@@ -12,6 +12,7 @@ namespace BanMoHinh.Share.Models
     {
         [Key]
         public Guid Id { get; set; }
+        public Guid VoucherTypeId { get; set; }
         public string? Code { get; set; }
         public DateTime? Create_Date { get; set; }
         public DateTime? Start_Date { get; set; }

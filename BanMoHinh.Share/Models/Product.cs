@@ -36,8 +36,9 @@ namespace BanMoHinh.Share.Models
 
         [ForeignKey("BrandId")]
         public Brand? Brand { get; set; }
+        [ForeignKey("MaterialId")]
+        public Material? Material { get; set; }
 
-        public virtual List<ProductImage>? ProductImage { get; set; }
         public virtual List<ProductDetail>? ProductDetails { get; set; }
     }
 }

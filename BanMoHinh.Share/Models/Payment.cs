@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BanMoHinh.Share.Models
 {
-    public class Category
+    public class Payment
     {
         [Key]
         public Guid Id { get; set; }
-        public string? CategoryName { get; set; }
-        public virtual List<Product>? Product { get; set; }
+        public string? PaymentName { get; set; }
+        public virtual List<Order>? Order { get; set; }
     }
 }

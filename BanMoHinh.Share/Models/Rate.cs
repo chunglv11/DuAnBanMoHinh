@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 
 namespace BanMoHinh.Share.Models
 {
-    public class Adress
+    public class Rate
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid? UserId { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? City { get; set; }
-        public string? TownShip { get; set; }
-        [ForeignKey("UserId")]
-        public User? user { get; set; }
+        public Guid OrderItemId { get; set; }
+        public string? Content { get; set; }
+        public string? Image { get; set; }
+        public int? Rating { get; set; }
+        [ForeignKey("OrderItemId")]
+        public OrderItem? OrderItem { get; set; }
+
+
     }
 }
