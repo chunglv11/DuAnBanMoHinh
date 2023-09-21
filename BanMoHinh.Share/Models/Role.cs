@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BanMoHinh.Share.Models
 {
-    public class Role : IdentityUserRole<Guid>
+    public class Role : IdentityRole<Guid>
     {
     }
 }
