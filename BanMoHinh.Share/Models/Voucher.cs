@@ -20,5 +20,6 @@ namespace BanMoHinh.Share.Models
         public int? Quantity { get; set; }
         [ForeignKey("VoucherTypeId")]
         public VoucherType? voucherType { get; set; }
+        //cái này nối vs hoá đơn hử
     }
 }
