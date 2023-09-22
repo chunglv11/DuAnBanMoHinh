@@ -15,9 +15,9 @@ namespace BanMoHinh.Share.Models
         public Guid UserId { get; set; }
         public Guid ProductDetailId { get; set; }
         [ForeignKey("UserId")]
-        public User? user { get; set; }
+        public User? User { get; set; }
 
         [ForeignKey("ProductDetailId")]
-        public ProductDetail? productDetail { get; set; }
+        public ProductDetail? ProductDetail { get; set; }
     }
 }

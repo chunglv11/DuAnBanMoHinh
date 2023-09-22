@@ -8,17 +8,16 @@ using System.Threading.Tasks;
 
 namespace BanMoHinh.Share.Models
 {
-    public class VoucherDetails
+    public class VoucherProduct
     {
         [Key]
         public Guid Id { get; set; }
         public Guid VoucherId { get; set; }
-        public Guid ProductDetailId { get; set; }
-        public int? Value { get; set; }
+        public Guid ProductId { get; set; }
         [ForeignKey("VoucherId")]
         public Voucher? Voucher { get; set; }
 
-        [ForeignKey("ProductDetailId")]
-        public ProductDetail? productDetail { get; set; }
+        [ForeignKey("ProductId")]
+        public Product? Product { get; set; }
     }
 }

@@ -14,8 +14,8 @@ namespace BanMoHinh.Share.Models
         public Guid Id { get; set; }
         public Guid OrderItemId { get; set; }
         public string? Content { get; set; }
-        public string? Image { get; set; }
-        public int? Rating { get; set; }
+        public string? ImageUrl { get; set; }
+        public float? Rating { get; set; }
         [ForeignKey("OrderItemId")]
         public OrderItem? OrderItem { get; set; }
 

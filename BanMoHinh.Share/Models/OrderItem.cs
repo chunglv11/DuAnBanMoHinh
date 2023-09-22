@@ -14,7 +14,6 @@ namespace BanMoHinh.Share.Models
         public Guid Id { get; set; }
         public Guid? OrderId { get; set; }
         public Guid? ProductDetailId { get; set; }
-        public Guid? RateId { get; set; }
         public int? Quantity { get; set; }
         public int? Price { get; set; }
 

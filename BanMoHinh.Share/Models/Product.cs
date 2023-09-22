@@ -12,23 +12,16 @@ namespace BanMoHinh.Share.Models
     {
         [Key]
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
         public Guid? CategoryId { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
         public Guid? BrandId { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
         public Guid? MaterialId { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
         public string? ProductName { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
-        [Range(1, int.MaxValue, ErrorMessage = "Giá trị phải lớn hơn hoặc bằng 1")]
         public int? AvailableQuantity { get; set; }
-        [Required(ErrorMessage = "Không được để trống")]
-        public string? Description { get; set; }
         public DateTime? Create_At { get; set; }
         public DateTime? Update_At { get; set; }
+        public string? Description { get; set; }
         public string? Long_Description { get; set; }
-        public int? Status { get; set; }
+        public bool? Status { get; set; }
 
 
         [ForeignKey("CategoryId")]
@@ -40,5 +33,6 @@ namespace BanMoHinh.Share.Models
         public Material? Material { get; set; }
 
         public virtual List<ProductDetail>? ProductDetails { get; set; }
+        public virtual List<VoucherProduct>? VoucherProduct { get; set; }
     }
 }

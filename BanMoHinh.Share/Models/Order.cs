@@ -20,10 +20,10 @@ namespace BanMoHinh.Share.Models
         public string? RecipientName { get; set; }
         public string? RecipientAddress { get; set; }
         public string? RecipientPhone { get; set; }
-        public decimal? TotalAmout { get; set; } // tổng tiền trước khi áp dụng
+        public int? TotalAmout { get; set; } // tổng tiền trước khi áp dụng
         public int? VoucherValue { get; set; } // giá trị voucher
-        public decimal? TotalAmoutAfterApplyingVoucher { get; set; } // giá sau khi áp voucher
-        public decimal? ShippingFee { get; set; } // phí ship
+        public int? TotalAmoutAfterApplyingVoucher { get; set; } // giá sau khi áp voucher
+        public int? ShippingFee { get; set; } // phí ship
         public DateTime? Create_Date { get; set; } // ngày tạo bill
         public DateTime? Ship_Date { get; set; } // ngày Ship
         public DateTime? Payment_Date { get; set; } // ngày thanh toán

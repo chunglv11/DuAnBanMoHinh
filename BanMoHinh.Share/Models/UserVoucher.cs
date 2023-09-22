@@ -14,10 +14,10 @@ namespace BanMoHinh.Share.Models
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid VoucherId { get; set; }
+        public bool? Status { get; set; }
         [ForeignKey("UserId")]
-        public User? user { get; set; }
+        public User? User { get; set; }
         [ForeignKey("VoucherId")]
-        public Voucher? voucher { get; set; }
-        public int? Status { get; set; }
+        public Voucher? Voucher { get; set; }
     }
 }
