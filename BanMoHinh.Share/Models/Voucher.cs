@@ -21,5 +21,6 @@ namespace BanMoHinh.Share.Models
         [ForeignKey("VoucherTypeId")]
         public VoucherType? voucherType { get; set; }
         //cái này nối vs hoá đơn hử
+        public virtual List<Order>? Orders { get; set; }
     }
 }

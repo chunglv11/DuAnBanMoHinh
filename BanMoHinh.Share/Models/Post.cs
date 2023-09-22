@@ -13,7 +13,7 @@ namespace BanMoHinh.Share.Models
         [Key]
         public Guid Id { get; set; }
         public string? Tittle { get; set; }
-        public string? Content { get; set; }
+        public string? Contents { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public string? Description { get; set; }
