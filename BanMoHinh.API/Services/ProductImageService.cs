@@ -6,28 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
 {
-    public class SizeService : ISizeService
+    public class ProductImageService : IProductImageService
     {
         private MyDbContext _dbContext;
 
-
-        public SizeService(MyDbContext myDbContext)
+        public ProductImageService(MyDbContext dbContext)
         {
-            _dbContext = myDbContext;
+            _dbContext = dbContext;
         }
 
-        public async Task<bool> Create(SizeVM item)
+        public async Task<bool> Create(ProductImageVM item)
         {
             try
             {
-                Size size = new Size()
+                ProductImage productImage = new ProductImage()
                 {
                     Id = Guid.NewGuid(),
-                    SizeName = item.SizeName,
-                    Height = item.Height,
-                    Width = item.Width
+                    ProductDetailId = item.ProductDetailId,
+                    ImageUrl = item.ImageUrl,
                 };
-                await _dbContext.AddAsync(size);
+                await _dbContext.ProductImage.AddAsync(productImage);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
@@ -38,21 +36,19 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<bool> CreateMany(List<SizeVM> items)
+        public async Task<bool> CreateMany(List<ProductImageVM> items)
         {
             try
             {
-                //List<Size> sizes = new List<Size>();
                 foreach (var x in items)
                 {
-                    Size size = new Size()
+                    ProductImage productImage = new ProductImage()
                     {
                         Id = Guid.NewGuid(),
-                        Width = x.Width,
-                        Height = x.Height,
-                        SizeName = x.SizeName,
+                        ProductDetailId = x.ProductDetailId,
+                        ImageUrl = x.ImageUrl,
                     };
-                    await _dbContext.AddRangeAsync(size);
+                    await _dbContext.ProductImage.AddRangeAsync(productImage);
                 }
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -68,42 +64,39 @@ namespace BanMoHinh.API.Services
         {
             try
             {
-                var result = await _dbContext.Size.FindAsync(id);
-                _dbContext.Remove(result);
+                var idp = await _dbContext.ProductImage.FindAsync(id);
+                _dbContext.Remove(idp);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
                 return false;
             }
         }
 
-        public async Task<IEnumerable<Size>> GetAll()
+        public async Task<IEnumerable<ProductImage>> GetAll()
         {
-            return await _dbContext.Size.ToListAsync();
+            return await _dbContext.ProductImage.ToListAsync();
         }
 
-        public async Task<Size> GetItem(Guid id)
+        public async Task<ProductImage> GetItem(Guid id)
         {
-            var item = await _dbContext.Size.FindAsync(id);
-            return item;
+            return await _dbContext.ProductImage.FindAsync(id);
         }
 
-        public async Task<bool> Update(Guid id, SizeVM item)
+        public async Task<bool> Update(Guid id, ProductImageVM item)
         {
-            var result = await _dbContext.Size.FindAsync(id);
-            if (result == null)
+            var idp = await _dbContext.ProductImage.FindAsync(id);
+            if (idp == null)
             {
                 return false;
             }
             else
             {
-                result.SizeName = item.SizeName;
-                result.Width = item.Width;
-                result.Height = item.Height;
-
+                idp.ProductDetailId = item.ProductDetailId;
+                idp.ImageUrl = item.ImageUrl;
+                _dbContext.Update(idp);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

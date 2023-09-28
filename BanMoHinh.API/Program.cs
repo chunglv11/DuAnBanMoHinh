@@ -1,4 +1,6 @@
 using BanMoHinh.API.Data;
+using BanMoHinh.API.IServices;
+using BanMoHinh.API.Services;
 using BanMoHinh.Share.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,11 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyCs"));
 });
+// add Dependency Injection
+builder.Services.AddTransient<ISizeService, SizeService>();
+builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IProductDetailService, ProductDetailService>();
+builder.Services.AddTransient<IProductImageService, ProductImageService>();
 // Add Identity
 builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<MyDbContext>()
