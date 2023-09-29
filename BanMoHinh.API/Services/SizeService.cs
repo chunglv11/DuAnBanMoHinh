@@ -42,7 +42,7 @@ namespace BanMoHinh.API.Services
         {
             try
             {
-                //List<Size> sizes = new List<Size>();
+                var lstS = new List<Size>();
                 foreach (var x in items)
                 {
                     Size size = new Size()
@@ -52,8 +52,9 @@ namespace BanMoHinh.API.Services
                         Height = x.Height,
                         SizeName = x.SizeName,
                     };
-                    await _dbContext.AddRangeAsync(size);
+                    lstS.Add(size);
                 }
+                await _dbContext.Size.AddRangeAsync(lstS);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

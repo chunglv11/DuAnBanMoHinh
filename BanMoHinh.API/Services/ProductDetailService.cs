@@ -48,6 +48,7 @@ namespace BanMoHinh.API.Services
         {
             try
             {
+                var LstProductDetail = new List<ProductDetail>();
                 foreach (var x in items)
                 {
                     ProductDetail productDetail = new ProductDetail()
@@ -64,9 +65,9 @@ namespace BanMoHinh.API.Services
                         Description = x.Description,
                         Status = x.Status,
                     };
-                    await _dbContext.ProductDetail.AddRangeAsync(productDetail);
+                    LstProductDetail.Add(productDetail);
                 }
-
+                await _dbContext.ProductDetail.AddRangeAsync(LstProductDetail);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

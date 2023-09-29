@@ -49,6 +49,7 @@ namespace BanMoHinh.API.Services
         {
             try
             {
+                var lstP = new List<Product>();
                 foreach (var x in items)
                 {
                     Product pr = new Product()
@@ -65,8 +66,10 @@ namespace BanMoHinh.API.Services
                         Long_Description = x.Long_Description,
                         Status = x.Status,
                     };
-                    await _dbContext.AddRangeAsync(pr);
+                    lstP.Add(pr);
+
                 }
+                await _dbContext.Product.AddRangeAsync(lstP);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

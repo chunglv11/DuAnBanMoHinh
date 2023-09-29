@@ -40,6 +40,7 @@ namespace BanMoHinh.API.Services
         {
             try
             {
+                var lstPi = new List<ProductImage>();
                 foreach (var x in items)
                 {
                     ProductImage productImage = new ProductImage()
@@ -48,8 +49,10 @@ namespace BanMoHinh.API.Services
                         ProductDetailId = x.ProductDetailId,
                         ImageUrl = x.ImageUrl,
                     };
-                    await _dbContext.ProductImage.AddRangeAsync(productImage);
+                    lstPi.Add(productImage);
+
                 }
+                await _dbContext.ProductImage.AddRangeAsync(lstPi);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
