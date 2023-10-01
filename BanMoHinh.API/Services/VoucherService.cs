@@ -1,0 +1,106 @@
+﻿using BanMoHinh.API.Data;
+using BanMoHinh.API.IServices;
+using BanMoHinh.Share.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace BanMoHinh.API.Services
+{
+    public class VoucherService : IVoucherService
+    {
+        private readonly MyDbContext _dbContext;
+
+        public VoucherService(MyDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<bool> Create(Voucher item)
+        {
+            try
+            {
+                var voucher = new Voucher()
+                {
+                    VoucherStatusId = item.VoucherStatusId,
+                    VoucherTypeId = item.VoucherTypeId,
+                    Code = item.Code,
+                    Quantity = item.Quantity,
+                    Value = item.Value,
+                    Minimum_order_value = item.Minimum_order_value,
+                    Create_Date = item.Create_Date,
+                    Start_Date = item.Start_Date,
+                    End_Date = item.End_Date,
+                    Status = item.Status,
+                };
+                await _dbContext.Voucher.AddAsync(voucher);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            try
+            {
+                var item = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == id);
+                _dbContext.Remove(item);
+                await _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public async Task<List<Voucher>> GetAll()
+        {
+            return await _dbContext.Voucher.ToListAsync();
+        }
+
+        public async Task<Voucher> GetItem(Guid id)
+        {
+            return await _dbContext.Voucher.FindAsync(id);
+        }
+
+        public async Task<Voucher> GetItemByCode(string code)
+        {
+            return await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Code.ToLower() == code.ToLower());
+
+        }
+
+        public async Task<bool> Update(Guid id, Voucher rank)
+        {
+            try
+            {
+                var VoucherForcus = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == id);
+
+                VoucherForcus.VoucherTypeId = rank.VoucherTypeId;
+                VoucherForcus.VoucherStatusId = rank.VoucherStatusId;
+                VoucherForcus.Code = rank.Code;
+                VoucherForcus.Quantity = rank.Quantity;
+                VoucherForcus.Value = rank.Value;
+                VoucherForcus.Create_Date = rank.Create_Date;
+                VoucherForcus.Start_Date = rank.Start_Date;
+                VoucherForcus.End_Date = rank.End_Date;
+                VoucherForcus.Status = rank.Status;
+
+                _dbContext.Voucher.Update(VoucherForcus);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+    }
+}
