@@ -12,6 +12,7 @@ namespace BanMoHinh.Share.Models
     public class User : IdentityUser<Guid>
     {
         public DateTime? DateOfBirth { get; set; }
+        public int? Points { get; set; }
         public Guid RankId { get; set; }
         [ForeignKey("RankId")]
         public virtual Rank Rank { get; set; }
