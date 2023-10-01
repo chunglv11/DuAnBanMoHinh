@@ -17,6 +17,7 @@ namespace BanMoHinh.API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            Create(builder);
 
         }
         private void Create(ModelBuilder builder)
@@ -31,6 +32,12 @@ namespace BanMoHinh.API.Data
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Nhựa pvc"},
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Gỗ"}
             );
+            builder.Entity<Rank>().HasData(
+                new Rank() { Id = Guid.NewGuid(), Name = "Bạc", PointsMin = 0,PoinsMax = 1000000},
+                new Rank() { Id = Guid.NewGuid(), Name = "Vàng", PointsMin = 1000001, PoinsMax =  3000000},
+                new Rank() { Id = Guid.NewGuid(), Name = "Kim Cương", PointsMin = 3000001, PoinsMax = 10000000 }
+            );
+
             builder.Entity<OrderStatus>().HasData(
                     new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Đang được xử lý" },
                     new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Chờ lấy hàng" },
