@@ -55,6 +55,11 @@ namespace BanMoHinh.API.Services
             }
         }
 
+        public async Task<List<CartItem>> GetAll()
+        {
+            return await _dbContext.CartItem.ToListAsync();
+        }
+
         public async Task<bool> GetCartItemsByCartId(Guid cartItemId)
         {
             try
@@ -73,7 +78,7 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<bool> UpdateCartItem(Guid cartItemId, int newquantity, int newPrice)
+        public async Task<bool> UpdateCartItem(Guid cartItemId, int? newquantity, int? newPrice)
         {
             try
             {

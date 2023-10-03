@@ -19,7 +19,7 @@ namespace BanMoHinh.API.Services
             {
                 var color = new Colors()
                 {
-                    ColorId = item.ColorId,
+                    ColorId = Guid.NewGuid(),
                     ColorCode = item.ColorCode,
                     ColorName = item.ColorName,
                 };
