@@ -36,11 +36,11 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid id,Guid orderid)
         {
             try
             {
-                var item = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == id);
+                var item = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == id&&c.OrderItemId == orderid);
                 _dbContext.Remove(item);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -70,17 +70,16 @@ namespace BanMoHinh.API.Services
             return rates;
         }
 
-        public async Task<bool> Update(Guid id, Rate rate)
+        public async Task<bool> Update(Guid id,Guid orderid, Rate rate)
         {
             try
             {
-                var rates = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == id);
+                var rates = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == id&&c.OrderItemId == orderid);
 
-                rates.OrderItemId = rate.OrderItemId;
+                rates.OrderItemId = orderid;
                 rates.ImageUrl = rate.ImageUrl;
                 rates.Content = rate.Content;
                 rates.Rating = rate.Rating;
-
                 _dbContext.Rate.Update(rates);
                 await _dbContext.SaveChangesAsync();
                 return true;

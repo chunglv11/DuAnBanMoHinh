@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[cartitem]")]
+    [Route("api/cartitem")]
     [ApiController]
     public class CartItemController : ControllerBase
     {
