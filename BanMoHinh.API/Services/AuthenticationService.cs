@@ -15,13 +15,15 @@ namespace BanMoHinh.API.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IRankService _rankService;
+        private readonly ICartService _cartService;
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration,IRankService rankService)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration,IRankService rankService, ICartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _rankService = rankService;
+            _cartService = cartService;
         }
         private async Task<string> GenerateJwtTokenAsync(User user)
         {
@@ -115,12 +117,19 @@ namespace BanMoHinh.API.Services
                 Points = 0,
             };
             var result = await _userManager.CreateAsync(identityUser, model.Password);
+            
+
             if (!result.Succeeded)
             {
                 response.StatusCode = 400;
                 response.Messages = "SignUp failed!";
                 return response;
             }
+            var cart = new Cart()
+            {
+                UserId = identityUser.Id
+            };
+            _cartService.Create(cart);
             await _userManager.AddToRoleAsync(identityUser, "User");
             response.StatusCode = 200;
             response.Messages = "Sign Up Successfully!";

@@ -1,8 +1,7 @@
 ﻿using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
-using System.Data.Entity;
-
+using Microsoft.EntityFrameworkCore;
 namespace BanMoHinh.API.Services
 {
     public class CategoryService : ICategoryService

@@ -3,7 +3,7 @@ using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
 {
