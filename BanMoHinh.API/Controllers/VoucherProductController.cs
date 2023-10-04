@@ -1,29 +1,27 @@
 ﻿using BanMoHinh.API.IServices;
+using BanMoHinh.API.Services;
 using BanMoHinh.Share.Models;
-using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/color")]
+    [Route("api/voucherproduct")]
     [ApiController]
-    public class ColorController : ControllerBase
+    public class VoucherProductController : ControllerBase
     {
-        private IColorService _iColorService;
-
-        public ColorController(IColorService iColorService)
+        private IVoucherProductService _voucherProductService;
+        public VoucherProductController(IVoucherProductService voucherProductService)
         {
-            _iColorService = iColorService;
+            _voucherProductService = voucherProductService;
         }
-        [HttpGet("get-all-Color")]
+
+        [HttpGet("get-voucherproduct")]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(await _iColorService.GetAll());
+                return Ok(await _voucherProductService.GetAll());
             }
             catch (Exception ex)
             {
@@ -32,11 +30,11 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpGet("get-{id}")]
-        public async Task<ActionResult<Colors>> Get(Guid id)
+        public async Task<ActionResult<VoucherProduct>> Get(Guid id)
         {
             try
             {
-                return Ok(await _iColorService.GetItem(id));
+                return Ok(await _voucherProductService.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -44,31 +42,30 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create-Color")]
-        public async Task<ActionResult<Colors>> Post([FromBody] Colors obj)
+        [HttpPost("create-voucherproduct")]
+        public async Task<ActionResult<VoucherProduct>> Post([FromBody] VoucherProduct userVoucher)
         {
-            var result = await _iColorService.Create(obj);
+            var result = await _voucherProductService.Create(userVoucher);
             if (result)
             {
                 return Ok("Đã thêm thành công");
             }
             return Ok("Lỗi!");
         }
-
-        [HttpPut("update-Color-{id}")]
-        public async Task<ActionResult<Colors>> Put(Guid id, [FromBody] Colors obj)
+        [HttpPut("update-voucherproduct-{id}")]
+        public async Task<ActionResult<VoucherProduct>> Put(Guid id, VoucherProduct userVoucher)
         {
-            var result = await _iColorService.Update(id, obj);
+            var result = await _voucherProductService.Update(id, userVoucher);
             if (result)
             {
                 return Ok("Đã sửa thành công");
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-Color-{id}")]
-        public async Task<ActionResult<Colors>> Delete(Guid id)
+        [HttpDelete("delete-voucherproduct-{id}")]
+        public async Task<ActionResult<VoucherProduct>> Delete(Guid id)
         {
-            var result = await _iColorService.Delete(id);
+            var result = await _voucherProductService.Delete(id);
             if (result)
             {
                 return Ok("Đã xoá thành công");

@@ -7,35 +7,37 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/posts")]
+    [Route("api/rate")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class RateController : ControllerBase
     {
-        private IPostService _postService;
+        private IRateService _rateService;
 
-        public PostController(IPostService postService)
+        public RateController(IRateService rateService)
         {
-            _postService = postService;
+            _rateService = rateService;
         }
-        [HttpGet("get-posts")]
-        public async Task<IActionResult> GetAll()
+
+        [HttpGet("Get-All-Rate")]
+        public async Task<IActionResult> GetAllRate()
         {
             try
             {
-                return Ok(await _postService.GetAll());
+                return Ok(await _rateService.GetAll());
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "Không lấy được dữ liệu");
+                return StatusCode(500, "Không tìm được dữ liệu");
             }
+
         }
         [HttpGet("get-{id}")]
-        public async Task<ActionResult<Post>> Get(Guid id)
+        public async Task<ActionResult<Rate>> Get(Guid id)
         {
             try
             {
-                return Ok(await _postService.GetItem(id));
+                return Ok(await _rateService.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -43,31 +45,30 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create-post")]
-        public async Task<ActionResult<Post>> Post([FromBody] Post post)
+        [HttpPost("create-rate")]
+        public async Task<ActionResult<Rate>> CreateRate([FromBody] Rate rate)
         {
-            var result = await _postService.Create(post);
+            var result = await _rateService.Create(rate);
             if (result)
             {
                 return Ok("Đã thêm thành công");
             }
             return Ok("Lỗi!");
         }
-      
-        [HttpPut("update-post-{id}")]
-        public async Task<ActionResult<Post>> Put(Guid id,  Post post, Guid UserId)
+        [HttpPut("update-rate-{id}")]
+        public async Task<ActionResult<Rate>> Put(Guid id, Rate rate, Guid orderid)
         {
-            var result = await _postService.Update(id,UserId, post);
+            var result = await _rateService.Update(id, orderid, rate);
             if (result)
             {
                 return Ok("Đã sửa thành công");
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-post-{id}")]
-        public async Task<ActionResult<Post>> Delete(Guid id,Guid UserId)
+        [HttpDelete("delete-rate-{id}")]
+        public async Task<ActionResult<Rate>> Delete(Guid id, Guid orderid)
         {
-            var result = await _postService.Delete(id,UserId);
+            var result = await _rateService.Delete(id, orderid);
             if (result)
             {
                 return Ok("Đã xoá thành công");

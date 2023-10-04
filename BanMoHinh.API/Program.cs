@@ -21,6 +21,10 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 });
 // add Dependency Injection
 builder.Services.AddTransient<ISizeService, SizeService>();
+builder.Services.AddTransient<IRateService, RateService>();
+builder.Services.AddTransient<IUserVoucherService, UserVoucherService>();
+builder.Services.AddTransient<IVoucherService, VoucherService>();
+builder.Services.AddTransient<IVoucherProductService, VoucherProductService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IProductDetailService, ProductDetailService>();
 builder.Services.AddTransient<IProductImageService, ProductImageService>();
