@@ -31,6 +31,10 @@ builder.Services.AddTransient<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<IRankService, RankService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IWishListService, WishListService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 // Add Identity
