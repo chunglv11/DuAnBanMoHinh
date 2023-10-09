@@ -28,7 +28,6 @@ namespace BanMoHinh.API.Services
         private async Task<string> GenerateJwtTokenAsync(User user)
         {
             var role = await _userManager.GetRolesAsync(user);
-            var tokenHandler = new JwtSecurityTokenHandler();
             // Create list of claims
             var claims = new List<Claim>()
             {
@@ -43,7 +42,7 @@ namespace BanMoHinh.API.Services
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims,
                 expires: DateTime.UtcNow.AddDays(7), signingCredentials: signIn);
-            return tokenHandler.WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
         public async Task<Response> Login(LoginViewModel model)
         {

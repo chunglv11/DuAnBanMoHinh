@@ -21,7 +21,7 @@ namespace BanMoHinh.API.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var result = await _userAuthentication.Login(model);
-            return Ok(result);
+            return Ok(result.Token);
         }
         [HttpPost("register")]
         
