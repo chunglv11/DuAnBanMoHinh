@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,6 +9,7 @@ namespace BanMoHinh.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class AdressController : ControllerBase
     {
         private IAdressService _adressService;
@@ -16,6 +18,10 @@ namespace BanMoHinh.API.Controllers
             _adressService = iadressService;
         }
         // GET: api/<AdressController>
+        /// <summary>
+        /// Get All Address
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Get-All-Adress")]
         public async Task<IActionResult> GetAll()
         {

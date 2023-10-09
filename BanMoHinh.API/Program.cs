@@ -20,14 +20,16 @@ builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyCs"));
 });
 // add Dependency Injection
-builder.Services.AddTransient<ISizeService, SizeService>();
-builder.Services.AddTransient<IRateService, RateService>();
-builder.Services.AddTransient<IUserVoucherService, UserVoucherService>();
-builder.Services.AddTransient<IVoucherService, VoucherService>();
-builder.Services.AddTransient<IVoucherProductService, VoucherProductService>();
-builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<IProductDetailService, ProductDetailService>();
-builder.Services.AddTransient<IProductImageService, ProductImageService>();
+
+builder.Services.AddScoped<IAdressService, AdressService>();
+builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IRateService, RateService>();
+builder.Services.AddScoped<IUserVoucherService, UserVoucherService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IVoucherProductService, VoucherProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductDetailService, ProductDetailService>();
+builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<IRankService, RankService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IWishListService, WishListService>();
@@ -36,6 +38,7 @@ builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 // Add Identity
 builder.Services.AddIdentity<User, Role>()
@@ -79,43 +82,43 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-//// cau hinh swagger
-//builder.Services.AddSwaggerGen(options =>
-//{
-//    options.SwaggerDoc("v1", new()
-//    {
-//        Title = "Api Title",
-//        Version = "v999",
-//        Description = "A simple example ASP.NET Core Web API (Description)",
-//        Contact = new() { Name = "contact", Email = "trung27012003@gmail.com", Url = new Uri("https://contact.com"), },
-//    });
-//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        Description = "Please insert token",
-//        Name = "Authorization",
-//        In = ParameterLocation.Header,
-//        Type = SecuritySchemeType.Http,
-//        Scheme = "Bearer"
-//    });
+// cau hinh swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new()
+    {
+        Title = "Api Title",
+        Version = "v999",
+        Description = "A simple example ASP.NET Core Web API (Description)",
+        Contact = new() { Name = "contact", Email = "trung27012003@gmail.com", Url = new Uri("https://contact.com"), },
+    });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Please insert token",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer"
+    });
 
-//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-//            {
-//                {
-//                    new OpenApiSecurityScheme
-//                    {
-//                        Reference = new OpenApiReference
-//                        {
-//                            Type = ReferenceType.SecurityScheme,
-//                            Id = "Bearer"
-//                        }
-//                    },
-//                    new string[]{}
-//                }
-//            });
-//    string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-//    string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-//    options.IncludeXmlComments(xmlPath);
-//});
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
+    string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
