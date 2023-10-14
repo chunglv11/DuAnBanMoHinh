@@ -105,17 +105,18 @@ namespace BanMoHinh.API.Services
                 response.Messages = "This password doesn't match with confirm password!";
                 return response;
             }
+            // new rank 
             var newRank = await _rankService.GetItemByName("Bạc");
             User identityUser = new()  
             {
-                RankId = newRank.Id,
+                RankId = newRank.Id, // add rank id
                 UserName = model.UserName,
                 Email = model.Email,
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
                 Points = 0,
-            };
-            var result = await _userManager.CreateAsync(identityUser, model.Password);
+            }; 
+            var result = await _userManager.CreateAsync(identityUser, model.Password); // create user
             
 
             if (!result.Succeeded)
@@ -128,7 +129,7 @@ namespace BanMoHinh.API.Services
             {
                 UserId = identityUser.Id
             };
-            _cartService.Create(cart);
+            _cartService.Create(cart); // create cart
             await _userManager.AddToRoleAsync(identityUser, "User");
             response.StatusCode = 200;
             response.Messages = "Sign Up Successfully!";

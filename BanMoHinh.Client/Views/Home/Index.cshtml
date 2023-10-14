@@ -6,9 +6,6 @@
     string name = @User.FindFirst(ClaimTypes.Name)?.Value ?? "Null";
     string role = @User.FindFirst(ClaimTypes.Role)?.Value ?? "Null";
 }
-
-
-
 @if (role!=null)
 {
     

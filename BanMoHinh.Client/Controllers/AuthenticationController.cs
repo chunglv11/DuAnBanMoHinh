@@ -51,28 +51,6 @@ namespace BanMoHinh.Client.Controllers
                 ViewBag.Message = result.Messages;
                 return View();
             }
-
-            //var url = "https://localhost:7007/api/authentication/login";
-            //var response = await _httpClient.PostAsJsonAsync(url, model);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var token = await response.Content.ReadAsStringAsync();
-            //    var handler = new JwtSecurityTokenHandler();
-            //    var jwt = handler.ReadJwtToken(token);
-            //    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            //    identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Name).Value));
-            //    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value));
-            //    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value));
-            //    identity.AddClaim(new Claim(ClaimTypes.Email, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email).Value));
-            //    var principal = new ClaimsPrincipal(identity);
-            //    await HttpContext.SignInAsync(principal);
-            //    var check = User.Identity.IsAuthenticated;
-            //    return RedirectToAction("Index", "Home");
-            //}
-            //else
-            //{
-            //    return View();
-            //}
         }
     }
 }
