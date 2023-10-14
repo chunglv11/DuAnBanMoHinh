@@ -9,7 +9,8 @@ namespace BanMoHinh.API.IServices
         public Task<bool> Delete(Guid id);
         public Task<List<User>> GetAll();
         public Task<User> GetItem(Guid id);
-        public Task<bool> Update(Guid id, User item);
+        public Task<bool> Update(UserViewModel item);
         public Task<bool> ChangeRole(Guid userId, string roleName);
+        public Task<bool> ChangePassword(Guid id, string password);
     }
 }

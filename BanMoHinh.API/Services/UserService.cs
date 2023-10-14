@@ -14,21 +14,18 @@ namespace BanMoHinh.API.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IRankService _rankService;
-        private readonly MyDbContext _myDbContext;
+        private readonly RoleManager<Role> _roleManager;
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration,IRankService rankService,MyDbContext myDbContext)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager,RoleManager<Role> roleManager, IConfiguration configuration,IRankService rankService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _rankService = rankService;
-            _myDbContext = myDbContext;
+            _roleManager = roleManager;
         }
 
-        public Task<bool> ChangeRole(Guid userId, string roleName)
-        {
-            throw new NotImplementedException();
-        }
+
 
 
 
@@ -74,8 +71,44 @@ namespace BanMoHinh.API.Services
         {
             return await _userManager.FindByIdAsync(id.ToString());
         }
-
-        public Task<bool> Update(Guid id, User item)
+        public async Task<bool> ChangePassword(Guid id, string password)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null)
+            {
+                var result = await _userManager.RemovePasswordAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddPasswordAsync(user, password);
+                    if (result.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public async Task<bool> ChangeRole(Guid userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                var allRole = await _roleManager.Roles.ToListAsync(); // get all role
+                List<string> lstRole = new List<string>(); // create list role
+                lstRole.AddRange(allRole.Select(c=>c.Name)); // add role to list
+                var result = await _userManager.RemoveFromRolesAsync(user, lstRole); // remove all role
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddToRoleAsync(user, roleName);
+                    if (result.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public Task<bool> Update( UserViewModel item) // tự nhiên có rank khoai ghê
         {
             throw new NotImplementedException();
         }
