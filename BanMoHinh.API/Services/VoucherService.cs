@@ -19,6 +19,7 @@ namespace BanMoHinh.API.Services
             {
                 var voucher = new Voucher()
                 {
+                  
                     VoucherStatusId = item.VoucherStatusId,
                     VoucherTypeId = item.VoucherTypeId,
                     Code = item.Code,

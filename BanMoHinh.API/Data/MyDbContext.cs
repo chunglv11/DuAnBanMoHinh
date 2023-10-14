@@ -26,6 +26,11 @@ namespace BanMoHinh.API.Data
                     new Role() { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" },
                     new Role() { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" },
                     new Role() { Id = Guid.NewGuid(), Name = "Guest", NormalizedName = "GUEST" }
+                ); 
+            builder.Entity<VoucherType>().HasData(
+                    new VoucherType() { Id = Guid.NewGuid(), Name = "Khánh hàng"},
+                    new VoucherType() { Id = Guid.NewGuid(), Name = "Sản phẩm"}
+                    
                 );
             builder.Entity<Material>().HasData(
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Sắt"},
@@ -109,6 +114,7 @@ namespace BanMoHinh.API.Data
         public DbSet<Colors> Colors { get; set; }
         public DbSet<Voucher> Voucher { get; set; }
         public DbSet<VoucherType> VoucherType { get; set; }
+        public DbSet<VoucherStatus> voucherstatus { get; set; }
         public DbSet<VoucherProduct> VoucherDetails { get; set; }
         public DbSet<UserVoucher> VoucherUser { get; set; }
         public DbSet<Rate> Rate { get; set; }
