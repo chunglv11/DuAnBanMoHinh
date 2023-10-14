@@ -43,8 +43,12 @@ namespace BanMoHinh.Client.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Email, jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email).Value));
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
-                var check = User.Identity.IsAuthenticated;
-                return RedirectToAction("Index", "Home");
+                string role = jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value;
+                if(role == "User") { return RedirectToAction("Index", "Home"); }
+                else
+                {
+                    return Redirect("Admin/Home/Index");
+                }
             }
             else
             {

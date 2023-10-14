@@ -9,7 +9,7 @@ namespace BanMoHinh.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     public class AdressController : ControllerBase
     {
         private IAdressService _adressService;
