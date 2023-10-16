@@ -1,0 +1,148 @@
+﻿@model IEnumerable<BanMoHinh.Share.ViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    
+    <a asp-action="Create" class="btn btn-success" data-toggle="modal" data-target="#Create">Tạo Mới </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+          @*  <th>
+                Role
+            </th>
+*@
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </th>
+            
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                @*<td>
+                    
+                </td>*@
+                <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+            <td>
+                    <a asp-action="ChangeRole" class="btn btn-success" data-toggle="modal" data-target="#changrole">Sửa Rolse </a>
+                    @Html.ActionLink("Delete", "DeleteUser", new {  userName=item.UserName  })
+            </td>
+        </tr>
+            <!--
+              MODAL
+            -->
+            <div class="modal fade" id="changrole" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                 data-backdrop="static" data-keyboard="false">
+                <form asp-action="ChangeRole" method="post">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="form-group  col-md-12">
+                                        <span class="thong-tin-thanh-toan">
+                                            <h5>Chọn Role</h5>
+                                        </span>
+                                    </div> 
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Hiện dropdown</label>
+                                        <input class="form-control" type="text" required name="description">
+                                    </div>
+
+                                </div>
+                                <BR>
+                                <button class="btn btn-save" type="submit">Lưu lại</button>
+                                <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                                <BR>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!--
+              MODAL
+            -->
+        }
+    </tbody>
+</table>
+<!--
+  MODAL
+-->
+<div class="modal fade" id="Create" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     data-backdrop="static" data-keyboard="false">
+    <form asp-action="CreateRank" method="post">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group  col-md-12">
+                            <span class="thong-tin-thanh-toan">
+                                <h5>Tạo Xếp hạng mới</h5>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập tên xếp hạng mới</label>
+                            <input class="form-control" type="text" required name="rankName">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập điểm nhỏ nhất</label>
+                            <input class="form-control" type="text" required name="pointMin">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập điểm lớn nhất</label>
+                            <input class="form-control" type="text" required name="pointMax">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Mô tả chi tiết</label>
+                            <input class="form-control" type="text" required name="description">
+                        </div>
+
+                    </div>
+                    <BR>
+                    <button class="btn btn-save" type="submit">Lưu lại</button>
+                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                    <BR>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+<!--
+  MODAL
+-->

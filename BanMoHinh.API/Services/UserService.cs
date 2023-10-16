@@ -45,9 +45,9 @@ namespace BanMoHinh.API.Services
             return false;
         }
         // DELETE
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(string userName)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByNameAsync(userName);
             if (user != null)
             {
                 await _userManager.DeleteAsync(user);
@@ -62,14 +62,14 @@ namespace BanMoHinh.API.Services
             return user;
         }
         // GET USER
-        public async Task<User> GetItem(Guid id)
+        public async Task<User> GetItem(string userName)
         {
-            return await _userManager.FindByIdAsync(id.ToString());
+            return await _userManager.FindByNameAsync(userName);
         }
         // RESET PASSWORD
-        public async Task<bool> ResetPassword(Guid id, string newPassword)
+        public async Task<bool> ResetPassword(string userName, string newPassword)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByNameAsync(userName);
             if (user != null)
             {
                 var result = await _userManager.RemovePasswordAsync(user);
@@ -85,9 +85,9 @@ namespace BanMoHinh.API.Services
             return false;
         }
         // CHANGE PASSWORD
-        public async Task<bool> ChangePassword(string id, string currentPassword, string newPassword)
+        public async Task<bool> ChangePassword(string userName, string currentPassword, string newPassword)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByNameAsync(userName);
             bool passwordMatch = await _userManager.CheckPasswordAsync(user, currentPassword); // check old password
             if (passwordMatch != null)
             {
@@ -100,9 +100,9 @@ namespace BanMoHinh.API.Services
             return false;
         }
         // CHANGE ROLE
-        public async Task<bool> ChangeRole(Guid userId, string roleName)
+        public async Task<bool> ChangeRole(string userName, string roleName)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByNameAsync(userName);
             if (user != null)
             {
                 var currentRoles = await _userManager.GetRolesAsync(user);

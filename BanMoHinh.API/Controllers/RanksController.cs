@@ -30,7 +30,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<Product>> Get(Guid id)
         {
             try
@@ -54,7 +54,7 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
 
-        [HttpPut("update-rank-{id}")]
+        [HttpPut("update-rank/{id}")]
         public async Task<ActionResult<Post>> Put(Guid id, Rank rank)
         {
             var result = await _rankService.Update(id, rank);
@@ -64,7 +64,7 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-rank-{id}")]
+        [HttpDelete("delete-rank/{id}")]
         public async Task<ActionResult<ProductVM>> Delete(Guid id)
         {
             var result = await _rankService.Delete(id);
