@@ -22,6 +22,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 // add Dependency Injection
 
 builder.Services.AddScoped<IAdressService, AdressService>();
+builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddScoped<IUserVoucherService, UserVoucherService>();
@@ -53,7 +54,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     //add jwtbear
-    .AddJwtBearer(options => 
+    .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;

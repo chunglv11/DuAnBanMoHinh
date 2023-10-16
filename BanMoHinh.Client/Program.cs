@@ -1,6 +1,9 @@
 ﻿using BanMoHinh.Client.IServices;
 using BanMoHinh.Client.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,7 @@ builder.Services.AddControllersWithViews();
 
 // add Dependency Injection
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddSession(options =>
 {
@@ -54,6 +57,8 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authentication}/{action=DemoLogin}/{id?}");
+
+
 });
 
 app.Run();
