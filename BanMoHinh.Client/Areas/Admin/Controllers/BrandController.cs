@@ -20,9 +20,10 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         }
 
         // GET: BrandController/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            return View();
+            var getBrand = await _client.GetFromJsonAsync<Category>($"https://localhost:7007/api/brand/get{id}");
+            return View(getBrand);
         }
 
         // GET: BrandController/Create
@@ -50,7 +51,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // GET: BrandController/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            return View();
+            var getBrand = await _client.GetFromJsonAsync<Category>($"https://localhost:7007/api/brand/get{id}");
+            return View(getBrand);
         }
 
         // POST: BrandController/Edit/5
