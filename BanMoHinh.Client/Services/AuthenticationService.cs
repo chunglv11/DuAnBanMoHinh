@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Client.IServices;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace BanMoHinh.Client.Services
@@ -32,14 +33,37 @@ namespace BanMoHinh.Client.Services
             return response;
         }
 
-        public Task Logout()
+        public async Task Logout()
         {
-            throw new NotImplementedException();
+            var url = "https://localhost:7007/api/authentication/logout";
+            Response response = new Response();
+            var result = await _httpClient.GetAsync(url);
+            if (result.IsSuccessStatusCode)
+            {
+                response.IsSuccess = true;
+
+            }
+            response.IsSuccess = false;
         }
 
-        public Task<Response> Register(RegisterViewModel model, string url)
+
+        public async Task<Response> Register(RegisterViewModel model, string url)
         {
-            throw new NotImplementedException();
+            Response response = new Response();
+            var result = await _httpClient.PostAsJsonAsync(url, model);
+
+            if (result.IsSuccessStatusCode)
+            {
+                response.IsSuccess = true;
+                response.Messages = "Register Success";
+
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.Messages = "Login Fail";
+            }
+            return response;
         }
     }
 }

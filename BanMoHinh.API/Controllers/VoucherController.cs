@@ -43,7 +43,7 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create-voucher")]
-        public async Task<ActionResult<Voucher>> Post([FromBody] Voucher voucher)
+        public async Task<ActionResult<Voucher>> Post(Voucher voucher)
         {
             var result = await _voucherservice.Create(voucher);
             if (result)

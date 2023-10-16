@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BanMoHinh.Share.Models.Voucher>
+
+@{
+    ViewData["Title"] = "GetallVoucher";
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>GetallVoucher</h1>
+
+<p>
+    <a asp-area="Admin" asp-controller="Voucher" asp-action="CreateVoucher">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VoucherTypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VoucherStatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Minimum_order_value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Create_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Start_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.End_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherStatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Minimum_order_value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Create_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Start_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.End_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "editVoucher", new {  area="Admin",id=item.Id }) |
+                    @Html.ActionLink("Details", "detailVoucher", new {  area="Admin",id=item.Id  }) |
+                    @Html.ActionLink("Delete", "DeleteVoucher", new {area="Admin", id=item.Id  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

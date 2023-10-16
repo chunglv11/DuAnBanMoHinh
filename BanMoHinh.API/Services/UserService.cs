@@ -1,10 +1,8 @@
-﻿using BanMoHinh.API.Data;
-using BanMoHinh.API.IServices;
+﻿using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
 {
@@ -14,24 +12,17 @@ namespace BanMoHinh.API.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IRankService _rankService;
-        private readonly MyDbContext _myDbContext;
+        private readonly RoleManager<Role> _roleManager;
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration,IRankService rankService,MyDbContext myDbContext)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager,RoleManager<Role> roleManager, IConfiguration configuration,IRankService rankService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _rankService = rankService;
-            _myDbContext = myDbContext;
+            _roleManager = roleManager;
         }
-
-        public Task<bool> ChangeRole(Guid userId, string roleName)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
+        // CREATE
         public async Task<bool> Create(UserViewModel item, string roleName)
         {
             var newRank = await _rankService.GetItemByName("Bạc");
@@ -53,7 +44,7 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
-
+        // DELETE
         public async Task<bool> Delete(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -64,20 +55,88 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
-
-        public async Task<List<User>> GetAll()
+        // GET ALL USER
+        public async Task<ICollection<User>> GetAll()
         {
-            return await _userManager.Users.ToListAsync();
+            var user =  await _userManager.Users.ToListAsync();
+            return user;
         }
-
+        // GET USER
         public async Task<User> GetItem(Guid id)
         {
             return await _userManager.FindByIdAsync(id.ToString());
         }
-
-        public Task<bool> Update(Guid id, User item)
+        // RESET PASSWORD
+        public async Task<bool> ResetPassword(Guid id, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null)
+            {
+                var result = await _userManager.RemovePasswordAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddPasswordAsync(user, newPassword);
+                    if (result.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        // CHANGE PASSWORD
+        public async Task<bool> ChangePassword(string id, string currentPassword, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            bool passwordMatch = await _userManager.CheckPasswordAsync(user, currentPassword); // check old password
+            if (passwordMatch != null)
+            {
+                var results = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword); // change password
+                if (results.Succeeded)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        // CHANGE ROLE
+        public async Task<bool> ChangeRole(Guid userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                
+                var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddToRoleAsync(user, roleName);
+                    if (result.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // UPDATE
+        public async Task<bool> Update( UserViewModel item) // tự nhiên có rank khoai ghê
+        {
+            var user = new User()
+            {
+                UserName = item.UserName,
+                Email = item.Email,
+                PhoneNumber = item.PhoneNumber,
+                DateOfBirth = item.DateOfBirth,
+                Points = 0,
+            };
+            var result = await _userManager.UpdateAsync(user); // update account
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

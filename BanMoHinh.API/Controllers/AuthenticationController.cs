@@ -21,7 +21,14 @@ namespace BanMoHinh.API.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var result = await _userAuthentication.Login(model);
-            return Ok(result.Token);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Token);
+            }
+            else
+            {
+                return BadRequest(result.Messages);
+            }
         }
         [HttpPost("register")]
         
@@ -29,6 +36,12 @@ namespace BanMoHinh.API.Controllers
         {
             var result = await _userAuthentication.Register(model);
             return Ok(result);
+        }
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _userAuthentication.Logout();
+            return Ok();
         }
     }
 }
