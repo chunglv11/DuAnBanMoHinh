@@ -1,10 +1,8 @@
-﻿using BanMoHinh.API.Data;
-using BanMoHinh.API.IServices;
+﻿using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
 {
@@ -24,11 +22,7 @@ namespace BanMoHinh.API.Services
             _rankService = rankService;
             _roleManager = roleManager;
         }
-
-
-
-
-
+        // CREATE
         public async Task<bool> Create(UserViewModel item, string roleName)
         {
             var newRank = await _rankService.GetItemByName("Bạc");
@@ -50,7 +44,7 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
-
+        // DELETE
         public async Task<bool> Delete(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -61,17 +55,19 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
-
-        public async Task<List<User>> GetAll()
+        // GET ALL USER
+        public async Task<ICollection<User>> GetAll()
         {
-            return await _userManager.Users.ToListAsync();
+            var user =  await _userManager.Users.ToListAsync();
+            return user;
         }
-
+        // GET USER
         public async Task<User> GetItem(Guid id)
         {
             return await _userManager.FindByIdAsync(id.ToString());
         }
-        public async Task<bool> ChangePassword(Guid id, string password)
+        // RESET PASSWORD
+        public async Task<bool> ResetPassword(Guid id, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user != null)
@@ -79,7 +75,7 @@ namespace BanMoHinh.API.Services
                 var result = await _userManager.RemovePasswordAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddPasswordAsync(user, password);
+                    result = await _userManager.AddPasswordAsync(user, newPassword);
                     if (result.Succeeded)
                     {
                         return true;
@@ -88,15 +84,30 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
+        // CHANGE PASSWORD
+        public async Task<bool> ChangePassword(string id, string currentPassword, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            bool passwordMatch = await _userManager.CheckPasswordAsync(user, currentPassword); // check old password
+            if (passwordMatch != null)
+            {
+                var results = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword); // change password
+                if (results.Succeeded)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        // CHANGE ROLE
         public async Task<bool> ChangeRole(Guid userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user != null)
             {
-                var allRole = await _roleManager.Roles.ToListAsync(); // get all role
-                List<string> lstRole = new List<string>(); // create list role
-                lstRole.AddRange(allRole.Select(c=>c.Name)); // add role to list
-                var result = await _userManager.RemoveFromRolesAsync(user, lstRole); // remove all role
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                
+                var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddToRoleAsync(user, roleName);
@@ -108,9 +119,24 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
-        public Task<bool> Update( UserViewModel item) // tự nhiên có rank khoai ghê
+
+        // UPDATE
+        public async Task<bool> Update( UserViewModel item) // tự nhiên có rank khoai ghê
         {
-            throw new NotImplementedException();
+            var user = new User()
+            {
+                UserName = item.UserName,
+                Email = item.Email,
+                PhoneNumber = item.PhoneNumber,
+                DateOfBirth = item.DateOfBirth,
+                Points = 0,
+            };
+            var result = await _userManager.UpdateAsync(user); // update account
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

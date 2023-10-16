@@ -46,7 +46,11 @@ namespace BanMoHinh.API.Services
         }
         public async Task<Response> Login(LoginViewModel model)
         {
-            var response = new Response();
+            var response = new Response()
+            {
+                IsSuccess = false
+            };
+
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
             {
@@ -129,8 +133,10 @@ namespace BanMoHinh.API.Services
             {
                 UserId = identityUser.Id
             };
+                 // khi add sản phẩm vào wishList thì mới thêm
             _cartService.Create(cart); // create cart
             await _userManager.AddToRoleAsync(identityUser, "User");
+            response.IsSuccess = true;
             response.StatusCode = 200;
             response.Messages = "Sign Up Successfully!";
             return response;
