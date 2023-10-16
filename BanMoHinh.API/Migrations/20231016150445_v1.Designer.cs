@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BanMoHinh.API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230922073001_mg")]
-    partial class mg
+    [Migration("20231016150445_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,6 +61,33 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brand");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("80c277c4-6dd5-49e9-a6bc-fbb520888e29"),
+                            BrandName = "Brand 1"
+                        },
+                        new
+                        {
+                            Id = new Guid("25a837e2-db59-4636-9c61-e0e08411e78b"),
+                            BrandName = "Brand 2"
+                        },
+                        new
+                        {
+                            Id = new Guid("2d1b66fe-de1a-4bec-aef7-bf71038bda04"),
+                            BrandName = "Brand 3"
+                        },
+                        new
+                        {
+                            Id = new Guid("72eb9fc8-3c86-47e6-aca0-b3d55e45d99d"),
+                            BrandName = "Brand 4"
+                        },
+                        new
+                        {
+                            Id = new Guid("eb112fc4-3601-483d-9eb0-3a2a6e74c9b0"),
+                            BrandName = "Brand 5"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Cart", b =>
@@ -119,6 +146,33 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0fb70c21-cfc7-494e-a040-1c6c77836e55"),
+                            CategoryName = "Category 1"
+                        },
+                        new
+                        {
+                            Id = new Guid("9ca32796-b1b7-4d39-99ee-847825b65faa"),
+                            CategoryName = "Category 2"
+                        },
+                        new
+                        {
+                            Id = new Guid("c665fb67-fe73-468e-8d6f-e61c9c4f7efa"),
+                            CategoryName = "Category 3"
+                        },
+                        new
+                        {
+                            Id = new Guid("1051f8bb-9676-4900-83bf-ec1e501df149"),
+                            CategoryName = "Category 4"
+                        },
+                        new
+                        {
+                            Id = new Guid("106da763-3b8d-4291-99b7-edf87128293e"),
+                            CategoryName = "Category 5"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Colors", b =>
@@ -136,6 +190,104 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("ColorId");
 
                     b.ToTable("Colors");
+
+                    b.HasData(
+                        new
+                        {
+                            ColorId = new Guid("f6dc9628-6265-42ef-af89-351b2347d609"),
+                            ColorCode = "#000000",
+                            ColorName = "Đen"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("209c1544-d65b-494e-b362-3c4fc171cbf1"),
+                            ColorCode = "#FFFFFF",
+                            ColorName = "Trắng"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("6d7639b3-3d83-4bfa-833c-165032384506"),
+                            ColorCode = "#FF0000",
+                            ColorName = "Đỏ"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("fb0398c8-0a13-491b-8db9-39c11ebcc16b"),
+                            ColorCode = "#00FF00",
+                            ColorName = "Xanh lá cây"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("5ef1113f-a2f4-49c3-9ae1-52feaa8f3ba4"),
+                            ColorCode = "#0000FF",
+                            ColorName = "Xanh dương"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("150b814e-7e5e-4ea0-bc99-5b0d066a3bf6"),
+                            ColorCode = "#FFFF00",
+                            ColorName = "Vàng"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("8adfab98-70de-4a1d-8ca8-8c7ab5ad6405"),
+                            ColorCode = "#FFA500",
+                            ColorName = "Cam"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("cbb0a313-85f6-4a7d-9ff4-fc4257f0ba69"),
+                            ColorCode = "#800080",
+                            ColorName = "Tím"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("1dacbb9c-0064-428b-837b-2d842ef8e57c"),
+                            ColorCode = "#FFC0CB",
+                            ColorName = "Hồng"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("438a5c22-3c8b-465f-b5ac-03fb169a654f"),
+                            ColorCode = "#808080",
+                            ColorName = "Xám"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("fb23291b-7aff-42a3-b18a-abe490cf3af9"),
+                            ColorCode = "#A52A2A",
+                            ColorName = "Nâu"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("0fbf9f1d-39b2-4f7a-92a2-3218d35ff3b1"),
+                            ColorCode = "#000080",
+                            ColorName = "Xanh lam"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("f6d7ea66-d168-4dc3-b72a-278169b9542e"),
+                            ColorCode = "#00BFFF",
+                            ColorName = "Xanh da trời"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("6987531a-5726-4541-9d33-b273d8fbbc08"),
+                            ColorCode = "#FFDAB9",
+                            ColorName = "Hồng phấn"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("53ddf0da-083c-4482-b9e5-01f45d64d715"),
+                            ColorCode = "#C0C0C0",
+                            ColorName = "Xám tro"
+                        },
+                        new
+                        {
+                            ColorId = new Guid("5c4d0e45-a123-4185-a00f-129b8b40636d"),
+                            ColorCode = "#C0C0C0",
+                            ColorName = "Bạc"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Material", b =>
@@ -150,6 +302,23 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Material");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b55c3ebf-08d4-429d-9efe-027d16307dc7"),
+                            MaterialName = "Sắt"
+                        },
+                        new
+                        {
+                            Id = new Guid("bec383f4-bbf7-4cd4-a914-68b6405adbd1"),
+                            MaterialName = "Nhựa pvc"
+                        },
+                        new
+                        {
+                            Id = new Guid("2a8b9d2f-3a1c-4490-b5e6-ecee70e6e298"),
+                            MaterialName = "Gỗ"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Order", b =>
@@ -261,6 +430,48 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fbe9bd9b-5fd7-4b45-a622-b14a4e8abc40"),
+                            OrderStatusName = "Đang được xử lý"
+                        },
+                        new
+                        {
+                            Id = new Guid("ea36edc6-46ae-4b75-a561-3dec13ad15e2"),
+                            OrderStatusName = "Chờ lấy hàng"
+                        },
+                        new
+                        {
+                            Id = new Guid("f77aad07-dfd6-4d5d-8cc2-28541cac6da7"),
+                            OrderStatusName = "Đang giao hàng"
+                        },
+                        new
+                        {
+                            Id = new Guid("97faa432-31df-4d2f-acf4-690bbfc502b6"),
+                            OrderStatusName = "Giao hàng thành công"
+                        },
+                        new
+                        {
+                            Id = new Guid("02d3a349-fa16-40b1-adb2-5e861ec40774"),
+                            OrderStatusName = "Giao hàng không thành công"
+                        },
+                        new
+                        {
+                            Id = new Guid("4ecd8b36-0768-421b-ba89-b1191cd3fc64"),
+                            OrderStatusName = "Hủy đơn"
+                        },
+                        new
+                        {
+                            Id = new Guid("8be8caef-7c83-4b59-9c85-b9cbb60f876b"),
+                            OrderStatusName = "Yêu cầu trả hàng"
+                        },
+                        new
+                        {
+                            Id = new Guid("a2a06135-949b-459f-993e-f63340bcadaa"),
+                            OrderStatusName = "Chấp nhận trả hàng"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Payment", b =>
@@ -275,6 +486,18 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Payment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a101c049-8489-43ac-9ced-fa238e43ec32"),
+                            PaymentName = "Thanh toán khi nhận hàng"
+                        },
+                        new
+                        {
+                            Id = new Guid("07dacb17-e3c0-402a-a725-e5f862292848"),
+                            PaymentName = "Thanh toán Online"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Post", b =>
@@ -304,7 +527,7 @@ namespace BanMoHinh.API.Migrations
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -420,12 +643,9 @@ namespace BanMoHinh.API.Migrations
                     b.Property<Guid?>("ProductDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductDetailId");
 
                     b.ToTable("ProductImage");
                 });
@@ -442,9 +662,38 @@ namespace BanMoHinh.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PoinsMax")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PointsMin")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Rank");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5be8d160-af3a-48dc-9b81-17c828fd9b76"),
+                            Name = "Bạc",
+                            PoinsMax = 1000000,
+                            PointsMin = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("3d7ce39d-0d9f-4da3-8249-45f50183666c"),
+                            Name = "Vàng",
+                            PoinsMax = 3000000,
+                            PointsMin = 1000001
+                        },
+                        new
+                        {
+                            Id = new Guid("071a84bb-b6af-49b5-a466-a1c00cc2711e"),
+                            Name = "Kim Cương",
+                            PoinsMax = 10000000,
+                            PointsMin = 3000001
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Rate", b =>
@@ -498,6 +747,29 @@ namespace BanMoHinh.API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("099ab9b6-fa33-449c-bab2-7c104119b9c8"),
+                            ConcurrencyStamp = "66c46bb0-5655-4575-8825-9676876bdc55",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("5cf31344-bba2-4cfb-bb07-d6b85bd2078c"),
+                            ConcurrencyStamp = "6245a204-c1a6-4322-b2c4-fb27c32bbf58",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = new Guid("db50adb9-a926-4dba-930c-63dd7029826d"),
+                            ConcurrencyStamp = "d5b0c16c-45a1-44fd-ae8c-db32c765d92c",
+                            Name = "Guest",
+                            NormalizedName = "GUEST"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Size", b =>
@@ -565,6 +837,9 @@ namespace BanMoHinh.API.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("Points")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("RankId")
                         .HasColumnType("uniqueidentifier");
@@ -648,10 +923,15 @@ namespace BanMoHinh.API.Migrations
                     b.Property<int?>("Value")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("VoucherTypeId")
+                    b.Property<Guid?>("VoucherStatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("VoucherTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("VoucherStatusId");
 
                     b.HasIndex("VoucherTypeId");
 
@@ -679,6 +959,37 @@ namespace BanMoHinh.API.Migrations
                     b.ToTable("VoucherDetails");
                 });
 
+            modelBuilder.Entity("BanMoHinh.Share.Models.VoucherStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("voucherstatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7fda05ce-c9d5-4e4e-b6f9-23b83d4ffc58"),
+                            Name = "Used"
+                        },
+                        new
+                        {
+                            Id = new Guid("f2fff3d0-0053-428f-9c0a-f077a3e38df9"),
+                            Name = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("4329816d-a206-4d03-829d-3056b272798e"),
+                            Name = "Expired"
+                        });
+                });
+
             modelBuilder.Entity("BanMoHinh.Share.Models.VoucherType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -691,6 +1002,18 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VoucherType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4dc00f84-1e37-45d2-874a-17a41e7834d9"),
+                            Name = "Khánh hàng"
+                        },
+                        new
+                        {
+                            Id = new Guid("c0e51b81-fa95-4633-8e47-b0751fba37cb"),
+                            Name = "Sản phẩm"
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.WishList", b =>
@@ -900,9 +1223,7 @@ namespace BanMoHinh.API.Migrations
                 {
                     b.HasOne("BanMoHinh.Share.Models.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -953,7 +1274,7 @@ namespace BanMoHinh.API.Migrations
                 {
                     b.HasOne("BanMoHinh.Share.Models.ProductDetail", "Product")
                         .WithMany("ProductImages")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductDetailId");
 
                     b.Navigation("Product");
                 });
@@ -1001,11 +1322,15 @@ namespace BanMoHinh.API.Migrations
 
             modelBuilder.Entity("BanMoHinh.Share.Models.Voucher", b =>
                 {
+                    b.HasOne("BanMoHinh.Share.Models.VoucherStatus", "VoucherStatus")
+                        .WithMany("Vouchers")
+                        .HasForeignKey("VoucherStatusId");
+
                     b.HasOne("BanMoHinh.Share.Models.VoucherType", "VoucherType")
                         .WithMany("Vouchers")
-                        .HasForeignKey("VoucherTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VoucherTypeId");
+
+                    b.Navigation("VoucherStatus");
 
                     b.Navigation("VoucherType");
                 });
@@ -1183,6 +1508,11 @@ namespace BanMoHinh.API.Migrations
             modelBuilder.Entity("BanMoHinh.Share.Models.Voucher", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("BanMoHinh.Share.Models.VoucherStatus", b =>
+                {
+                    b.Navigation("Vouchers");
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.VoucherType", b =>
