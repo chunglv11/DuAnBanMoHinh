@@ -37,5 +37,11 @@ namespace BanMoHinh.API.Controllers
             var result = await _userAuthentication.Register(model);
             return Ok(result);
         }
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _userAuthentication.Logout();
+            return Ok();
+        }
     }
 }
