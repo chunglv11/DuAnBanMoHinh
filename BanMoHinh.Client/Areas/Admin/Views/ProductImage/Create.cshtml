@@ -1,0 +1,52 @@
+﻿@using BanMoHinh.Share.Models;
+@using Newtonsoft.Json;
+@model BanMoHinh.Share.Models.ProductImage
+
+@{
+     HttpClient _httpClient = new HttpClient();
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+    string apiUrls = $"https://localhost:7007/api/productdetail/get-all-productdetail";
+    var responses = await _httpClient.GetAsync(apiUrls); // goi api lay data
+    string apiDatas = await responses.Content.ReadAsStringAsync(); // doc data tra ve
+    var shoeDetails = JsonConvert.DeserializeObject<List<ProductDetail>>(apiDatas);
+}
+
+<h1>Create</h1>
+
+<h4>ProductImage</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          
+            <div class="form-group">
+                <label asp-for="ProductDetailId" class="control-label"></label>
+                <select asp-for="ProductDetailId" class="form-select">
+                        <option>Chose Shoes </option>
+                        @foreach (var item in shoeDetails)
+                        {
+                            <option value="@item.Id">@item.ProductId</option>
+                        }
+                    </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input name="file" class="form-control" type="file" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Show">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

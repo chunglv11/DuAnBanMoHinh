@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -33,17 +33,13 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        /// <summary>
-        /// Get User by Id
-        /// </summary>
-        /// <param name="id">UserId</param>
-        /// <returns></returns>
-        [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+
+        [HttpGet("get/{userName}")]
+        public async Task<IActionResult> GetByName(string userName)
         {
             try
             {
-                return Ok(await _userService.GetItem(id));
+                return Ok(await _userService.GetItem(userName));
             }
             catch (Exception ex)
             {
@@ -52,17 +48,13 @@ namespace BanMoHinh.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Delete User by id
-        /// </summary>
-        /// <param name="id">UserId</param>
-        /// <returns></returns>
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+
+        [HttpDelete("delete/{userName}")]
+        public async Task<IActionResult> Delete(string userName)
         {
             try
             {
-                return Ok(await _userService.Delete(id));
+                return Ok(await _userService.Delete(userName));
             }
             catch (Exception ex)
             {
@@ -97,12 +89,12 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("change-role/{userId}/{roleName}")]
-        public async Task<IActionResult> ChangeRole(Guid userId, string roleName)
+        [HttpGet("change-role/{userName}/{roleName}")]
+        public async Task<IActionResult> ChangeRole(string userName, string roleName)
         {
             try
             {
-                return Ok(await _userService.ChangeRole(userId, roleName));
+                return Ok(await _userService.ChangeRole(userName, roleName));
             }
             catch (Exception ex)
             {
@@ -110,12 +102,12 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("reset-password/{id}/{newPassword}")]
-        public async Task<IActionResult> ResetPassword(Guid id, string newPassword)
+        [HttpGet("reset-password/{userName}/{newPassword}")]
+        public async Task<IActionResult> ResetPassword(string userName, string newPassword)
         {
             try
             {
-                return Ok(await _userService.ResetPassword(id, newPassword));
+                return Ok(await _userService.ResetPassword(userName, newPassword));
             }
             catch (Exception ex)
             {
@@ -123,12 +115,12 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("change-password/{id}/{currentPassword}/{newPassword}")]
-        public async Task<IActionResult> ChangePassword(string id, string currentPassword, string newPassword)
+        [HttpGet("change-password/{userName}/{currentPassword}/{newPassword}")]
+        public async Task<IActionResult> ChangePassword(string userName, string currentPassword, string newPassword)
         {
             try
             {
-                return Ok(await _userService.ChangePassword(id, currentPassword, newPassword));
+                return Ok(await _userService.ChangePassword(userName, currentPassword, newPassword));
             }
             catch (Exception ex)
             {
