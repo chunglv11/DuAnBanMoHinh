@@ -24,8 +24,10 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddScoped<IAdressService, AdressService>();
 builder.Services.AddScoped<IVoucherTypeServices, VoucherTypeServices>();
 builder.Services.AddScoped<IVoucherStatusService, VoucherStatusService>();
-
 builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<ICartItemService, CartItemService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddScoped<IUserVoucherService, UserVoucherService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
