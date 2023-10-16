@@ -17,7 +17,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    
+    <!-- (1): Khai báo sử dụng thư viện CKEditor -->
+
+    <script src="~/file/admin/ckeditor/ckeditor.js"></script>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -61,8 +63,19 @@
                 </a>
             </li>
             <li>
-                <a class="app-menu__item " href="table-data-table.html">
-                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân viên</span>
+                <a class="app-menu__item " asp-area="Admin" asp-controller="Post" asp-action="Index">
+                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý bài viết</span>
+                </a>
+            </li>
+            <li>
+                <a class="app-menu__item " asp-area="Admin" asp-controller="Rank" asp-action="Index">
+                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý xếp hạng</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="app-menu__item " asp-area="Admin" asp-controller="User" asp-action="Index">
+                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý tài khoản</span>
                 </a>
             </li>
             <li>
@@ -248,6 +261,10 @@
             }
         }
     </script>
+    <!-- chkeditor -->
+    <script src="~/file/admin/ckeditor/ckeditor.js"></script>
+    <script>CKEDITOR.replace('ten');</script>
+    <!-- /chkeditor -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
