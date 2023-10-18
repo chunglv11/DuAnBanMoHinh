@@ -56,7 +56,7 @@ app.UseEndpoints(endpoints =>
     );
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authentication}/{action=DemoLogin}/{id?}");
+    pattern: "{controller=Authentication}/{action=Login}/{id?}");
 });
 
 app.Run();

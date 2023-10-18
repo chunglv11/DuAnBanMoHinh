@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BanMoHinh.Share.Models.Material>
+@{
+    ViewData["Title"] = "GetAllMaterial";
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+}
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { area="Admin", id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { area="Admin", id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { area="Admin", id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -36,7 +36,7 @@ namespace BanMoHinh.API.Services
         {
             try
             {
-                var item = await _dbContext.Brand.FirstOrDefaultAsync(c => c.Id == id);
+                var item = await _dbContext.Material.FirstOrDefaultAsync(c => c.Id == id);
                 _dbContext.Remove(item);
                 await _dbContext.SaveChangesAsync();
                 return true;

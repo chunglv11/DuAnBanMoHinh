@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>D:\New folder (2)\BanMoHinh.API\bin\Debug\net6.0\BanMoHinh.API.xml</DocumentationFile>
+    <DocumentationFile>D:\LTC#6\BanMoHinh.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

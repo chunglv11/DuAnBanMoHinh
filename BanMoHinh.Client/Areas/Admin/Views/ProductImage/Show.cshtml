@@ -1,0 +1,82 @@
+﻿@using BanMoHinh.Share.Models;
+@using Newtonsoft.Json;
+@model IEnumerable<BanMoHinh.Share.Models.ProductImage>
+
+@{
+    
+    HttpClient _httpClient = new HttpClient();
+    ViewData["Title"] = "Show";
+    List<string> imageExtensions = new List<string>()
+    {
+        ".png", ".jpg", ".jpeg", ".gif", ".tiff", ".pdf"
+    };
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Show</h1>
+
+@if (Model.Count() == 0)
+{
+    <h1>There are no images <a asp-action="Create">Create Now?</a></h1>
+}
+else
+{
+    <h1>Manager</h1>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Name Product
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Control
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @* Gộp những sản phẩm có cùng id lại*@
+        @{
+            var  x = Model.GroupBy(x => x.ProductDetailId).Select(x => x.First()).ToList();
+
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{
+                        //lay data tu bang PoductDetail
+                        string apiUrls = $"https://localhost:7007/api/productDetail/get-all-productdetail";
+                        var responses = await _httpClient.GetAsync(apiUrls); // goi api lay data
+                        string apiDatas = await responses.Content.ReadAsStringAsync(); // doc data tra ve
+                        var PrDetails = JsonConvert.DeserializeObject<List<ProductDetail>>(apiDatas);
+                        var PrDetail = PrDetails.FirstOrDefault(x => x.Id == item.ProductDetailId);
+                    }
+                    @PrDetail.ProductId @*chưa bú được tên sản phẩm *@
+                </td>
+                <td>
+                    @{ string extension = System.IO.Path.GetExtension(item.ImageUrl); }
+                    @if (imageExtensions.Contains(extension.Trim()))
+                    {
+                            <img src="~/ImagesProduct/@item.ImageUrl" height="100px">
+                    }
+                    else
+                    {
+                        <img src="~/ImagesProduct/meohaimai.ipg" height="100px">
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Update", new {  id=item.Id }) |
+                    @Html.ActionLink("Chi tiết", "Detais", new {  id=item.Id }) |
+                    @Html.ActionLink("Xoá", "Delete", new {  id=item.Id })
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
