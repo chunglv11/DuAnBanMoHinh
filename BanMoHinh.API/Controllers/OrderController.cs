@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/order")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -15,7 +15,8 @@ namespace BanMoHinh.API.Controllers
         public OrderController(IOrderService orderService) {
             _iorderService = orderService;
         }
-        [HttpGet("getall")]
+        [Route("getall")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -28,7 +29,8 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
+        [Route("details/{id}")]
+        [HttpGet]
         public async Task<ActionResult<Order>> Get(Guid id)
         {
             try
@@ -41,7 +43,8 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create")]
+        [Route("add")]
+        [HttpPost]
         public async Task<ActionResult<OrderVM>> Post([FromBody] OrderVM obj)
         {
             var result = await _iorderService.Create(obj);
@@ -51,8 +54,8 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-       
-        [HttpPut("update-{id}")]
+        [Route("update/{id}")]
+        [HttpPut]
         public async Task<ActionResult<OrderVM>> Put(Guid id, Guid userid,[FromBody] OrderVM obj)
         {
             var result = await _iorderService.Update(id,userid, obj);
@@ -62,7 +65,8 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-{id}")]
+        [Route("delete/{id}")]
+        [HttpDelete]
         public async Task<ActionResult<OrderVM>> Delete(Guid id)
         {
             var result = await _iorderService.Delete(id);

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<BanMoHinh.Share.Models.Order>
+
+@{
+    ViewData["Title"] = "ShowList";
+    Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>ShowList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.OrderCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmout)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VoucherValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmoutAfterApplyingVoucher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingFee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Create_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ship_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payment_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delivery_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmout)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmoutAfterApplyingVoucher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingFee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Create_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ship_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Payment_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delivery_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id = item.Id }) |
+                    @Html.ActionLink("Details", "DetailsOrder", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "DeleteC", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/orderitem")]
     [ApiController]
     public class OrderItemController : ControllerBase
     {
@@ -15,8 +15,9 @@ namespace BanMoHinh.API.Controllers
         {
             _iOrderItemService = iOrderItemService;
         }
+        [Route("getalll")]
 
-        [HttpGet("getall")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -29,7 +30,8 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
+        [Route("details/{id}")]
+        [HttpGet]
         public async Task<ActionResult<OrderItem>> Get(Guid id)
         {
             try
@@ -42,7 +44,9 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create")]
+        [Route("add")]
+
+        [HttpPost]
         public async Task<ActionResult<OrderItemVM>> Post([FromBody] OrderItemVM obj)
         {
             var result = await _iOrderItemService.Create(obj);
@@ -52,8 +56,9 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        
-        [HttpPut("update-product-{id}")]
+        [Route("update/{id}")]
+
+        [HttpPut]
         public async Task<ActionResult<OrderItemVM>> Put(Guid id, [FromBody] OrderItemVM obj)
         {
             var result = await _iOrderItemService.Update(id, obj);
@@ -63,7 +68,9 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-product-{id}")]
+        [Route("delete/{id}")]
+
+        [HttpDelete]
         public async Task<ActionResult<OrderItemVM>> Delete(Guid id)
         {
             var result = await _iOrderItemService.Delete(id);
