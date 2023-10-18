@@ -1,4 +1,6 @@
-﻿using BanMoHinh.Client.IServices;
+﻿
+
+using BanMoHinh.Client.IServices;
 using BanMoHinh.Client.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -10,6 +12,7 @@ builder.Services.AddControllersWithViews();
 // add Dependency Injection
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddScoped<IRateServices,RateServices>();
 
 builder.Services.AddSession(options =>
 {

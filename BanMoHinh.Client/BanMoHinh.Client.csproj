@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BanMoHinh.API\BanMoHinh.API.csproj" />
     <ProjectReference Include="..\BanMoHinh.Share\BanMoHinh.Share.csproj" />
   </ItemGroup>
 

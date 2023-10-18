@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/material")]
     [ApiController]
     public class MaterialController : ControllerBase
     {

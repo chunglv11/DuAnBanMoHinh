@@ -12,13 +12,15 @@ namespace BanMoHinh.API.Controllers
     public class RateController : ControllerBase
     {
         private IRateService _rateService;
-
-        public RateController(IRateService rateService)
+            public IOrderService _iorderService;
+        public RateController(IRateService rateService, IOrderService orderService)
         {
             _rateService = rateService;
+            _iorderService = orderService;
         }
+        [Route("getall")]
 
-        [HttpGet("Get-All-Rate")]
+        [HttpGet]
         public async Task<IActionResult> GetAllRate()
         {
             try
@@ -32,7 +34,9 @@ namespace BanMoHinh.API.Controllers
             }
 
         }
-        [HttpGet("get-{id}")]
+        [Route("details/{id}")]
+
+        [HttpGet]
         public async Task<ActionResult<Rate>> Get(Guid id)
         {
             try
@@ -45,7 +49,10 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create-rate")]
+
+        [Route("add")]
+
+        [HttpPost]
         public async Task<ActionResult<Rate>> CreateRate([FromBody] Rate rate)
         {
             var result = await _rateService.Create(rate);
@@ -55,7 +62,9 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpPut("update-rate-{id}")]
+        [Route("update/{id}")]
+
+        [HttpPut]
         public async Task<ActionResult<Rate>> Put(Guid id, Rate rate, Guid orderid)
         {
             var result = await _rateService.Update(id, orderid, rate);
@@ -65,9 +74,17 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-rate-{id}")]
+        [Route("delete/{id}")]
+
+        [HttpDelete]
         public async Task<ActionResult<Rate>> Delete(Guid id, Guid orderid)
         {
+            var rate = await _rateService.GetItem(id);
+            if (rate != null)
+            {
+                orderid = rate.OrderItemId;
+
+            }
             var result = await _rateService.Delete(id, orderid);
             if (result)
             {
