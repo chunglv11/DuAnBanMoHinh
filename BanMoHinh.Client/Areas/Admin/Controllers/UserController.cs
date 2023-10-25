@@ -17,7 +17,6 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             // show role trong index 
             // nếu là tài khoản của nhân viên thì được phép reset mật khẩu
-            //var lstRole = _httpClient.GetFromJsonAsync<List<Role>>("");
             var user =await _httpClient.GetFromJsonAsync<List<UserViewModel>>("https://localhost:7007/api/users");
             return View(user);
         }
