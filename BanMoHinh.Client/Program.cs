@@ -12,7 +12,6 @@ builder.Services.AddControllersWithViews();
 // add Dependency Injection
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
-builder.Services.AddScoped<IRateServices,RateServices>();
 
 builder.Services.AddSession(options =>
 {
