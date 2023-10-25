@@ -1,7 +1,7 @@
 ﻿using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
-using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace BanMoHinh.API.Services
 {
