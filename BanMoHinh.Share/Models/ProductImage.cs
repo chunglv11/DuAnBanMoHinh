@@ -15,7 +15,7 @@ namespace BanMoHinh.Share.Models
         public Guid? ProductDetailId { get; set; }
         public string? ImageUrl { get; set; }
 
-        [ForeignKey("ProductDetailId")]
+        [ForeignKey("ProductId")]
         public ProductDetail? Product { get; set; }
     }
 }
