@@ -30,7 +30,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get/{id}")]
+        [HttpGet("get-{id}")]
         public async Task<ActionResult<Post>> Get(Guid id)
         {
             try
@@ -54,7 +54,7 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
       
-        [HttpPut("update-post/{id}/{UserId}")]
+        [HttpPut("update-post-{id}")]
         public async Task<ActionResult<Post>> Put(Guid id,  Post post, Guid UserId)
         {
             var result = await _postService.Update(id,UserId, post);
@@ -64,7 +64,7 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-post/{id}")]
+        [HttpDelete("delete-post-{id}")]
         public async Task<ActionResult<Post>> Delete(Guid id,Guid UserId)
         {
             var result = await _postService.Delete(id,UserId);

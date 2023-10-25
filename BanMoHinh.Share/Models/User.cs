@@ -15,7 +15,7 @@ namespace BanMoHinh.Share.Models
         public int? Points { get; set; }
         public Guid RankId { get; set; }
         [ForeignKey("RankId")]
-        public virtual Rank? Rank { get; set; }
+        public virtual Rank Rank { get; set; }
         public virtual List<WishList>? WishLists { get; set; }
         public virtual List<Adress>? Adresses { get; set; }
         public virtual List<UserVoucher>? VoucherUsers { get; set; }
