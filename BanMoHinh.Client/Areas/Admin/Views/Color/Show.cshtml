@@ -5,19 +5,19 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-
+<h1>Danh sách màu</h1>
 <p>
-    <a asp-action="Create">Thêm mới</a>
+    <a asp-action="Create"  class="btn btn-add btn-sm"> <i class="fas fa-plus"></i>Thêm mới màu</a>
 </p>
 <table class="table">
     <thead>
         <tr>
            
             <th>
-                @Html.DisplayNameFor(model => model.ColorName)
+               Tên màu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ColorCode)
+                Mã màu
             </th>
             <th></th>
         </tr>
@@ -33,9 +33,8 @@
                 @Html.DisplayFor(modelItem => item.ColorCode)
             </td>
             <td>
-                @Html.ActionLink("Sửa", "Update", new {  id=item.ColorId  }) |
-                @Html.ActionLink("Chi tiết", "Details", new {  id=item.ColorId  }) |
-                @Html.ActionLink("Xoá", "Remove", new {  id=item.ColorId  })
+                <a class="btn btn-primary btn-sm edit" type="button" href="Update/@item.ColorId" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-primary btn-sm trash" type="button" href="Remove/@item.ColorId" title="Xóa"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
 }

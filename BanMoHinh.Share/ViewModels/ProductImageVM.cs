@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace BanMoHinh.Share.ViewModels
         public Guid Id { get; set; }
         public Guid? ProductDetailId { get; set; }
         public string? ImageUrl { get; set; }
+        public IFormFile ImageFile { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using BanMoHinh.API.Common;
 using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.API.Services;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IStorageService, FileStorageService>();
 
 // Add Identity
 builder.Services.AddIdentity<User, Role>()
