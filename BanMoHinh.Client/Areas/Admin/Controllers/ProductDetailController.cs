@@ -1,5 +1,8 @@
-﻿using BanMoHinh.Share.Models;
+﻿using BanMoHinh.Client.IServices;
+using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
@@ -9,9 +12,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
     {
         private HttpClient _httpClient;
         Uri Url = new Uri("https://localhost:7007/api/productDetail");
-        public ProductDetailController(HttpClient httpClient)
+        private IproductDetailApiClient _apiClient;
+        public ProductDetailController(HttpClient httpClient, IproductDetailApiClient iproductDetail)
         {
             _httpClient = httpClient;
+            _apiClient = iproductDetail;
         }
 
         public async Task<IActionResult> Show()
@@ -21,30 +26,76 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             string apiData = await response.Content.ReadAsStringAsync();
             // Lấy kqua trả về từ API
             // Đọc từ string Json vừa thu được sang List<T>
-            var colors = JsonConvert.DeserializeObject<List<ProductDetail>>(apiData);
+            var colors = JsonConvert.DeserializeObject<List<ProductDetailVM>>(apiData);
             return View(colors);
 
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create(Guid productId, Guid sizeId, Guid colorId)
         {
+            var productprops = _apiClient.GetListProduct();
+            ViewBag.ProductProp = productprops.Result.Select(x => new SelectListItem()
+            {
+                Text = x.ProductName,
+                Value = x.Id.ToString(),
+                Selected = productId.ToString() == x.Id.ToString()
+            });
+            var sizes = _apiClient.GetListSize();
+            ViewBag.Size = sizes.Result.Select(x => new SelectListItem()
+            {
+                Text = x.SizeName,
+                Value = x.Id.ToString(),
+                Selected = sizeId.ToString() == x.Id.ToString()
+            });
+            var colors = _apiClient.GetListColor();
+            ViewBag.Color = colors.Result.Select(x => new SelectListItem()
+            {
+                Text = x.ColorName,
+                Value = x.ColorId.ToString(),
+                Selected = colorId.ToString() == x.ColorId.ToString()
+            });
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Create(ProductDetail product)
-        {
-            var response = await _httpClient.PostAsJsonAsync(Url + "/create-productdetail", product);
 
-            if (response.IsSuccessStatusCode)
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ProductDetailVM product, Guid productId, Guid sizeId, Guid colorId, string edit)
+        {
+            if (!ModelState.IsValid)
             {
+                return View(ModelState);
+            }
+            var productprops = _apiClient.GetListProduct();
+            ViewBag.ProductProp = productprops.Result.Select(x => new SelectListItem()
+            {
+                Text = x.ProductName,
+                Value = x.Id.ToString(),
+                Selected = productId.ToString() == x.Id.ToString()
+            });
+            var sizes = _apiClient.GetListSize();
+            ViewBag.Size = sizes.Result.Select(x => new SelectListItem()
+            {
+                Text = x.SizeName,
+                Value = x.Id.ToString(),
+                Selected = sizeId.ToString() == x.Id.ToString()
+            });
+            var colors = _apiClient.GetListColor();
+            ViewBag.Color = colors.Result.Select(x => new SelectListItem()
+            {
+                Text = x.ColorName,
+                Value = x.ColorId.ToString(),
+                Selected = colorId.ToString() == x.ColorId.ToString()
+            });
+            var result = await _apiClient.CreateProduct(product, productId, sizeId, colorId, edit);
+            if (result)
+            {
+                TempData["result"] = "Thêm mới sản phẩm thành công";
                 return RedirectToAction("Show");
             }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = errorMessage;
-                return View();
-            }
+
+            ModelState.AddModelError("", "Thêm sản phẩm thất bại");
+            return View(product);
         }
+
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {

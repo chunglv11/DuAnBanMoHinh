@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BanMoHinh.API.Services
 {
@@ -28,10 +29,11 @@ namespace BanMoHinh.API.Services
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
-        public async Task<bool> Create(ProductDetailVM item)
+        public async Task<bool> Create(ProductDetailVM item, IFormFileCollection filecollection)
         {
             try
             {
+
                 ProductDetail productDetail = new ProductDetail()
                 {
                     Id = Guid.NewGuid(),
@@ -46,20 +48,46 @@ namespace BanMoHinh.API.Services
                     Description = item.Description,
                     Status = item.Status,
                 };
-                //save image
-                if (item.ThumbnailImage != null)
-                {
-                    productDetail.ProductImages = new List<ProductImage>()
-                {
-                    new ProductImage()
-                    {
-                        Id= Guid.NewGuid(),
-                        ImageUrl = await this.SaveFile(item.ThumbnailImage)
-                    }
-                };
-                }
-                _dbContext.ProductDetail.Add(productDetail);
+                await _dbContext.ProductDetail.AddAsync(productDetail);
                 await _dbContext.SaveChangesAsync();
+                int passcount = 0;
+                //save image
+                if (filecollection != null)//không null 
+                {
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+                    foreach (var i in filecollection)
+                    {
+
+                        string imgPath = path + "\\" + i.FileName;
+                        using (var stream = new FileStream(imgPath, FileMode.Create))
+                        {
+                            await i.CopyToAsync(stream);
+                            passcount++;
+                        }
+
+                        //productDetail.ProductImages = new List<ProductImage>()
+                        //{
+                        //    new ProductImage()
+                        //    {
+                        //        Id = Guid.NewGuid(),
+                        //        ProductDetailId = item.Id,
+                        //        ImageUrl = i.FileName
+                        //    }
+
+                        //};
+                        var proi = new ProductImage()
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductDetailId = productDetail.Id,
+                            ImageUrl = i.FileName
+                        };
+                        await _dbContext.ProductImage.AddAsync(proi);
+                        //await _dbContext.ProductDetail.AddAsync(productDetail);
+                    }
+
+                    await _dbContext.SaveChangesAsync();
+                }
+
                 return true;
             }
             catch (Exception e)
@@ -109,10 +137,8 @@ namespace BanMoHinh.API.Services
             {
                 var productDt = await _dbContext.ProductDetail.FindAsync(id) ?? throw new Exception("Không tìm thấy sản phẩm");
                 var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == id);
-                foreach (var image in images)
-                {
-                    await _storageService.DeleteFileAsync(image.ImageUrl);
-                }
+                _dbContext.ProductImage.RemoveRange(images);
+                await _dbContext.SaveChangesAsync();
                 _dbContext.ProductDetail.Remove(productDt);
                 await _dbContext.SaveChangesAsync();
                 return true;

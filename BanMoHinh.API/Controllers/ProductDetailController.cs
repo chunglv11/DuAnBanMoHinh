@@ -45,9 +45,9 @@ namespace BanMoHinh.API.Controllers
         }
         [HttpPost("create-productdetail")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ProductDetailVM>> Post([FromForm] ProductDetailVM obj)
+        public async Task<ActionResult<ProductDetailVM>> Post([FromForm] ProductDetailVM obj, IFormFileCollection file)
         {
-            var result = await _iproductDetailService.Create(obj);
+            var result = await _iproductDetailService.Create(obj, file);
             if (result)
             {
                 return Ok("Đã thêm thành công");

@@ -8,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // add Dependency Injection
+
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IproductDetailApiClient, ProductDetailApiClient>();
 
 builder.Services.AddSession(options =>
 {

@@ -9,7 +9,7 @@ namespace BanMoHinh.Share.ViewModels
 {
     public class ProductDetailVM
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string? ProductName { get; set; }
         public Guid? SizeId { get; set; }
@@ -23,6 +23,6 @@ namespace BanMoHinh.Share.ViewModels
         public DateTime? Update_At { get; set; }
         public string? Description { get; set; }
         public bool? Status { get; set; }
-        public IFormFile ThumbnailImage { get; set; }
+        public IFormFile? ThumbnailImage { get; set; }
     }
 }
