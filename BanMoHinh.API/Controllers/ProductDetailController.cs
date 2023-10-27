@@ -44,9 +44,10 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create-productdetail")]
-        public async Task<ActionResult<ProductDetailVM>> Post([FromBody] ProductDetailVM obj)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ProductDetailVM>> Post([FromForm] ProductDetailVM obj, IFormFileCollection file)
         {
-            var result = await _iproductDetailService.Create(obj);
+            var result = await _iproductDetailService.Create(obj, file);
             if (result)
             {
                 return Ok("Đã thêm thành công");
@@ -64,9 +65,15 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpPut("update-productdetail-{id}")]
-        public async Task<ActionResult<ProductDetailVM>> Put(Guid id, [FromBody] ProductDetailVM obj)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ProductDetailVM>> Put(Guid id, [FromForm] ProductDetailVM obj)
         {
-            var result = await _iproductDetailService.Update(id, obj);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            obj.Id = id;
+            var result = await _iproductDetailService.Update(obj);
             if (result)
             {
                 return Ok("Đã sửa thành công");

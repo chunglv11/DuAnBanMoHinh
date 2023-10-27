@@ -111,7 +111,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(Guid Id)
         {
-            var response = await _httpClient.DeleteAsync(Url + $"/delete-Color-{Id}");
+            var response = await _httpClient.DeleteAsync(Url + $"/delete-size-{Id}");
 
             if (response.IsSuccessStatusCode)
             {

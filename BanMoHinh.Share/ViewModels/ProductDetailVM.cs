@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,13 @@ namespace BanMoHinh.Share.ViewModels
 {
     public class ProductDetailVM
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
+        public string? ProductName { get; set; }
         public Guid? SizeId { get; set; }
+        public string? SizeName { get; set; }
         public Guid? ColorId { get; set; }
+        public string? ColorName { get; set; }
         public int? Quantity { get; set; }
         public decimal? Price { get; set; }
         public decimal? PriceSale { get; set; }
@@ -19,5 +23,6 @@ namespace BanMoHinh.Share.ViewModels
         public DateTime? Update_At { get; set; }
         public string? Description { get; set; }
         public bool? Status { get; set; }
+        public IFormFile? ThumbnailImage { get; set; }
     }
 }
