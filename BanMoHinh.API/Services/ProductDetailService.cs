@@ -63,7 +63,7 @@ namespace BanMoHinh.API.Services
                         {
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
-                            ImageUrl = i.FileName
+                            ImageUrl = imgPath
                         };
                         await _dbContext.ProductImage.AddAsync(proi);
                     }
