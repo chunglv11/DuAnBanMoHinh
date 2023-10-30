@@ -2,6 +2,7 @@
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Security.Policy;
 
 namespace BanMoHinh.Client.Services
@@ -19,17 +20,6 @@ namespace BanMoHinh.Client.Services
         {
             string apiUrl = "https://localhost:7007/api/productDetail/create-productdetail";
             var requestContent = new MultipartFormDataContent();
-            if (request.ThumbnailImage != null)
-            {
-
-                byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
-                {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
-                }
-                ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "ThumbnailImage", request.ThumbnailImage.FileName);
-            }
             request.ProductId = productId;
             request.SizeId = sizeId;
             request.ColorId = colorId;
@@ -44,6 +34,17 @@ namespace BanMoHinh.Client.Services
             requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
+            foreach (var file in request.filecollection)
+            {
+                requestContent.Add(new StreamContent(file.OpenReadStream())
+                {
+                    Headers =
+                     {
+                       ContentLength = file.Length,
+                       ContentType = new MediaTypeHeaderValue(file.ContentType)
+                     }
+                }, "filecollection", file.FileName);
+            }
             var response = await _httpClient.PostAsync(apiUrl, requestContent);
             return response.IsSuccessStatusCode;
         }
