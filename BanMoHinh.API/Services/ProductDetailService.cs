@@ -22,14 +22,8 @@ namespace BanMoHinh.API.Services
             _storageService = storageService;
         }
         //luu anh vao thu muc wwwroot o api
-        private async Task<string> SaveFile(IFormFile file)
-        {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
-        }
-        public async Task<bool> Create(ProductDetailVM item, IFormFileCollection filecollection)
+
+        public async Task<bool> Create(ProductDetailVM item)
         {
             try
             {
@@ -52,10 +46,10 @@ namespace BanMoHinh.API.Services
                 await _dbContext.SaveChangesAsync();
                 int passcount = 0;
                 //save image
-                if (filecollection != null)//không null 
+                if (item.filecollection != null)//không null 
                 {
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
-                    foreach (var i in filecollection)
+                    foreach (var i in item.filecollection)
                     {
 
                         string imgPath = path + "\\" + i.FileName;
@@ -65,16 +59,6 @@ namespace BanMoHinh.API.Services
                             passcount++;
                         }
 
-                        //productDetail.ProductImages = new List<ProductImage>()
-                        //{
-                        //    new ProductImage()
-                        //    {
-                        //        Id = Guid.NewGuid(),
-                        //        ProductDetailId = item.Id,
-                        //        ImageUrl = i.FileName
-                        //    }
-
-                        //};
                         var proi = new ProductImage()
                         {
                             Id = Guid.NewGuid(),
@@ -82,7 +66,6 @@ namespace BanMoHinh.API.Services
                             ImageUrl = i.FileName
                         };
                         await _dbContext.ProductImage.AddAsync(proi);
-                        //await _dbContext.ProductDetail.AddAsync(productDetail);
                     }
 
                     await _dbContext.SaveChangesAsync();
@@ -197,28 +180,32 @@ namespace BanMoHinh.API.Services
                 idp.Update_At = item.Update_At;
                 idp.Description = item.Description;
                 idp.Status = item.Status;
-                if (item.ThumbnailImage != null)
+                //var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == idp.Id);
+                //_dbContext.ProductImage.RemoveRange(images);
+                int passcount = 0;
+                //save image
+                if (item.filecollection != null)//không null 
                 {
-                    var thumbnailImage = _dbContext.ProductImage.FirstOrDefault(i => i.ProductDetailId == item.Id);
-                    if (thumbnailImage != null)
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+                    foreach (var i in item.filecollection)
                     {
-                        thumbnailImage.ImageUrl = await this.SaveFile(item.ThumbnailImage);
-                        _dbContext.ProductImage.Update(thumbnailImage);
-                    }
-                    else
-                    {
-                        idp.ProductImages = new List<ProductImage>()
+
+                        string imgPath = path + "\\" + i.FileName;
+                        using (var stream = new FileStream(imgPath, FileMode.Create))
                         {
-                            new ProductImage()
-                            {
-                                Id= Guid.NewGuid(),
-                                ImageUrl = await this.SaveFile(item.ThumbnailImage)
-                            }
+                            await i.CopyToAsync(stream);
+                            passcount++;
+                        }
+                        var proi = new ProductImage()
+                        {
+                            ProductDetailId = idp.Id,
+                            ImageUrl = i.FileName
                         };
-                        _dbContext.ProductDetail.Add(idp);
+                        _dbContext.ProductImage.Update(proi);
                     }
+                    _dbContext.ProductDetail.Update(idp);
                 }
-                _dbContext.ProductDetail.Update(idp);
+
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
