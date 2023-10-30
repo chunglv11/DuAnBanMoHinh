@@ -1,124 +1,162 @@
-﻿@using BanMoHinh.Share.Models;
-@using Newtonsoft.Json;
-@model BanMoHinh.Share.Models.ProductDetail
+﻿
+@model BanMoHinh.Share.ViewModels.ProductDetailVM
 
 @{
     HttpClient _httpClient = new HttpClient();
-    ViewData["Title"] = "Update";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
-
-<h1>Cập nhật sản phẩm</h1>
-
-<h4>ProductDetail</h4>
+<style>
+input[type="file"]{
+    display: none;
+}
+#images{
+    width: 90%;
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+figure{
+    width: 20%;
+}
+img{
+    width: 100%;
+}
+figcaption{
+    text-align: center;
+    font-size: 2.4vmin;
+    margin-top: 0.5vmin;
+}
+</style>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Update">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container">
+        <form asp-action="Update" enctype="multipart/form-data" >
+            <div asp-validation-summary="ModelOnly"  class="text-danger" ></div>
             
-            <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
+            @*<div class="form-group">
+                <label class="control-label">Tên sản phẩm</label>
                 @{
-                    //lay du lieu tu bang Product
-                    string apiUrl1 = "https://localhost:7007/api/product/get-all-product";
-                    var response1 = await _httpClient.GetAsync(apiUrl1);
-                    string apidata1 = await response1.Content.ReadAsStringAsync();
-                    var sp = JsonConvert.DeserializeObject<List<Product>>(apidata1);
-                    //load du lieu vao dropdownlist
-                    <select asp-for="ProductId" class="form-select">
-                        <option selected>Select Product</option>
-                        @foreach (var item in sp)
-                        {
-                            <option value="@item.Id">@item.ProductName</option>
-                        }
-                    </select>
+                    <select name="productId" onchange="this.value;" asp-items="@ViewBag.ProductProp" class="form-control">
+                    <option>--Chọn sản phẩm--</option>
+                </select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
                 }
-            </div>
-            <div class="form-group">
-                <label asp-for="SizeId" class="control-label"></label>
-                @{
-                    //lay du lieu tu bang Product
-                    string apiUrl2 = "https://localhost:7007/api/size/get-all-size";
-                    var response2 = await _httpClient.GetAsync(apiUrl2);
-                    string apidata2 = await response2.Content.ReadAsStringAsync();
-                    var sp2 = JsonConvert.DeserializeObject<List<Size>>(apidata2);
-                    
-                    //load du lieu vao dropdownlist
-                    <select asp-for="SizeId" class="form-select">
-                        <option selected>Select Size</option>
-                        @foreach (var item in sp2)
-                        {
-                            <option value="@item.Id">@item.SizeName</option>
-                        }
-                    </select>
-                }
-            </div>
-            <div class="form-group">
-                <label asp-for="ColorId" class="control-label"></label>
                 
-                @{
-                    //lay du lieu tu bang Product
-                    string apiUrl3 = "https://localhost:7007/api/color/get-all-Color";
-                    var response3 = await _httpClient.GetAsync(apiUrl3);
-                    string apidata3 = await response3.Content.ReadAsStringAsync();
-                    var sp3 = JsonConvert.DeserializeObject<List<Colors>>(apidata3);
-                    //load du lieu vao dropdownlist
-                    <select asp-for="ColorId" class="form-select">
-                        <option selected>Select Color</option>
-                        @foreach (var item in sp3)
-                        {
-                            <option value="@item.ColorId">@item.ColorName</option>
-                        }
-                    </select>
-                }
             </div>
             <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
+                <label class="control-label">Tên size</label>
+                @{
+                    <select name="sizeId" onchange="this.value;" asp-items="@ViewBag.Size" class="form-control">
+                    <option>--Chọn size--</option>
+                </select>
+                <span asp-validation-for="SizeId" class="text-danger"></span>
+                }
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Tên màu</label>
+                @{
+                    <select name="colorId" onchange="this.value;" asp-items="@ViewBag.Color" class="form-control">
+                    <option>--Chọn màu--</option>
+                </select>
+                <span asp-validation-for="ColorId" class="text-danger"></span>
+                }
+               
+            </div>*@
+            <div class="form-group">
+                <label class="control-label">Số lượng</label>
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+                <label class="control-label">Giá nhập</label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PriceSale" class="control-label"></label>
+                <label class="control-label">Giá bán</label>
                 <input asp-for="PriceSale" class="form-control" />
                 <span asp-validation-for="PriceSale" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Create_At" class="control-label"></label>
+                <label class="control-label">Ngày nhập</label>
                 <input asp-for="Create_At" class="form-control" />
                 <span asp-validation-for="Create_At" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Update_At" class="control-label"></label>
+                <label  class="control-label">Ngày cập nhật</label>
                 <input asp-for="Update_At" class="form-control" />
                 <span asp-validation-for="Update_At" class="text-danger"></span>
             </div>
+          
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <label  class="control-label">Mô tả</label>
+                <div class="form-group space-top" >
+                    <!-- (2): textarea sẽ được thay thế bởi CKEditor -->
+                    <textarea asp-for="Description" id="edit" name="edit" cols="200" rows="80"></textarea>
+
+                    <!-- (3): Code Javascript thay thế textarea có id='editor1' bởi CKEditor -->
+                    <script>
+
+                        CKEDITOR.replace('edit');
+
+                    </script>
+                </div>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
+                <input type="file" id="file-input"  asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+                <label for="file-input">
+                    <i class="fas fa-upload"></i> Chọn ảnh
+                </label>
+                <p id="num-of-files">Không có file nào</p>
+                <div id="images"></div>            
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Trạng thái</label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+           <div class="form-group">
+                <button class="btn btn-save" type="submit" >Cập nhật</button>
+                <a class="btn btn-cancel" asp-action="Show" >Quay lại</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Show">Quay lại</a>
-</div>
+ <!--Font Awesome Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<script> 
+    let fileInput = document.getElementById("file-input");
+let imageContainer = document.getElementById("images");
+let numOfFiles = document.getElementById("num-of-files");
 
+function preview(){
+    imageContainer.innerHTML = "";
+    numOfFiles.textContent = `${fileInput.files.length} ảnh được chọn`;
+
+    for(i of fileInput.files){
+        let reader = new FileReader();
+        let figure = document.createElement("figure");
+        let figCap = document.createElement("figcaption");
+        figCap.innerText = i.name;
+        figure.appendChild(figCap);
+        reader.onload=()=>{
+            let img = document.createElement("img");
+            img.setAttribute("src",reader.result);
+            figure.insertBefore(img,figCap);
+        }
+        imageContainer.appendChild(figure);
+        reader.readAsDataURL(i);
+    }
+}
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -10,24 +10,16 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductDetailController : Controller
     {
-        private HttpClient _httpClient;
-        Uri Url = new Uri("https://localhost:7007/api/productDetail");
         private IproductDetailApiClient _apiClient;
-        public ProductDetailController(HttpClient httpClient, IproductDetailApiClient iproductDetail)
+        public ProductDetailController(IproductDetailApiClient iproductDetail)
         {
-            _httpClient = httpClient;
             _apiClient = iproductDetail;
         }
 
         public async Task<IActionResult> Show()
         {
-            var response = await _httpClient.GetAsync(Url + "/get-all-productdetail");
-            // Lấy dữ liệu Json trả về từ Api được call dạng string
-            string apiData = await response.Content.ReadAsStringAsync();
-            // Lấy kqua trả về từ API
-            // Đọc từ string Json vừa thu được sang List<T>
-            var colors = JsonConvert.DeserializeObject<List<ProductDetailVM>>(apiData);
-            return View(colors);
+            var response = await _apiClient.GetAllProductDetail();
+            return View(response);
 
         }
         public async Task<IActionResult> Create(Guid productId, Guid sizeId, Guid colorId)
@@ -96,39 +88,68 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             return View(product);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Update(Guid id)
+        //{
+        //    var response = await _httpClient.GetAsync(Url + $"/get-{id}");
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var apiData = await response.Content.ReadAsStringAsync();
+        //        var co = JsonConvert.DeserializeObject<ProductDetail>(apiData);
+        //        return View(co);
+        //    }
+        //    else
+        //    {
+        //        var errorMessage = await response.Content.ReadAsStringAsync();
+        //        ViewBag.ErrorMessage = errorMessage;
+        //        return View();
+        //    }
+        //}
+
+        //public async Task<IActionResult> Update(Guid id, ProductDetail create)
+        //{
+        //    try
+        //    {
+
+        //        var response = await _httpClient.PutAsJsonAsync(Url + $"/update-productdetail-{id}", create);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            return RedirectToAction("Show");
+        //        }
+        //        else
+        //        {
+        //            var errorMessage = await response.Content.ReadAsStringAsync();
+        //            ViewBag.ErrorMessage = errorMessage;
+        //            return View();
+        //        }
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return View();
+        //    }
+        //}
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var response = await _httpClient.GetAsync(Url + $"/get-{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var apiData = await response.Content.ReadAsStringAsync();
-                var co = JsonConvert.DeserializeObject<ProductDetail>(apiData);
-                return View(co);
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = errorMessage;
-                return View();
-            }
+            var response = await _apiClient.GetByIdProductDetail(id);
+            return View(response);
         }
 
-        public async Task<IActionResult> Update(Guid id, ProductDetail create)
+        public async Task<IActionResult> Update(ProductDetailVM create, string edit)
         {
             try
             {
 
-                var response = await _httpClient.PutAsJsonAsync(Url + $"/update-productdetail-{id}", create);
-                if (response.IsSuccessStatusCode)
+                var response = await _apiClient.UpdateProduct(create, edit);
+                if (response)
                 {
                     return RedirectToAction("Show");
                 }
                 else
                 {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    ViewBag.ErrorMessage = errorMessage;
-                    return View();
+                    ModelState.AddModelError("", "Cập nhật sản phẩm thất bại");
+                    return View(create);
                 }
 
             }
@@ -140,27 +161,17 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid Id)
         {
-            var response = await _httpClient.GetAsync(Url + $"/get-{Id}");
 
-            if (response.IsSuccessStatusCode)
-            {
-                var apiData = await response.Content.ReadAsStringAsync();
-                var fo = JsonConvert.DeserializeObject<ProductDetail>(apiData);
-                return View(fo);
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = errorMessage;
-                return View();
-            }
+            var result = await _apiClient.GetByIdProductDetail(Id);
+            ViewBag.ImagePath = result.Images;
+            return View(result);
         }
         [HttpGet]
         public async Task<IActionResult> Remove(Guid Id)
         {
-            var response = await _httpClient.DeleteAsync(Url + $"/delete-productdetail-{Id}");
+            var response = await _apiClient.DeleteProductDetail(Id);
 
-            if (response.IsSuccessStatusCode)
+            if (response)
             {
                 return RedirectToAction("Show");
             }

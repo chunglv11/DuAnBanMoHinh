@@ -31,7 +31,7 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpGet("get-{id}")]
-        public async Task<ActionResult<ProductDetail>> Get(Guid id)
+        public async Task<ActionResult<ProductDetailVM>> Get(Guid id)
         {
             try
             {

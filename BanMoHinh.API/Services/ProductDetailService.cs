@@ -155,9 +155,35 @@ namespace BanMoHinh.API.Services
             return lst.ToList();
         }
 
-        public async Task<ProductDetail> GetItem(Guid id)
+        public async Task<ProductDetailVM> GetItem(Guid id)
         {
-            return await _dbContext.ProductDetail.FindAsync(id);
+            var prD = await _dbContext.ProductDetail.FindAsync(id);
+            var product = _dbContext.Product.FirstOrDefault(x => x.Id == prD.ProductId);
+            var size = _dbContext.Size.FirstOrDefault(x => x.Id == prD.SizeId);
+            var color = _dbContext.Colors.FirstOrDefault(x => x.ColorId == prD.ColorId);
+            var img = (from a in _dbContext.ProductImage
+                       join b in _dbContext.ProductDetail on a.ProductDetailId equals b.Id
+                       where a.ProductDetailId == prD.Id
+                       select a.ImageUrl).ToList();//khó hiểu, dùng asyn k tìm được, dùng 1 luồng lại được ???
+            var lstPrd = new ProductDetailVM()
+            {
+                Id = id,
+                Images = img,
+                ProductId = prD.ProductId,
+                ProductName = product.ProductName,
+                SizeId = prD.SizeId,
+                SizeName = size.SizeName,
+                ColorId = prD.ColorId,
+                ColorName = color.ColorName,
+                Quantity = prD.Quantity,
+                Price = prD.Price,
+                PriceSale = prD.PriceSale,
+                Create_At = prD.Create_At,
+                Update_At = prD.Update_At,
+                Description = prD.Description,
+                Status = prD.Status
+            };
+            return lstPrd;
         }
 
         public async Task<bool> Update(ProductDetailVM item)
