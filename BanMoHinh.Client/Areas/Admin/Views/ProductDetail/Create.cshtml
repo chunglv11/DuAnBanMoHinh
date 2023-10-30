@@ -6,9 +6,31 @@
     ViewData["Title"] = "Thêm mới";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
-
-<h3>Thêm sản phẩm</h3>
-
+<style>
+input[type="file"]{
+    display: none;
+}
+#images{
+    width: 90%;
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+figure{
+    width: 20%;
+}
+img{
+    width: 100%;
+}
+figcaption{
+    text-align: center;
+    font-size: 2.4vmin;
+    margin-top: 0.5vmin;
+}
+</style>
 <hr />
 <div class="row">
     <div class="container">
@@ -16,7 +38,7 @@
             <div asp-validation-summary="ModelOnly"  class="text-danger" ></div>
             
             <div class="form-group">
-                <labelclass="control-label">Tên sản phẩm</label>
+                <label class="control-label">Tên sản phẩm</label>
                 @{
                     <select name="productId" onchange="this.value;" asp-items="@ViewBag.ProductProp" class="form-control">
                     <option>--Chọn sản phẩm--</option>
@@ -87,26 +109,55 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Hình ảnh</label>
-                <input asp-for="filecollection" type="file" class="form-control" multiple />
-                <span asp-validation-for="filecollection" class="text-danger"></span>
+                <input type="file" id="file-input"  asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+                <label for="file-input">
+                    <i class="fas fa-upload"></i> Chọn ảnh
+                </label>
+                <p id="num-of-files">Không có file nào</p>
+                <div id="images"></div>            
             </div>
             <div class="form-group">
                 <label  class="control-label">Trạng thái</label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+           <div class="form-group">
+                <button class="btn btn-save" type="submit" >Tạo</button>
+                <a class="btn btn-cancel" asp-action="Show" >Quay lại</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Show">Quay lại</a>
-</div>
+ <!--Font Awesome Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<script> 
+    let fileInput = document.getElementById("file-input");
+let imageContainer = document.getElementById("images");
+let numOfFiles = document.getElementById("num-of-files");
 
+function preview(){
+    imageContainer.innerHTML = "";
+    numOfFiles.textContent = `${fileInput.files.length} ảnh được chọn`;
+
+    for(i of fileInput.files){
+        let reader = new FileReader();
+        let figure = document.createElement("figure");
+        let figCap = document.createElement("figcaption");
+        figCap.innerText = i.name;
+        figure.appendChild(figCap);
+        reader.onload=()=>{
+            let img = document.createElement("img");
+            img.setAttribute("src",reader.result);
+            figure.insertBefore(img,figCap);
+        }
+        imageContainer.appendChild(figure);
+        reader.readAsDataURL(i);
+    }
+}
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
