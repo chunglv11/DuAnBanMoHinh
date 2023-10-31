@@ -1,7 +1,10 @@
 ﻿using BanMoHinh.Client.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
+using System.Drawing;
+using System.Net.Http.Headers;
 using System.Security.Policy;
 
 namespace BanMoHinh.Client.Services
@@ -19,17 +22,6 @@ namespace BanMoHinh.Client.Services
         {
             string apiUrl = "https://localhost:7007/api/productDetail/create-productdetail";
             var requestContent = new MultipartFormDataContent();
-            if (request.ThumbnailImage != null)
-            {
-
-                byte[] data;
-                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
-                {
-                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
-                }
-                ByteArrayContent bytes = new ByteArrayContent(data);
-                requestContent.Add(bytes, "ThumbnailImage", request.ThumbnailImage.FileName);
-            }
             request.ProductId = productId;
             request.SizeId = sizeId;
             request.ColorId = colorId;
@@ -44,8 +36,46 @@ namespace BanMoHinh.Client.Services
             requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
+            foreach (var file in request.filecollection)
+            {
+                requestContent.Add(new StreamContent(file.OpenReadStream())
+                {
+                    Headers =
+                     {
+                       ContentLength = file.Length,
+                       ContentType = new MediaTypeHeaderValue(file.ContentType)
+                     }
+                }, "filecollection", file.FileName);
+            }
             var response = await _httpClient.PostAsync(apiUrl, requestContent);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteProductDetail(Guid request)
+        {
+            string apiURL = $"https://localhost:7007/api/productDetail/delete-productdetail-{request}";
+            var response = await _httpClient.DeleteAsync(apiURL);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<List<ProductDetailVM>> GetAllProductDetail()
+        {
+            string apiUrl = "https://localhost:7007/api/productDetail/get-all-productdetail";
+            var response = await _httpClient.GetAsync(apiUrl);
+            response.EnsureSuccessStatusCode();
+            string apiData = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<ProductDetailVM>>(apiData);
+            return result;
+        }
+
+        public async Task<ProductDetailVM> GetByIdProductDetail(Guid productDetailId)
+        {
+            string apiURL = $"https://localhost:7007/api/productDetail/get/{productDetailId}";
+            var response = await _httpClient.GetAsync(apiURL);
+            response.EnsureSuccessStatusCode();
+            string apiData = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ProductDetailVM>(apiData);
+            return result;
         }
 
         public async Task<List<Colors>> GetListColor()
@@ -76,6 +106,33 @@ namespace BanMoHinh.Client.Services
             string apiData = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<SizeVM>>(apiData);
             return result;
+        }
+
+        public async Task<bool> UpdateProduct(ProductDetailVM request, string edit)
+        {
+            string apiUrl = $"https://localhost:7007/api/productDetail/update-productdetail-{request.Id}";
+            var requestContent = new MultipartFormDataContent();
+            request.Description = edit;
+            requestContent.Add(new StringContent(request.Quantity.ToString()), "quantity");
+            requestContent.Add(new StringContent(request.Price.ToString()), "price");
+            requestContent.Add(new StringContent(request.PriceSale.ToString()), "pricesale");
+            requestContent.Add(new StringContent(request.Create_At.ToString()), "create_At");
+            requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
+            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Status.ToString()), "status");
+            foreach (var file in request.filecollection)
+            {
+                requestContent.Add(new StreamContent(file.OpenReadStream())
+                {
+                    Headers =
+                     {
+                       ContentLength = file.Length,
+                       ContentType = new MediaTypeHeaderValue(file.ContentType)
+                     }
+                }, "filecollection", file.FileName);
+            }
+            var response = await _httpClient.PutAsync(apiUrl, requestContent);
+            return response.IsSuccessStatusCode;
         }
     }
 }

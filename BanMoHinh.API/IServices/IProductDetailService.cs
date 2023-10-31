@@ -5,7 +5,7 @@ namespace BanMoHinh.API.IServices
 {
     public interface IProductDetailService
     {
-        public Task<bool> Create(ProductDetailVM item, IFormFileCollection filecollection);
+        public Task<bool> Create(ProductDetailVM item);
 
         public Task<bool> CreateMany(List<ProductDetailVM> items);
 
@@ -15,7 +15,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<IEnumerable<ProductDetailVM>> GetAll();
 
-        public Task<ProductDetail> GetItem(Guid id);
+        public Task<ProductDetailVM> GetItem(Guid id);
 
         public Task<bool> Update(ProductDetailVM item);
     }

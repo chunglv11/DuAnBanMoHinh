@@ -30,8 +30,8 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
-        public async Task<ActionResult<ProductDetail>> Get(Guid id)
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<ProductDetailVM>> Get(Guid id)
         {
             try
             {
@@ -45,9 +45,9 @@ namespace BanMoHinh.API.Controllers
         }
         [HttpPost("create-productdetail")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<ProductDetailVM>> Post([FromForm] ProductDetailVM obj, IFormFileCollection file)
+        public async Task<ActionResult<ProductDetailVM>> Post([FromForm] ProductDetailVM obj)
         {
-            var result = await _iproductDetailService.Create(obj, file);
+            var result = await _iproductDetailService.Create(obj);
             if (result)
             {
                 return Ok("Đã thêm thành công");
