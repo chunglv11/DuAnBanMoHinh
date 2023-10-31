@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Runtime.Intrinsics.Arm;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BanMoHinh.API.Services
@@ -57,20 +58,30 @@ namespace BanMoHinh.API.Services
                 };
                 await _dbContext.ProductDetail.AddAsync(productDetail);
                 await _dbContext.SaveChangesAsync();
+                int passcount = 0;
                 //save image
                 if (item.filecollection != null)//không null 
                 {
-                    string foder = "images/product/";
                     foreach (var i in item.filecollection)
                     {
+
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                        //create folder if not exist
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+                        string imgPath = Path.Combine(path, i.FileName);
+                        using (var stream = new FileStream(imgPath, FileMode.Create))
+                        {
+                            await i.CopyToAsync(stream);
+                            passcount++;
+                        }
                         var proi = new ProductImage()
                         {
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
-                            ImageUrl = await UploadImage(foder, i)
+                            ImageUrl = "images/" + i.FileName
                         };
-                        await _dbContext.ProductImage.AddAsync(proi);
-
+                        _dbContext.ProductImage.Add(proi);
                     }
                     await _dbContext.SaveChangesAsync();
                 }
@@ -223,13 +234,13 @@ namespace BanMoHinh.API.Services
             }
             else
             {
-                //idp.SizeId = item.SizeId;
-                //idp.ColorId = item.ColorId;
+                idp.SizeId = item.SizeId;
+                idp.ColorId = item.ColorId;
                 //idp.ProductId = item.ProductId;
                 idp.Quantity = item.Quantity;
                 idp.Price = item.Price;
                 idp.PriceSale = item.PriceSale;
-                idp.Create_At = item.Create_At;
+                //idp.Create_At = item.Create_At;
                 idp.Update_At = item.Update_At;
                 idp.Description = item.Description;
                 idp.Status = item.Status;
@@ -242,7 +253,7 @@ namespace BanMoHinh.API.Services
                     foreach (var i in item.filecollection)
                     {
 
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images");
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
                         //create folder if not exist
                         if (!Directory.Exists(path))
                             Directory.CreateDirectory(path);
@@ -255,7 +266,7 @@ namespace BanMoHinh.API.Services
                         var proi = new ProductImage()
                         {
                             ProductDetailId = idp.Id,
-                            ImageUrl = imgPath
+                            ImageUrl = "images/" + i.FileName
                         };
                         _dbContext.ProductImage.Update(proi);
                     }

@@ -165,7 +165,6 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
 
             var result = await _apiClient.GetByIdProductDetail(Id);
-            ViewBag.ImagePath = result.Images;
             return View(result);
         }
         [HttpGet]
