@@ -70,7 +70,7 @@ namespace BanMoHinh.Client.Services
 
         public async Task<ProductDetailVM> GetByIdProductDetail(Guid productDetailId)
         {
-            string apiURL = $"https://localhost:7007/api/productDetail/get-{productDetailId}";
+            string apiURL = $"https://localhost:7007/api/productDetail/get/{productDetailId}";
             var response = await _httpClient.GetAsync(apiURL);
             response.EnsureSuccessStatusCode();
             string apiData = await response.Content.ReadAsStringAsync();

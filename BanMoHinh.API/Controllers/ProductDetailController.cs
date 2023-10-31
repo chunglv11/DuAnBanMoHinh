@@ -30,7 +30,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<ProductDetailVM>> Get(Guid id)
         {
             try

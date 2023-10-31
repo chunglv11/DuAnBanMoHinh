@@ -1,6 +1,7 @@
 ﻿using BanMoHinh.Client.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -158,6 +159,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 return View();
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Details(Guid Id)
         {

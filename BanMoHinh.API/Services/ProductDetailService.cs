@@ -3,6 +3,7 @@ using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
 using System.Net.Http.Headers;
@@ -15,14 +16,26 @@ namespace BanMoHinh.API.Services
     {
         private MyDbContext _dbContext;
         private readonly IStorageService _storageService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private const string USER_CONTENT_FOLDER_NAME = "Images";
-        public ProductDetailService(MyDbContext dbContext, IStorageService storageService)
+        public ProductDetailService(MyDbContext dbContext, IStorageService storageService, IWebHostEnvironment webHostEnvironment)
         {
             _dbContext = dbContext;
             _storageService = storageService;
+            _webHostEnvironment = webHostEnvironment;
         }
         //luu anh vao thu muc wwwroot o api
+        private async Task<string> UploadImage(string folderPath, IFormFile file)
+        {
 
+            folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
+
+            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+
+            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+            return "/" + folderPath;
+        }
         public async Task<bool> Create(ProductDetailVM item)
         {
             try
@@ -44,33 +57,23 @@ namespace BanMoHinh.API.Services
                 };
                 await _dbContext.ProductDetail.AddAsync(productDetail);
                 await _dbContext.SaveChangesAsync();
-                int passcount = 0;
                 //save image
                 if (item.filecollection != null)//không null 
                 {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+                    string foder = "images/product/";
                     foreach (var i in item.filecollection)
                     {
-
-                        string imgPath = path + "\\" + i.FileName;
-                        using (var stream = new FileStream(imgPath, FileMode.Create))
-                        {
-                            await i.CopyToAsync(stream);
-                            passcount++;
-                        }
-
                         var proi = new ProductImage()
                         {
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
-                            ImageUrl = imgPath
+                            ImageUrl = await UploadImage(foder, i)
                         };
                         await _dbContext.ProductImage.AddAsync(proi);
-                    }
 
+                    }
                     await _dbContext.SaveChangesAsync();
                 }
-
                 return true;
             }
             catch (Exception e)
@@ -157,6 +160,7 @@ namespace BanMoHinh.API.Services
 
         public async Task<ProductDetailVM> GetItem(Guid id)
         {
+            #region
             var prD = await _dbContext.ProductDetail.FindAsync(id);
             var product = _dbContext.Product.FirstOrDefault(x => x.Id == prD.ProductId);
             var size = _dbContext.Size.FirstOrDefault(x => x.Id == prD.SizeId);
@@ -184,6 +188,29 @@ namespace BanMoHinh.API.Services
                 Status = prD.Status
             };
             return lstPrd;
+            #endregion
+            //return await _dbContext.ProductDetail.Where(c => c.Id == id)
+            //    .Select(prd => new ProductDetailVM()
+            //    {
+            //        Id = prd.Id,
+            //        ProductId = prd.ProductId,
+            //        ProductName = product.ProductName,
+            //        SizeId = prd.SizeId,
+            //        SizeName = size.SizeName,
+            //        ColorId = prd.ColorId,
+            //        ColorName = color.ColorName,
+            //        Quantity = prd.Quantity,
+            //        Price = prd.Price,
+            //        PriceSale = prd.PriceSale,
+            //        Create_At = prd.Create_At,
+            //        Update_At = prd.Update_At,
+            //        Description = prd.Description,
+            //        Status = prd.Status,
+            //        ProductImage = prd.ProductImages.Select(b => new ProductImage()
+            //        {
+            //            ImageUrl = b.ImageUrl,
+            //        }).ToList(),
+            //    }).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Update(ProductDetailVM item)
@@ -196,9 +223,9 @@ namespace BanMoHinh.API.Services
             }
             else
             {
-                idp.SizeId = item.SizeId;
-                idp.ColorId = item.ColorId;
-                idp.ProductId = item.ProductId;
+                //idp.SizeId = item.SizeId;
+                //idp.ColorId = item.ColorId;
+                //idp.ProductId = item.ProductId;
                 idp.Quantity = item.Quantity;
                 idp.Price = item.Price;
                 idp.PriceSale = item.PriceSale;
@@ -206,17 +233,20 @@ namespace BanMoHinh.API.Services
                 idp.Update_At = item.Update_At;
                 idp.Description = item.Description;
                 idp.Status = item.Status;
-                //var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == idp.Id);
-                //_dbContext.ProductImage.RemoveRange(images);
+                var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == idp.Id);
+                _dbContext.ProductImage.RemoveRange(images);
                 int passcount = 0;
                 //save image
                 if (item.filecollection != null)//không null 
                 {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
                     foreach (var i in item.filecollection)
                     {
 
-                        string imgPath = path + "\\" + i.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images");
+                        //create folder if not exist
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+                        string imgPath = Path.Combine(path, i.FileName);
                         using (var stream = new FileStream(imgPath, FileMode.Create))
                         {
                             await i.CopyToAsync(stream);
@@ -225,7 +255,7 @@ namespace BanMoHinh.API.Services
                         var proi = new ProductImage()
                         {
                             ProductDetailId = idp.Id,
-                            ImageUrl = i.FileName
+                            ImageUrl = imgPath
                         };
                         _dbContext.ProductImage.Update(proi);
                     }
