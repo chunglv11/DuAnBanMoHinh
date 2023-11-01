@@ -14,7 +14,7 @@
         <div id="clock"></div>
 </div>
 <p>
-    <a asp-action="Create" class="btn btn-add btn-sm" ><i class="fas fa-plus"></i>Thêm mới</a>
+    <a asp-action="Create" class="btn btn-success m-1" >Thêm mới</a>
 </p>
 <table class="table">
     <thead>
@@ -28,23 +28,23 @@
             <th>
                 Chiều cao
             </th>
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
 
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.SizeName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.Width)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.Height)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 <a class="btn btn-primary btn-sm " type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
                 <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
                 <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
