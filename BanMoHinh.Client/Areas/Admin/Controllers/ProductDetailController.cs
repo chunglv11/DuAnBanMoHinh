@@ -89,60 +89,46 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             return View(product);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Update(Guid id)
-        //{
-        //    var response = await _httpClient.GetAsync(Url + $"/get-{id}");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var apiData = await response.Content.ReadAsStringAsync();
-        //        var co = JsonConvert.DeserializeObject<ProductDetail>(apiData);
-        //        return View(co);
-        //    }
-        //    else
-        //    {
-        //        var errorMessage = await response.Content.ReadAsStringAsync();
-        //        ViewBag.ErrorMessage = errorMessage;
-        //        return View();
-        //    }
-        //}
-
-        //public async Task<IActionResult> Update(Guid id, ProductDetail create)
-        //{
-        //    try
-        //    {
-
-        //        var response = await _httpClient.PutAsJsonAsync(Url + $"/update-productdetail-{id}", create);
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            return RedirectToAction("Show");
-        //        }
-        //        else
-        //        {
-        //            var errorMessage = await response.Content.ReadAsStringAsync();
-        //            ViewBag.ErrorMessage = errorMessage;
-        //            return View();
-        //        }
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return View();
-        //    }
-        //}
         [HttpGet]
-        public async Task<IActionResult> Update(Guid id)
+        public async Task<IActionResult> Update(Guid id, Guid sizeId, Guid colorId)
         {
+            var sizes = _apiClient.GetListSize();
+            ViewBag.Size = sizes.Result.Select(x => new SelectListItem()
+            {
+                Text = x.SizeName,
+                Value = x.Id.ToString(),
+                Selected = sizeId.ToString() == x.Id.ToString()
+            });
+            var colors = _apiClient.GetListColor();
+            ViewBag.Color = colors.Result.Select(x => new SelectListItem()
+            {
+                Text = x.ColorName,
+                Value = x.ColorId.ToString(),
+                Selected = colorId.ToString() == x.ColorId.ToString()
+            });
             var response = await _apiClient.GetByIdProductDetail(id);
             return View(response);
         }
 
-        public async Task<IActionResult> Update(ProductDetailVM create, string edit)
+        public async Task<IActionResult> Update(ProductDetailVM create, Guid sizeId, Guid colorId, string edit)
         {
             try
             {
-
-                var response = await _apiClient.UpdateProduct(create, edit);
+                var sizes = _apiClient.GetListSize();
+                ViewBag.Size = sizes.Result.Select(x => new SelectListItem()
+                {
+                    Text = x.SizeName,
+                    Value = x.Id.ToString(),
+                    Selected = sizeId.ToString() == x.Id.ToString()
+                });
+                var colors = _apiClient.GetListColor();
+                ViewBag.Color = colors.Result.Select(x => new SelectListItem()
+                {
+                    Text = x.ColorName,
+                    Value = x.ColorId.ToString(),
+                    Selected = colorId.ToString() == x.ColorId.ToString()
+                });
+                var response = await _apiClient.UpdateProduct(create, sizeId, colorId, edit);
                 if (response)
                 {
                     return RedirectToAction("Show");

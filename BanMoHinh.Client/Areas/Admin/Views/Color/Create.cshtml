@@ -5,9 +5,13 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h3>Thêm mới màu</h3>
-
-<hr />
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Show">Danh sách màu</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Create">Thêm mới</a></li>
+        </ul>    
+</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">

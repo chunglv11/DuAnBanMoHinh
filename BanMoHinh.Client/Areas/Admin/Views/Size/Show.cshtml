@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Danh sách size</h1>
+<h4>Danh sách size</h4>
 <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
           <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
@@ -45,9 +45,9 @@
                 @Html.DisplayFor(modelItem => item.Height)
             </td>
             <td>
-                <a class="btn btn-primary btn-sm edit" type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-primary btn-sm" style="color:cadetblue" type="button" href="Update/@item.Id" title="Sửa"><i class="fas fa-info-circle"></i></a>
-                <a class="btn btn-primary btn-sm trash" type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
+                <a class="btn btn-primary btn-sm " type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
                 
             </td>
         </tr>
