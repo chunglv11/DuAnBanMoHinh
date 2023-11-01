@@ -24,7 +24,7 @@
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
         <img src="~/file/admin/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">Smart Dashboard Pro</span>
+        <span class="ms-1 font-weight-bold">ADMIN</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
@@ -58,62 +58,72 @@
                 <div class="collapse " id="profileExample">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a class="nav-link " asp-area="Admin" asp-controller="ProductDetail" asp-action="Show">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Product" asp-action="GetAllProduct">
                         <span class="sidenav-mini-icon text-xs"> P </span>
-                        <span class="sidenav-normal"> Hiển thị </span>
+                        <span class="sidenav-normal"> Sản phẩm </span>
                       </a>
                     </li>
+                    
                     <li class="nav-item">
-                      <a class="nav-link " href="pages/pages/profile/teams.html">
-                        <span class="sidenav-mini-icon text-xs"> T </span>
-                        <span class="sidenav-normal"> Teams </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link " href="pages/pages/profile/projects.html">
+                      <a class="nav-link "  asp-area="Admin" asp-controller="ProductDetail" asp-action="Show">
                         <span class="sidenav-mini-icon text-xs"> A </span>
-                        <span class="sidenav-normal"> All Projects </span>
+                        <span class="sidenav-normal"> Sản phẩm chi tiết </span>
                       </a>
                     </li>
                   </ul>
                 </div>
               </li>
-
-             
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#applicationsExamples" class="nav-link active" aria-controls="applicationsExamples" role="button" aria-expanded="false">
-            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-              <i class="ni ni-ui-04 text-info text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Applications</span>
-          </a>
-          <div class="collapse  show " id="applicationsExamples">
-            <ul class="nav ms-4">
-              <li class="nav-item active">
-                <a class="nav-link active" href="pages/applications/kanban.html">
-                  <span class="sidenav-mini-icon"> K </span>
-                  <span class="sidenav-normal"> Kanban </span>
-                </a>
-              </li>
               <li class="nav-item ">
-                <a class="nav-link " href="pages/applications/wizard.html">
-                  <span class="sidenav-mini-icon"> W </span>
-                  <span class="sidenav-normal"> Wizard </span>
+                <a class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#usersExample">
+                  <span class="sidenav-mini-icon"> U </span>
+                  <span class="sidenav-normal"> Thuộc tính <b class="caret"></b></span>
                 </a>
+                <div class="collapse " id="usersExample">
+                  <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Color" asp-action="Show">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Màu sắc </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Size" asp-action="Show">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Size </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Brand" asp-action="GetAllBrand">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Thương hiệu </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory">
+                        <span class="sidenav-mini-icon text-xs"> A </span>
+                        <span class="sidenav-normal"> Thể loại </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Material" asp-action="GetAllMaterial">
+                        <span class="sidenav-mini-icon text-xs"> A </span>
+                        <span class="sidenav-normal"> Chất liệu </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
-              
             </ul>
           </div>
+            
         </li>
+        
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#ecommerceExamples" class="nav-link " aria-controls="ecommerceExamples" role="button" aria-expanded="false">
             <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
               <i class="ni ni-archive-2 text-success text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Ecommerce</span>
+            <span class="nav-link-text ms-1">Quản lý đơn hàng</span>
           </a>
           
         </li>
@@ -122,15 +132,60 @@
             <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
               <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Authentication</span>
+            <span class="nav-link-text ms-1">Quản lý người dùng</span>
+          </a>
+          <div class="collapse " id="authExamples">
+            <ul class="nav ms-4">
+              <li class="nav-item ">
+                <a class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#signinExample">
+                  <span class="sidenav-mini-icon"> X </span>
+                  <span class="sidenav-normal">Danh mục<b class="caret"></b></span>
+                </a>
+                <div class="collapse " id="signinExample">
+                  <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="User" asp-action="Index">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Tài khoản </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Rank" asp-action="Index">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Xếp hạng </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " >
+                        <span class="sidenav-mini-icon text-xs"> K </span>
+                        <span class="sidenav-normal"> Khách hàng </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Post" asp-action="Index">
+                        <span class="sidenav-mini-icon text-xs"> B </span>
+                        <span class="sidenav-normal"> Bài đăng </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>            
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher"  target="_blank">
+            <div class="icon icon-shape icon-sm text-center  me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-align-left-2 text-dark text-sm"></i>
+            </div>
+            <span class="nav-link-text ms-1">Quản lý voucher</span>
           </a>
         </li>
-       
       </ul>
     </div>
     <div class="sidenav-footer mx-3 my-3">
       <div class="card card-plain shadow-none" id="sidenavCard">
-        <img class="w-60 mx-auto" src="assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
+        <img class="w-60 mx-auto" src="~/file/admin/assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
         <div class="card-body text-center p-3 w-100 pt-0">
           <div class="docs-info">
             <h6 class="mb-0">Bé cần giúp đỡ?</h6>
