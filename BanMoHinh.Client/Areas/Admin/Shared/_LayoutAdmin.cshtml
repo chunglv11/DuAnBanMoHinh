@@ -1,276 +1,249 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
-    <title>Danh sách nhân viên | Quản trị Admin</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="~/file/admin/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <!-- or -->
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <!-- Font-icon css-->
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <!-- (1): Khai báo sử dụng thư viện CKEditor -->
-
-    <script src="~/file/admin/ckeditor/ckeditor.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modernize Free</title>
+  <link rel="shortcut icon" type="image/png" href="~/file/admin/assets/images/logos/favicon.png" />
+  <link rel="stylesheet" href="~/file/admin/assets/css/styles.min.css" />
+  <script src="~/file/admin/ckeditor/ckeditor.js"></script>
 </head>
 
-<body onload="time()" class="app sidebar-mini rtl">
-    <!-- Navbar-->
-    <header class="app-header">
-        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
-                                        aria-label="Hide Sidebar"></a>
-        <!-- Navbar Right Menu-->
-        <ul class="app-nav">
-
-
-            <!-- User Menu-->
-            <li>
-                <a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
-
-            </li>
-        </ul>
-    </header>
-    <!-- Sidebar menu-->
-    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-    <aside class="app-sidebar">
-        <div class="app-sidebar__user">
-            <img class="app-sidebar__user-avatar" src="/QUANLYNHANVIEN VER.2/images/ad.jpg" width="50px"
-                 alt="User Image">
-            <div>
-                <p class="app-sidebar__user-name"><b>Văn Chung</b></p>
-                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-            </div>
+<body >
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a class="text-nowrap logo-img">
+            <img src="~/file/admin/assets/images/logos/dark-logo.svg" width="180" alt="" />
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
         </div>
-        <hr>
-        <ul class="app-menu">
-            <li>
-                <a class="app-menu__item haha" href="phan-mem-ban-hang.html">
-                    <i class='app-menu__icon bx bx-cart-alt'></i>
-                    <span class="app-menu__label">POS Bán Hàng</span>
-                </a>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="sidebar-item">
+              <a class="sidebar-link" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Trang chủ</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item active" href="index.html">
-                    <i class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều khiển</span>
-                </a>
+            
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Quản lý</span>
+            </li>        
+            <li class="sidebar-item">
+              <a class="sidebar-link"  aria-expanded="false" asp-area="Admin" asp-controller="Post" asp-action="Index">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Quản lý bài viết</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item " asp-area="Admin" asp-controller="Post" asp-action="Index">
-                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý bài viết</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Rank" asp-action="Index" aria-expanded="false">
+                <span>
+                  <i class="ti ti-alert-circle"></i>
+                </span>
+                <span class="hide-menu">Quản lý xếp hạng</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item " asp-area="Admin" asp-controller="Rank" asp-action="Index">
-                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý xếp hạng</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="User" asp-action="Index" aria-expanded="false">
+                <span>
+                  <i class="ti ti-cards"></i>
+                </span>
+                <span class="hide-menu">Quản lý tài khoản</span>
+              </a>
             </li>
-
-            <li>
-                <a class="app-menu__item " asp-area="Admin" asp-controller="User" asp-action="Index">
-                    <i class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý tài khoản</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-file-description"></i>
+                </span>
+                <span class="hide-menu">Quản lý khách hàng</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" href="#">
-                    <i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách hàng</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link"asp-area="Admin" asp-controller="Brand" asp-action="GetAllBrand" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý thương hiệu</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Brand" asp-action="GetAllBrand">
-                    <i class="ti ti-brand-producthunt"></i><span class="app-menu__label">Quản lý thương hiệu</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý loại sản phẩm</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory">
-                    <i class="ti ti-brand-producthunt"></i><span class="app-menu__label">Quản lý loại sản phẩm</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Material" asp-action="GetAllMaterial" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý chất liệu</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Material" asp-action="GetAllMaterial">
-                    <i class="ti ti-brand-producthunt"></i><span class="app-menu__label">Quản lý Vật liệu</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Product" asp-action="GetAllProduct" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý sản phẩm</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Product" asp-action="GetAllProduct">
-                    <i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="ProductDetail" asp-action="Show" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý chi tiết sản phẩm</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="ProductDetail" asp-action="Show">
-                    <i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý chi tiết sản phẩm</span>     
-                </a>
-                <ul>
-                    <li>
-                        <a class="app-menu__item" asp-area="Admin" asp-controller="Color" asp-action="Show">
-                    <i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý màu</span>     
-                         </a>
-                    </li>
-                    <li>
-                        <a class="app-menu__item" asp-area="Admin" asp-controller="Size" asp-action="Show">
-                    <i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý size</span>     
-                         </a>
-                    </li>
-                    <li>
-                        <a class="app-menu__item" asp-area="Admin" asp-controller="ProductImage" asp-action="Show">
-                    <i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý ảnh</span>     
-                         </a>
-                    </li>
-                </ul>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Color" asp-action="Show" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý màu</span>
+              </a>
             </li>
-        
-            <li>
-                <a class="app-menu__item" href="table-data-oder.html">
-                    <i class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản lý đơn hàng</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Size" asp-action="Show" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý size</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher">
-                    <i class='app-menu__icon bx bx-run'></i><span class="app-menu__label">
-                        Quản lý voucher
-                    </span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý đơn hàng</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" asp-area="Admin" asp-controller="Voucher" asp-action="CreateVoucher">
-                    <i class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê lương</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Quản lý voucher</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" href="quan-ly-bao-cao.html">
-                    <i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-login"></i>
+                </span>
+                <span class="hide-menu">Đăng nhập</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" href="page-calendar.html">
-                    <i class='app-menu__icon bx bx-calendar-check'></i><span class="app-menu__label">Lịch công tác </span>
-                </a>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user-plus"></i>
+                </span>
+                <span class="hide-menu">Đăng xuất</span>
+              </a>
             </li>
-            <li>
-                <a class="app-menu__item" href="#">
-                    <i class='app-menu__icon bx bx-cog'></i><span class="app-menu__label">
-                        Cài
-                        đặt hệ thống
-                    </span>
-                </a>
-            </li>
-        </ul>
+            
+          </ul>
+          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
+            <div class="d-flex">
+              <div class="unlimited-access-title me-3">
+                <h6 class="fw-semibold fs-4 mb-6 text-dark w-85">Upgrade to pro</h6>
+                <a href="https://adminmart.com/product/modernize-bootstrap-5-admin-template/" target="_blank" class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Pro</a>
+              </div>
+              <div class="unlimited-access-img">
+                <img src="../assets/images/backgrounds/rocket.png" alt="" class="img-fluid">
+              </div>
+            </div>
+          </div>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
     </aside>
-    <main class="app-content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="app-title">
-                    <ul class="app-breadcrumb breadcrumb">
-                        <li class="breadcrumb-item"><a href="#"><b>Bảng điều khiển</b></a></li>
-                    </ul>
-                    <div id="clock"></div>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                <i class="ti ti-bell-ringing"></i>
+                <div class="notification bg-primary rounded-circle"></div>
+              </a>
+            </li>
+          </ul>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <li class="nav-item dropdown">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="~/file/admin/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                  <div class="message-body">
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-user fs-6"></i>
+                      <p class="mb-0 fs-3">My Profile</p>
+                    </a>
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-mail fs-6"></i>
+                      <p class="mb-0 fs-3">My Account</p>
+                    </a>
+                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="ti ti-list-check fs-6"></i>
+                      <p class="mb-0 fs-3">My Task</p>
+                    </a>
+                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-            @RenderBody()
-            </div>
-        </div>
-    </main>
-    <script src="~/file/admin/js/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/file/admin/js/popper.min.js"></script>
-    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/file/admin/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/file/admin/js/main.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/file/admin/js/plugins/pace.min.js"></script>
-    <!--===============================================================================================-->
-    <script type="text/javascript" src="~/file/admin/js/plugins/chart.js"></script>
-    <!--===============================================================================================-->
-    <script type="text/javascript">
-        var data = {
-            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
-            datasets: [{
-                label: "Dữ liệu đầu tiên",
-                fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
-                strokeColor: "rgb(255, 212, 59)",
-                pointColor: "rgb(255, 212, 59)",
-                pointStrokeColor: "rgb(255, 212, 59)",
-                pointHighlightFill: "rgb(255, 212, 59)",
-                pointHighlightStroke: "rgb(255, 212, 59)",
-                data: [20, 59, 90, 51, 56, 100]
-            },
-            {
-                label: "Dữ liệu kế tiếp",
-                fillColor: "rgba(9, 109, 239, 0.651)  ",
-                pointColor: "rgb(9, 109, 239)",
-                strokeColor: "rgb(9, 109, 239)",
-                pointStrokeColor: "rgb(9, 109, 239)",
-                pointHighlightFill: "rgb(9, 109, 239)",
-                pointHighlightStroke: "rgb(9, 109, 239)",
-                data: [48, 48, 49, 39, 86, 10]
-            }
-            ]
-        };
-        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-        var lineChart = new Chart(ctxl).Line(data);
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!--  Header End -->
+      <div class="container-fluid">
+        @RenderBody()
+        
+      </div>
 
-        var ctxb = $("#barChartDemo").get(0).getContext("2d");
-        var barChart = new Chart(ctxb).Bar(data);
-    </script>
-    <script type="text/javascript">
-        //Thời Gian
-        function time() {
-            var today = new Date();
-            var weekday = new Array(7);
-            weekday[0] = "Chủ Nhật";
-            weekday[1] = "Thứ Hai";
-            weekday[2] = "Thứ Ba";
-            weekday[3] = "Thứ Tư";
-            weekday[4] = "Thứ Năm";
-            weekday[5] = "Thứ Sáu";
-            weekday[6] = "Thứ Bảy";
-            var day = weekday[today.getDay()];
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1;
-            var yyyy = today.getFullYear();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            nowTime = h + " giờ " + m + " phút " + s + " giây";
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-                '</span>';
-            document.getElementById("clock").innerHTML = tmp;
-            clocktime = setTimeout("time()", "1000", "Javascript");
-
-            function checkTime(i) {
-                if (i < 10) {
-                    i = "0" + i;
-                }
-                return i;
-            }
-        }
-    </script>
-    <!-- chkeditor -->
-    <script src="~/file/admin/ckeditor/ckeditor.js"></script>
-    <script>CKEDITOR.replace('ten');</script>
-    <!-- /chkeditor -->
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+  </div>
+  <script src="~/file/admin/assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="~/file/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/file/admin/assets/js/sidebarmenu.js"></script>
+  <script src="~/file/admin/assets/js/app.min.js"></script>
+  <script src="~/file/admin/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="~/file/admin/assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="~/file/admin/assets/js/dashboard.js"></script>
+  @RenderSection("Scripts", required : false)
 </body>
 
 </html>
