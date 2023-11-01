@@ -48,28 +48,28 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.SizeName)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.ColorName)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.PriceSale)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @Html.DisplayFor(modelItem => item.Update_At)
             </td>
-            <td style="padding-left:20px">
+            <td >
                 @if (item.Status == true)
                     {
                         <p>Còn hàng</p>
@@ -80,7 +80,7 @@
                     }
 
             </td>
-            <td style="padding-left:20px">
+            <td >
                 <a class="btn btn-primary btn-sm " type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
                 <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
                 <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
