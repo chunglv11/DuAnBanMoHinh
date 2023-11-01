@@ -25,21 +25,22 @@
             <th>
                 Mã màu
             </th>
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ColorName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ColorCode)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 <a class="btn btn-primary btn-sm " type="button" href="Update/@item.ColorId" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.ColorId" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
                 <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.ColorId" title="Xóa"><i class="fas fa-trash"></i></a>
             </td>
         </tr>

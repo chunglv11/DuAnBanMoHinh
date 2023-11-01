@@ -34,7 +34,7 @@ namespace BanMoHinh.Client.Services
             requestContent.Add(new StringContent(request.PriceSale.ToString()), "pricesale");
             requestContent.Add(new StringContent(request.Create_At.ToString()), "create_At");
             requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
-            requestContent.Add(new StringContent(request.Description.ToString()), "description");
+            requestContent.Add(new StringContent(request.Description), "description");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
             foreach (var file in request.filecollection)
             {
