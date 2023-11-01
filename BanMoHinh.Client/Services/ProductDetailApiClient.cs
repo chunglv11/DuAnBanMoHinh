@@ -108,15 +108,18 @@ namespace BanMoHinh.Client.Services
             return result;
         }
 
-        public async Task<bool> UpdateProduct(ProductDetailVM request, string edit)
+        public async Task<bool> UpdateProduct(ProductDetailVM request, Guid sizeId, Guid colorId, string edit)
         {
             string apiUrl = $"https://localhost:7007/api/productDetail/update-productdetail-{request.Id}";
             var requestContent = new MultipartFormDataContent();
+            request.SizeId = sizeId;
+            request.ColorId = colorId;
             request.Description = edit;
+            requestContent.Add(new StringContent(request.ColorId.ToString()), "colorid");
+            requestContent.Add(new StringContent(request.SizeId.ToString()), "sizeid");
             requestContent.Add(new StringContent(request.Quantity.ToString()), "quantity");
             requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.PriceSale.ToString()), "pricesale");
-            requestContent.Add(new StringContent(request.Create_At.ToString()), "create_At");
             requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
