@@ -73,6 +73,7 @@
                   </ul>
                 </div>
               </li>
+                           
               <li class="nav-item ">
                 <a class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#usersExample">
                   <span class="sidenav-mini-icon"> U </span>
@@ -119,7 +120,7 @@
         </li>
         
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#ecommerceExamples" class="nav-link " aria-controls="ecommerceExamples" role="button" aria-expanded="false">
+                    <a data-bs-toggle="collapse"  class="nav-link " aria-controls="ecommerceExamples" role="button" aria-expanded="false" asp-area="Admin" asp-controller="Order" asp-action="ShowList">
             <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
               <i class="ni ni-archive-2 text-success text-sm opacity-10"></i>
             </div>
@@ -165,6 +166,12 @@
                       <a class="nav-link " asp-area="Admin" asp-controller="Post" asp-action="Index">
                         <span class="sidenav-mini-icon text-xs"> B </span>
                         <span class="sidenav-normal"> Bài đăng </span>
+                      </a>
+                    </li>
+                     <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="Rate" asp-action="ShowList">
+                        <span class="sidenav-mini-icon text-xs"> B </span>
+                        <span class="sidenav-normal"> Đánh Giá </span>
                       </a>
                     </li>
                   </ul>
