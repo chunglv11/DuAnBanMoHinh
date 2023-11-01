@@ -7,9 +7,10 @@
   <title>Modernize Free</title>
   <link rel="shortcut icon" type="image/png" href="~/file/admin/assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="~/file/admin/assets/css/styles.min.css" />
+  <script src="~/file/admin/ckeditor/ckeditor.js"></script>
 </head>
 
-<body>
+<body >
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -200,11 +201,10 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="~/file/admin/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -243,6 +243,7 @@
   <script src="~/file/admin/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
   <script src="~/file/admin/assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="~/file/admin/assets/js/dashboard.js"></script>
+  @RenderSection("Scripts", required : false)
 </body>
 
 </html>
