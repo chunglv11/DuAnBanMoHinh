@@ -17,8 +17,11 @@ namespace BanMoHinh.Client.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        public IActionResult Introduct()
+        {
+            return View();
+        }
+        public IActionResult Contact()
         {
             return View();
         }

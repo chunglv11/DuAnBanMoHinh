@@ -164,7 +164,10 @@ namespace BanMoHinh.API.Services
                           Create_At = a.Create_At,
                           Update_At = a.Update_At,
                           Description = a.Description,
-                          Status = a.Status
+                          Status = a.Status,
+                          ProductId = d.Id,
+                          ColorId = c.ColorId,
+                          SizeId = b.Id
                       };
             return lst.ToList();
         }

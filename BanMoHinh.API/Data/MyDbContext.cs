@@ -60,6 +60,15 @@ namespace BanMoHinh.API.Data
                 new Brand() { Id = Guid.NewGuid(), BrandName = "Brand 4" },
                 new Brand() { Id = Guid.NewGuid(), BrandName = "Brand 5" }
             );
+            builder.Entity<Size>().HasData(
+                new Size() { Id = Guid.NewGuid(), SizeName = "Size 1",Height=30,Width = 30 },
+                new Size() { Id = Guid.NewGuid(), SizeName = "Size 2",Height=30,Width = 30 },
+                new Size() { Id = Guid.NewGuid(), SizeName = "Size 3",Height=30,Width = 30 },
+                new Size() { Id = Guid.NewGuid(), SizeName = "Size 4",Height=30,Width = 30 },
+                new Size() { Id = Guid.NewGuid(), SizeName = "Size 5",Height=30,Width = 30 }
+
+            );
+
             builder.Entity<Category>().HasData(
                 new Category() { Id = Guid.NewGuid(), CategoryName = "Category 1" },
                 new Category() { Id = Guid.NewGuid(), CategoryName = "Category 2" },
