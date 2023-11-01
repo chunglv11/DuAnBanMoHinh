@@ -5,10 +5,15 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h3>Danh sách sản phẩm</h3>
-
+<h4>Danh sách chi tiết sản phẩm</h4>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Show">Danh sách chi tiết sản phẩm</a></li>
+        </ul>    
+</div>
 <p>
-    <a asp-action="Create" class="btn btn-add btn-sm"><i class="fas fa-plus"></i>Thêm mới</a>
+    <a asp-action="Create" class="btn btn-success m-1">Thêm mới</a>
 </p>
 <table class="table">
     <thead>
@@ -23,7 +28,7 @@
                 Màu
             </th>
             <th>
-                số lượng tồn
+                Số lượng tồn
             </th>
             <th>
                 Giá nhập
@@ -88,9 +93,9 @@
 
             </td>
             <td>
-                <a class="btn btn-primary btn-sm edit" type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-primary btn-sm" style="color:cadetblue" type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
-                <a class="btn btn-primary btn-sm trash" type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
+                <a class="btn btn-warning m-1" type="button" href="Update/@item.Id" title="Sửa">Sửa</a>
+                <a class="btn btn-outline-info m-1"  type="button" href="Details/@item.Id" title="Chi tiết">Chi tiết</a>
+                <a class="btn btn-danger m-1" type="button" href="Remove/@item.Id" title="Xóa">Xoá</a>
             </td>
         </tr>
 }

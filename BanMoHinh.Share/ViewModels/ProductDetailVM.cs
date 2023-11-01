@@ -24,7 +24,6 @@ namespace BanMoHinh.Share.ViewModels
         public DateTime? Update_At { get; set; }
         public string? Description { get; set; }
         public bool? Status { get; set; }
-        public List<ProductImage>? ProductImage { get; set; }
         public List<string>? Images { get; set; } //lay link anh cua tbProImage
         public IFormFileCollection filecollection { get; set; }
     }

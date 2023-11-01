@@ -31,7 +31,13 @@ figcaption{
     margin-top: 0.5vmin;
 }
 </style>
-<hr />
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Show">Danh sách chi tiết sản phẩm</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Create">Tạo mới </a></li>
+        </ul>    
+</div>
 <div class="row">
     <div class="container">
         <form asp-action="Create" enctype="multipart/form-data" >
