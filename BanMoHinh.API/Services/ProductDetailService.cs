@@ -17,26 +17,12 @@ namespace BanMoHinh.API.Services
     {
         private MyDbContext _dbContext;
         private readonly IStorageService _storageService;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private const string USER_CONTENT_FOLDER_NAME = "Images";
-        public ProductDetailService(MyDbContext dbContext, IStorageService storageService, IWebHostEnvironment webHostEnvironment)
+        public ProductDetailService(MyDbContext dbContext)
         {
             _dbContext = dbContext;
-            _storageService = storageService;
-            _webHostEnvironment = webHostEnvironment;
         }
         //luu anh vao thu muc wwwroot o api
-        private async Task<string> UploadImage(string folderPath, IFormFile file)
-        {
 
-            folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
-
-            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-
-            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-
-            return "/" + folderPath;
-        }
         public async Task<bool> Create(ProductDetailVM item)
         {
             try

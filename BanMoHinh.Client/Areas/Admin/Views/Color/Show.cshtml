@@ -5,9 +5,15 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Danh sách màu</h1>
+<h4>Danh sách màu</h4>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Show">Danh sách màu</a></li>
+        </ul>    
+</div>
 <p>
-    <a asp-action="Create"  class="btn btn-add btn-sm"> <i class="fas fa-plus"></i>Thêm mới màu</a>
+    <a asp-action="Create"  class="btn btn-success m-1">Thêm mới màu</a>
 </p>
 <table class="table">
     <thead>
@@ -19,22 +25,23 @@
             <th>
                 Mã màu
             </th>
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ColorName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ColorCode)
             </td>
-            <td>
-                <a class="btn btn-primary btn-sm edit" type="button" href="Update/@item.ColorId" title="Sửa"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-primary btn-sm trash" type="button" href="Remove/@item.ColorId" title="Xóa"><i class="fas fa-trash"></i></a>
+            <td style="padding-left:20px">
+                <a class="btn btn-primary btn-sm " type="button" href="Update/@item.ColorId" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.ColorId" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.ColorId" title="Xóa"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
 }

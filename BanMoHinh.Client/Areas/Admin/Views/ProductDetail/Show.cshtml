@@ -37,13 +37,7 @@
                 Giá bán
             </th>
             <th>
-                Ngày nhập
-            </th>
-            <th>
                 Ngày cập nhật
-            </th>
-            <th>
-                Mô tả
             </th>
             <th>
                 Trạng thái
@@ -54,34 +48,28 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.SizeName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.ColorName)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.PriceSale)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Create_At)
-            </td>
-            <td>
+            <td style="padding-left:20px">
                 @Html.DisplayFor(modelItem => item.Update_At)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
+            <td style="padding-left:20px">
                 @if (item.Status == true)
                     {
                         <p>Còn hàng</p>
@@ -92,10 +80,10 @@
                     }
 
             </td>
-            <td>
-                <a class="btn btn-warning m-1" type="button" href="Update/@item.Id" title="Sửa">Sửa</a>
-                <a class="btn btn-outline-info m-1"  type="button" href="Details/@item.Id" title="Chi tiết">Chi tiết</a>
-                <a class="btn btn-danger m-1" type="button" href="Remove/@item.Id" title="Xóa">Xoá</a>
+            <td style="padding-left:20px">
+                <a class="btn btn-primary btn-sm " type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
 }
