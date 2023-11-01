@@ -1,248 +1,242 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Modernize Free</title>
-  <link rel="shortcut icon" type="image/png" href="~/file/admin/assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="~/file/admin/assets/css/styles.min.css" />
-  <script src="~/file/admin/ckeditor/ckeditor.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="~/file/admin/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="~/file/admin/assets/img/favicon.png">
+  <title>
+    Smart Dashboard Pro by Oscar Bahamonde
+  </title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link href="~/file/admin/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="~/file/admin/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="~/file/admin/assets/css/nucleo-svg.css" rel="stylesheet" />
+   <script src="~/file/admin/ckeditor/ckeditor.js"></script>
+  <link id="pagestyle" href="~/file/admin/assets/css/argon-dashboard.css?v=2.0.0" rel="stylesheet" />
 </head>
 
-<body >
-  <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <!-- Sidebar Start -->
-    <aside class="left-sidebar">
-      <!-- Sidebar scroll-->
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a class="text-nowrap logo-img">
-            <img src="~/file/admin/assets/images/logos/dark-logo.svg" width="180" alt="" />
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-            <i class="ti ti-x fs-8"></i>
-          </div>
-        </div>
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-          <ul id="sidebarnav">
-            <li class="sidebar-item">
-              <a class="sidebar-link" aria-expanded="false">
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
-                <span class="hide-menu">Trang chủ</span>
-              </a>
-            </li>
-            
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Quản lý</span>
-            </li>        
-            <li class="sidebar-item">
-              <a class="sidebar-link"  aria-expanded="false" asp-area="Admin" asp-controller="Post" asp-action="Index">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Quản lý bài viết</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Rank" asp-action="Index" aria-expanded="false">
-                <span>
-                  <i class="ti ti-alert-circle"></i>
-                </span>
-                <span class="hide-menu">Quản lý xếp hạng</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="User" asp-action="Index" aria-expanded="false">
-                <span>
-                  <i class="ti ti-cards"></i>
-                </span>
-                <span class="hide-menu">Quản lý tài khoản</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-file-description"></i>
-                </span>
-                <span class="hide-menu">Quản lý khách hàng</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link"asp-area="Admin" asp-controller="Brand" asp-action="GetAllBrand" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý thương hiệu</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý loại sản phẩm</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Material" asp-action="GetAllMaterial" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý chất liệu</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Product" asp-action="GetAllProduct" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý sản phẩm</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="ProductDetail" asp-action="Show" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý chi tiết sản phẩm</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Color" asp-action="Show" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý màu</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Size" asp-action="Show" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý size</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý đơn hàng</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Quản lý voucher</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-login"></i>
-                </span>
-                <span class="hide-menu">Đăng nhập</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Đăng xuất</span>
-              </a>
-            </li>
-            
-          </ul>
-          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
-            <div class="d-flex">
-              <div class="unlimited-access-title me-3">
-                <h6 class="fw-semibold fs-4 mb-6 text-dark w-85">Upgrade to pro</h6>
-                <a href="https://adminmart.com/product/modernize-bootstrap-5-admin-template/" target="_blank" class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Pro</a>
-              </div>
-              <div class="unlimited-access-img">
-                <img src="../assets/images/backgrounds/rocket.png" alt="" class="img-fluid">
-              </div>
+<body class="g-sidenav-show   bg-gray-100">
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+        <img src="~/file/admin/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1 font-weight-bold">Smart Dashboard Pro</span>
+      </a>
+    </div>
+    <hr class="horizontal dark mt-0">
+    <div class="collapse navbar-collapse  w-auto h-auto h-100" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link " aria-controls="dashboardsExamples" role="button" aria-expanded="false">
+            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+              <i class="ni ni-shop text-primary text-sm opacity-10"></i>
             </div>
-          </div>
-        </nav>
-        <!-- End Sidebar navigation -->
-      </div>
-      <!-- End Sidebar scroll-->
-    </aside>
-    <!--  Sidebar End -->
-    <!--  Main wrapper -->
-    <div class="body-wrapper">
-      <!--  Header Start -->
-      <header class="app-header">
-        <nav class="navbar navbar-expand-lg navbar-light">
-          <ul class="navbar-nav">
-            <li class="nav-item d-block d-xl-none">
-              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
-                <i class="ti ti-menu-2"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
-            </li>
-          </ul>
-          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <li class="nav-item dropdown">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <img src="~/file/admin/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+            <span class="nav-link-text ms-1">Trang chủ</span>
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <h6 class="ps-4  ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Danh mục</h6>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#pagesExamples" class="nav-link " aria-controls="pagesExamples" role="button" aria-expanded="false">
+            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+              <i class="ni ni-ungroup text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Quản lý chi tiết sản phẩm</span>
+          </a>
+          <div class="collapse " id="pagesExamples">
+            <ul class="nav ms-4">
+              <li class="nav-item ">
+                <a class="nav-link " data-bs-toggle="collapse" aria-expanded="false" href="#profileExample">
+                  <span class="sidenav-mini-icon"> P </span>
+                  <span class="sidenav-normal"> Danh sách <b class="caret"></b></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                  <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
-                    </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
-                  </div>
+                <div class="collapse " id="profileExample">
+                  <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link " asp-area="Admin" asp-controller="ProductDetail" asp-action="Show">
+                        <span class="sidenav-mini-icon text-xs"> P </span>
+                        <span class="sidenav-normal"> Hiển thị </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " href="pages/pages/profile/teams.html">
+                        <span class="sidenav-mini-icon text-xs"> T </span>
+                        <span class="sidenav-normal"> Teams </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " href="pages/pages/profile/projects.html">
+                        <span class="sidenav-mini-icon text-xs"> A </span>
+                        <span class="sidenav-normal"> All Projects </span>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </li>
+
+             
             </ul>
           </div>
-        </nav>
-      </header>
-      <!--  Header End -->
-      <div class="container-fluid">
-        @RenderBody()
-        
-      </div>
-
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#applicationsExamples" class="nav-link active" aria-controls="applicationsExamples" role="button" aria-expanded="false">
+            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+              <i class="ni ni-ui-04 text-info text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Applications</span>
+          </a>
+          <div class="collapse  show " id="applicationsExamples">
+            <ul class="nav ms-4">
+              <li class="nav-item active">
+                <a class="nav-link active" href="pages/applications/kanban.html">
+                  <span class="sidenav-mini-icon"> K </span>
+                  <span class="sidenav-normal"> Kanban </span>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link " href="pages/applications/wizard.html">
+                  <span class="sidenav-mini-icon"> W </span>
+                  <span class="sidenav-normal"> Wizard </span>
+                </a>
+              </li>
+              
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#ecommerceExamples" class="nav-link " aria-controls="ecommerceExamples" role="button" aria-expanded="false">
+            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+              <i class="ni ni-archive-2 text-success text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Ecommerce</span>
+          </a>
+          
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#authExamples" class="nav-link " aria-controls="authExamples" role="button" aria-expanded="false">
+            <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+              <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Authentication</span>
+          </a>
+        </li>
+       
+      </ul>
     </div>
-  </div>
-  <script src="~/file/admin/assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="~/file/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="~/file/admin/assets/js/sidebarmenu.js"></script>
-  <script src="~/file/admin/assets/js/app.min.js"></script>
-  <script src="~/file/admin/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-  <script src="~/file/admin/assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="~/file/admin/assets/js/dashboard.js"></script>
+    <div class="sidenav-footer mx-3 my-3">
+      <div class="card card-plain shadow-none" id="sidenavCard">
+        <img class="w-60 mx-auto" src="assets/img/illustrations/icon-documentation.svg" alt="sidebar_illustration">
+        <div class="card-body text-center p-3 w-100 pt-0">
+          <div class="docs-info">
+            <h6 class="mb-0">Bé cần giúp đỡ?</h6>
+            <p class="text-xs font-weight-bold">Vui lòng liên hệ mèo béo</p>
+            <a href="https://www.oscarbahamonde.com/learning-lab/bootstrap/overview/argon-dashboard" target="_blank" class="btn btn-primary btn-sm w-100 mb-0">Documentation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <main class="main-content position-relative border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg  px-0 mx-4 shadow-none border-radius-xl z-index-sticky " id="navbarBlur" data-scroll="false">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm">
+            </li>
+          </ol>
+        </nav>
+        <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+          <a href="javascript:;" class="nav-link p-0">
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line bg-white"></i>
+              <i class="sidenav-toggler-line bg-white"></i>
+              <i class="sidenav-toggler-line bg-white"></i>
+            </div>
+          </a>
+        </div>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Type here...">
+            </div>
+          </div>
+          <ul class="navbar-nav  justify-content-end">
+            <li class="nav-item d-flex align-items-center">
+              <a href="pages/authentication/signin/illustration.html" class="nav-link text-white font-weight-bold px-0" target="_blank">
+                <i class="fa fa-user me-sm-1"></i>
+                <span class="d-sm-inline d-none">Sign In</span>
+              </a>
+            </li>
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line bg-white"></i>
+                  <i class="sidenav-toggler-line bg-white"></i>
+                  <i class="sidenav-toggler-line bg-white"></i>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item px-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-white p-0">
+                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown pe-2 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-bell cursor-pointer"></i>
+              </a>
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+    
+      <div class="py-2 min-vh-100 d-inline-flex" style="overflow-x: auto">
+        <div class="card shadow-lg mx-4  card-profile-top">
+            <div class="card-body">
+                <div class="col-md-auto">
+                    @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</div>
+  </main>
+
+  <!--   Core JS Files   -->
+  <script src="~/file/admin/assets/js/core/popper.min.js"></script>
+  <script src="~/file/admin/assets/js/core/bootstrap.min.js"></script>
+  <script src="~/file/admin/assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="~/file/admin/assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <!-- Kanban scripts -->
+  <script src="~/file/admin/assets/js/plugins/dragula/dragula.min.js"></script>
+  <script src="~/file/admin/assets/js/plugins/jkanban/jkanban.js"></script>
+ 
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="~/file/admin/assets/js/argon-dashboard.min.js?v=2.0.0"></script>
   @RenderSection("Scripts", required : false)
 </body>
 
