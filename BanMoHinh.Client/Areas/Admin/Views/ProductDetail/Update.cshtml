@@ -4,6 +4,8 @@
 @{
     HttpClient _httpClient = new HttpClient();
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+    var a = ViewBag.Size;
+    var b = a;
 }
 <style>
 input[type="file"]{
@@ -44,22 +46,14 @@ figcaption{
             
             <div class="form-group">
                 <label class="control-label">Tên size</label>
-                @{
-                    <select name="sizeId" onchange="this.value;" asp-items="@ViewBag.Size" class="form-control">
-                    <option>--Chọn size--</option>
-                </select>
+                @Html.DropDownList("SizeId", (IEnumerable<SelectListItem>)ViewBag.Size, "Chọn kích thước", new { @class = "form-control" })
                 <span asp-validation-for="SizeId" class="text-danger"></span>
-                }
-                
             </div>
             <div class="form-group">
                 <label class="control-label">Tên màu</label>
-                @{
-                    <select name="colorId" onchange="this.value;" asp-items="@ViewBag.Color" class="form-control">
-                    <option>--Chọn màu--</option>
-                </select>
+                    @Html.DropDownList("ColorId", (IEnumerable<SelectListItem>)ViewBag.Color, "Chọn màu sắc", new { @class = "form-control" })
                 <span asp-validation-for="ColorId" class="text-danger"></span>
-                }
+                
                
             </div>
             <div class="form-group">
