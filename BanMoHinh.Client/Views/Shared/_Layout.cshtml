@@ -19,7 +19,7 @@
     <link href="~/file/user/css/owl.carousel.css" rel="stylesheet">
     <link href="~/file/user/css/owl.theme.default.css" rel="stylesheet">
     <!-- FontAwesome CSS -->
-    <link href="~/file/user/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -229,6 +229,11 @@
     <script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
     <script type="text/javascript" src="~/file/user/js/owl.carousel.min.js"></script>
     <script type="text/javascript" src="~/file/user/js/multiple-carousel.js"></script>
+    <script src="https://tudongchat.com/js/chatbox.js"></script>
+    <script>
+      const tudong_chatbox = new TuDongChat('p37hyL6vg91Biao4G8KXJ')
+      tudong_chatbox.initial()
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
