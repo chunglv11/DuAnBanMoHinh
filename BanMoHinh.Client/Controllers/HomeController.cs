@@ -27,9 +27,15 @@ namespace BanMoHinh.Client.Controllers
                               .ToList();
 
             // Làm tương tự để lấy ra 4 sản phẩm bán chạy nhất
-
-
             ViewData["NewestProducts"] = newestProducts;
+            if (newestProducts != null)
+            {
+                ViewData["NewestProducts"] = newestProducts;
+            }
+            else
+            {
+                TempData["Message"] = "Dữ liệu không tồn tại.";
+            }
             //ViewData["TopSellingProducts"] = topSellingProducts;
             return View();
         }
