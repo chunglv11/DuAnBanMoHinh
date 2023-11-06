@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BanMoHinh.Share.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,11 @@ namespace BanMoHinh.Share.ViewModels
     {
         public Guid Id { get; set; }
         public Guid? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
         public Guid? BrandId { get; set; }
+        public string? BrandName { get; set; }
         public Guid? MaterialId { get; set; }
+        public string? MaterialName { get; set; }
         public string? ProductName { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? Create_At { get; set; }
@@ -19,5 +23,6 @@ namespace BanMoHinh.Share.ViewModels
         public string? Description { get; set; }
         public string? Long_Description { get; set; }
         public bool? Status { get; set; }
+        public virtual List<ProductDetailVM>? ProductDvms { get; set; }
     }
 }
