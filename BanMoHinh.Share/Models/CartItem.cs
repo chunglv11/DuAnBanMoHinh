@@ -17,8 +17,8 @@ namespace BanMoHinh.Share.Models
         public int? Quantity { get; set; }
         public int? Price { get; set; }
         [ForeignKey("CartId")]
-        public Cart Cart { get; set; }
+        public Cart? Cart { get; set; }
         [ForeignKey("ProductDetail_ID")]
-        public ProductDetail ProductDetail { get; set; }
+        public ProductDetail? ProductDetail { get; set; }
     }
 }

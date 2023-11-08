@@ -257,9 +257,7 @@
 
                         if (LstProductDetail.Any())
                         {
-                            var priceMin = LstProductDetail.Min(c => c.PriceSale);
-                            var priceMax = LstProductDetail.Max(c => c.PriceSale);
-
+                        
                             var productDetailID = LstProductDetail.First().Id; // lấy id productdetail đầu tiên
 
                             var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
@@ -283,7 +281,19 @@
                                             </a>
                                         </h5>
                                         <div class="product-meta">
-                                              @priceMin đ - @priceMax đ
+                                            @if (item.MinPrice < item.MaxPrice)
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ  - @item.MaxPrice đ
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ 
+                                                </span>
+                                            }
+                                              
                                           @*  <span class="offer-price">20%off</span>*@
                                         </div>
                                         <div class="shopping-btn">

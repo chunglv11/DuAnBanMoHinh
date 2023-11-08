@@ -63,27 +63,27 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("80c277c4-6dd5-49e9-a6bc-fbb520888e29"),
+                            Id = new Guid("30034855-6604-4ce8-bb12-9b2ec13e2177"),
                             BrandName = "Brand 1"
                         },
                         new
                         {
-                            Id = new Guid("25a837e2-db59-4636-9c61-e0e08411e78b"),
+                            Id = new Guid("d7aa807a-a696-419c-94b5-9258148ebeae"),
                             BrandName = "Brand 2"
                         },
                         new
                         {
-                            Id = new Guid("2d1b66fe-de1a-4bec-aef7-bf71038bda04"),
+                            Id = new Guid("f8124d09-6052-45e6-8c23-f9a8b0dc2301"),
                             BrandName = "Brand 3"
                         },
                         new
                         {
-                            Id = new Guid("72eb9fc8-3c86-47e6-aca0-b3d55e45d99d"),
+                            Id = new Guid("19cd9725-0536-4624-9472-302d29afe4e7"),
                             BrandName = "Brand 4"
                         },
                         new
                         {
-                            Id = new Guid("eb112fc4-3601-483d-9eb0-3a2a6e74c9b0"),
+                            Id = new Guid("aa4b8fbf-51a1-4684-8b22-082f40b0dc45"),
                             BrandName = "Brand 5"
                         });
                 });
@@ -111,7 +111,6 @@ namespace BanMoHinh.API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CartId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Price")
@@ -148,27 +147,27 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0fb70c21-cfc7-494e-a040-1c6c77836e55"),
+                            Id = new Guid("986ce7f0-2d51-417f-abec-fb7d59a7b33e"),
                             CategoryName = "Category 1"
                         },
                         new
                         {
-                            Id = new Guid("9ca32796-b1b7-4d39-99ee-847825b65faa"),
+                            Id = new Guid("8842657e-9a44-44ef-8297-dca17a0f2010"),
                             CategoryName = "Category 2"
                         },
                         new
                         {
-                            Id = new Guid("c665fb67-fe73-468e-8d6f-e61c9c4f7efa"),
+                            Id = new Guid("25d465d4-c430-4fd5-bd40-e66a75d4851d"),
                             CategoryName = "Category 3"
                         },
                         new
                         {
-                            Id = new Guid("1051f8bb-9676-4900-83bf-ec1e501df149"),
+                            Id = new Guid("f4edac54-fa39-4c68-bc8c-a94b4a91daba"),
                             CategoryName = "Category 4"
                         },
                         new
                         {
-                            Id = new Guid("106da763-3b8d-4291-99b7-edf87128293e"),
+                            Id = new Guid("fdc6ae33-1ff3-44c4-940c-da45606f1a71"),
                             CategoryName = "Category 5"
                         });
                 });
@@ -192,97 +191,97 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            ColorId = new Guid("f6dc9628-6265-42ef-af89-351b2347d609"),
+                            ColorId = new Guid("4d6797ce-65db-461f-85f0-812c6f371c63"),
                             ColorCode = "#000000",
                             ColorName = "Đen"
                         },
                         new
                         {
-                            ColorId = new Guid("209c1544-d65b-494e-b362-3c4fc171cbf1"),
+                            ColorId = new Guid("cb191f4e-9ee0-46a9-8dc7-9283d023b513"),
                             ColorCode = "#FFFFFF",
                             ColorName = "Trắng"
                         },
                         new
                         {
-                            ColorId = new Guid("6d7639b3-3d83-4bfa-833c-165032384506"),
+                            ColorId = new Guid("9bf77060-0546-47f8-b563-c299fce7513f"),
                             ColorCode = "#FF0000",
                             ColorName = "Đỏ"
                         },
                         new
                         {
-                            ColorId = new Guid("fb0398c8-0a13-491b-8db9-39c11ebcc16b"),
+                            ColorId = new Guid("32835192-c9d8-4a7f-8413-621ac94b22be"),
                             ColorCode = "#00FF00",
                             ColorName = "Xanh lá cây"
                         },
                         new
                         {
-                            ColorId = new Guid("5ef1113f-a2f4-49c3-9ae1-52feaa8f3ba4"),
+                            ColorId = new Guid("3b8aee7f-65d0-4d67-9d5b-5c4957ac2f33"),
                             ColorCode = "#0000FF",
                             ColorName = "Xanh dương"
                         },
                         new
                         {
-                            ColorId = new Guid("150b814e-7e5e-4ea0-bc99-5b0d066a3bf6"),
+                            ColorId = new Guid("f2a3a9de-35a6-4aed-bc83-d4946c2b6ea7"),
                             ColorCode = "#FFFF00",
                             ColorName = "Vàng"
                         },
                         new
                         {
-                            ColorId = new Guid("8adfab98-70de-4a1d-8ca8-8c7ab5ad6405"),
+                            ColorId = new Guid("085c9bbd-64be-4902-b2f5-37d581a37ccd"),
                             ColorCode = "#FFA500",
                             ColorName = "Cam"
                         },
                         new
                         {
-                            ColorId = new Guid("cbb0a313-85f6-4a7d-9ff4-fc4257f0ba69"),
+                            ColorId = new Guid("2717be6c-7863-49ef-81db-0bba5cc48a93"),
                             ColorCode = "#800080",
                             ColorName = "Tím"
                         },
                         new
                         {
-                            ColorId = new Guid("1dacbb9c-0064-428b-837b-2d842ef8e57c"),
+                            ColorId = new Guid("d9a8ff12-1cc0-4974-a6fd-2da850e05974"),
                             ColorCode = "#FFC0CB",
                             ColorName = "Hồng"
                         },
                         new
                         {
-                            ColorId = new Guid("438a5c22-3c8b-465f-b5ac-03fb169a654f"),
+                            ColorId = new Guid("a56b307c-5ecd-44e1-b3b9-e3fbd7ed5f1e"),
                             ColorCode = "#808080",
                             ColorName = "Xám"
                         },
                         new
                         {
-                            ColorId = new Guid("fb23291b-7aff-42a3-b18a-abe490cf3af9"),
+                            ColorId = new Guid("35678ae1-1a2e-4411-b447-a6445bb9a3cc"),
                             ColorCode = "#A52A2A",
                             ColorName = "Nâu"
                         },
                         new
                         {
-                            ColorId = new Guid("0fbf9f1d-39b2-4f7a-92a2-3218d35ff3b1"),
+                            ColorId = new Guid("ce4ce4c9-57ef-432e-bb2f-874f68be40e2"),
                             ColorCode = "#000080",
                             ColorName = "Xanh lam"
                         },
                         new
                         {
-                            ColorId = new Guid("f6d7ea66-d168-4dc3-b72a-278169b9542e"),
+                            ColorId = new Guid("bd044e49-3985-4a7f-9f49-96804753c1bb"),
                             ColorCode = "#00BFFF",
                             ColorName = "Xanh da trời"
                         },
                         new
                         {
-                            ColorId = new Guid("6987531a-5726-4541-9d33-b273d8fbbc08"),
+                            ColorId = new Guid("cb29ab1f-8b84-4eb1-a1fd-e512898913ea"),
                             ColorCode = "#FFDAB9",
                             ColorName = "Hồng phấn"
                         },
                         new
                         {
-                            ColorId = new Guid("53ddf0da-083c-4482-b9e5-01f45d64d715"),
+                            ColorId = new Guid("37259e17-d7ee-4fcc-89e1-234358ad2a72"),
                             ColorCode = "#C0C0C0",
                             ColorName = "Xám tro"
                         },
                         new
                         {
-                            ColorId = new Guid("5c4d0e45-a123-4185-a00f-129b8b40636d"),
+                            ColorId = new Guid("4f8e0790-2e3e-477f-bffd-b740c6ea6cb8"),
                             ColorCode = "#C0C0C0",
                             ColorName = "Bạc"
                         });
@@ -304,17 +303,17 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b55c3ebf-08d4-429d-9efe-027d16307dc7"),
+                            Id = new Guid("d6aef51e-c46b-46d3-be83-aa7a48a73111"),
                             MaterialName = "Sắt"
                         },
                         new
                         {
-                            Id = new Guid("bec383f4-bbf7-4cd4-a914-68b6405adbd1"),
+                            Id = new Guid("95194e72-4efa-4504-b220-04735986afe8"),
                             MaterialName = "Nhựa pvc"
                         },
                         new
                         {
-                            Id = new Guid("2a8b9d2f-3a1c-4490-b5e6-ecee70e6e298"),
+                            Id = new Guid("4762bbf8-7f5f-41d7-a9af-5dab29257304"),
                             MaterialName = "Gỗ"
                         });
                 });
@@ -432,42 +431,42 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fbe9bd9b-5fd7-4b45-a622-b14a4e8abc40"),
+                            Id = new Guid("34be76ad-fdd9-49fa-815a-0817ad506014"),
                             OrderStatusName = "Đang được xử lý"
                         },
                         new
                         {
-                            Id = new Guid("ea36edc6-46ae-4b75-a561-3dec13ad15e2"),
+                            Id = new Guid("39d300a6-91b9-4c60-8231-7d9ee2f82ac6"),
                             OrderStatusName = "Chờ lấy hàng"
                         },
                         new
                         {
-                            Id = new Guid("f77aad07-dfd6-4d5d-8cc2-28541cac6da7"),
+                            Id = new Guid("07c1c972-4831-4c0a-a446-cf0437873511"),
                             OrderStatusName = "Đang giao hàng"
                         },
                         new
                         {
-                            Id = new Guid("97faa432-31df-4d2f-acf4-690bbfc502b6"),
+                            Id = new Guid("d8ea6a56-2e8b-40dc-a4a0-cde17642e936"),
                             OrderStatusName = "Giao hàng thành công"
                         },
                         new
                         {
-                            Id = new Guid("02d3a349-fa16-40b1-adb2-5e861ec40774"),
+                            Id = new Guid("34f3c838-fdd6-444a-8646-347b847f5d34"),
                             OrderStatusName = "Giao hàng không thành công"
                         },
                         new
                         {
-                            Id = new Guid("4ecd8b36-0768-421b-ba89-b1191cd3fc64"),
+                            Id = new Guid("43f3da2b-da2b-48f5-b6a6-6206e72688b1"),
                             OrderStatusName = "Hủy đơn"
                         },
                         new
                         {
-                            Id = new Guid("8be8caef-7c83-4b59-9c85-b9cbb60f876b"),
+                            Id = new Guid("ea0fbc23-7482-49b7-afcd-dccd0b8e37ae"),
                             OrderStatusName = "Yêu cầu trả hàng"
                         },
                         new
                         {
-                            Id = new Guid("a2a06135-949b-459f-993e-f63340bcadaa"),
+                            Id = new Guid("1b9cb474-4d08-42fc-8143-723d7491fbcc"),
                             OrderStatusName = "Chấp nhận trả hàng"
                         });
                 });
@@ -488,12 +487,12 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a101c049-8489-43ac-9ced-fa238e43ec32"),
+                            Id = new Guid("a4905d32-bce3-4451-ad14-9c71ad7adeb9"),
                             PaymentName = "Thanh toán khi nhận hàng"
                         },
                         new
                         {
-                            Id = new Guid("07dacb17-e3c0-402a-a725-e5f862292848"),
+                            Id = new Guid("b5de0760-a15f-4883-b6d3-f99faaefe932"),
                             PaymentName = "Thanh toán Online"
                         });
                 });
@@ -673,21 +672,21 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5be8d160-af3a-48dc-9b81-17c828fd9b76"),
+                            Id = new Guid("22755eda-258c-4044-930c-91931d4b20a5"),
                             Name = "Bạc",
                             PoinsMax = 1000000,
                             PointsMin = 0
                         },
                         new
                         {
-                            Id = new Guid("3d7ce39d-0d9f-4da3-8249-45f50183666c"),
+                            Id = new Guid("abdfcfea-be16-444a-8096-bea9b88bf5d7"),
                             Name = "Vàng",
                             PoinsMax = 3000000,
                             PointsMin = 1000001
                         },
                         new
                         {
-                            Id = new Guid("071a84bb-b6af-49b5-a466-a1c00cc2711e"),
+                            Id = new Guid("091077b4-fbf8-4271-b1f1-4cab5ddae0b8"),
                             Name = "Kim Cương",
                             PoinsMax = 10000000,
                             PointsMin = 3000001
@@ -749,22 +748,22 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("099ab9b6-fa33-449c-bab2-7c104119b9c8"),
-                            ConcurrencyStamp = "66c46bb0-5655-4575-8825-9676876bdc55",
+                            Id = new Guid("79fd03bb-d3f4-4cdf-8f75-a8f6a9bb5b96"),
+                            ConcurrencyStamp = "4f7379ec-b458-45cb-97ae-46bf3877fa04",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5cf31344-bba2-4cfb-bb07-d6b85bd2078c"),
-                            ConcurrencyStamp = "6245a204-c1a6-4322-b2c4-fb27c32bbf58",
+                            Id = new Guid("3337ed98-ac6c-4c1e-ae3e-321005cbe7f9"),
+                            ConcurrencyStamp = "5dd54460-de6d-4afe-844e-5b1b056ae44f",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("db50adb9-a926-4dba-930c-63dd7029826d"),
-                            ConcurrencyStamp = "d5b0c16c-45a1-44fd-ae8c-db32c765d92c",
+                            Id = new Guid("c261e66b-2eec-4a35-93a5-9a94c73a8590"),
+                            ConcurrencyStamp = "ec505b11-d9ba-4a7c-8a81-5810f7a8549c",
                             Name = "Guest",
                             NormalizedName = "GUEST"
                         });
@@ -788,6 +787,43 @@ namespace BanMoHinh.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Size");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("adfc6e33-f0f0-4ec3-814d-d76a67ccdc20"),
+                            Height = 30.0,
+                            SizeName = "Size 1",
+                            Width = 30.0
+                        },
+                        new
+                        {
+                            Id = new Guid("e40642f4-e6b4-4681-92f6-1e008fee7ab5"),
+                            Height = 30.0,
+                            SizeName = "Size 2",
+                            Width = 30.0
+                        },
+                        new
+                        {
+                            Id = new Guid("4f009f4c-a4ba-4339-a183-ac618f0cc1c2"),
+                            Height = 30.0,
+                            SizeName = "Size 3",
+                            Width = 30.0
+                        },
+                        new
+                        {
+                            Id = new Guid("2f3b9084-dbde-4917-954c-b93e1fef2daa"),
+                            Height = 30.0,
+                            SizeName = "Size 4",
+                            Width = 30.0
+                        },
+                        new
+                        {
+                            Id = new Guid("4b11554a-5196-454a-a355-96404235453a"),
+                            Height = 30.0,
+                            SizeName = "Size 5",
+                            Width = 30.0
+                        });
                 });
 
             modelBuilder.Entity("BanMoHinh.Share.Models.User", b =>
@@ -973,17 +1009,17 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7fda05ce-c9d5-4e4e-b6f9-23b83d4ffc58"),
+                            Id = new Guid("2a5b2f2f-b0fd-4721-9117-f1e8d5900a87"),
                             Name = "Used"
                         },
                         new
                         {
-                            Id = new Guid("f2fff3d0-0053-428f-9c0a-f077a3e38df9"),
+                            Id = new Guid("5fd582ad-91aa-4e8f-94cc-004d0fb925de"),
                             Name = "Active"
                         },
                         new
                         {
-                            Id = new Guid("4329816d-a206-4d03-829d-3056b272798e"),
+                            Id = new Guid("2648a33f-6f14-4652-9337-5cc867db04d8"),
                             Name = "Expired"
                         });
                 });
@@ -1004,12 +1040,12 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4dc00f84-1e37-45d2-874a-17a41e7834d9"),
+                            Id = new Guid("9bec4cb4-d7a0-4bac-85b3-aafe06147795"),
                             Name = "Khánh hàng"
                         },
                         new
                         {
-                            Id = new Guid("c0e51b81-fa95-4633-8e47-b0751fba37cb"),
+                            Id = new Guid("d56814da-4b2f-4a6e-bf3b-a2b9de153631"),
                             Name = "Sản phẩm"
                         });
                 });
@@ -1162,9 +1198,7 @@ namespace BanMoHinh.API.Migrations
                 {
                     b.HasOne("BanMoHinh.Share.Models.Cart", "Cart")
                         .WithMany("CartItem")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CartId");
 
                     b.HasOne("BanMoHinh.Share.Models.ProductDetail", "ProductDetail")
                         .WithMany("CartItem")
