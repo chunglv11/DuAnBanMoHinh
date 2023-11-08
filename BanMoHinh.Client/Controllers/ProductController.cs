@@ -71,6 +71,7 @@ namespace BanMoHinh.Client.Controllers
             ViewData["productDetail"] = productDetail;
             ViewData["ProductImage"] = ProductImage;
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).ToList();
             return View(allproduct);
         }
         public async Task<IActionResult> ProductDetailAsync(Guid id)
