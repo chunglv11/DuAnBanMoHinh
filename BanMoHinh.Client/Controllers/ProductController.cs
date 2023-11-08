@@ -27,34 +27,36 @@ namespace BanMoHinh.Client.Controllers
             var productMaterial = await _httpClient.GetFromJsonAsync<List<Material>>("https://localhost:7007/api/Material/getall");
             var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
             var ProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
+
             ViewData["productCategory"] = productCategory;
             ViewData["productBrand"] = productBrand;
             ViewData["productMaterial"] = productMaterial;
             ViewData["productDetail"] = productDetail;
             ViewData["ProductImage"] = ProductImage;
-            var result = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id)).ToList();
             switch (sortOrder)
             {
                 case "best-selling":
-                    result = result.OrderBy(p => p.ProductDvms?.Sum(d => d.Quantity)).ToList();
+                    allproduct = allproduct.OrderBy(p => p.ProductDvms?.Sum(d => d.Quantity)).ToList();
                     break;
                 case "a":
-                    result = result.OrderBy(p => p.ProductName).ToList();
+                    allproduct = allproduct.OrderBy(p => p.ProductName).ToList();
                     break;
                 case "high-price":
-                    result = result.OrderByDescending(p => p.ProductDvms?.Max(d => d.PriceSale)).ToList();
+                    allproduct = allproduct.OrderByDescending(p => p.ProductDvms?.Max(d => d.PriceSale)).ToList();
                     break;
                 case "low-price":
-                    result = result.OrderBy(p => p.ProductDvms?.Min(d => d.PriceSale)).ToList();
+                    allproduct = allproduct.OrderBy(p => p.ProductDvms?.Min(d => d.PriceSale)).ToList();
                     break;
                 case "z":
-                    result = result.OrderByDescending(p => p.ProductName).ToList();
+                    allproduct = allproduct.OrderByDescending(p => p.ProductName).ToList();
                     break;
                 default:
-                    result = result.OrderBy(p => p.ProductName).ToList();
+                    allproduct = allproduct.OrderBy(p => p.ProductName).ToList();
                     break;
             }
-            return View("ListProduct", result);
+            return View("ListProduct", allproduct);
         }
         public async Task<IActionResult> ListProductAsync()
         {
