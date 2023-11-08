@@ -277,7 +277,19 @@
                                             </a>
                                         </h5>
                                         <div class="product-meta">
-                                              @item.MinPrice đ - @item.MaxPrice đ
+                                            @if (item.MinPrice < item.MaxPrice)
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ  - @item.MaxPrice đ
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ 
+                                                </span>
+                                            }
+                                              
                                           @*  <span class="offer-price">20%off</span>*@
                                         </div>
                                         <div class="shopping-btn">
