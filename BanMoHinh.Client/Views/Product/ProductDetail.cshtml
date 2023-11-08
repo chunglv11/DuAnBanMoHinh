@@ -77,15 +77,17 @@
                                                 <input type="number" max="10" min="1" name="quantity" value="1" class="quantity-input" id="quantity-input">
                                                 <input class="btn-quantity increase-quantity" onclick="icQuantity()" type="button" value="+">
                                             </div>
+                                            @productdetail.Id
                                             <span class="rest-quantity">5 sản phẩm có sẵn</span>
                                         </div>
                                         <div>
                                             <button class="btn btn-default btn-buy-now">
                                                 Mua Ngay
                                             </button>
-                                            <button type="submit" class="btn btn-default">
+                                            <a type="submit" class="btn btn-default" asp-controller="Cart" asp-action="AddtoCart" asp-route-prDetailId="@productdetail.Id" asp-route-quantity="@productdetail.Quantity" asp-route-Price="@productdetail.PriceSale">
+                                                
                                                 <i class="fa fa-shopping-cart"></i>&nbsp;Thêm vào giỏ hàng
-                                            </button>
+                                            </a>
 
                                         </div>
 
