@@ -27,7 +27,7 @@ namespace BanMoHinh.Share.ViewModels
             get
             {
                 if (ProductDvms != null && ProductDvms.Count > 0)
-                    return ProductDvms.Min(pd => pd.PriceSale);
+                    return ProductDvms.Where(c=>c.ProductId==Id).Min(pd => pd.PriceSale);
                 return 0;
             }
         }
@@ -37,7 +37,7 @@ namespace BanMoHinh.Share.ViewModels
             get
             {
                 if (ProductDvms != null && ProductDvms.Count > 0)
-                    return ProductDvms.Max(pd => pd.PriceSale);
+                    return ProductDvms.Where(c => c.ProductId == Id).Max(pd => pd.PriceSale);
                 return 0;
             }
         }
