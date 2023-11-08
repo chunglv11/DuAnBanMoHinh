@@ -127,7 +127,7 @@ namespace BanMoHinh.API.Services
                              ProductName = d.ProductName
                          };
             #endregion
-
+            var productDetail = await _dbContext.ProductDetail.ToListAsync();
             var lstPr = from a in _dbContext.ProductDetail
                         join b in _dbContext.Product on a.ProductId equals b.Id
                         join c in _dbContext.Brand on b.BrandId equals c.Id
@@ -149,7 +149,7 @@ namespace BanMoHinh.API.Services
                             Description = b.Description,
                             Long_Description = b.Long_Description,
                             Status = b.Status,
-                            ProductDvms = lstPrd.Where(v => v.ProductId == b.Id).ToList(),
+                            ProductDvms = productDetail
                         };
             return lstPr.ToList();
         }

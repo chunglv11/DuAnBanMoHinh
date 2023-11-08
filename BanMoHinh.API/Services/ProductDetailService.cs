@@ -65,7 +65,7 @@ namespace BanMoHinh.API.Services
                         {
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
-                            ImageUrl = "images/" + i.FileName
+                            ImageUrl = "/images/" + i.FileName
                         };
                         _dbContext.ProductImage.Add(proi);
                     }
@@ -255,7 +255,7 @@ namespace BanMoHinh.API.Services
                         var proi = new ProductImage()
                         {
                             ProductDetailId = idp.Id,
-                            ImageUrl = "images/" + i.FileName
+                            ImageUrl = "/images/" + i.FileName
                         };
                         _dbContext.ProductImage.Update(proi);
                     }

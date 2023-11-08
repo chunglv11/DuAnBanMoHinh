@@ -97,13 +97,13 @@
                     if (i == 0)
                     {
                        <div class="@(i==0 ? "carousel-item active" : "carousel-item") ">
-                                <img class="d-block w-100" src="https://localhost:7007/@Model.Images[i]">
+                                <img class="d-block w-100" src="@(Configuration["BaseAddress"]+ Model.Images[i])">
                        </div>
                     }
                     else
                     {
                         <div class="@(i==0 ? "carousel-item active" : "carousel-item") ">
-                                <img class="d-block w-100" src="https://localhost:7007/@Model.Images[i]">
+                                <img class="d-block w-100" src="@(Configuration["BaseAddress"]+ Model.Images[i])">
                        </div>
                     }
                 }
