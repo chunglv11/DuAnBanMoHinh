@@ -19,8 +19,28 @@ namespace BanMoHinh.Client.Controllers
             _httpClient = httpClient;
             _apiClient = iproductDetailApiClient;
         }
+        //dg lỗi
+        public async Task<IActionResult> Search(string name)
+        {
+            var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+            var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id)).ToList();
+            if (string.IsNullOrEmpty(name))
+            {
+                // Nếu không có tên sản phẩm được cung cấp, trả về tất cả sản phẩm
 
-        public async Task<IActionResult> FilterName(string sortOrder)
+
+                return View(allproduct);
+            }
+            else
+            {
+                // Nếu tên sản phẩm được cung cấp, thực hiện tìm kiếm
+                var searchResult = allproduct.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
+
+                return View("ListProduct", searchResult);
+            }
+        }
+        public async Task<IActionResult> Filter(string sortOrder)
         {
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
             var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
@@ -44,10 +64,10 @@ namespace BanMoHinh.Client.Controllers
                     allproduct = allproduct.OrderBy(p => p.ProductName).ToList();
                     break;
                 case "high-price":
-                    allproduct = allproduct.OrderByDescending(p => p.ProductDvms?.Max(d => d.PriceSale)).ToList();
+                    allproduct = allproduct.OrderByDescending(p => p.MaxPrice).ToList();
                     break;
                 case "low-price":
-                    allproduct = allproduct.OrderBy(p => p.ProductDvms?.Min(d => d.PriceSale)).ToList();
+                    allproduct = allproduct.OrderBy(p => p.MinPrice).ToList();
                     break;
                 case "z":
                     allproduct = allproduct.OrderByDescending(p => p.ProductName).ToList();

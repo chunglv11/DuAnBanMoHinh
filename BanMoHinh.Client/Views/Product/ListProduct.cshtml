@@ -1,6 +1,7 @@
 ﻿@using BanMoHinh.Share.Models;
 @using System.Linq;
 @using BanMoHinh.Share.ViewModels;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @model IEnumerable<BanMoHinh.Share.ViewModels.ProductVM>;
 @{
 
@@ -12,14 +13,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var sortOrder = document.getElementById('sortOrder');
-        var savedValue = localStorage.getItem('selectedValue');
+        var savedValue = sessionStorage.getItem('selectedValue');
 
         if (savedValue) {
             sortOrder.value = savedValue;
         }
 
         sortOrder.addEventListener('change', function() {
-            localStorage.setItem('selectedValue', this.value);
+            sessionStorage.setItem('selectedValue', this.value);
             this.form.submit();
         });
     });
@@ -234,7 +235,7 @@
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb10 alignright">
-                        <form asp-controller="Product" asp-action="FilterName" method="get">
+                        <form asp-controller="Product" asp-action="Filter" method="get">
                             <div class="select-option form-group">
                                 <select id="sortOrder" name="sortOrder" class="form-control" placeholder="Sắp xếp theo">
                                     <option value="" default="">Sắp xếp theo</option>
@@ -268,7 +269,7 @@
                                 <a href="/Product/ProductDetail/@item.Id">
                                 </a><div class="product-block">
                                     <a href="product-single.html">
-                                        <div class="product-img"><img src="https://localhost:7007/@imgFirst" alt=""></div>
+                                        <div class="product-img"><img src="@(Configuration["BaseAddress"]+imgFirst)" alt=""></div>
                                     </a><div class="product-content">
                                         <a href="product-single.html">
                                         </a><h5>
