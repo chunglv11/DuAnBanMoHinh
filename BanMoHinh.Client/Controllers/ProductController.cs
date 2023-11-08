@@ -80,10 +80,12 @@ namespace BanMoHinh.Client.Controllers
             var allProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
             var Product = allproduct.FirstOrDefault(x => x.Id == id);
             var productdetail = allproductDetail.FirstOrDefault(c => c.ProductId == Product.Id);
-            var lstProductImage = allProductImage.Where(c => c.ProductDetailId == productdetail.Id);
+            var lstProductImage = allProductImage.Where(c => c.ProductDetailId == productdetail.Id).ToList();
             ViewData["productDetail"] = productdetail;
             ViewData["lstProductImage"] = lstProductImage;
             return View(Product);
+
         }
+
     }
 }

@@ -50,8 +50,9 @@
                             <!-- product -->
                             @foreach (var item in productDetail)
                             {
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">                          
-                                <div class="product-block">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <a asp-controller="Product" asp-action="ProductDetail" asp-route-productId="@item.Id">
+                                    <div class="product-block" >
                                     <div class="product-img"><img src="images/product_img_1.png" alt=""></div>
                                     <div class="product-content">
                                         <h5><a href="#" class="product-title">@item.ProductName <strong>(@item.BrandName, @item.MaterialName, @item.CategoryName)</strong></a></h5>
@@ -64,7 +65,8 @@
                                             <a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
                                         </div>
                                     </div>
-                                </div>
+                                        </div>
+                                    </a>
                             </div>
                             }
                             

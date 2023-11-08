@@ -263,18 +263,22 @@
                             var productDetailID = LstProductDetail.First().Id; // lấy id productdetail đầu tiên
 
                             var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
+                            if (lstProductImage != null && lstProductImage.Any())
+                            {
+                                var imgFirst = lstProductImage.First().ImageUrl;
+                                // Tiếp tục xử lý ảnh đầu tiên
+                            
 
-                                var imgFirst = lstProductImage.First().ImageUrl; // lấy img đầu tiên
 
                             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb30">
-                                <a href="/Product/ProductDetail/@item.Id">
-                                </a><div class="product-block">
-                                    <a href="product-single.html">
+                                
+                                <div class="product-block">
+                                        <a href="/Product/ProductDetail/@item.Id">
                                         <div class="product-img"><img src="https://localhost:7007/@imgFirst" alt=""></div>
                                     </a><div class="product-content">
-                                        <a href="product-single.html">
+                                            <a href="/Product/ProductDetail/@item.Id">
                                         </a><h5>
-                                            <a href="product-single.html"></a><a href="#" class="product-title">
+                                                <a href="/Product/ProductDetail/@item.Id"></a><a href="#" class="product-title">
                                                 @item.ProductName
                                             </a>
                                         </h5>
@@ -288,8 +292,9 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                             </div>
+                            }
 
                         }
                         else
