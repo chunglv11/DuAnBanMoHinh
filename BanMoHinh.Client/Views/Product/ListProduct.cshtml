@@ -342,3 +342,35 @@
     </div><a href="#" aria-label="Next">
     </a>
 </div>
+<script src="~/file/user/js/jquery.min.js" type="text/javascript"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/file/user/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/file/user/js/menumaker.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/file/user/js/jquery.sticky.js"></script>
+    <script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $(document).ready(function () {
+                $('#cssmenu ul ul li:odd').addClass('odd');
+                $('#cssmenu ul ul li:even').addClass('even');
+                $('#cssmenu > ul > li > a').click(function () {
+                    $('#cssmenu li').removeClass('active');
+                    $(this).closest('li').addClass('active');
+                    var checkElement = $(this).next();
+                    if ((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                        $(this).closest('li').removeClass('active');
+                        checkElement.slideUp('normal');
+                    }
+                    if ((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                        $('#cssmenu ul ul:visible').slideUp('normal');
+                        checkElement.slideDown('normal');
+                    }
+                    if ($(this).closest('li').find('ul').children().length == 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
