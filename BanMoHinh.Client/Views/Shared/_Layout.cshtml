@@ -59,8 +59,12 @@
                 <!-- search -->
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="search-bg">
-                        <input type="text" class="form-control" placeholder="Search Here">
-                        <button type="Submit"><i class="fa fa-search"></i></button>
+                        <form asp-controller="Product" asp-action="Search" method="get">
+                            <div class="form-group">
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Tìm kiếm">
+                            </div>
+                            <button type="Submit"><i class="fa fa-search"></i></button>
+                        </form>                        
                     </div>
                 </div>
                 <!-- /.search -->

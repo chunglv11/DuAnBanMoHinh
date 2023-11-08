@@ -1,6 +1,7 @@
 ﻿@using BanMoHinh.Share.Models;
 @using System.Linq;
 @using BanMoHinh.Share.ViewModels;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @model IEnumerable<BanMoHinh.Share.ViewModels.ProductVM>;
 @{
 
@@ -12,14 +13,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var sortOrder = document.getElementById('sortOrder');
-        var savedValue = localStorage.getItem('selectedValue');
+        var savedValue = sessionStorage.getItem('selectedValue');
 
         if (savedValue) {
             sortOrder.value = savedValue;
         }
 
         sortOrder.addEventListener('change', function() {
-            localStorage.setItem('selectedValue', this.value);
+            sessionStorage.setItem('selectedValue', this.value);
             this.form.submit();
         });
     });
@@ -234,7 +235,7 @@
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb10 alignright">
-                        <form asp-controller="Product" asp-action="FilterName" method="get">
+                        <form asp-controller="Product" asp-action="Filter" method="get">
                             <div class="select-option form-group">
                                 <select id="sortOrder" name="sortOrder" class="form-control" placeholder="Sắp xếp theo">
                                     <option value="" default="">Sắp xếp theo</option>
@@ -261,22 +262,18 @@
                             var productDetailID = LstProductDetail.First().Id; // lấy id productdetail đầu tiên
 
                             var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
-                            if (lstProductImage != null && lstProductImage.Any())
-                            {
-                                var imgFirst = lstProductImage.First().ImageUrl;
-                                // Tiếp tục xử lý ảnh đầu tiên
-                            
 
+                                var imgFirst = lstProductImage.First().ImageUrl; // lấy img đầu tiên
 
                             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb30">
-                                
-                                <div class="product-block">
-                                        <a href="/Product/ProductDetail/@item.Id">
-                                        <div class="product-img"><img src="https://localhost:7007/@imgFirst" alt=""></div>
+                                <a href="/Product/ProductDetail/@item.Id">
+                                </a><div class="product-block">
+                                    <a href="product-single.html">
+                                        <div class="product-img"><img src="@(Configuration["BaseAddress"]+imgFirst)" alt=""></div>
                                     </a><div class="product-content">
-                                            <a href="/Product/ProductDetail/@item.Id">
+                                        <a href="product-single.html">
                                         </a><h5>
-                                                <a href="/Product/ProductDetail/@item.Id"></a><a href="#" class="product-title">
+                                            <a href="product-single.html"></a><a href="#" class="product-title">
                                                 @item.ProductName
                                             </a>
                                         </h5>
@@ -302,9 +299,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            }
 
                         }
                         else
