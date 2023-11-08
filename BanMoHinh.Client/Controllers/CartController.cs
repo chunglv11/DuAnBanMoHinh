@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -41,9 +42,9 @@ namespace BanMoHinh.Client.Controllers
         }
         public async Task<IActionResult> AddtoCart(Guid prDetailId, int quantity, int Price)
         {
-            prDetailId = Guid.Parse("51d38d0f-686e-49bc-9005-7779a7c47200");
-            quantity = 1;
-            Price = 123;
+            //prDetailId = Guid.Parse("51d38d0f-686e-49bc-9005-7779a7c47200");
+            //quantity = 1;
+            //Price = 123;
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
             {
@@ -52,7 +53,8 @@ namespace BanMoHinh.Client.Controllers
                 {
                     var userName = userIdClaim.Value;
                     var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
-                    var getProductdetailbyID = await _httpClient.GetFromJsonAsync<ProductDetail>($"https://localhost:7007/api/productDetail/get/{prDetailId}");
+                    var getProductdetailbyID = await _httpClient.GetFromJsonAsync<ProductDetailVM>($"https://localhost:7007/api/productDetail/get/{prDetailId}");
+
                     var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={getUserbyName.Id}");
                     List<CartItem> getAllCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>("https://localhost:7007/api/cartitem/Get-All-CartItem");
                     IEnumerable<CartItem> CartItembyidCart = getAllCartItem.Where(c => c.ProductDetail_ID == prDetailId);
