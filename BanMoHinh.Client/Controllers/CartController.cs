@@ -37,7 +37,7 @@ namespace BanMoHinh.Client.Controllers
                 // ban chua dang nhap cho em no ra cho dang nhao anh oi
                 return RedirectToAction("Login", "Authentication");
             }
-         return View();
+       
         }
         public async Task<IActionResult> AddtoCart(Guid prDetailId, int quantity, int Price)
         {
@@ -54,8 +54,8 @@ namespace BanMoHinh.Client.Controllers
                     var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
                     var getProductdetailbyID = await _httpClient.GetFromJsonAsync<ProductDetail>($"https://localhost:7007/api/productDetail/get/{prDetailId}");
                     var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={getUserbyName.Id}");
-                    var getAllCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>("https://localhost:7007/api/cartitem/Get-All-CartItem");
-                    var CartItembyidCart = getAllCartItem.Where(c => c.Id == getCart.Id);
+                    List<CartItem> getAllCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>("https://localhost:7007/api/cartitem/Get-All-CartItem");
+                    IEnumerable<CartItem> CartItembyidCart = getAllCartItem.Where(c => c.ProductDetail_ID == prDetailId);
 
                     var ProductInCart = CartItembyidCart.FirstOrDefault(c => c.ProductDetail_ID == prDetailId);
                     if (ProductInCart != null) 
@@ -64,7 +64,7 @@ namespace BanMoHinh.Client.Controllers
                         ProductInCart.Quantity += quantity;
 						var updateResponse = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/cartitem/Update-CartItem?id={ProductInCart.Id}", ProductInCart);
 						return RedirectToAction("ShowCart", "Cart");
-					}
+					}   
                     else
                     {
 						if (getUserbyName != null)
