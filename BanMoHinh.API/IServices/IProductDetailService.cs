@@ -18,6 +18,6 @@ namespace BanMoHinh.API.IServices
         public Task<ProductDetailVM> GetItem(Guid id);
 
         public Task<bool> Update(ProductDetailVM item);
-        public decimal GetPriceForSize(Guid productDId, Guid sizeId);
+        public decimal GetPriceForSize(Guid productId, Guid sizeId);
     }
 }
