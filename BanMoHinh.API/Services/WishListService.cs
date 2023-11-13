@@ -15,7 +15,7 @@ namespace BanMoHinh.API.Services
             _dbContext = myDbContext;
         }
 
-        public async Task<bool> Create(Guid UserId, Guid ProductDetailId)
+        public async Task<bool> Create(Guid UserId, Guid ProductId)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace BanMoHinh.API.Services
                 {
                     Id = Guid.NewGuid(),
                     UserId = UserId,
-                    ProductDetailId = ProductDetailId
+                    ProductId = ProductId
                 };
                 await _dbContext.WishList.AddAsync(wishList);
                 await _dbContext.SaveChangesAsync();

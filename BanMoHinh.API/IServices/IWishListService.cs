@@ -4,7 +4,7 @@ namespace BanMoHinh.API.IServices
 {
     public interface IWishListService
     {
-        public Task<bool> Create(Guid UserId, Guid ProductDetailId);
+        public Task<bool> Create(Guid UserId, Guid ProductId);
 
         public Task<bool> Delete(Guid Id);
 
