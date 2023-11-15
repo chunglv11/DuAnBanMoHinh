@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using System.Net.Http;
+using System.Security.Claims;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -18,6 +19,63 @@ namespace BanMoHinh.Client.Controllers
         {
             _httpClient = httpClient;
             _apiClient = iproductDetailApiClient;
+        }
+        public async Task<JsonResult> WishList(Guid ProductId)
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                if (identity != null)
+                {
+                    var userIdClaim = identity.FindFirst(ClaimTypes.Name);
+
+                    if (userIdClaim != null)
+                    {
+                        var userName = userIdClaim.Value;
+                        var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
+
+                        if (getUserbyName != null)
+                        {
+                            var userId = getUserbyName.Id;
+
+
+                            // Tạo yêu cầu để thêm sản phẩm vào danh sách yêu thích
+                            var requestData = new
+                            {
+                                UserId = userId,
+                                ProductId = ProductId
+                            };
+
+                            // Gửi yêu cầu POST đến API
+                            var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/WishList/create-wishlist", requestData);
+
+                            // Kiểm tra xem yêu cầu có thành công không
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return Json(new { success = true });
+                            }
+                            else
+                            {
+                                // Xử lý khi có lỗi từ API khi thêm vào danh sách yêu thích
+                                return Json(new { success = false, errorMessage = "Có lỗi khi thêm vào danh sách yêu thích." });
+                            }
+                        }
+                    }
+                }
+
+                return Json(new { success = false, errorMessage = "Không thể xác định người dùng." });
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                return Json(new { success = false, errorMessage = ex.Message });
+            }
+        }
+        public async Task<IActionResult> ShowWishList()
+        {
+            var wl = await _httpClient.GetFromJsonAsync<List<WishListVM>>("https://localhost:7007/api/WishList/get-all");
+            ViewData["WishList"] = wl;
+            return View(wl);
         }
         public async Task<IActionResult> Filter(string sortOrder)
         {
@@ -86,21 +144,21 @@ namespace BanMoHinh.Client.Controllers
         // Search
         public async Task<List<ProductVM>> Search(string name, List<ProductVM> lstProductVm)
         {
-                lstProductVm = lstProductVm.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
+            lstProductVm = lstProductVm.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
             return lstProductVm;
         }
         // filter by form
-        public async Task<List<ProductVM>> Filter(Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice , string? sortOrder, List<ProductVM> lstProductVm)
+        public async Task<List<ProductVM>> Filter(Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice, string? sortOrder, List<ProductVM> lstProductVm)
         {
-            if (SelectedCategory.Length>0)
+            if (SelectedCategory.Length > 0)
             {
                 lstProductVm = lstProductVm.FindAll(c => SelectedCategory.Contains(c.CategoryId)).ToList();
             }
-            if (SelectedBrand.Length>0)
+            if (SelectedBrand.Length > 0)
             {
                 lstProductVm = lstProductVm.FindAll(c => SelectedBrand.Contains(c.BrandId)).ToList();
             }
-            if (SelectedMaterial.Length>0)
+            if (SelectedMaterial.Length > 0)
             {
                 lstProductVm = lstProductVm.FindAll(c => SelectedMaterial.Contains(c.MaterialId)).ToList();
             }
@@ -117,7 +175,7 @@ namespace BanMoHinh.Client.Controllers
             (maxPrice >= p.MinPrice && maxPrice <= p.MaxPrice))
         .ToList();
             }
-            if (sortOrder!=null)
+            if (sortOrder != null)
             {
                 lstProductVm = await Filter(sortOrder, lstProductVm);
             }
