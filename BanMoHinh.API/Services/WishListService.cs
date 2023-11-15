@@ -1,6 +1,7 @@
 ﻿using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
@@ -8,17 +9,22 @@ namespace BanMoHinh.API.Services
     public class WishListService : IWishListService
     {
         private MyDbContext _dbContext;
+        private IUserService _userService;
+        private IProductService _productService;
 
-
-        public WishListService(MyDbContext myDbContext)
+        public WishListService(MyDbContext dbContext, IUserService userService, IProductService productService)
         {
-            _dbContext = myDbContext;
+            _dbContext = dbContext;
+            _userService = userService;
+            _productService = productService;
         }
 
         public async Task<bool> Create(Guid UserId, Guid ProductId)
         {
             try
             {
+                //var idp = _dbContext.Product.FirstOrDefault(c => c.Id == ProductId).Id;
+                //var iduser = _dbContext.Users.FirstOrDefault(c => c.Id == UserId).Id;
                 WishList wishList = new WishList()
                 {
                     Id = Guid.NewGuid(),
@@ -54,9 +60,20 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<List<WishList>> GetAll()
+        public async Task<List<WishListVM>> GetAll()
         {
-            return await _dbContext.WishList.ToListAsync();
+            var result = (from pd in _dbContext.WishList
+                          join p in _dbContext.Product on pd.ProductId equals p.Id
+                          join u in _dbContext.Users on pd.UserId equals u.Id
+                          select new WishListVM()
+                          {
+                              Id = pd.Id,
+                              UserId = pd.UserId,
+                              ProductId = pd.ProductId,
+                              ProductName = p.ProductName
+                          }).ToList();
+
+            return result;
         }
 
         public async Task<WishList> GetItem(Guid id)

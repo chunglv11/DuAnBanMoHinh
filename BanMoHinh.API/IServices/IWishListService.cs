@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 
 namespace BanMoHinh.API.IServices
 {
@@ -8,7 +9,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<bool> Delete(Guid Id);
 
-        public Task<List<WishList>> GetAll();
+        public Task<List<WishListVM>> GetAll();
 
         public Task<WishList> GetItem(Guid Id);
 

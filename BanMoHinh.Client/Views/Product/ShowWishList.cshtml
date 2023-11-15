@@ -1,0 +1,67 @@
+﻿@using BanMoHinh.Share.ViewModels;
+@model IEnumerable<BanMoHinh.Share.ViewModels.WishListVM>;
+@{
+
+    List<WishListVM> wl = ViewData["WishList"] as List<WishListVM>;
+    
+
+}
+<div class="container">
+        <div class="row">
+
+            <div class="box">
+                <div class="box-head box-head-gray">
+                    <h3 class="head-title">Danh sách yêu thích</h3>
+                </div>
+                <div class="box-body box-body-gray">
+                    <ul class="list-favorites">
+                        @foreach (var item in wl)
+                    {
+                        <li class="item">
+                            <button class="btn-delete">×</button>
+                            <div class="thumbnail">
+                                <a href="/Product/ProductDetail/@item.ProductId" class="img">
+                                    <img src="https://media3.scdn.vn/img4/2021/09_16/GGLGduTGmON5lp2Xmii5_simg_de2fe0_500x500_maxb.jpg"
+                                        alt="">
+                                </a>
+                            </div>
+
+                            <div class="body">
+                                <a href="/Product/ProductDetail/@item.ProductId" class="name">@item.ProductName</a>
+                                <div class="rating-review">
+                                    <div class="rating">
+                                        <span><i class="fa fa-star"></i></span>
+                                        <span><i class="fa fa-star"></i></span>
+                                        <span><i class="fa fa-star"></i></span>
+                                        <span><i class="fa fa-star"></i></span>
+                                        <span><i class="fa fa-star-o"></i></span>
+                                    </div>
+                                    <span class="review-count">(10 nhận xét)</span>
+                                </div>
+
+                            </div>
+
+                            <div class="footer">
+                                <div class="price-discount">36.990.00 đ</div>
+                                <div class="wrap">
+                                    <div class="price"><strike>37.990.000 đ</strike></div>
+                                    <div class="discount">-3%</div>
+                                </div>
+                            </div>
+
+                        </li>
+                    }
+                                              
+                    </ul>
+                </div>
+            </div>
+            <a href="/Product/ListProduct" class="btn-link" style="display:block; margin-bottom: 20px">
+                <center> Trở về trang mua hàng</center>
+            </a>
+
+            <!-- cart-total -->
+
+        </div>
+        <!-- /.cart-total -->
+        <!-- </div> -->
+    </div>
