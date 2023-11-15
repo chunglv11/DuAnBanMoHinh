@@ -1,11 +1,17 @@
 ﻿using BanMoHinh.Client.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -14,11 +20,13 @@ namespace BanMoHinh.Client.Controllers
         private readonly HttpClient _httpClient;
         private IproductDetailApiClient _apiClient;
 
-        public ProductController(HttpClient httpClient, IproductDetailApiClient iproductDetailApiClient)
+        public ProductController(HttpClient httpClient, IproductDetailApiClient apiClient)
         {
             _httpClient = httpClient;
-            _apiClient = iproductDetailApiClient;
+            _apiClient = apiClient;
         }
+
+
         //dg lỗi
         public async Task<IActionResult> Search(string name)
         {
@@ -39,6 +47,68 @@ namespace BanMoHinh.Client.Controllers
 
                 return View("ListProduct", searchResult);
             }
+        }
+
+        public async Task<JsonResult> WishList(Guid ProductId)
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                if (identity != null)
+                {
+                    var userIdClaim = identity.FindFirst(ClaimTypes.Name);
+
+                    if (userIdClaim != null)
+                    {
+                        var userName = userIdClaim.Value;
+                        var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
+
+                        if (getUserbyName != null)
+                        {
+                            var userId = getUserbyName.Id;
+
+
+                            // Tạo yêu cầu để thêm sản phẩm vào danh sách yêu thích
+                            var requestData = new
+                            {
+                                UserId = userId,
+                                ProductId = ProductId
+                            };
+
+                            // Gửi yêu cầu POST đến API
+                            var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/WishList/create-wishlist", requestData);
+
+                            // Kiểm tra xem yêu cầu có thành công không
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return Json(new { success = true });
+                            }
+                            else
+                            {
+                                // Xử lý khi có lỗi từ API khi thêm vào danh sách yêu thích
+                                return Json(new { success = false, errorMessage = "Có lỗi khi thêm vào danh sách yêu thích." });
+                            }
+                        }
+                    }
+                }
+
+                return Json(new { success = false, errorMessage = "Không thể xác định người dùng." });
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                return Json(new { success = false, errorMessage = ex.Message });
+            }
+        }
+
+
+
+
+        public async Task<IActionResult> ShowWishList()
+        {
+            var wl = await _httpClient.GetFromJsonAsync<List<WishListVM>>("https://localhost:7007/api/WishList/get-all");
+            ViewData["WishList"] = wl;
+            return View(wl);
         }
         public async Task<IActionResult> Filter(string sortOrder)
         {

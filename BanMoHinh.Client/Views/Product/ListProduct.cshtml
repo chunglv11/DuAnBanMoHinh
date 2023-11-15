@@ -294,7 +294,8 @@
                                           @*  <span class="offer-price">20%off</span>*@
                                         </div>
                                         <div class="shopping-btn">
-                                            <a href="/Product/ProductDetail/@item.Id" class="product-btn btn-like"><i class="fa fa-heart"></i></a>
+                                            <a href="#" class="product-btn btn-like" onclick="addToWishList('@item.Id')"><i class="fa fa-heart"></i></a>
+
                                             <a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
                                         </div>
                                     </div>
@@ -374,3 +375,49 @@
             });
         })(jQuery);
     </script>
+    <script>
+    function addToWishList(productId) {
+    $.ajax({
+        type: "POST",
+        url: "/Product/WishList",
+        data: { ProductId: productId },
+        success: function (response) {
+            if (response.success) {
+                // Hiển thị SweetAlert khi thêm thành công
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Sản phẩm đã được thêm vào danh sách yêu thích.',
+                    showConfirmButton: true, // Hiển thị nút xác nhận
+                    confirmButtonText: 'Xem danh sách yêu thích', // Text cho nút xác nhận
+                    timer: 3000
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Nếu người dùng ấn xác nhận, chuyển hướng đến trang danh sách yêu thích
+                        window.location.href = "/Product/ShowWishList";
+                    }
+                });
+            } else {
+                // Hiển thị SweetAlert khi có lỗi
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.errorMessage || 'Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            // Xử lý khi có lỗi
+            console.log(error);
+            // Hiển thị thông báo lỗi cho người dùng
+        }
+    });
+}
+
+
+    </script>
+
+
+
+
+
