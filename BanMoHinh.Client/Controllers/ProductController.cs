@@ -13,12 +13,11 @@ namespace BanMoHinh.Client.Controllers
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;
-        private IproductDetailApiClient _apiClient;
 
-        public ProductController(HttpClient httpClient, IproductDetailApiClient iproductDetailApiClient)
+
+        public ProductController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _apiClient = iproductDetailApiClient;
         }
         public async Task<JsonResult> WishList(Guid ProductId)
         {
@@ -71,12 +70,38 @@ namespace BanMoHinh.Client.Controllers
                 return Json(new { success = false, errorMessage = ex.Message });
             }
         }
+
         public async Task<IActionResult> ShowWishList()
         {
-            var wl = await _httpClient.GetFromJsonAsync<List<WishListVM>>("https://localhost:7007/api/WishList/get-all");
-            ViewData["WishList"] = wl;
-            return View(wl);
+            var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+            var productImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
+            var allProducts = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            var wishList = await _httpClient.GetFromJsonAsync<List<WishListVM>>("https://localhost:7007/api/WishList/get-all");
+            allProducts = allProducts.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id)).ToList();
+            // Lọc danh sách sản phẩm yêu thích dựa trên ProductId
+            var wishListProducts = allProducts.Where(p => wishList.Any(w => w.ProductId == p.Id)).ToList();
+
+            ViewData["productDetail"] = productDetail;
+            ViewData["productImage"] = productImage;
+            ViewData["wishListProducts"] = wishListProducts;
+
+            return View(wishListProducts);
         }
+
+        public async Task<JsonResult> DeleteFromWishList(Guid idwistlist)
+        {
+            var response = await _httpClient.DeleteAsync($"https://localhost:7007/api/WishList/delete-{idwistlist}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Json(new { message = "Xoá sản phẩm khỏi danh sách yêu thích thành công." });
+            }
+            else
+            {
+                return Json(new { message = "Có lỗi xảy ra khi xoá sản phẩm khỏi danh sách yêu thích." });
+            }
+        }
+
         public async Task<IActionResult> Filter(string sortOrder)
         {
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");

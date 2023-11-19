@@ -12,5 +12,7 @@ namespace BanMoHinh.Share.ViewModels
         public Guid UserId { get; set; }
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
+        public decimal? PriceSale { get; set; }
+        public List<string>? Images { get; set; }
     }
 }

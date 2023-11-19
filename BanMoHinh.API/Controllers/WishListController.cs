@@ -63,9 +63,9 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpDelete("delete-{id}")]
-        public async Task<ActionResult<ProductVM>> Delete(Guid id)
+        public async Task<ActionResult<ProductVM>> Delete(WishList w)
         {
-            var result = await _wishListService.Delete(id);
+            var result = await _wishListService.Delete(w.Id);
             if (result)
             {
                 return Ok("Đã xoá thành công");
