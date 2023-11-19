@@ -3,6 +3,7 @@ using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace BanMoHinh.API.Services
 {
@@ -59,22 +60,38 @@ namespace BanMoHinh.API.Services
                 return false;
             }
         }
-
         public async Task<List<WishListVM>> GetAll()
         {
-            var result = (from pd in _dbContext.WishList
-                          join p in _dbContext.Product on pd.ProductId equals p.Id
-                          join u in _dbContext.Users on pd.UserId equals u.Id
-                          select new WishListVM()
-                          {
-                              Id = pd.Id,
-                              UserId = pd.UserId,
-                              ProductId = pd.ProductId,
-                              ProductName = p.ProductName
-                          }).ToList();
+            //var query = from wishList in _dbContext.WishList
+            //            join product in _dbContext.Product on wishList.ProductId equals product.Id
+            //            join productDetail in _dbContext.ProductDetail on product.Id equals productDetail.ProductId
+            //            join user in _dbContext.Users on wishList.UserId equals user.Id
 
-            return result;
+            //            select new WishListVM()
+            //            {
+            //                Id = wishList.Id,
+            //                ProductId = product.Id,
+            //                UserId = user.Id,
+            //                ProductName = product.ProductName,
+            //                PriceSale = productDetail.PriceSale,
+            //                Images = _dbContext.ProductImage
+            //                            .Where(img => img.ProductDetailId == productDetail.Id)
+            //                            .Select(img => img.ImageUrl)
+            //                            .ToList()
+            //            };
+            var query = from a in _dbContext.WishList
+                        join b in _dbContext.Product on a.ProductId equals b.Id
+                        join c in _dbContext.Users on a.UserId equals c.Id
+                        select new WishListVM()
+                        {
+                            Id = a.Id,
+                            ProductName = b.ProductName,
+                            UserId = c.Id,
+                            ProductId = b.Id
+                        };
+            return query.ToList();
         }
+
 
         public async Task<WishList> GetItem(Guid id)
         {
