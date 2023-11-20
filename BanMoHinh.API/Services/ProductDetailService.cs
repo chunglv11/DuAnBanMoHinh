@@ -189,7 +189,28 @@ namespace BanMoHinh.API.Services
             };
             return lstPrd;
             #endregion
-
+            //return await _dbContext.ProductDetail.Where(c => c.Id == id)
+            //    .Select(prd => new ProductDetailVM()
+            //    {
+            //        Id = prd.Id,
+            //        ProductId = prd.ProductId,
+            //        ProductName = product.ProductName,
+            //        SizeId = prd.SizeId,
+            //        SizeName = size.SizeName,
+            //        ColorId = prd.ColorId,
+            //        ColorName = color.ColorName,
+            //        Quantity = prd.Quantity,
+            //        Price = prd.Price,
+            //        PriceSale = prd.PriceSale,
+            //        Create_At = prd.Create_At,
+            //        Update_At = prd.Update_At,
+            //        Description = prd.Description,
+            //        Status = prd.Status,
+            //        ProductImage = prd.ProductImages.Select(b => new ProductImage()
+            //        {
+            //            ImageUrl = b.ImageUrl,
+            //        }).ToList(),
+            //    }).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Update(ProductDetailVM item)
@@ -245,18 +266,22 @@ namespace BanMoHinh.API.Services
                 return true;
             }
         }
+        public async Task<bool> UpdateQuantity(Guid ID, int QUANTITY)
 
-        public decimal GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
         {
-            // Tìm sản phẩm chi tiết dựa trên productId và sizeId color
-            var productDetail = _dbContext.ProductDetail
-            .FirstOrDefault(pd => pd.SizeId == sizeId && pd.ColorId == colorId && pd.ProductId == productId);
-
-            if (productDetail != null && productDetail.PriceSale.HasValue)
+            try
             {
-                return productDetail.PriceSale.Value;
+                var proid = _dbContext.ProductDetail.FirstOrDefault(x => x.Id == ID);
+                proid.Quantity = QUANTITY;
+                _dbContext.ProductDetail.Update(proid);
+                await _dbContext.SaveChangesAsync();
+                return true;
+
             }
-            throw new Exception("Không tìm thấy giá sản phẩm chi tiết/ chưa có size,color này.");
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }
