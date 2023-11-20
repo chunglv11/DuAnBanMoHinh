@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/orderitem")]
+    [Route("api/payment")]
     [ApiController]
-    public class OrderItemController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        public IOrderItemService _iOrderItemService;
-        public OrderItemController(IOrderItemService iOrderItemService)
+        public IPaymentService _IpaymentService;
+        public PaymentController(IPaymentService payment)
         {
-            _iOrderItemService = iOrderItemService;
+            _IpaymentService = payment;
         }
 
         [HttpGet("getall")]
@@ -21,7 +21,7 @@ namespace BanMoHinh.API.Controllers
         {
             try
             {
-                return Ok(await _iOrderItemService.GetAll());
+                return Ok(await _IpaymentService.GetAll());
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace BanMoHinh.API.Controllers
         {
             try
             {
-                return Ok(await _iOrderItemService.GetItem(id));
+                return Ok(await _IpaymentService.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -43,9 +43,9 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create")]
-        public async Task<ActionResult<OrderItemVM>> Post([FromBody] OrderItemVM obj)
-        {
-            var result = await _iOrderItemService.Create(obj);
+        public async Task<ActionResult<Payment>> Post([FromBody] Payment payment)
+        { 
+            var result = await _IpaymentService.Create(payment);
             if (result)
             {
                 return Ok("Đã thêm thành công");
@@ -54,19 +54,19 @@ namespace BanMoHinh.API.Controllers
         }
         
         [HttpPut("update-product-{id}")]
-        public async Task<ActionResult<OrderItemVM>> Put(Guid id, [FromBody] OrderItemVM obj)
+        public async Task<ActionResult<Payment>> Put(Guid id, [FromBody] Payment obj)
         {
-            var result = await _iOrderItemService.Update(id, obj);
+            var result = await _IpaymentService.Update(id, obj);
             if (result)
             {
                 return Ok("Đã sửa thành công");
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-{id}")]
+        [HttpDelete("delete-product-{id}")]
         public async Task<ActionResult<OrderItemVM>> Delete(Guid id)
         {
-            var result = await _iOrderItemService.Delete(id);
+            var result = await _IpaymentService.Delete(id);
             if (result)
             {
                 return Ok("Đã xoá thành công");

@@ -21,6 +21,7 @@
                         <!-- product-description -->
                         <div class="box-body">
                             <div class="row">
+                                <form>
                                 @if (ViewData["lstProductImage"] != null)
                                 {
                                     var lstProductImage = ViewData["lstProductImage"] as List<ProductImage>;
@@ -64,7 +65,7 @@
                                             <span><i class="fa fa-star-o"></i></span>
                                             <span class="text-secondary">&nbsp;(12 đánh giá)</span>
                                         </div>
-                                        <p class="product-price" style="font-size: 25px;">
+                                        <p  style="font-size: 25px;">
                                             @productdetail.PriceSale<strike style="color:rgba(128, 128, 128, 0.658); font-size: 18px;">
                                                 @productdetail.Price
                                             </strike>
@@ -93,6 +94,8 @@
 
                                     </div>
                                 </div>
+                            </form>
+
                             </div>
                         </div>
                     </div>

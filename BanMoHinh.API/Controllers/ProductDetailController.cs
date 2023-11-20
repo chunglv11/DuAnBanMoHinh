@@ -90,5 +90,22 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
+        [HttpPut("updatequantity/{id}")]
+        public async Task<ActionResult<ProductDetailVM>> Update(Guid id, int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return BadRequest("Số lượng phải lớn hơn 0");
+            }
+
+            var result = await _iproductDetailService.UpdateQuantity(id, quantity);
+            if (result)
+            {
+                return Ok("Đã thành công");
+            }
+
+            return Ok("Lỗi!");
+        }
+
     }
 }

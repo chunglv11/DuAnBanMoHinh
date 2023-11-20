@@ -266,5 +266,22 @@ namespace BanMoHinh.API.Services
                 return true;
             }
         }
+        public async Task<bool> UpdateQuantity(Guid ID, int QUANTITY)
+
+        {
+            try
+            {
+                var proid = _dbContext.ProductDetail.FirstOrDefault(x => x.Id == ID);
+                proid.Quantity = QUANTITY;
+                _dbContext.ProductDetail.Update(proid);
+                await _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }
