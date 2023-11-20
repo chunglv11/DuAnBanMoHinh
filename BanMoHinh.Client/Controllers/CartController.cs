@@ -1,6 +1,8 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.Net.Http.Json;
 using System.Security.Claims;
 
 namespace BanMoHinh.Client.Controllers
@@ -23,7 +25,17 @@ namespace BanMoHinh.Client.Controllers
                     var userName = userIdClaim.Value;
                     var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
                     var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={getUserbyName.Id}");
-                    var listCartDetail = await _httpClient.GetFromJsonAsync<List<CartItem>>("https://localhost:7007/api/cartitem/Get-All-CartItem");
+                    var getColor = await _httpClient.GetFromJsonAsync<List<Colors>>("https://localhost:7007/api/color/get-all-Color");
+                    var getCate = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
+                    var getSize = await _httpClient.GetFromJsonAsync<List<Size>>("https://localhost:7007/api/size/get-all-size");
+                    var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
+                    var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+                    var voucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
+                    ViewData["productDetail"] = productDetail;
+                    ViewData["voucher"] = voucher;
+                    ViewData["color"] = getColor;
+                    ViewData["size"] = getSize;
+                    ViewData["category"] = getCate;
                     var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
                     return View(listcartDetailbyIdCart);
                 }
@@ -118,6 +130,22 @@ namespace BanMoHinh.Client.Controllers
                 // ban chua dang nhap cho em no ra cho dang nhao anh oi
                 return RedirectToAction("Login", "Authentication");
             }
+        }
+        public async Task<IActionResult> TangSL(Guid id, Guid ProdcutDetails_Id, string idgh)
+        {
+            try
+            {
+                var url = $"https://localhost:7007/api/CartDetails/TangSl?id={ProdcutDetails_Id}&idCartItem={id}&idgh={idgh}";
+                var response = await _httpClient.GetAsync(url);
+                
+  
+                return RedirectToAction("ShowCart");
+            }
+            catch (Exception)
+            {
+                return View("Error");
+            }
+
         }
     }
 }

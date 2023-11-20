@@ -60,22 +60,18 @@ namespace BanMoHinh.API.Services
             return await _dbContext.CartItem.ToListAsync();
         }
 
-        public async Task<bool> GetCartItemsByCartId(Guid cartItemId)
+        public async Task<IEnumerable<CartItem>> GetAllCartItemsByCartId(Guid id)
         {
             try
             {
-                var item = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId);
-                _dbContext.CartItem.Remove(item);
-                await _dbContext.SaveChangesAsync();
-                return true;
-
+                var model = await _dbContext.CartItem.Where(x => x.CartId == id).ToListAsync();
+                return model;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
-                Console.WriteLine(e.Message);
-                return false;
+                throw;
             }
+            
         }
 
         public async Task<bool> UpdateCartItem(Guid cartItemId, int? newquantity, int? newPrice)
@@ -97,6 +93,19 @@ namespace BanMoHinh.API.Services
                 Console.WriteLine(e.Message);
                 return false;
             }
+        }
+
+        public async Task<bool> UpdateQuantityCartItem(CartItem cartItem)
+        {
+            _dbContext.Update(cartItem);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<CartItem> GetCartItemsByCartIds(Guid cartItemId)
+        {
+            var item = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId);
+            return item;
         }
     }
 }
