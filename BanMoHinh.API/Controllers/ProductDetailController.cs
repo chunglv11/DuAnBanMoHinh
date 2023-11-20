@@ -90,5 +90,11 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
+        [HttpGet("getpriceforproductD")]
+        public IActionResult GetPriceForProductD([FromQuery] Guid sizeId, [FromQuery] Guid colorId, [FromQuery] Guid productId)
+        {
+            var price = _iproductDetailService.GetPriceForProductDetail(sizeId, colorId, productId);
+            return Ok(price);
+        }
     }
 }

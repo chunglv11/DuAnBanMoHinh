@@ -65,7 +65,7 @@ namespace BanMoHinh.API.Services
                         {
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
-                            ImageUrl = "images/" + i.FileName
+                            ImageUrl = "/images/" + i.FileName
                         };
                         _dbContext.ProductImage.Add(proi);
                     }
@@ -143,6 +143,8 @@ namespace BanMoHinh.API.Services
                           Id = a.Id,
                           ProductName = d.ProductName,
                           SizeName = b.SizeName,
+                          Width = b.Width,
+                          Height = b.Height,
                           ColorName = c.ColorName,
                           Quantity = a.Quantity,
                           Price = a.Price,
@@ -255,7 +257,7 @@ namespace BanMoHinh.API.Services
                         var proi = new ProductImage()
                         {
                             ProductDetailId = idp.Id,
-                            ImageUrl = "images/" + i.FileName
+                            ImageUrl = "/images/" + i.FileName
                         };
                         _dbContext.ProductImage.Update(proi);
                     }
@@ -265,6 +267,28 @@ namespace BanMoHinh.API.Services
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
+        }
+        public async Task<bool> UpdateQuantity(Guid ID, int QUANTITY)
+
+        {
+            try
+            {
+                var proid = _dbContext.ProductDetail.FirstOrDefault(x => x.Id == ID);
+                proid.Quantity = QUANTITY;
+                _dbContext.ProductDetail.Update(proid);
+                await _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public decimal GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

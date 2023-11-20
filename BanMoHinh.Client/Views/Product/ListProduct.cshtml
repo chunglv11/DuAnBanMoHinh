@@ -1,13 +1,45 @@
 ﻿@using BanMoHinh.Share.Models;
 @using System.Linq;
 @using BanMoHinh.Share.ViewModels;
-@model IEnumerable<BanMoHinh.Share.Models.Product>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@model IEnumerable<BanMoHinh.Share.ViewModels.ProductVM>;
 @{
 
     List<ProductDetailVM> productDetail = ViewData["productDetail"] as List<ProductDetailVM>;
     List<ProductImage> ProductImage = ViewData["ProductImage"] as List<ProductImage>;
 
+    var productCategory = ViewData["productCategory"] as List<SelectListItem>;
+    var SelectedCategory = ViewBag.SelectedCategories as Guid?[];
+    Guid[] selectedCategoryIds = SelectedCategory?.Select(x => x.Value).ToArray();
+
+    var productBrand = ViewData["productBrand"] as List<SelectListItem>;
+    var SelectedBrand = ViewBag.SelectedBrand as Guid?[];
+    Guid[] selectedBrandIds = SelectedBrand?.Select(x => x.Value).ToArray();
+
+
+    var productMaterial = ViewData["productMaterial"] as List<SelectListItem>;
+    var SelectedMaterial = ViewBag.SelectedBrand as Guid?[];
+    Guid[] selectedMaterialIds = SelectedMaterial?.Select(x => x.Value).ToArray();
+
 }
+@*Lưu trạng thái khi lọc*@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var sortOrder = document.getElementById('sortOrder');
+        var savedValue = sessionStorage.getItem('selectedValue');
+
+        if (savedValue) {
+            sortOrder.value = savedValue;
+        }
+
+        sortOrder.addEventListener('change', function() {
+            sessionStorage.setItem('selectedValue', this.value);
+            this.form.submit();
+        });
+    });
+</script>
+@*có gì viết xuống đây nha*@
+<form method="get" action="@Url.Action("ListProduct")" id="filterForm">
 <div class="content">
     <div class="container">
         <div class="row">
@@ -16,199 +48,69 @@
                 <div id="cssmenu">
                     <ul>
                         <li class="has-sub">
-                            <a href="#">Hệ điều hành</a>
+                            <a href="#">Hãng sản xuất</a>
                             <ul>
-
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Tất cả</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Android</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">ISO</span>
-                                    </label>
-                                </li>
-
+                                @foreach (var item in productBrand)
+                                {
+                                    <li class="even">
+                                        <label>
+                                            <input type="checkbox" name="SelectedBrand" value="@item.Value" @(selectedBrandIds != null && selectedBrandIds.Select(x => x.ToString()).Contains(item.Value) ? "checked='checked'" : "")>
+                                            <span class="checkbox-list">@item.Text</span>
+                                        </label>
+                                    </li>
+                                }
                             </ul>
                         </li>
                         <li class="has-sub">
-                            <a href="#">Hãng sản xuất</a>
+                            <a href="#">Loại Sản phẩm</a>
                             <ul>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Tất cả </span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Samsung</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Apple</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Xiaomi</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Vsmart</span>
-                                    </label>
-
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">OPPO</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Vivo</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Nokia</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Huawei</span>
-                                    </label>
-                                </li>
-
+                                @foreach (var item in productCategory)
+                                {
+                                    <li class="even">
+                                        <label>
+                                            <input type="checkbox" name="SelectedCategory" value="@item.Value" @(selectedCategoryIds != null && selectedCategoryIds.Select(x => x.ToString()).Contains(item.Value) ? "checked='checked'" : "")>
+                                            <span class="checkbox-list">@item.Text</span>
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a href="#">Chất liệu</a>
+                            <ul>
+                                @foreach (var item in productMaterial)
+                                {
+                                    <li class="even">
+                                        <label>
+                                            <input type="checkbox" name="SelectedMaterial" value="@item.Value" @(selectedMaterialIds != null && selectedMaterialIds.Select(x => x.ToString()).Contains(item.Value) ? "checked='checked'" : "")>
+                                            <span class="checkbox-list">@item.Text</span>
+                                        </label>
+                                    </li>
+                                }
                             </ul>
                         </li>
                         <li class="has-sub">
                             <a href="#">Giá Bán</a>
                             <ul>
                                 <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Tất cả</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Dưới 2 triệu</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <span>
-                                        <label>
-                                            <input type="checkbox">
-                                            <span class="checkbox-list">Từ 2 - 5 triệu</span>
-                                        </label>
-                                    </span>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Từ 5 - 10 triệu</span>
-                                    </label>
-                                </li>
-
-                                <li class="even">
-                                    <span>
-                                        <label>
-                                            <input type="checkbox">
-                                            <span class="checkbox-list">Từ 10 - 15 triệu</span>
-                                        </label>
-                                    </span>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Trên 15 triệu</span>
-                                    </label>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li class="has-sub">
-                            <a href="#">Màn hình</a>
-                            <ul>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Tất cả</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Dưới 5.0 inch</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Trên 6.0 inch</span>
-                                    </label>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li class="has-sub">
-                            <a href="#">Bộ nhớ trong</a>
-                            <ul>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Tất cả</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Dưới 32GB</span>
-                                    </label>
-                                </li>
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">64GB và 128GB</span>
-                                    </label>
-                                </li>
-                                <li class="even">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">256GB và 512GB</span>
-                                    </label>
-                                </li>
-
-                                <li class="odd">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span class="checkbox-list">Trên 512GB</span>
-                                    </label>
+                                    <div class="filter-content collapse show" id="collapse_3">
+                                        <div class="inner">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Min</label>
+                                                    <input class="form-control" placeholder="0đ" name="minPrice" type="number" min="0" value="">
+                                                </div>
+                                                <div class="form-group text-right col-md-6">
+                                                    <label>Max</label>
+                                                    <input class="form-control" placeholder="10 000đ" name="maxPrice" type="number" min="0" value="">
+                                                </div>
+                                            </div> <!-- form-row.// -->
+                                        </div> <!-- inner.// -->
+                                    </div>
                                 </li>
                             </ul>
                         </li>
-
+                        <button class="btn btn-block btn-primary">Apply</button>
                     </ul>
                 </div>
                 <!-- /.sidenav-section -->
@@ -216,14 +118,17 @@
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb10 alignright">
-                        <form>
+                        <form asp-controller="Product" asp-action="Filter" method="get">
                             <div class="select-option form-group">
-                                <select name="select" class="form-control" placeholder="Sắp xếp theo">
+                                <select id="sortOrder" name="sortOrder" class="form-control" placeholder="Sắp xếp theo">
                                     <option value="" default="">Sắp xếp theo</option>
-                                    <option value="">Bán Chạy</option>
-                                    <option value="">Giá Thấp</option>
-                                    <option value="">Giá Cao</option>
+                                    <option value="best-selling">Bán Chạy</option>
+                                    <option value="low-price">Giá Thấp</option>
+                                    <option value="high-price">Giá Cao</option>
+                                    <option value="a">A-Z</option>
+                                    <option value="z">Z-A</option>
                                 </select>
+                                <input type="submit" style="display: none;" />
                             </div>
                         </form>
                     </div>
@@ -235,9 +140,7 @@
 
                         if (LstProductDetail.Any())
                         {
-                            var priceMin = LstProductDetail.Min(c => c.PriceSale);
-                            var priceMax = LstProductDetail.Max(c => c.PriceSale);
-
+                        
                             var productDetailID = LstProductDetail.First().Id; // lấy id productdetail đầu tiên
 
                             var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
@@ -246,27 +149,40 @@
 
                             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb30">
                                 <a href="/Product/ProductDetail/@item.Id">
-                                </a><div class="product-block">
-                                    <a href="product-single.html">
-                                        <div class="product-img"><img src="https://localhost:7007/@imgFirst" alt=""></div>
+                                <div class="product-block">
+                                        <a href="/Product/ProductDetail/@item.Id">
+                                        <div class="product-img"><img src="@(Configuration["BaseAddress"]+imgFirst)" alt=""></div>
                                     </a><div class="product-content">
-                                        <a href="product-single.html">
+                                            <a href="/Product/ProductDetail/@item.Id">
                                         </a><h5>
-                                            <a href="product-single.html"></a><a href="#" class="product-title">
+                                            <a href="/Product/ProductDetail/@item.Id"></a><a href="#" class="product-title">
                                                 @item.ProductName
                                             </a>
                                         </h5>
                                         <div class="product-meta">
-                                              @priceMin đ - @priceMax đ
+                                            @if (item.MinPrice < item.MaxPrice)
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ  - @item.MaxPrice đ
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    @item.MinPrice đ 
+                                                </span>
+                                            }
+                                              
                                           @*  <span class="offer-price">20%off</span>*@
                                         </div>
                                         <div class="shopping-btn">
-                                            <a href="/Product/ProductDetail/@item.Id" class="product-btn btn-like">Chi tiết<i class="fa fa-heart"></i></a>
+                                            <a href="#" class="product-btn btn-like" onclick="addToWishList('@item.Id')"><i class="fa fa-heart"></i></a>
+
                                             <a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
                                         </div>
                                     </div>
                                 </div>
-
+                                </a>
                             </div>
 
                         }
@@ -309,3 +225,82 @@
     </div><a href="#" aria-label="Next">
     </a>
 </div>
+</form>
+<script src="~/file/user/js/jquery.min.js" type="text/javascript"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/file/user/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/file/user/js/menumaker.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/file/user/js/jquery.sticky.js"></script>
+    <script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $(document).ready(function () {
+                $('#cssmenu ul ul li:odd').addClass('odd');
+                $('#cssmenu ul ul li:even').addClass('even');
+                $('#cssmenu > ul > li > a').click(function () {
+                    $('#cssmenu li').removeClass('active');
+                    $(this).closest('li').addClass('active');
+                    var checkElement = $(this).next();
+                    if ((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                        $(this).closest('li').removeClass('active');
+                        checkElement.slideUp('normal');
+                    }
+                    if ((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                        $('#cssmenu ul ul:visible').slideUp('normal');
+                        checkElement.slideDown('normal');
+                    }
+                    if ($(this).closest('li').find('ul').children().length == 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+    <script>
+    function addToWishList(productId) {
+    $.ajax({
+        type: "POST",
+        url: "/Product/WishList",
+        data: { ProductId: productId },
+        success: function (response) {
+            if (response.success) {
+                // Hiển thị SweetAlert khi thêm thành công
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Sản phẩm đã được thêm vào danh sách yêu thích.',
+                    showConfirmButton: true, // Hiển thị nút xác nhận
+                    confirmButtonText: 'Xem danh sách yêu thích', // Text cho nút xác nhận
+                    timer: 3000
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Nếu người dùng ấn xác nhận, chuyển hướng đến trang danh sách yêu thích
+                        window.location.href = "/Product/ShowWishList";
+                    }
+                });
+            } else {
+                // Hiển thị SweetAlert khi có lỗi
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.errorMessage || 'Có lỗi xảy ra khi thêm sản phẩm vào danh sách yêu thích.'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            // Xử lý khi có lỗi
+            console.log(error);
+            // Hiển thị thông báo lỗi cho người dùng
+        }
+    });
+}
+
+
+    </script>
+
+
+
+
+

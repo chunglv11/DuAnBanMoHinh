@@ -33,7 +33,7 @@ namespace BanMoHinh.Share.Models
 
         public virtual List<CartItem>? CartItem { get; set; }
         public virtual List<OrderItem>? OrderItems { get; set; }
-        public virtual List<WishList>? WishLists { get; set; }
+        
         public virtual List<ProductImage>? ProductImages { get; set; }
         
     }

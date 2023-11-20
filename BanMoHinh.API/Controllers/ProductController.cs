@@ -30,6 +30,19 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("get-all-productvm")]
+        public async Task<IActionResult> GetAllVm()
+        {
+            try
+            {
+                return Ok(await _iproductService.GetAllVM());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
         [HttpGet("get-{id}")]
         public async Task<ActionResult<Product>> Get(Guid id)
         {

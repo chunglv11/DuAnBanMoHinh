@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/orderitem")]
     [ApiController]
     public class OrderItemController : ControllerBase
     {
@@ -63,7 +63,7 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpDelete("delete-product-{id}")]
+        [HttpDelete("delete-{id}")]
         public async Task<ActionResult<OrderItemVM>> Delete(Guid id)
         {
             var result = await _iOrderItemService.Delete(id);
