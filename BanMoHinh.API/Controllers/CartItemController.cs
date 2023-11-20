@@ -36,7 +36,7 @@ namespace BanMoHinh.API.Controllers
         {
             try
             {
-                return Ok(await _cartItemService.GetCartItemsByCartIds(id));
+                return Ok(await _cartItemService.GetCartItemsByCartId(id));
             }
             catch (Exception ex)
             {

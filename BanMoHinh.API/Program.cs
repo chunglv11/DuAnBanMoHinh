@@ -27,13 +27,11 @@ builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<ICartItemService, CartItemService>();
 builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
+
 builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserVoucherService, UserVoucherService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
-builder.Services.AddScoped<IVoucherStatusService, VoucherStatusService>();
-builder.Services.AddScoped<IVoucherTypeServices, VoucherTypeServices>();
 builder.Services.AddScoped<IVoucherProductService, VoucherProductService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductDetailService, ProductDetailService>();
