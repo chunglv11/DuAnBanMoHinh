@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BanMoHinh.API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-    [Migration("20231113161343_13112023")]
-    partial class _13112023
-========
-    [Migration("20231119160201_db1")]
-    partial class db1
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+    [Migration("20231120152914_fix")]
+    partial class fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,47 +65,27 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("9b490f96-e42a-42c8-a8fc-1eff7c30e0f4"),
-========
-                            Id = new Guid("9b3f0c0a-290e-47c7-b37a-61d3bc2eefe9"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("eaf330ab-9867-490a-9e91-2eb2575df15b"),
                             BrandName = "Brand 1"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("1aa587aa-e3d0-48a0-b463-754ef3f701bc"),
-========
-                            Id = new Guid("5b26d63d-4144-4ef4-8031-646d661b4cd7"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("64838a0a-1879-4940-b8ee-3ec61ed5275e"),
                             BrandName = "Brand 2"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("d4efabe6-7006-4d0b-b8f5-285983e42dd4"),
-========
-                            Id = new Guid("0ac20c8b-46fa-4378-8a13-852f8062f377"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("e1a83da9-d555-40bc-9882-8a94b484e3ed"),
                             BrandName = "Brand 3"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("60bbb486-60ae-4322-a9df-7a62979bd717"),
-========
-                            Id = new Guid("99cf50e4-591b-407c-b517-4b9e681a6117"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("c7a6fd59-b6f7-4d43-b306-5b201a5e1cca"),
                             BrandName = "Brand 4"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("e52d6f07-e554-4a74-bf55-6197aa41678e"),
-========
-                            Id = new Guid("77b3ddb9-3679-46ad-9381-18b9f74dd241"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("7a66f12b-4eaa-40c4-a1a1-97bba2b861bc"),
                             BrandName = "Brand 5"
                         });
                 });
@@ -174,47 +149,27 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("4218c663-a4a0-41d9-9803-a81b9516503f"),
-========
-                            Id = new Guid("a35536b0-989b-48d3-afbd-366c5f563658"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("b7976ff0-7d21-4eda-9135-bca6ec0d6288"),
                             CategoryName = "Category 1"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("362c812f-5790-4ec0-bb05-6b6ccae7fd3f"),
-========
-                            Id = new Guid("e5233bd7-b2af-4df3-9d5a-2a148040da3d"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("bc854caf-bb41-4fa0-9958-c68af2f93179"),
                             CategoryName = "Category 2"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("2b67a9b4-75db-41de-8d25-8cd967191331"),
-========
-                            Id = new Guid("fc9bceb2-0605-49ff-8439-9b3856e0be61"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("0277805a-fdb6-49e0-8637-552d7662cab5"),
                             CategoryName = "Category 3"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("bb916f5c-c51b-4220-b4ef-a910813ed87c"),
-========
-                            Id = new Guid("1563d6dd-8e83-4d64-aaeb-f48bcf4d4f22"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("6173c216-747c-4144-81ee-bda63236b0b8"),
                             CategoryName = "Category 4"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("9f767ea1-f374-4540-aea6-774cf48ef6f0"),
-========
-                            Id = new Guid("51d2f177-03b8-4b7f-8e2a-e5a00488efec"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("33ec0f53-aed8-475a-a7ce-5d9e15086e67"),
                             CategoryName = "Category 5"
                         });
                 });
@@ -238,161 +193,97 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("c0a6c036-eda1-465e-99c8-4e818f55e617"),
-========
-                            ColorId = new Guid("80538c0a-014a-4b18-b868-3f4622afb490"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("e19bc2b2-47be-4956-b587-9e618975de12"),
                             ColorCode = "#000000",
                             ColorName = "Đen"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("4143ab44-e779-4c17-84d5-52eac5e6f7aa"),
-========
-                            ColorId = new Guid("5959a9e5-0278-4d63-8fc3-8b557984afde"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("935f03db-5080-446e-897d-e9ad72a67ec2"),
                             ColorCode = "#FFFFFF",
                             ColorName = "Trắng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("fa6c70c1-dd79-461f-837d-8803cd28a098"),
-========
-                            ColorId = new Guid("119ce713-e16e-4c23-b687-f84e4b7110e4"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("c6434b0d-28ab-4b23-adfa-6050b41e3e50"),
                             ColorCode = "#FF0000",
                             ColorName = "Đỏ"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("e1252c19-c29a-477f-880f-6920a1b6a545"),
-========
-                            ColorId = new Guid("069ba292-8fec-4483-b8da-5d5e1e6ca1d8"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("481a6fd6-2ba5-47ef-9802-07b48b1e0f22"),
                             ColorCode = "#00FF00",
                             ColorName = "Xanh lá cây"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("23e1d459-9174-4315-9b6c-a6c5010206e5"),
-========
-                            ColorId = new Guid("b84d08b7-fb3f-4aa9-afb8-841304e96f8a"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("0bdfac4a-c8f0-46e1-af04-f92ff2551b4d"),
                             ColorCode = "#0000FF",
                             ColorName = "Xanh dương"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("bff32bbc-bc15-4ac5-9bca-62aef0772560"),
-========
-                            ColorId = new Guid("a14ae2eb-6941-4765-9f83-b00e916a080c"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("12b7ff33-091a-4ba3-aad9-bce607dc32b8"),
                             ColorCode = "#FFFF00",
                             ColorName = "Vàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("a93fbf66-d85b-411c-8a75-aca94a15d07c"),
-========
-                            ColorId = new Guid("c677db30-379b-4352-88cb-0b32b6ad0b4b"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("a39b2127-ef9d-4313-b7ec-301ac16b7650"),
                             ColorCode = "#FFA500",
                             ColorName = "Cam"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("d587e0b6-203d-48be-ae0c-bb687e8eb3a4"),
-========
-                            ColorId = new Guid("27695ab5-2aae-4dcf-acb6-c4102f1e4265"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("5bce9d65-242f-4db7-8d82-b53ecdb48052"),
                             ColorCode = "#800080",
                             ColorName = "Tím"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("122ef464-a2f1-462f-af8a-ebb26ffd84e8"),
-========
-                            ColorId = new Guid("1a844407-f341-4720-a163-40bcc652ebeb"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("84d05b16-a315-496c-894f-92b440de27a9"),
                             ColorCode = "#FFC0CB",
                             ColorName = "Hồng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("062371a8-4dc3-4fea-8fb7-66861e21d0e3"),
-========
-                            ColorId = new Guid("e49199ad-c3f7-439f-9385-8e127b815fef"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("7be66c9c-efeb-4033-a11d-b68e1945bc2c"),
                             ColorCode = "#808080",
                             ColorName = "Xám"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("8e0be780-c8b0-4a34-a13b-a96e7599d0f4"),
-========
-                            ColorId = new Guid("1b05e7c4-3181-41c2-a9e8-84b5c676b305"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("41dd8f4c-aa0d-4b29-85fa-6c1de88c9336"),
                             ColorCode = "#A52A2A",
                             ColorName = "Nâu"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("7fd0dd1f-e137-4089-8a7e-acf7712971d5"),
-========
-                            ColorId = new Guid("752125bb-c598-4927-b1a4-1ca39c22c258"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("ee0b6a70-f1fc-4cc0-8a20-2776edafeebe"),
                             ColorCode = "#000080",
                             ColorName = "Xanh lam"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("41e27708-75fa-4fb0-bf81-98cb07a19bdd"),
-========
-                            ColorId = new Guid("8124a5cb-f808-45dd-80aa-d75cf303889c"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("59aab369-38fc-4923-87c3-9ca98b479b08"),
                             ColorCode = "#00BFFF",
                             ColorName = "Xanh da trời"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("66f095a6-bdae-472f-90d1-161755d1af5d"),
-========
-                            ColorId = new Guid("d24f76ff-c03e-47de-a1f8-7ff17157417d"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("7e862e8e-a1b6-421b-995f-8f138baf86c1"),
                             ColorCode = "#FFDAB9",
                             ColorName = "Hồng phấn"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("b6c7763f-ed84-494e-a337-c89ba1ee8ce9"),
-========
-                            ColorId = new Guid("f6b77d2b-13f3-4c1c-8093-d213549c9669"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("a6255004-1b79-4bcb-98b2-6c8b958e3bfb"),
                             ColorCode = "#C0C0C0",
                             ColorName = "Xám tro"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            ColorId = new Guid("6f71c8e8-3bb7-4912-9744-ee036b456fe0"),
-========
-                            ColorId = new Guid("3734e267-efb8-4409-a6b3-adaf54e5f93f"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            ColorId = new Guid("0060c5f9-1041-4924-b428-a7f4d0fa4459"),
                             ColorCode = "#C0C0C0",
                             ColorName = "Bạc"
                         });
@@ -414,29 +305,17 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("827fa1bd-bc38-44a7-97d5-c77581080320"),
-========
-                            Id = new Guid("b0198cb6-0217-4696-9b6a-4b64c56346ec"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("27cce2ea-d408-4d99-9ffc-8a4466d6ea9d"),
                             MaterialName = "Sắt"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("18a10019-5a6a-45a3-8b7f-962efff912e0"),
-========
-                            Id = new Guid("ba265fa6-2b4d-4fc2-b2df-f0f427886add"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("20b9bce4-fbec-4840-978d-e85be4f6f801"),
                             MaterialName = "Nhựa pvc"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("09420567-67ea-4065-be97-12a4cc52d109"),
-========
-                            Id = new Guid("9933d484-b7d6-469b-b5b4-dcc93029b423"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("d8d25d38-79b2-48cc-9d98-bfadad29b37b"),
                             MaterialName = "Gỗ"
                         });
                 });
@@ -554,74 +433,42 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("7095e5e4-7b8e-4530-85d9-b77c4776c962"),
-========
-                            Id = new Guid("478550b4-a57f-4f02-a14a-223922c4c8f5"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("a51a477f-97be-4db1-806e-995aa62ce95f"),
                             OrderStatusName = "Đang được xử lý"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("4db39967-fd9a-4715-9201-0ed5025279ed"),
-========
-                            Id = new Guid("7d3c634c-324a-4b80-9373-f942921b64b4"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("db2546d5-b911-453a-bccc-e1690ef717ff"),
                             OrderStatusName = "Chờ lấy hàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("304e1a4d-f53c-4e84-bef9-2f3ef64d383a"),
-========
-                            Id = new Guid("c0a8f8c1-e468-4727-9533-2f73656baa21"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("7d2399d5-e299-46d6-a3f1-7f8af2a7c2b4"),
                             OrderStatusName = "Đang giao hàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("d8bf59ed-2793-46a7-ac9e-a9a09c78673b"),
-========
-                            Id = new Guid("19d6a5dc-736d-4c0a-88a4-90a97ad6a2fd"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("49004487-9e22-44bd-a766-660d733d3c40"),
                             OrderStatusName = "Giao hàng thành công"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("1d4f0bfb-e2a7-4195-8c11-3fa351caf65c"),
-========
-                            Id = new Guid("519eb4d6-6092-4c08-b5ef-430d27f760c2"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("237d066f-696f-48ce-8b3b-c46d197789e6"),
                             OrderStatusName = "Giao hàng không thành công"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("3a125bc3-9f3d-4306-937a-c486a0c3c448"),
-========
-                            Id = new Guid("eb4533ab-e01e-45ad-80ea-10a7e240d525"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("d1be32ff-2413-4783-ac79-2061903d3c67"),
                             OrderStatusName = "Hủy đơn"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("2875d97a-c8de-4dc5-8857-35ec1aee8fd8"),
-========
-                            Id = new Guid("ecfce80e-b992-422d-8c92-61d728d4503a"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("5e7751d6-638d-4240-9ad8-901f69207e8e"),
                             OrderStatusName = "Yêu cầu trả hàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("c5ee777b-911e-442c-9efc-f2aaa73b4190"),
-========
-                            Id = new Guid("988ad1b7-3c57-4e2f-8657-02d089926c27"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("4759bbda-079f-42cb-b9b9-870d875ff0a9"),
                             OrderStatusName = "Chấp nhận trả hàng"
                         });
                 });
@@ -642,20 +489,12 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("f5a8622c-775b-4b94-ab8e-c13430063d19"),
-========
-                            Id = new Guid("bc0ff280-df20-4ce2-a809-30f2c3caaa67"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("6fc98f19-b861-41ce-98c5-bab8001d14b3"),
                             PaymentName = "Thanh toán khi nhận hàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("f517be0a-f654-4f76-bc86-624446099c49"),
-========
-                            Id = new Guid("a6f79672-f0de-42d8-ae7a-1bc7f5595de7"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("a478e168-3636-49b3-a4a5-f38850741328"),
                             PaymentName = "Thanh toán Online"
                         });
                 });
@@ -835,33 +674,21 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("671c5ec5-c6e6-424c-817e-b1b4a57a3fda"),
-========
-                            Id = new Guid("90a580c4-cdf3-4cf2-9b73-139083043f4c"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("0c34c9c5-d484-4c04-bb50-18303de9b12c"),
                             Name = "Bạc",
                             PoinsMax = 1000000,
                             PointsMin = 0
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("8056df54-125c-4350-bf09-e0d239539920"),
-========
-                            Id = new Guid("2a87303c-ccac-4d8d-aefc-dd13b1e6c0dc"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("ce1d884a-6f2c-4db3-85c1-9cc1a69968c4"),
                             Name = "Vàng",
                             PoinsMax = 3000000,
                             PointsMin = 1000001
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("f90a507b-1494-4cb6-aadd-28f41be7fa3e"),
-========
-                            Id = new Guid("86fc745d-73eb-4a97-8a77-166ad22b3041"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("fe7c6eae-881a-4c7f-8ad4-d0558d8deb34"),
                             Name = "Kim Cương",
                             PoinsMax = 10000000,
                             PointsMin = 3000001
@@ -923,37 +750,22 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("59a491f2-2083-47ce-91f0-6cac2a2eb61a"),
-                            ConcurrencyStamp = "42e407b9-7426-49a3-a9e3-01ec2d32d010",
-========
-                            Id = new Guid("a5f923b7-2f22-4a01-bed8-6cd1c3a3a21a"),
-                            ConcurrencyStamp = "8a351fba-caea-4985-ae82-d7716b214799",
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("5d63d281-1e9b-4734-adc1-54b70fda49e0"),
+                            ConcurrencyStamp = "4437d1ab-f2bb-443f-b788-f0d654cef2fd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("d462c50b-e955-47f2-a70b-2291afaee9fd"),
-                            ConcurrencyStamp = "3570d24c-5cd1-4e20-953a-01b5f0c90253",
-========
-                            Id = new Guid("27ee3f10-62d4-4d69-a9c1-9af433e03873"),
-                            ConcurrencyStamp = "3ff385e0-bcfd-4e4a-976e-16dfc62c652e",
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("92bc5747-c071-46f6-ad18-de35fee90527"),
+                            ConcurrencyStamp = "c84df95e-8254-4100-bcd7-15ad833946be",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("febef870-6173-4204-804e-ac80720c0c97"),
-                            ConcurrencyStamp = "b34751f3-f4bb-499a-b894-965ece1ca8a5",
-========
-                            Id = new Guid("9e5bc4ff-6a9a-47cb-9588-ab844b612a21"),
-                            ConcurrencyStamp = "7b157af5-bf58-4e14-80cc-c761593fa7ec",
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("0877f313-86ff-4835-8905-0cd0c49aba8c"),
+                            ConcurrencyStamp = "7bc6a45d-7416-40a9-ad3a-d9605c5dd1dc",
                             Name = "Guest",
                             NormalizedName = "GUEST"
                         });
@@ -981,55 +793,35 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("fac89534-e4dc-460a-b96f-55938b71460e"),
-========
-                            Id = new Guid("33c9916d-770f-47f2-8ace-85fe947af28b"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("6b2ecfbc-9e19-45dc-8b59-d16714a79eb3"),
                             Height = 30.0,
                             SizeName = "Size 1",
                             Width = 30.0
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("5d6a61b7-e49d-43bf-96fd-0ba1314c01af"),
-========
-                            Id = new Guid("37973cf8-9710-4b4c-8a91-dddafc550575"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("d7309f7e-b1a9-459d-bb8c-6dde2f7495f9"),
                             Height = 30.0,
                             SizeName = "Size 2",
                             Width = 30.0
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("db7b2b87-54c5-4bdc-bfff-ac0117a49a3b"),
-========
-                            Id = new Guid("e24bb620-2afd-4d73-8104-d2bad0cb0bf1"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("f5c515b9-522a-4dfe-b7d1-48705bd14d04"),
                             Height = 30.0,
                             SizeName = "Size 3",
                             Width = 30.0
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("1b25d0bc-1402-4bf9-bacb-b2c05d2e11f5"),
-========
-                            Id = new Guid("1b6b6914-b557-4aeb-820e-4d397b2cec44"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("27e1a0d5-0ea9-4d93-8f06-15b9d8bfa144"),
                             Height = 30.0,
                             SizeName = "Size 4",
                             Width = 30.0
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("0d4d955e-ccd3-4080-af4f-156dd7ae4c57"),
-========
-                            Id = new Guid("933bed4a-cefc-44e4-b2d9-8bc3ffd138ae"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("585798a2-f7ec-4c8d-a105-c707d3f3bfab"),
                             Height = 30.0,
                             SizeName = "Size 5",
                             Width = 30.0
@@ -1219,29 +1011,17 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("be05dee1-4570-427f-a20a-19fcabfa98dd"),
-========
-                            Id = new Guid("de9c8fb5-fb47-47d8-8d52-310f2f3450c9"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("dde9ca19-b825-4351-b267-17f99768ff77"),
                             Name = "Used"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("a7e90e6d-3e7d-4462-baad-4388a3cc5ac1"),
-========
-                            Id = new Guid("0d0f2eb4-5326-47d4-8719-3a9ffc9dd964"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("9c05c7b2-8c4e-4265-8164-00edacfda17d"),
                             Name = "Active"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("a70515ea-b96a-4cd4-93be-822c2c2bf4c6"),
-========
-                            Id = new Guid("608c376d-119d-4225-a2e6-075c6a1269b6"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("cb54e213-0672-4727-ad07-e7476923694f"),
                             Name = "Expired"
                         });
                 });
@@ -1262,20 +1042,12 @@ namespace BanMoHinh.API.Migrations
                     b.HasData(
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("470f6999-4f6e-4766-868e-b38d69645776"),
-========
-                            Id = new Guid("1f0baa17-8126-41a4-9139-7580e1dbe9d0"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("8a192efb-a2cf-46ed-89eb-f67db0fc1b19"),
                             Name = "Khánh hàng"
                         },
                         new
                         {
-<<<<<<<< HEAD:BanMoHinh.API/Migrations/20231113161343_13112023.Designer.cs
-                            Id = new Guid("8101a90d-c95b-44ad-9e01-8ae99dad5e0c"),
-========
-                            Id = new Guid("c28b09c1-1cf2-443b-99f3-d6dcd8f4b3e1"),
->>>>>>>> hung:BanMoHinh.API/Migrations/20231119160201_db1.Designer.cs
+                            Id = new Guid("9d01d19e-e371-47d4-ba42-795dc242a699"),
                             Name = "Sản phẩm"
                         });
                 });

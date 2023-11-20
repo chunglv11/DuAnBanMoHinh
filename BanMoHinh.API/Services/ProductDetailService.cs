@@ -285,5 +285,10 @@ namespace BanMoHinh.API.Services
                 return false;
             }
         }
+
+        public decimal GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
