@@ -3,34 +3,35 @@
     ViewData["Title"] = "GetAllBrand";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
+<h4>Danh sách nhãn sản xuất</h4>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="GetAllBrand">Danh sách nhãn sản xuất</a></li>
+        </ul>
+</div>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success m-1" >Thêm mới</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Tên nhãn sản xuất
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BrandName)
-            </th>
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.BrandName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { area = "Admin", id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { area = "Admin", id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { area = "Admin", id=item.Id })
+                <a class="btn btn-primary btn-sm " type="button" href="Edit/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-danger btn-sm " type="button" href="Delete/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
 }

@@ -250,16 +250,25 @@ namespace BanMoHinh.Client.Controllers
         }
         public async Task<IActionResult> ProductDetailAsync(Guid id)
         {
-            var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
+            var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
             var allproductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
             var allProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
             var Product = allproduct.FirstOrDefault(x => x.Id == id);
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => allproductDetail.Any(b => b.ProductId == c.Id)).ToList();
             var productdetail = allproductDetail.FirstOrDefault(c => c.ProductId == Product.Id);
             var lstProductImage = allProductImage.Where(c => c.ProductDetailId == productdetail.Id).ToList();
-            ViewData["productDetail"] = productdetail;
+            ViewData["productDetail"] = allproductDetail;
             ViewData["lstProductImage"] = lstProductImage;
+            //ViewData["lstallproduct"] = allproduct;
             return View(Product);
 
+        }
+        public async Task<decimal> GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
+        {
+            var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?sizeId={sizeId}&colorId={colorId}&productId={productId}");
+            string apiData = await price.Content.ReadAsStringAsync();
+            var result = Convert.ToDecimal(apiData);
+            return result;
         }
 
     }
