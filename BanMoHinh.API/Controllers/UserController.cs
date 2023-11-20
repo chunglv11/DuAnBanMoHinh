@@ -20,7 +20,7 @@ namespace BanMoHinh.API.Controllers
         /// Get all User
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
             try

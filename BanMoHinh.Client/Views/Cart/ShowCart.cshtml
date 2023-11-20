@@ -2,58 +2,143 @@
 
 @{
     ViewData["Title"] = "ShowCart";
+    int total = 0;
+
 }
 
-<h1>ShowCart</h1>
+    
+        <div class="container">
+            <div class="cart-content mt30 mb30">
+                <div class="title-header mb20">
+                    <h2 class="title">Giỏ Hàng</h2>
+                    <p><span class="text-blue">@Model.Count()</span> sản phẩm trong giỏ hàng của bạn</p>
+                </div>
+            
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th></th>
+                            <th>Sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col"></th>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CartId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDetail_ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CartId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDetail_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        </tr>
+                    </thead>
+                @foreach (var item in Model)
+                {
+                    var thanhtien = @item.Price * @item.Quantity;
+                    total += Convert.ToInt32(thanhtien);
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="item-center pdl10"><input type="checkbox" class="checkboxStyle"></div>
+                            </td>
+                            <td>
+                                <div class="product-title item-center">
+                                    <img src="images/iPhone_13.jpg" alt="">
+                                    <div>
+                                        <p>@item.ProductDetail_ID</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="item-center">@item.Price</div>
+                            </td>
+                            <td>
+                                <div class="item-center">
+                                    <div class="quantity">
+                                        <input class="btn-quantity decrease-quantity" onclick="dcQuantity()" type="button"
+                                        value="-">
+                                        <input type="number" max="10" min="1" name="quantity" value="@item.Quantity"
+                                        class="quantity-input" id="quantity-input">
+                                        <input class="btn-quantity increase-quantity" onclick="icQuantity()" type="button"
+                                        value="+">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="item-center text-red">
+                                    @(
+                                    total.ToString("n0")
+                                    )
+                                </div>
+                            </td>
+                            <td>
+                                <div class="item-center pinside10"><i class="far fa-trash-alt"></i></div>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                    }
+                </table>
+                <div class="prices-summary">
+                    <div class="left-content">
+                        <a href="product-list.html" class="derection-product text-blue">
+                            <i class="fas fa-long-arrow-alt-left"></i> Tiếp tục
+                            mua hàng
+                        </a>
+                    </div>
+                    <div class="right-con">
+                        <div class="total-receipt">
+                            <div class="promotion-code pinside20">
+                                <input type="text" class="input-code" placeholder="Nhập mã ưu đãi">
+                                <button type="submit" class="submit-code btn-default">Áp dụng</button>
+                            </div>
+                            <ul class="prices pinside20">
+                                <li class="prices-item">
+                                    <span class="prices-text">Tạm tính</span>
+                                    <span class="prices-value">
+                                        @(
+                                        total.ToString("n0")
+                                    )
+                                    </span>
+                                </li>
+                                <li class="prices-item">
+                                    <span class="prices-text">Giảm giá</span>
+                                    <span class="prices-value">0đ</span>
+                                </li>
+                            </ul>
+                            <div class="prices-total pinside20">
+                                <span class="price-text">Tổng cộng</span>
+                            <span class="prices-value prices-final text-red">
+                                @(
+                                    total.ToString("n0")
+                                    )
+                            </span>
+                            </div>
+                        </div>
+                        <a asp-controller="Bill" asp-action="Checkout" class="btn-default btn-checkout">Mua Hàng</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- /.cart-total -->
+
+    <script>
+        function dcQuantity() {
+        document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("decrease-quantity")) {
+        decreaseQuantity();
+        } else if (event.target.classList.contains("increase-quantity")) {
+        increaseQuantity();
+        }
+        });
+        function decreaseQuantity() {
+        var quantityInput = document.querySelector(".quantity-input");
+        if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+        }
+        function increaseQuantity() {
+        var quantityInput = document.querySelector(".quantity-input");
+        if (quantityInput.value < 10) {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+        }
+        }
+    </script>
+

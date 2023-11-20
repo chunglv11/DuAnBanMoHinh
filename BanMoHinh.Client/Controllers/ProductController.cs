@@ -13,12 +13,13 @@ namespace BanMoHinh.Client.Controllers
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;
-        private IproductDetailApiClient _apiClient;
+
 
         public ProductController(HttpClient httpClient, IproductDetailApiClient apiClient)
         {
             _httpClient = httpClient;
             _apiClient = apiClient;
+
         }
         public async Task<JsonResult> WishList(Guid ProductId)
         {

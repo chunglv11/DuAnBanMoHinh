@@ -26,7 +26,9 @@
                         var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
                         var imgFirst = lstProductImage.First().ImageUrl; // lấy img đầu tiên
                         <li class="item">
+
                             <button class="btn-delete" onclick="deleteFromWishList('')">×</button>
+
                             <div class="thumbnail">
                                 <a href="/Product/ProductDetail/@item.Id" class="img">
                                     <img src="@(Configuration["BaseAddress"]+imgFirst)"

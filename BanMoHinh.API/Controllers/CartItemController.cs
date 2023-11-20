@@ -71,9 +71,9 @@ namespace BanMoHinh.API.Controllers
 
         // DELETE api/<CartItemController>/5
         [HttpDelete("Delete-CartItem")]
-        public async Task<ActionResult<CartItem>> Delete(Guid id,Guid proId, Guid UserId)
+        public async Task<ActionResult<CartItem>> Delete(Guid id,Guid proId, Guid cartId)
         {
-            var result = await _cartItemService.DeleteCartItem(id,proId,UserId);
+            var result = await _cartItemService.DeleteCartItem(id,proId,cartId);
             if (result)
             {
                 return Ok("Xóa thành công");
