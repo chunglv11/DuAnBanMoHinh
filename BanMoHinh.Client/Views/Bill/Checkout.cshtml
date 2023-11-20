@@ -103,7 +103,7 @@
                                         {
                                             var payment = ViewData["payment"] as List<Payment>;
 
-                                            <label asp-for="PaymentId" class="control-label"></label>
+                                            <label asp-for="PaymentId" class="control-label">PHƯƠNG THỨC THANH TOÁN</label>
                                             <select asp-for="PaymentId" class="form-control">
                                                 @foreach (var type in payment)
                                                 {
@@ -121,7 +121,7 @@
                                         {
                                             var voucher = ViewData["voucher"] as List<Voucher>;
 
-                                            <label asp-for="VoucherId" class="control-label"></label>
+                                            <label asp-for="VoucherId" class="control-label">Voucher Value</label>
                                              <select asp-for="VoucherId" class="form-control">
                                             @foreach (var type in voucher)
                                             {
@@ -133,7 +133,7 @@
 
                                             </div>
                                     </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" hidden>
                                     <div class="form-group">
                                         <label class="control-label sr-only"> </label>
 

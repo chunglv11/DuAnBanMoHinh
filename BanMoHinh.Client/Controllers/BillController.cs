@@ -35,7 +35,6 @@ namespace BanMoHinh.Client.Controllers
 
             var orderstatus = await _httpClient.GetFromJsonAsync<List<OrderStatus>>("https://localhost:7007/api/orderstatus/getall");
             var payment = await _httpClient.GetFromJsonAsync<List<Payment>>("https://localhost:7007/api/payment/getall");
-            var orders = await _httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7007/api/order/getall");
             var voucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
             ViewData["voucher"] = voucher;
             ViewData["payment"] = payment;
@@ -64,7 +63,6 @@ namespace BanMoHinh.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(string RecipientName, string RecipientPhone, string RecipientAddress, string Description, Guid VoucherId, Guid PaymentId, Guid OrderStatusId, decimal total)
         {
-            var orders = await _httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7007/api/order/getall");
             var allproductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
             // Assuming 'user' is a collection of items
             ViewData["productdetail"] = allproductDetail;
