@@ -19,11 +19,12 @@ namespace BanMoHinh.API.Services
             {
                 var orderitem = new OrderItem()
                 {
+                    Id =Guid.NewGuid(),
                     OrderId = item.OrderId,
                     ProductDetailId = item.ProductDetailId,
                     Quantity = item.Quantity,
                     Price = item.Price,
-                    
+
                 };
                 await _dbContext.OrderItem.AddAsync(orderitem);
                 await _dbContext.SaveChangesAsync();
@@ -32,8 +33,15 @@ namespace BanMoHinh.API.Services
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Exception innerException = e.InnerException;
+                while (innerException != null)
+                {
+                    Console.WriteLine("Inner Exception: " + innerException.Message);
+                    innerException = innerException.InnerException;
+                }
                 return false;
             }
+           
         }
 
         public async Task<bool> Delete(Guid id)

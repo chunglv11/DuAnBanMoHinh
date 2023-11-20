@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.API.IServices;
+using BanMoHinh.API.Services;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -6,22 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.API.Controllers
 {
-    [Route("api/orderitem")]
+    [Route("api/orderstatus")]
     [ApiController]
-    public class OrderItemController : ControllerBase
+    public class OrderStatusController : ControllerBase
     {
-        public IOrderItemService _iOrderItemService;
-        public OrderItemController(IOrderItemService iOrderItemService)
-        {
-            _iOrderItemService = iOrderItemService;
+        public IOrderStatusService _iorderStatusService;
+        public OrderStatusController(IOrderStatusService  orderStatusService) {
+            _iorderStatusService = orderStatusService;
         }
-
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(await _iOrderItemService.GetAll());
+                return Ok(await _iorderStatusService.GetAll());
             }
             catch (Exception ex)
             {
@@ -30,11 +29,11 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpGet("get-{id}")]
-        public async Task<ActionResult<OrderItem>> Get(Guid id)
+        public async Task<ActionResult<OrderStatus>> Get(Guid id)
         {
             try
             {
-                return Ok(await _iOrderItemService.GetItem(id));
+                return Ok(await _iorderStatusService.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -43,20 +42,20 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create")]
-        public async Task<ActionResult<OrderItemVM>> Post([FromBody] OrderItemVM obj)
+        public async Task<ActionResult<OrderStatusVM>> Post([FromBody] OrderStatusVM obj)
         {
-            var result = await _iOrderItemService.Create(obj);
+            var result = await _iorderStatusService.Create(obj);
             if (result)
             {
                 return Ok("Đã thêm thành công");
             }
             return Ok("Lỗi!");
         }
-        
-        [HttpPut("update-product-{id}")]
-        public async Task<ActionResult<OrderItemVM>> Put(Guid id, [FromBody] OrderItemVM obj)
+       
+        [HttpPut("update-{id}")]
+        public async Task<ActionResult<OrderStatusVM>> Put(Guid id, [FromBody] OrderStatusVM obj)
         {
-            var result = await _iOrderItemService.Update(id, obj);
+            var result = await _iorderStatusService.Update(id, obj);
             if (result)
             {
                 return Ok("Đã sửa thành công");
@@ -64,9 +63,9 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpDelete("delete-{id}")]
-        public async Task<ActionResult<OrderItemVM>> Delete(Guid id)
+        public async Task<ActionResult<OrderStatusVM>> Delete(Guid id)
         {
-            var result = await _iOrderItemService.Delete(id);
+            var result = await _iorderStatusService.Delete(id);
             if (result)
             {
                 return Ok("Đã xoá thành công");

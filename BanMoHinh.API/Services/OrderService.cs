@@ -18,7 +18,7 @@ namespace BanMoHinh.API.Services
             {
                 var order = new Order()
                 {
-                    
+                    Id = item.Id,
                     UserId = item.UserId,
                     PaymentId = item.PaymentId,
                     VoucherId = item.VoucherId,

@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="~/file/user/css/animate.min.css">
     <link href="~/file/user/css/scrolling-nav.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="~/file/user/css/jquery.rateyo.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -78,7 +79,7 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li><a href="/Authentication/Login" class="title">Xin chào @User.Identity.Name</a></li>
-                                <li><a href="favorite-list.html"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="/Product/ShowWishList"><i class="fa fa-heart"></i></a></li>
                                 <li>
                                     <a asp-controller="Cart" asp-action="ShowCart" class="title">
                                         <i class="fa fa-shopping-cart"></i> <sup class="cart-quantity">1</sup>
@@ -244,6 +245,7 @@
     <script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
     <script type="text/javascript" src="~/file/user/js/owl.carousel.min.js"></script>
     <script type="text/javascript" src="~/file/user/js/multiple-carousel.js"></script>
+    <script type="text/javascript" src="~/file/user/js/jquery.rateyo.min.js"></script>
     <script src="https://tudongchat.com/js/chatbox.js"></script>
     <script>
       const tudong_chatbox = new TuDongChat('p37hyL6vg91Biao4G8KXJ')

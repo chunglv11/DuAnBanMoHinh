@@ -11,12 +11,13 @@ namespace BanMoHinh.API.Controllers
     public class WishListController : ControllerBase
     {
         private IWishListService _wishListService;
-
-        public WishListController(IWishListService wishListService)
+        private IProductService _productService;
+        public WishListController(IWishListService wishListService, IProductService productService)
         {
             _wishListService = wishListService;
+            _productService = productService;
         }
-        [HttpGet("get-posts")]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -43,9 +44,18 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create-wishlist")]
-        public async Task<ActionResult<WishList>> Post(Guid UserId, Guid ProductDetailId)
-        {   
-            var result = await _wishListService.Create(UserId,ProductDetailId);
+        public async Task<ActionResult<WishList>> Post([FromBody] WishList request)
+        {
+            // Kiểm tra xem sản phẩm đã tồn tại trong danh sách yêu thích của người dùng hay chưa
+            var existingWishList = await _wishListService.GetAll();
+
+            if (existingWishList.FirstOrDefault(c => c.ProductId == request.ProductId) != null)
+            {
+                return Ok("Sản phẩm đã có trong danh sách yêu thích");
+            }
+
+            // Nếu sản phẩm chưa tồn tại trong danh sách yêu thích, thêm sản phẩm vào danh sách
+            var result = await _wishListService.Create(request.UserId, request.ProductId);
             if (result)
             {
                 return Ok("Đã thêm thành công");
@@ -53,9 +63,9 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpDelete("delete-{id}")]
-        public async Task<ActionResult<ProductVM>> Delete(Guid id)
+        public async Task<ActionResult<ProductVM>> Delete(WishList w)
         {
-            var result = await _wishListService.Delete(id);
+            var result = await _wishListService.Delete(w.Id);
             if (result)
             {
                 return Ok("Đã xoá thành công");
