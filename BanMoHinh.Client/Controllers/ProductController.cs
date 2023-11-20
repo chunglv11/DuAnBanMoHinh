@@ -13,11 +13,12 @@ namespace BanMoHinh.Client.Controllers
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;
+        private IproductDetailApiClient _apiClient;
 
-
-        public ProductController(HttpClient httpClient)
+        public ProductController(HttpClient httpClient, IproductDetailApiClient apiClient)
         {
             _httpClient = httpClient;
+            _apiClient = apiClient;
         }
         public async Task<JsonResult> WishList(Guid ProductId)
         {
@@ -263,6 +264,7 @@ namespace BanMoHinh.Client.Controllers
             return View(Product);
 
         }
+
         public async Task<decimal> GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
         {
             var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?sizeId={sizeId}&colorId={colorId}&productId={productId}");
@@ -270,6 +272,7 @@ namespace BanMoHinh.Client.Controllers
             var result = Convert.ToDecimal(apiData);
             return result;
         }
+
 
     }
 }

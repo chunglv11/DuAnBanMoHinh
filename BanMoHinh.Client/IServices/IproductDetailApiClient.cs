@@ -13,5 +13,8 @@ namespace BanMoHinh.Client.IServices
         Task<List<ProductVM>> GetListProduct();
         Task<List<Colors>> GetListColor();
         Task<List<SizeVM>> GetListSize();
+        Task<Size> GetSize(Guid id);
+        Task<Colors> GetColor(Guid id);
+        Task<Product> GetProduct(Guid id);
     }
 }

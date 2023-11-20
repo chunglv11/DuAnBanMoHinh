@@ -77,37 +77,47 @@
                                             <span class="text-secondary">(12 đánh giá)</span>
                                         </div>
                                         <p id="selected-price" class="product-price" style="font-size: 25px;">
-                                            @Model.MaxPrice?.ToString("N0")<strike style="color:rgba(128, 128, 128, 0.658); font-size: 18px;">
-                                                @Model.MaxPrice?.ToString("N0")</strike>
-                                        </p>
+                                        @if (Model.MinPrice < Model.MaxPrice)
+                                        {
+                                            <span>
+                                                @Model.MinPrice?.ToString("N0") VND  - @Model.MaxPrice?.ToString("N0") VND
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                @Model.MinPrice?.ToString("N0") VND
+                                            </span>
+                                        }
+                                    </p>
 
-                                        <div class="box-capacity">
-                                            @{
-                                                var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
-                                                var uniquewh = lst.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
+                                    <div class="box-capacity">
+                                        @{
+                                            var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
+                                            var uniquewh = lst.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
 
-                                                foreach (var uniqueSize in uniquewh)
-                                                {
-                                                    <a style="width:auto; height:auto" href="#" onclick="selectSize(this)">
-                                                        <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>
-                                                    </a>
-                                                }
+                                            foreach (var uniqueSize in uniquewh)
+                                            {
+                                                <a style="width:auto; height:auto" onclick="selectSize(this)">
+                                                    <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>
+                                                </a>
                                             }
-                                        </div>
+                                        }
+                                    </div>
 
-                                        <div class="color-phone">
-                                            @{
-                                                var lstc = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
-                                                var uniqueColors = lstc.Select(item => item.ColorName).Distinct().ToList();
+                                    <div class="color-phone">
+                                        @{
+                                            var lstc = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
+                                            var uniqueColors = lstc.Select(item => item.ColorName).Distinct().ToList();
 
-                                                foreach (var uniqueColor in uniqueColors)
-                                                {
-                                                    <a style="width:auto; height:auto" href="#" onclick="selectColor(this)">
-                                                        <span class="capacity">@uniqueColor</span>
-                                                    </a>
-                                                }
+                                            foreach (var uniqueColor in uniqueColors)
+                                            {
+                                                <a style="width:auto; height:auto" onclick="selectColor(this)">
+                                                    <span class="capacity">@uniqueColor</span>
+                                                </a>
                                             }
-                                        </div>
+                                        }
+                                    </div>
 
                                         <div class="product-quantity">
                                             <h4>Số lượng</h4>

@@ -173,5 +173,20 @@ namespace BanMoHinh.Client.Services
             var response = await _httpClient.PutAsync(apiUrl, requestContent);
             return response.IsSuccessStatusCode;
         }
+
+        public Task<Share.Models.Size> GetSize(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Colors> GetColor(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Product> GetProduct(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
