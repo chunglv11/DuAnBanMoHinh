@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
+using System.Globalization;
 using System.Net.Http;
 using System.Security.Claims;
 
@@ -269,10 +270,9 @@ namespace BanMoHinh.Client.Controllers
         {
             var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?sizeId={sizeId}&colorId={colorId}&productId={productId}");
             string apiData = await price.Content.ReadAsStringAsync();
-            var result = Convert.ToDecimal(apiData);
+            var culture = CultureInfo.InvariantCulture;
+            var result = decimal.Parse(apiData, culture);
             return result;
         }
-
-
     }
 }

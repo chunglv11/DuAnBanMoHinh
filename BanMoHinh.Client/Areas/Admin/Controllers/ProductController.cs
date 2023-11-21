@@ -1,6 +1,9 @@
 ﻿using BanMoHinh.Share.Models;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Web;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
@@ -11,6 +14,31 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         public ProductController(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+        //loại bỏ thẻ html
+        private string RemoveHtmlTags(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            return doc.DocumentNode.InnerText;
+        }
+        public string ReplaceUnicodeCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            string normalized = input.Normalize(NormalizationForm.FormKD);
+            Encoding removal = Encoding.GetEncoding(Encoding.UTF8.CodePage,
+                                                    new EncoderReplacementFallback(""),
+                                                    new DecoderReplacementFallback(""));
+            byte[] bytes = removal.GetBytes(normalized);
+            string asciiString = Encoding.UTF8.GetString(bytes);
+
+            // Giải mã ký tự HTML
+            return HttpUtility.HtmlDecode(asciiString);
         }
         // GET: ProductController
         public async Task<IActionResult> GetAllProduct()
@@ -49,11 +77,15 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(Product pro)
+        public async Task<IActionResult> CreateProduct(Product pro, string edit)
         {
             try
             {
                 pro.Status = true;
+                pro.Long_Description = edit;
+                pro.Long_Description = RemoveHtmlTags(edit);
+                pro.Long_Description = ReplaceUnicodeCharacters(pro.Long_Description);
+                pro.Long_Description = HttpUtility.HtmlDecode(pro.Long_Description);
                 var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
                 if (createpro.IsSuccessStatusCode)
                 {

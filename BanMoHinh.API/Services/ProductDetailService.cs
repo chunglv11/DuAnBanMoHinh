@@ -286,9 +286,16 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public decimal GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
+        public decimal GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
-            throw new NotImplementedException();
+            // Tìm sản phẩm chi tiết dựa trên productId và sizeId color
+            var productDetail = _dbContext.ProductDetail
+            .FirstOrDefault(pd => pd.ProductId == productId && pd.SizeId == sizeId && pd.ColorId == colorId);
+            if (productDetail != null && productDetail.PriceSale.HasValue)
+            {
+                return productDetail.PriceSale.Value;
+            }
+            throw new Exception("Không tìm thấy giá sản phẩm chi tiết/ chưa có size,color này.");
         }
     }
 }

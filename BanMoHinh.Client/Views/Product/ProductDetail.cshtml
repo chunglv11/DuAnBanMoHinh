@@ -69,9 +69,9 @@
                                     <div class="product-single">
                                         <h2>@Model.ProductName</h2>
                                         @{
-                                           var id = lstproductDetail.Where(c => c.ProductId == Model.Id);
-                                           var productDetailID = id.First().Id;
-                                           <input name="prDetailId" value="@productDetailID" hidden />
+                                            var productdetail = lstproductDetail.FirstOrDefault(c => c.ProductId == Model.Id);
+                                            var productDetailID = productdetail.Id;
+                                            <input name="prDetailId" value="@productDetailID" hidden />
                                         }
                                         
                                         @*Còn thiếu đánh giá*@
@@ -84,30 +84,31 @@
                                             <span class="text-secondary">(12 đánh giá)</span>
                                         </div>
 
-                                        <p id="selected-price" class="product-price" style="font-size: 25px;">
-                                            <input type="number" name="Price" value="@Model.MaxPrice"/>
-                                        @*@if (Model.MinPrice < Model.MaxPrice)
-                                        {
-                                            <span>
-                                                @Model.MinPrice?.ToString("N0") VND  - @Model.MaxPrice?.ToString("N0") VND
-                                            </span>
+                                    <p style="font-size: 25px;">
+                                        @{
+                                            if (Model.MinPrice < Model.MaxPrice)
+                                            {
+                                                <span id="old-price">@Model.MinPrice?.ToString("N0") VND - @Model.MaxPrice?.ToString("N0") VND</span>
+                                            }
+                                            else
+                                            {
+                                                <span id="old-price">@Model.MinPrice?.ToString("N0") VND</span>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <span>
-                                                @Model.MinPrice?.ToString("N0") VND
-                                            </span>
-                                        }*@
+                                         @*giá khi chọn size và màu, thêm giỏ hàng chắc phải chỉnh lại để nhận giá*@
+                                        <span id="selected-price" class="product-price" style="font-size: 25px;">
+                                            <input type="number" name="Price" value="@Model.MaxPrice" hidden/>
+                                        </span>
                                     </p>
 
                                     <div class="box-capacity">
                                         @{
                                             var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
-                                            var uniquewh = lst.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
+                                            var uniquewh = lst.Select(item => new { Id = item.SizeId, Width = item.Width, Height = item.Height }).Distinct().ToList();
 
                                             foreach (var uniqueSize in uniquewh)
                                             {
-                                                <a style="width:auto; height:auto" onclick="selectSize(this)">
+                                                <a type="button" style="width:auto; height:auto" data-size-id="@uniqueSize.Id">
                                                     <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>
                                                 </a>
                                             }
@@ -117,12 +118,12 @@
                                     <div class="color-phone">
                                         @{
                                             var lstc = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
-                                            var uniqueColors = lstc.Select(item => item.ColorName).Distinct().ToList();
+                                            var uniqueColors = lstc.Select(item => new { Id = item.ColorId, ColorName = item.ColorName }).Distinct().ToList();
 
                                             foreach (var uniqueColor in uniqueColors)
                                             {
-                                                <a style="width:auto; height:auto" onclick="selectColor(this)">
-                                                    <span class="capacity">@uniqueColor</span>
+                                                <a type="button" style="width:auto; height:auto"  data-color-id="@uniqueColor.Id">
+                                                    <span class="capacity">@uniqueColor.ColorName</span>
                                                 </a>
                                             }
                                         }
@@ -176,7 +177,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="description-details">
-                        <div class="description-left" style="width:60%">
+                        <div class="description-left" style="width:70%">
                             <h2 class="dgctpro">Đặc điểm nổi bật</h2>
                             <div itemprop="description" class="content_hide content-desc" style="height: 1180px;">
                                 @Model.Long_Description
@@ -187,12 +188,12 @@
                                 thêm</button>
 
                         </div>
-                        <div class="description-right" style="width:40%">
+                        <div class="description-right" style="width:30%">
                             <h2 class="dgctpro">Thông tin mô hình</h2>
                             <table class="charactestic_table">
                                 <tbody>
                                     <tr>
-                                        <td class="title_charactestic" width="30%">
+                                        <td class="title_charactestic" style="width:35%">
                                             Nhãn sản xuất:
                                         </td>
                                         <td class="content_charactestic">
@@ -201,7 +202,7 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="title_charactestic" width="30%">
+                                        <td class="title_charactestic" style="width:35%">
                                             Loại mô hình:
                                         </td>
                                         <td class="content_charactestic">
@@ -210,7 +211,7 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="title_charactestic" width="30%">
+                                        <td class="title_charactestic" style="width:35%">
                                             Chất liệu:
                                         </td>
                                         <td class="content_charactestic">
@@ -219,54 +220,45 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="title_charactestic" width="30%">
+                                        <td class="title_charactestic" style="width:35%">
                                             Size sẵn có:
                                         </td>
                                         <td class="content_charactestic">
                                             @{
-                                                // Tạo một danh sách chứa tên kích thước duy nhất
-                                                var uniqueSizes = lstproductDetail.Select(item => item.SizeName).Distinct().ToList();
+                                            var lst1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
+                                            // Tạo một danh sách chứa các đối tượng chứa Width và Height
+                                            var dimensionsList = lst1.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
 
-                                                // Tạo một biến để chứa chuỗi các kích thước
-                                                var sizeString = string.Join(", ", uniqueSizes);
+                                            // Tạo một danh sách chứa chuỗi các kích thước
+                                            var sizeList = dimensionsList.Select(d => $"{d.Width} cm x {d.Height} cm");
 
-                                                // Hiển thị chuỗi kích thước
-                                                <p>@sizeString</p>
-                                            }
+                                            // Hiển thị danh sách kích thước bằng cách sử dụng ul và li
+                                            <ul>
+                                                @foreach (var size in sizeList)
+                                                {
+                                                    <li>@size</li>
+                                                }
+                                            </ul>
+}
+
                                         </td>
 
                                     </tr>
 
                                     <tr>
-                                        <td class="title_charactestic" width="30%">
+                                        <td class="title_charactestic" style="width:35%">
                                             Màu sẵn có:
                                         </td>
                                         <td class="content_charactestic">
                                             @{
-                                                var uniqueSizes1 = lstproductDetail.Select(item => item.ColorName).Distinct().ToList();
-                                                var colorString = string.Join(", ", uniqueSizes1);
+                                                var lstc1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
+                                                var uniqueColors1 = lstc1.Select(item => item.ColorName).Distinct().ToList();
+                                                var colorString = string.Join(", ", uniqueColors1);
                                                 <p>@colorString</p>
                                             }
                                         </td>
                                     </tr>
 
-                                    <tr>
-                                        <td class="title_charactestic" width="30%">
-                                            Ram:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            6GB
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="title_charactestic" width="30%">
-                                            Bộ nhớ trong:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            128GB
-                                        </td>
-                                    </tr>
 
                                 </tbody>
                             </table>
@@ -490,7 +482,7 @@
     <script type="text/javascript" src="~/file/user/js/jquery.easing.min.js"></script>
     <script type="text/javascript" src="~/file/user/js/jquery.rateyo.min.js"></script>
     <script src="~/file/user/js/jquery.desoslide.js"></script>
-
+    
     <script type="text/javascript">
         $('#slideshow').desoSlide({
             thumbs: $('ul.slideshow_thumbs li > a'),
@@ -558,21 +550,49 @@
         })
     </script>
     <script>
-        function selectSize(element) {
-            // Loại bỏ lớp selected từ tất cả các thẻ <a>
-            var allLinks = document.querySelectorAll('.box-capacity a');
-            allLinks.forEach(link => link.classList.remove('selected'));
+    $(document).ready(function () {
+        var selectedSizeId = null;
+        var selectedColorId = null;
+        //var initialPrice = @Json.Serialize(Model.MinPrice);
 
-            // Thêm lớp selected cho thẻ được nhấp vào
-            element.classList.add('selected');
+        //$("#old-price").show(); // Hiển thị giá cũ khi trang được tải
+        //$("#selected-price").text(initialPrice.toLocaleString("en-US") + " VND");
+
+        $(".box-capacity a").on("click", function () {
+            $(".box-capacity a").removeClass("selected");
+            selectedSizeId = $(this).data("size-id");
+            $(this).addClass("selected");
+            updatePrice(selectedSizeId, selectedColorId);
+        });
+
+        $(".color-phone a").on("click", function () {
+            $(".color-phone a").removeClass("selected");
+            selectedColorId = $(this).data("color-id");
+            $(this).addClass("selected");
+            updatePrice(selectedSizeId, selectedColorId);
+        });
+    });
+
+    function updatePrice(sizeId, colorId) {
+        if (sizeId !== null && colorId !== null) {
+            $.ajax({
+                type: "GET",
+                url: "/Product/GetPriceForProductDetail",
+                data: { productId: "@Model.Id", sizeId: sizeId, colorId: colorId },
+                success: function (newPrice) {
+                    $("#old-price").hide(); // Ẩn giá cũ khi giá mới được chọn
+                    $("#selected-price").text(newPrice.toLocaleString("en-US") + " VND");
+                },
+                error: function (error) {
+                    console.error("Error updating price: ", error);
+                }
+            });
+        } else {
+            $("#old-price").show(); // Hiển thị giá cũ khi không có size hoặc color được chọn
+            $("#selected-price").text(initialPrice.toLocaleString("en-US") + " VND");
         }
+    }
+</script>
 
-        function selectColor(element) {
-            // Loại bỏ lớp selected từ tất cả các thẻ <a>
-            var allLinks = document.querySelectorAll('.color-phone a');
-            allLinks.forEach(link => link.classList.remove('selected'));
 
-            // Thêm lớp selected cho thẻ được nhấp vào
-            element.classList.add('selected');
-        }
-    </script>
+
