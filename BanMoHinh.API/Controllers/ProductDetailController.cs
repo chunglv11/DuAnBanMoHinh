@@ -91,9 +91,9 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpGet("getpriceforproductD")]
-        public IActionResult GetPriceForProductD([FromQuery] Guid sizeId, [FromQuery] Guid colorId, [FromQuery] Guid productId)
+        public IActionResult GetPriceForProductD([FromQuery] Guid productId, [FromQuery] Guid sizeId, [FromQuery] Guid colorId)
         {
-            var price = _iproductDetailService.GetPriceForProductDetail(sizeId, colorId, productId);
+            var price = _iproductDetailService.GetPriceForProductDetail(productId, sizeId, colorId);
             return Ok(price);
         }
     }
