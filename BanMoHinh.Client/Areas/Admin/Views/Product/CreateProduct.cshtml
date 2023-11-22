@@ -8,14 +8,19 @@
     var proBrand = ViewData["productBrand"] as List<Brand>;
     var proMaterial = ViewData["productMaterial"] as List<Material>;
 }
-<h4>Product</h4>
-<hr />
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="GetAllProduct">Danh sách sản phẩm</a></li>
+          <li class="breadcrumb-item active"><a asp-action="CreateProduct">Thêm mới</a></li>
+        </ul>    
+</div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="container">
         <form asp-action="CreateProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label  class="control-label">Tên danh mục</label>
                 <select asp-for="CategoryId" class="form-control">
                     <option>Select Category</option>
                     @foreach (var type in proCategory)
@@ -26,7 +31,7 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BrandId" class="control-label"></label>
+                <label  class="control-label">Tên nhãn sản xuất</label>
                 <select asp-for="BrandId" class="form-control">
                     <option>Select Brand</option>
                     @foreach (var type in proBrand)
@@ -37,7 +42,7 @@
                 <span asp-validation-for="BrandId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaterialId" class="control-label"></label>
+                <label  class="control-label">Tên chất liệu</label>
                 <select asp-for="MaterialId" class="form-control">
                     <option>Select Material</option>
                     @foreach (var type in proMaterial)
@@ -53,27 +58,27 @@
                 <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AvailableQuantity" class="control-label"></label>
+                <label  class="control-label">Tổng số lượng</label>
                 <input asp-for="AvailableQuantity" class="form-control" />
                 <span asp-validation-for="AvailableQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Create_At" class="control-label"></label>
+                <label  class="control-label">Ngày nhập</label>
                 <input asp-for="Create_At" class="form-control" />
                 <span asp-validation-for="Create_At" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Update_At" class="control-label"></label>
+                <label class="control-label">Ngày cập nhật</label>
                 <input asp-for="Update_At" class="form-control" />
                 <span asp-validation-for="Update_At" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label  class="control-label">Mô tả</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Long_Description" class="control-label"></label>
+                <label  class="control-label">Mô tả chi tiết</label>
                 <input asp-for="Long_Description" class="form-control" />
                 <span asp-validation-for="Long_Description" class="text-danger"></span>
             </div>
@@ -83,14 +88,11 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <button class="btn btn-success m-1" type="submit" >Tạo</button>
+                <a class="btn btn-secondary" asp-action="GetAllProduct" >Quay lại</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

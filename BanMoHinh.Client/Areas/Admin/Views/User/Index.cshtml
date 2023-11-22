@@ -5,12 +5,13 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    
-    <a asp-action="Create" class="btn btn-success" data-toggle="modal" data-target="#Create">Tạo Mới </a>
-</p>
+<h4>Danh sách người dùng</h4>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Index">Danh sách người dùng</a></li>
+        </ul>    
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -19,20 +20,20 @@
             </th>
 *@
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Tên đăng nhập
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                Số điện thoại
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                Ngày sinh
             </th>
             
            
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
@@ -54,8 +55,8 @@
                     @Html.DisplayFor(modelItem => item.DateOfBirth)
                 </td>
             <td>
-                    <a asp-action="ChangeRole" class="btn btn-success" data-toggle="modal" data-target="#changrole">Sửa Rolse </a>
-                    @Html.ActionLink("Delete", "DeleteUser", new {  userName=item.UserName  })
+                    <a asp-action="ChangeRole" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#changrole">Sửa Rolse </a>
+                    @Html.ActionLink("Xoá", "DeleteUser", new {  userName=item.UserName  }, new { @class = "btn btn-danger btn-sm" })
             </td>
         </tr>
             <!--
@@ -80,8 +81,8 @@
 
                                 </div>
                                 <BR>
-                                <button class="btn btn-save" type="submit">Lưu lại</button>
-                                <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                                <button class="btn btn-success m-1" type="submit">Lưu lại</button>
+                                <a class="btn btn-secondary" data-dismiss="modal" href="#">Hủy bỏ</a>
                                 <BR>
                             </div>
                             <div class="modal-footer">

@@ -4,57 +4,55 @@
     ViewData["Title"] = "GetallVoucher";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
-
-<h1>GetallVoucher</h1>
-
+<h4>Danh sách voucher</h4>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="Show">Danh sách voucher</a></li>
+        </ul>    
+</div>
 <p>
-    <a asp-area="Admin" asp-controller="Voucher" asp-action="CreateVoucher">Create New</a>
+    <a asp-action="CreateVoucher" class="btn btn-success m-1">Thêm mới</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Kiểu voucher
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VoucherTypeId)
+                Trạng thái kiểu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VoucherStatusId)
+                Mã
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Code)
+                Số lượng
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                Giá trị
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Value)
+                Giá trị tối thiểu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Minimum_order_value)
+                Ngày tạo
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Create_Date)
+                Ngày bắt đầu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Start_Date)
+                Ngày kết thức
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.End_Date)
+                Trạng thái
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VoucherTypeId)
             </td>
@@ -86,9 +84,10 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "editVoucher", new {  area="Admin",id=item.Id }) |
-                    @Html.ActionLink("Details", "detailVoucher", new {  area="Admin",id=item.Id  }) |
-                    @Html.ActionLink("Delete", "DeleteVoucher", new {area="Admin", id=item.Id  })
+                 <a class="btn btn-primary btn-sm" type="button" href="editVoucher/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-warning btn-sm"  type="button" href="detailVoucher/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-danger btn-sm " type="button" href="DeleteVoucher/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
+                    
             </td>
         </tr>
 }

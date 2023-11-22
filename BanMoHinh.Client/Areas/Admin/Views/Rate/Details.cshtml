@@ -5,27 +5,30 @@
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Details</h1>
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="ShowList">Danh sách dánh giá</a></li>
+        </ul>    
+</div>
 
 <div>
-    <h4>Rate</h4>
-    <hr />
     <dl class="row">
        
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
+            Nội dung
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Content)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
+            Ảnh
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ImageUrl)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
+            Đánh giá
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Rating)
