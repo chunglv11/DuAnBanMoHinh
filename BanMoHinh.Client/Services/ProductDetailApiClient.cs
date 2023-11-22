@@ -174,19 +174,6 @@ namespace BanMoHinh.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-        public Task<Share.Models.Size> GetSize(Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<Colors> GetColor(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Product> GetProduct(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

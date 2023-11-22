@@ -1,0 +1,167 @@
+﻿@model IEnumerable<BanMoHinh.Share.Models.Order>
+
+@{
+    ViewData["Title"] = "Yeucautrahang";
+}
+    <h2 style="text-align:center;margin-top:20px" class="title">Hóa đơn của bạn</h2>
+
+<style>
+    .button-container {
+        display: flex;
+        gap: 10px; /* Khoảng cách giữa các nút */
+    }
+
+    .button-style {
+        border: none;
+        background-color: transparent;
+        padding: 10px; /* Kích thước nút */
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+    }
+
+        .button-style:hover {
+            background-color: #a8dadc; /* Màu khi chỉ vào */
+        }
+</style>
+
+<!-- Mã HTML -->
+<div class="button-container">
+    <button class="button-style col-4"><a href="@Url.Action("allOrder", "Order")" class="button-style col-4">Tất cả</a></button>
+    <button class="button-style col-1">  <a href="@Url.Action("Xacnhan", "Order")" class="button-style col-1">Đang xác nhận</a></button>
+    <button class="button-style col-1"> <a href="@Url.Action("Danggiao", "Order")" class="button-style col-1">Đang giao</a> </button>
+    <button class="button-style col-1"> <a href="@Url.Action("Cholayhang", "Order")" class="button-style col-1">Chờ lấy hàng</a></button>
+    <button class="button-style col-1">    <a href="@Url.Action("Hoanthanh", "Order")" class="button-style col-1">Hoàn thành</a></button>
+    <button class="button-style col-1"></button>   <a href="@Url.Action("Yeucautrahang", "Order")" class="button-style col-1">Yêu cầu trả hàng</a>
+    <button class="button-style col-1"> <a href="@Url.Action("Xacnhantrahang", "Order")" class="button-style col-1">Xác nhận trả hàng</a></button>
+    <button class="button-style col-1">  <a href="@Url.Action("Huydon", "Order")" class="button-style col-1">Hủy đơn</a></button>
+    <button class="button-style col-1"></button>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VoucherId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmout)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VoucherValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmoutAfterApplyingVoucher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingFee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Create_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ship_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payment_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delivery_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderStatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmout)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmoutAfterApplyingVoucher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingFee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Create_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ship_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Payment_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delivery_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
