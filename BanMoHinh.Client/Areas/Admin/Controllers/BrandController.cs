@@ -10,7 +10,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         private readonly HttpClient _client;
         public BrandController(HttpClient client)
         {
-            _client = client;   
+            _client = client;
         }
         // GET: BrandController
         public async Task<IActionResult> GetAllBrand()
@@ -22,7 +22,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // GET: BrandController/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            var getBrand = await _client.GetFromJsonAsync<Category>($"https://localhost:7007/api/brand/get{id}");
+            var getBrand = await _client.GetFromJsonAsync<Brand>($"https://localhost:7007/api/brand/get{id}");
             return View(getBrand);
         }
 
@@ -51,7 +51,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // GET: BrandController/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
-            var getBrand = await _client.GetFromJsonAsync<Category>($"https://localhost:7007/api/brand/get{id}");
+            var getBrand = await _client.GetFromJsonAsync<Brand>($"https://localhost:7007/api/brand/get{id}");
             return View(getBrand);
         }
 

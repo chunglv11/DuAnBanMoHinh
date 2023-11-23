@@ -8,10 +8,14 @@
     var voucherstatus = ViewData["voucherstatus"] as List<VoucherStatus>;
 
 }
-
+<div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+          <li class="breadcrumb-item active"><a asp-action="GetallVoucher">Danh sách voucher</a></li>
+          <li class="breadcrumb-item active"><a asp-action="detailVoucher">Chi tiết</a></li>
+        </ul>    
+</div>
 <div>
-    <h4>Voucher</h4>
-    <hr />
     <dl class="row">
         <div class="col-12">
             <dt class="col-sm-2">Voucher Type</dt>
@@ -77,7 +81,7 @@
         </div>
     </dl>
 </div>
-<div class="mt-3">
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-primary" }) |
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<div>
+     <a class="btn btn-secondary" asp-action="GetallVoucher" >Quay lại</a>
+         
 </div>
