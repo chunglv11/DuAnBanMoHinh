@@ -36,7 +36,7 @@ namespace BanMoHinh.API.Controllers
         {
             try
             {
-                return Ok(await _cartItemService.GetCartItemsByCartId(id));
+                return Ok(await _cartItemService.GetCartItemsByCartIds(id));
             }
             catch (Exception ex)
             {
@@ -71,9 +71,9 @@ namespace BanMoHinh.API.Controllers
 
         // DELETE api/<CartItemController>/5
         [HttpDelete("Delete-CartItem")]
-        public async Task<ActionResult<CartItem>> Delete(Guid id,Guid proId, Guid cartId)
+        public async Task<ActionResult<CartItem>> Delete(Guid id, Guid proId, Guid UserId)
         {
-            var result = await _cartItemService.DeleteCartItem(id,proId,cartId);
+            var result = await _cartItemService.DeleteCartItem(id, proId, UserId);
             if (result)
             {
                 return Ok("Xóa thành công");
