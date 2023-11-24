@@ -85,7 +85,7 @@ namespace BanMoHinh.Client.Controllers
 
             ViewData["productDetail"] = productDetail;
             ViewData["productImage"] = productImage;
-            ViewData["wishListProducts"] = wishListProducts;
+            ViewData["wishList"] = wishList;
 
             return View(wishListProducts);
         }

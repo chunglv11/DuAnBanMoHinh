@@ -4,7 +4,7 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
 
-    List<WishListVM> wl = ViewData["WishList"] as List<WishListVM>;
+    List<WishListVM> wl = ViewData["wishList"] as List<WishListVM>;
     List<ProductDetailVM> productDetail = ViewData["productDetail"] as List<ProductDetailVM>;
     List<ProductImage> ProductImage = ViewData["ProductImage"] as List<ProductImage>;
     List<ProductVM> Product = ViewData["Product"] as List<ProductVM>;
@@ -26,7 +26,12 @@
                         var lstProductImage = ProductImage.Where(c => c.ProductDetailId == productDetailID); // lấy list img
                         var imgFirst = lstProductImage.First().ImageUrl; // lấy img đầu tiên
                         <li class="item">
-                            <button class="btn-delete"@*  onclick="deleteFromWishList('@idwistlist')" *@>×</button>
+                            @{
+                                var wishListId = wl.FirstOrDefault(c => c.ProductId == item.Id)?.Id;
+                                <button class="btn-delete" onclick="deleteFromWishList('@wishListId')">×</button>
+                            }
+                                
+                            
                             <div class="thumbnail">
                                 <a href="/Product/ProductDetail/@item.Id" class="img">
                                     <img src="@(Configuration["BaseAddress"]+imgFirst)"
@@ -45,20 +50,20 @@
                                         @if (item.MinPrice < item.MaxPrice)
                                             {
                                                 <span>
-                                                    @item.MinPrice đ  - @item.MaxPrice đ
+                                                    @item.MinPrice?.ToString("N0") VND  - @item.MaxPrice?.ToString("N0") VND
                                                 </span>
                                             }
                                             else
                                             {
                                                 <span>
-                                                    @item.MinPrice đ 
+                                                    @item.MinPrice?.ToString("N0") VND 
                                                 </span>
                                             }
                                     
                                     
                                 </div>
                                 <div class="wrap">
-                                    <div class="price"><strike>@item.MinPrice</strike></div>
+                                    <div class="price"><strike>@item.MinPrice?.ToString("N0")</strike></div>
                                     <div class="discount">-3%</div>
                                 </div>
                             </div>
@@ -83,17 +88,31 @@
     <script>
     function deleteFromWishList(idwistlist) {
         $.ajax({
-            url: '/ControllerName/DeleteFromWishList',
+            url: '/Product/DeleteFromWishList',
             type: 'POST',
             data: { idwistlist: idwistlist },
             success: function(response) {
-                // Xử lý kết quả trả về từ hàm DeleteFromWishList ở đây
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Xoá thành công khỏi mục đã thích',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                //sau bao lâu thì reload
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
                 console.log(response.message);
             },
             error: function() {
                 // Xử lý khi có lỗi xảy ra
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Có lỗi xảy ra',
+                    text: 'Vui lòng thử lại sau.'
+                });
                 console.log("Có lỗi xảy ra khi gọi hàm DeleteFromWishList");
             }
         });
     }
-</script>
+    </script>
