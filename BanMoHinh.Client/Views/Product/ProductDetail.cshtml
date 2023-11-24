@@ -101,6 +101,7 @@
                                         </span>
                                     </p>
 
+
                                     <div class="box-capacity">
                                         @{
                                             var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
@@ -179,7 +180,7 @@
                     <div class="description-details">
                         <div class="description-left" style="width:70%">
                             <h2 class="dgctpro">Đặc điểm nổi bật</h2>
-                            <div itemprop="description" class="content_hide content-desc" style="height: 1180px;">
+                            <div itemprop="description" class="content_hide content-desc" style="height: 600px;">
                                 @Model.Long_Description
                             </div>
                             <button class="less-evaluation text-center" style="display:none"><i
@@ -549,50 +550,82 @@
             })
         })
     </script>
-    <script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
     $(document).ready(function () {
+        $('.size-button').click(function () {
+            // Lấy SizeId từ nút Size được nhấp
+            var sizeId = $(this).data('size-id');
+
+            // Tìm tất cả các nút Màu có cùng SizeId
+            var colorButtons = $('.color-button[data-size-id="' + sizeId + '"]');
+
+            // Bật (enable) tất cả các nút Màu và vô hiệu hóa (disable) các nút Màu khác
+            $('.color-button').prop('disabled', true);
+            colorButtons.prop('disabled', false);
+        });
+    });
+</script>
+
+    <script>
+        $(document).ready(function () {
         var selectedSizeId = null;
         var selectedColorId = null;
-        //var initialPrice = @Json.Serialize(Model.MinPrice);
-
-        //$("#old-price").show(); // Hiển thị giá cũ khi trang được tải
-        //$("#selected-price").text(initialPrice.toLocaleString("en-US") + " VND");
+        var previousSizeId = null;
+        var previousColorId = null;
 
         $(".box-capacity a").on("click", function () {
-            $(".box-capacity a").removeClass("selected");
-            selectedSizeId = $(this).data("size-id");
-            $(this).addClass("selected");
-            updatePrice(selectedSizeId, selectedColorId);
+            if ($(this).hasClass("selected")) {
+                previousSizeId = selectedSizeId;
+                selectedSizeId = null;
+                $(this).removeClass("selected");
+            } else {
+                $(".box-capacity a").removeClass("selected");
+                previousSizeId = selectedSizeId;
+                selectedSizeId = $(this).data("size-id");
+                $(this).addClass("selected");
+            }
+            updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
         });
 
         $(".color-phone a").on("click", function () {
-            $(".color-phone a").removeClass("selected");
-            selectedColorId = $(this).data("color-id");
-            $(this).addClass("selected");
-            updatePrice(selectedSizeId, selectedColorId);
+            if ($(this).hasClass("selected")) {
+                previousColorId = selectedColorId;
+                selectedColorId = null;
+                $(this).removeClass("selected");
+            } else {
+                $(".color-phone a").removeClass("selected");
+                previousColorId = selectedColorId;
+                selectedColorId = $(this).data("color-id");
+                $(this).addClass("selected");
+            }
+            updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
         });
     });
 
-    function updatePrice(sizeId, colorId) {
+    function updatePrice(sizeId, colorId, previousSizeId, previousColorId) {
         if (sizeId !== null && colorId !== null) {
             $.ajax({
                 type: "GET",
                 url: "/Product/GetPriceForProductDetail",
                 data: { productId: "@Model.Id", sizeId: sizeId, colorId: colorId },
                 success: function (newPrice) {
-                    $("#old-price").hide(); // Ẩn giá cũ khi giá mới được chọn
+                    $("#old-price").hide();
                     $("#selected-price").text(newPrice.toLocaleString("en-US") + " VND");
                 },
                 error: function (error) {
                     console.error("Error updating price: ", error);
                 }
             });
+        } else if (previousSizeId !== null || previousColorId !== null) {
+            $("#old-price").show();
+            $("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
         } else {
-            $("#old-price").show(); // Hiển thị giá cũ khi không có size hoặc color được chọn
-            $("#selected-price").text(initialPrice.toLocaleString("en-US") + " VND");
+            $("#old-price").show();
+            $("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
         }
     }
-</script>
+    </script>
 
 
 
