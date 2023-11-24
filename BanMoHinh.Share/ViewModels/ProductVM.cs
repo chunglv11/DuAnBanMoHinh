@@ -16,6 +16,7 @@ namespace BanMoHinh.Share.ViewModels
         public string? BrandName { get; set; }
         public Guid? MaterialId { get; set; }
         public string? MaterialName { get; set; }
+        public Guid? WishId { get; set; }
         public string? ProductName { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? Create_At { get; set; }
@@ -27,7 +28,7 @@ namespace BanMoHinh.Share.ViewModels
             get
             {
                 if (ProductDvms != null && ProductDvms.Count > 0)
-                    return ProductDvms.Where(c=>c.ProductId==Id).Min(pd => pd.PriceSale);
+                    return ProductDvms.Where(c => c.ProductId == Id).Min(pd => pd.PriceSale);
                 return 0;
             }
         }
