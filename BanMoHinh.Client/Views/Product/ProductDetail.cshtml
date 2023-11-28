@@ -69,9 +69,7 @@
                                     <div class="product-single">
                                         <h2>@Model.ProductName</h2>
                                         @{
-                                            var productdetail = lstproductDetail.FirstOrDefault(c => c.ProductId == Model.Id);
-                                            var productDetailID = productdetail.Id;
-                                            <input name="prDetailId" value="@productDetailID" hidden />
+                                            <input name="ProductName" value="@Model.ProductName" hidden />
                                         }
                                         
                                         @*Còn thiếu đánh giá*@
@@ -97,7 +95,7 @@
                                         }
                                          @*giá khi chọn size và màu, thêm giỏ hàng chắc phải chỉnh lại để nhận giá*@
                                         <span id="selected-price" class="product-price" style="font-size: 25px;">
-                                            <input type="number" name="Price" value="@Model.MaxPrice" hidden/>
+                                           
                                         </span>
                                     </p>
 
@@ -110,7 +108,9 @@
                                             foreach (var uniqueSize in uniquewh)
                                             {
                                                 <a type="button" style="width:auto; height:auto" data-size-id="@uniqueSize.Id">
-                                                    <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>
+                                                    <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>.
+                                                        <input type="text" name="sizeid" value="@uniqueSize.Id" hidden />
+
                                                 </a>
                                             }
                                         }
@@ -124,7 +124,7 @@
                                             foreach (var uniqueColor in uniqueColors)
                                             {
                                                 <a type="button" style="width:auto; height:auto"  data-color-id="@uniqueColor.Id">
-                                                    <span class="capacity">@uniqueColor.ColorName</span>
+                                                        <span class="capacity">@uniqueColor.ColorName</span>  <input type="text" name="colorid" value="@uniqueColor.Id" hidden />
                                                 </a>
                                             }
                                         }
