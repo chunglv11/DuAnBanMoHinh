@@ -53,7 +53,7 @@ namespace BanMoHinh.Client.Controllers
             }
 
         }
-        public async Task<IActionResult> AddtoCart(string ProductName, Guid colorid, Guid sizeid, int quantity)
+        public async Task<IActionResult> AddtoCart(string ProductName, Guid colorId, Guid sizeId, int quantity)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
@@ -64,7 +64,7 @@ namespace BanMoHinh.Client.Controllers
                     var userName = userIdClaim.Value;
                     var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
                     var getallProductdetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
-                    var getProductaddcart = getallProductdetail.Find(c => c.ProductName == ProductName && c.ColorId == colorid && c.SizeId == sizeid);
+                    var getProductaddcart = getallProductdetail.Find(c => c.ProductName == ProductName && c.ColorId == colorId && c.SizeId == sizeId);
                     var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={getUserbyName.Id}");
                     List<CartItem> getAllCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>("https://localhost:7007/api/cartitem/Get-All-CartItem");
                     IEnumerable<CartItem> CartItembyidCart = getAllCartItem.Where(c => c.ProductDetail_ID == getProductaddcart.Id);
@@ -86,7 +86,7 @@ namespace BanMoHinh.Client.Controllers
                             cartItem.ProductDetail_ID = getProductaddcart.Id;
                             cartItem.Id = Guid.NewGuid();
                             cartItem.CartId = getCart.Id;
-                            cartItem.Price = (int?)getProductaddcart.Price;
+                            cartItem.Price = (int?)getProductaddcart.PriceSale;
                             if (getProductaddcart.Quantity >= quantity)
                             {
                                 cartItem.Quantity = quantity;
@@ -97,7 +97,7 @@ namespace BanMoHinh.Client.Controllers
                                 Console.WriteLine("so luong san pham het r ban oi");
                                 return RedirectToAction("ProductDetail", "Product", new { id = getProductaddcart.Id });
                             }
-                           
+
                             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/cartitem/Insert-Cart-Item", cartItem);
                             if (response.IsSuccessStatusCode)
                             {

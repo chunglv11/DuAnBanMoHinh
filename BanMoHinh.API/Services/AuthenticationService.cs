@@ -17,7 +17,7 @@ namespace BanMoHinh.API.Services
         private readonly IRankService _rankService;
         private readonly ICartService _cartService;
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration,IRankService rankService, ICartService cartService)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IRankService rankService, ICartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -111,7 +111,7 @@ namespace BanMoHinh.API.Services
             }
             // new rank 
             var newRank = await _rankService.GetItemByName("Bạc");
-            User identityUser = new()  
+            User identityUser = new()
             {
                 RankId = newRank.Id, // add rank id
                 UserName = model.UserName,
@@ -119,9 +119,9 @@ namespace BanMoHinh.API.Services
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
                 Points = 0,
-            }; 
+            };
             var result = await _userManager.CreateAsync(identityUser, model.Password); // create user
-            
+
 
             if (!result.Succeeded)
             {
@@ -133,8 +133,8 @@ namespace BanMoHinh.API.Services
             {
                 UserId = identityUser.Id
             };
-                 // khi add sản phẩm vào wishList thì mới thêm
-            _cartService.Create(cart); // create cart
+            // khi add sản phẩm vào wishList thì mới thêm
+            await _cartService.Create(cart); // create cart
             await _userManager.AddToRoleAsync(identityUser, "User");
             response.IsSuccess = true;
             response.StatusCode = 200;
