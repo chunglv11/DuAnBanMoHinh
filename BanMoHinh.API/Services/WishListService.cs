@@ -47,8 +47,8 @@ namespace BanMoHinh.API.Services
         {
             try
             {
-                var item = await _dbContext.WishList.FirstOrDefaultAsync(c => c.Id == id);
-                _dbContext.WishList.Remove(item);
+                var result = await _dbContext.WishList.FindAsync(id);
+                _dbContext.WishList.Remove(result);
                 await _dbContext.SaveChangesAsync();
                 return true;
 

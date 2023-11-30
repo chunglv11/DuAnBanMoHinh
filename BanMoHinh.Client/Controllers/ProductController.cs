@@ -85,7 +85,7 @@ namespace BanMoHinh.Client.Controllers
 
             ViewData["productDetail"] = productDetail;
             ViewData["productImage"] = productImage;
-            ViewData["wishListProducts"] = wishListProducts;
+            ViewData["wishList"] = wishList;
 
             return View(wishListProducts);
         }
@@ -266,9 +266,9 @@ namespace BanMoHinh.Client.Controllers
 
         }
 
-        public async Task<decimal> GetPriceForProductDetail(Guid sizeId, Guid colorId, Guid productId)
+        public async Task<decimal> GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
-            var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?sizeId={sizeId}&colorId={colorId}&productId={productId}");
+            var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?productId={productId}&sizeId={sizeId}&colorId={colorId}");
             string apiData = await price.Content.ReadAsStringAsync();
             var culture = CultureInfo.InvariantCulture;
             var result = decimal.Parse(apiData, culture);

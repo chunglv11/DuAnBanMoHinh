@@ -42,8 +42,17 @@ namespace BanMoHinh.API.Services
                     Description = item.Description,
                     Status = item.Status,
                 };
+
                 await _dbContext.ProductDetail.AddAsync(productDetail);
                 await _dbContext.SaveChangesAsync();
+                // Cập nhật AvailableQuantity trong Product
+                Product product = await _dbContext.Product.FindAsync(item.ProductId);
+                if (product != null)
+                {
+                    product.AvailableQuantity += item.Quantity;
+                    _dbContext.Product.Update(product);
+                    await _dbContext.SaveChangesAsync();
+                }
                 int passcount = 0;
                 //save image
                 if (item.filecollection != null)//không null 
@@ -217,74 +226,75 @@ namespace BanMoHinh.API.Services
 
         public async Task<bool> Update(ProductDetailVM item)
         {
-            var idp = await _dbContext.ProductDetail.FindAsync(item.Id);
+            // Tìm sản phẩm chi tiết theo Id
+            var productDetail = await _dbContext.ProductDetail.FindAsync(item.Id);
 
-            if (idp == null)
+            // Kiểm tra xem sản phẩm chi tiết có tồn tại không
+            if (productDetail == null)
             {
-                throw new Exception($"không tìm thấy sản phẩm có id: {item.Id}");
+                throw new Exception($"Không tìm thấy sản phẩm có id: {item.Id}");
             }
-            else
+
+            // Lấy sự thay đổi trong Quantity
+            int? quantityChange = item.Quantity - productDetail.Quantity;
+            //Nếu quantityChange là dương, là  thêm vào Quantity, và nếu quantityChange là âm, là  đang giảm Quantity.
+            productDetail.SizeId = item.SizeId;
+            productDetail.ColorId = item.ColorId;
+            productDetail.Quantity = item.Quantity;
+            productDetail.Price = item.Price;
+            productDetail.PriceSale = item.PriceSale;
+            productDetail.Update_At = item.Update_At;
+            productDetail.Description = item.Description;
+            productDetail.Status = item.Status;
+
+            // Xóa hết các hình ảnh liên quan đến sản phẩm chi tiết
+            var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == productDetail.Id);
+            _dbContext.ProductImage.RemoveRange(images);
+
+            // Lưu lại thông tin hình ảnh mới (nếu có)
+            if (item.filecollection != null)
             {
-                idp.SizeId = item.SizeId;
-                idp.ColorId = item.ColorId;
-                //idp.ProductId = item.ProductId;
-                idp.Quantity = item.Quantity;
-                idp.Price = item.Price;
-                idp.PriceSale = item.PriceSale;
-                //idp.Create_At = item.Create_At;
-                idp.Update_At = item.Update_At;
-                idp.Description = item.Description;
-                idp.Status = item.Status;
-                var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == idp.Id);
-                _dbContext.ProductImage.RemoveRange(images);
-                int passcount = 0;
-                //save image
-                if (item.filecollection != null)//không null 
+                foreach (var file in item.filecollection)
                 {
-                    foreach (var i in item.filecollection)
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                    // Tạo thư mục nếu nó chưa tồn tại
+                    if (!Directory.Exists(path))
                     {
-
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                        //create folder if not exist
-                        if (!Directory.Exists(path))
-                            Directory.CreateDirectory(path);
-                        string imgPath = Path.Combine(path, i.FileName);
-                        using (var stream = new FileStream(imgPath, FileMode.Create))
-                        {
-                            await i.CopyToAsync(stream);
-                            passcount++;
-                        }
-                        var proi = new ProductImage()
-                        {
-                            ProductDetailId = idp.Id,
-                            ImageUrl = "/images/" + i.FileName
-                        };
-                        _dbContext.ProductImage.Update(proi);
+                        Directory.CreateDirectory(path);
                     }
-                    _dbContext.ProductDetail.Update(idp);
+
+                    // Lưu file vào thư mục
+                    var imgPath = Path.Combine(path, file.FileName);
+                    using (var stream = new FileStream(imgPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Tạo đối tượng ProductImage mới và thêm vào danh sách
+                    var productImage = new ProductImage()
+                    {
+                        ProductDetailId = productDetail.Id,
+                        ImageUrl = "/images/" + file.FileName
+                    };
+                    _dbContext.ProductImage.Update(productImage);
                 }
-
-                await _dbContext.SaveChangesAsync();
-                return true;
+                _dbContext.Update(productDetail);
             }
-        }
-        public async Task<bool> UpdateQuantity(Guid ID, int QUANTITY)
+            await _dbContext.SaveChangesAsync();
 
-        {
-            try
+            // Cập nhật AvailableQuantity trong Product
+            var product = await _dbContext.Product.FindAsync(productDetail.ProductId);
+            if (product != null)
             {
-                var proid = _dbContext.ProductDetail.FirstOrDefault(x => x.Id == ID);
-                proid.Quantity = QUANTITY;
-                _dbContext.ProductDetail.Update(proid);
+                product.AvailableQuantity += quantityChange;
+                _dbContext.Product.Update(product);
                 await _dbContext.SaveChangesAsync();
-                return true;
+            }
 
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+            return true;
         }
+
 
         public decimal GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {

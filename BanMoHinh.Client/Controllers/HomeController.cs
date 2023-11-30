@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.Client.Models;
+using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -20,14 +21,16 @@ namespace BanMoHinh.Client.Controllers
         public async Task<IActionResult> Index()
         {
             var result = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
+            var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+            var ProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
             // Sắp xếp để lấy ra 4 sản phẩm mới nhất (theo ngày tạo)
-            var newestProducts = result.SelectMany(p => p.ProductDvms)
+            var newestProducts = result
                               .OrderByDescending(pd => pd.Create_At)
                               .Take(4)
                               .ToList();
-
-            // Làm tương tự để lấy ra 4 sản phẩm bán chạy nhất
             ViewData["NewestProducts"] = newestProducts;
+            ViewData["productDetail"] = productDetail;
+            ViewData["ProductImage"] = ProductImage;
             if (newestProducts != null)
             {
                 ViewData["NewestProducts"] = newestProducts;
@@ -36,7 +39,26 @@ namespace BanMoHinh.Client.Controllers
             {
                 TempData["Message"] = "Dữ liệu không tồn tại.";
             }
-            //ViewData["TopSellingProducts"] = topSellingProducts;
+            // sản phẩm bán chạy
+            var HDCT = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");
+            var query =
+            (from item in HDCT
+             group item.Quantity by item.productDetail into g
+             orderby g.Sum() descending
+             select new { ProductDetails = g.Key }).Take(4).ToList();
+            //var bestSell = from a in query
+            //               join b in result on a.ProductDetails.ProductId equals b.Id into temp
+            //               from b in temp.DefaultIfEmpty()
+            //               join c in ProductImage on a.ProductDetails.Id equals c.ProductDetailId into tempImage
+            //               from c in tempImage.DefaultIfEmpty()
+            //               select new ProductDetailVM()
+            //               {
+            //                   Id = a.ProductDetails.Id,
+            //                   ProductName = b != null ? b.ProductName : "Unknown", // Xử lý trường hợp b là null
+            //                   PriceSale = a.ProductDetails.PriceSale
+            //               };
+
+            ViewData["TopSellingProducts"] = query;
             return View();
         }
         public IActionResult Introduct()
