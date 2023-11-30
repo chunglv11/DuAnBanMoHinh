@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
@@ -78,6 +79,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 Value = x.ColorId.ToString(),
                 Selected = colorId.ToString() == x.ColorId.ToString()
             });
+            product.Status = true;
+            product.Create_At = DateTime.Now;
             var result = await _apiClient.CreateProduct(product, productId, sizeId, colorId, edit);
             if (result)
             {
@@ -128,6 +131,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                     Value = x.ColorId.ToString(),
                     Selected = colorId.ToString() == x.ColorId.ToString()
                 });
+                //var productImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
                 var response = await _apiClient.UpdateProduct(create, sizeId, colorId, edit);
                 if (response)
                 {

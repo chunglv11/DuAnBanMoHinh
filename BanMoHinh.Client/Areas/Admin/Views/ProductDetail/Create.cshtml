@@ -30,6 +30,15 @@ figcaption{
     font-size: 2.4vmin;
     margin-top: 0.5vmin;
 }
+.delete-button {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+    border: none;
+    margin-top: 5px;
+    width: 100%;
+  }
 </style>
 <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
@@ -88,16 +97,16 @@ figcaption{
                 <input asp-for="PriceSale" class="form-control" />
                 <span asp-validation-for="PriceSale" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label class="control-label">Ngày nhập</label>
                 <input asp-for="Create_At" class="form-control" />
                 <span asp-validation-for="Create_At" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div>*@
+            @*<div class="form-group">
                 <label  class="control-label">Ngày cập nhật</label>
                 <input asp-for="Update_At" class="form-control" />
                 <span asp-validation-for="Update_At" class="text-danger"></span>
-            </div>
+            </div>*@
           
             <div class="form-group">
                 <label  class="control-label">Mô tả</label>
@@ -114,19 +123,20 @@ figcaption{
                 </div>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
-                <input type="file" id="file-input"  asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
-                <label for="file-input">
-                    <i class="fas fa-upload"></i> Chọn ảnh
-                </label>
-                <p id="num-of-files">Không có file nào</p>
-                <div id="images"></div>            
+              <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+              <label for="file-input">
+                <i class="fas fa-upload"></i> Chọn ảnh
+              </label>
+              <p id="num-of-files">Không có file nào</p>
+              <div id="images"></div>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label  class="control-label">Trạng thái</label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+            </div>*@
            <div class="form-group">
                 <button class="btn btn-success m-1" type="submit" >Tạo</button>
                 <a class="btn btn-secondary" asp-action="Show" >Quay lại</a>
@@ -135,35 +145,74 @@ figcaption{
     </div>
 </div>
 
- <!--Font Awesome Icons-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-<script> 
-    let fileInput = document.getElementById("file-input");
-let imageContainer = document.getElementById("images");
-let numOfFiles = document.getElementById("num-of-files");
+<!--Font Awesome Icons-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<script>
+    let numOfFiles = document.getElementById("num-of-files");
+    let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
+    const maxAllowedFiles = 5; // Số lượng tối đa ảnh được chọn
 
-function preview(){
-    imageContainer.innerHTML = "";
-    numOfFiles.textContent = `${fileInput.files.length} ảnh được chọn`;
+    function preview() {
+        let fileInput = document.getElementById("file-input");
+        let imageContainer = document.getElementById("images");
 
-    for(i of fileInput.files){
-        let reader = new FileReader();
-        let figure = document.createElement("figure");
-        let figCap = document.createElement("figcaption");
-        figCap.innerText = i.name;
-        figure.appendChild(figCap);
-        reader.onload=()=>{
-            let img = document.createElement("img");
-            img.setAttribute("src",reader.result);
-            figure.insertBefore(img,figCap);
+        // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
+        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
+            alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
+            // Không thực hiện việc xoá giá trị đã chọn
+        } else {
+            // Xoá tất cả các phần tử hiện tại trong imageContainer
+            imageContainer.innerHTML = '';
+
+            for (let i = 0; i < fileInput.files.length; i++) {
+                let reader = new FileReader();
+                let figure = document.createElement("figure");
+                let deleteButton = document.createElement("button");
+
+                deleteButton.textContent = "Xoá";
+                deleteButton.classList.add("delete-button");
+
+                // Truyền tham số cho hàm deleteImage
+                deleteButton.onclick = function () {
+                    deleteImage(figure, fileInput.files[i]);
+                };
+
+                figure.appendChild(deleteButton);
+
+                reader.onload = () => {
+                    let img = document.createElement("img");
+                    img.setAttribute("src", reader.result);
+                    figure.insertBefore(img, deleteButton);
+                };
+
+                imageContainer.appendChild(figure);
+                reader.readAsDataURL(fileInput.files[i]);
+
+                selectedImages.push(fileInput.files[i]);
+            }
         }
-        imageContainer.appendChild(figure);
-        reader.readAsDataURL(i);
+
+        updateNumOfFiles();
     }
-}
+   function deleteImage(figure, file) {
+    // Xoá hình ảnh khi nút xoá được nhấn
+    figure.remove();
+    removeFromSelectedImages(file);
+    updateNumOfFiles();
+    }
+
+    function removeFromSelectedImages(file) {
+        // Loại bỏ ảnh khỏi mảng selectedImages
+        selectedImages = selectedImages.filter(img => img !== file);
+    }
+
+    function updateNumOfFiles() {
+        numOfFiles.textContent = `${selectedImages.length} ảnh được chọn`;
+    }
 </script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
