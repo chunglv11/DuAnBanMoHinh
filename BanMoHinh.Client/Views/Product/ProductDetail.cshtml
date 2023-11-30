@@ -5,627 +5,609 @@
 @using BanMoHinh.Share.ViewModels;
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
-    ViewData["Title"] = "ProductDetail";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    List<ProductDetailVM> lstproductDetail = ViewData["productDetail"] as List<ProductDetailVM>;
-    List<ProductImage> lstProductImage = ViewData["lstProductImage"] as List<ProductImage>;
+	ViewData["Title"] = "ProductDetail";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	List<ProductDetailVM> lstproductDetail = ViewData["productDetail"] as List<ProductDetailVM>;
+	List<ProductImage> lstProductImage = ViewData["lstProductImage"] as List<ProductImage>;
 }
 <style>
-    .selected {
+	.selected {
+		background-color: deepskyblue; /* Màu nền khi được chọn */
+	}
+	/* Ẩn input radio mặc định */
+    .box-capacity input[type="radio"],
+    .color-phone input[type="radio"] {
+        display: none;
+    }
+
+    /* Thiết lập cho label để tạo ra giao diện button */
+    .box-capacity label,
+    .color-phone label {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 0 4px;
+        cursor: pointer;
+        background-color: #f0f0f0; /* Màu nền */
+        border: 1px solid #ddd; /* Viền */
+        border-radius: 4px; /* Bo góc */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Khi label được hover, thay đổi màu nền */
+    .box-capacity label:hover,
+    .color-phone label:hover {
+        background-color: #ddd;
+    }
+
+    /* Khi input radio được chọn, thay đổi màu nền và viền */
+    .box-capacity input[type="radio"]:checked + label,
+    .color-phone input[type="radio"]:checked + label {
         background-color: deepskyblue; /* Màu nền khi được chọn */
+        color: #fff; /* Màu chữ khi được chọn */
+        border-color: #007bff; /* Viền khi được chọn */
     }
 </style>
 <div class="page-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="page-breadcrumb">
-                        <ol class="breadcrumb">
-                            <li><a href="#">Trang chủ</a></li>
-                            <li>Chi tiết sản phẩm</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.page-header-->
-    <!-- product-single -->
-    <div class="content">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="box">
-                        <!-- product-description -->
-                        <div class="box-body">
-                            <div class="row">
-                                <form asp-controller="Cart" asp-action="AddtoCart" method="post">
-                                @if (ViewData["lstProductImage"] != null)
-                                {
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                    @*hiển thị ảnh slide*@
-                                    @foreach (var item in lstProductImage)
-                                    {
-                                    <ul  id="demo1_thumbs" class="slideshow_thumbs" >
-                                        <li>
-                                            <a href="@(Configuration["BaseAddress"]+item.ImageUrl)" alt="img-left">
-                                            <div class=" thumb-img" >
-                                                <img src="@(Configuration["BaseAddress"]+item.ImageUrl)" alt="img-right" >
-                                            </div>
-                                        </a>  
-                                        </li>
-                                    </ul> 
-                                    }
-                                    </div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="page-breadcrumb">
+						<ol class="breadcrumb">
+							<li><a href="#">Trang chủ</a></li>
+							<li>Chi tiết sản phẩm</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-header-->
+	<!-- product-single -->
+	<div class="content">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="box">
+						<!-- product-description -->
+						<div class="box-body">
+							<div class="row">
+								<form asp-controller="Cart" asp-action="AddtoCart" method="post">
+								@if (ViewData["lstProductImage"] != null)
+								{
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+									@*hiển thị ảnh slide*@
+									@foreach (var item in lstProductImage)
+									{
+									<ul  id="demo1_thumbs" class="slideshow_thumbs" >
+										<li>
+											<a href="@(Configuration["BaseAddress"]+item.ImageUrl)" alt="img-left">
+											<div class=" thumb-img" >
+												<img src="@(Configuration["BaseAddress"]+item.ImageUrl)" alt="img-right" >
+											</div>
+										</a>  
+										</li>
+									</ul> 
+									}
+									</div>
 
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div id="slideshow">
-                                                
-                                        </div>
-                                    </div>
-                                }
-                               
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="product-single">
-                                        <h2>@Model.ProductName</h2>
-                                        @{
-                                            var productdetail = lstproductDetail.FirstOrDefault(c => c.ProductId == Model.Id);
-                                            var productDetailID = productdetail.Id;
-                                            <input name="prDetailId" value="@productDetailID" hidden />
-                                        }
-                                        
-                                        @*Còn thiếu đánh giá*@
-                                        <div class="product-rating">
-                                            <span><i class="fa fa-star"></i></span>
-                                            <span><i class="fa fa-star"></i></span>
-                                            <span><i class="fa fa-star"></i></span>
-                                            <span><i class="fa fa-star"></i></span>
-                                            <span><i class="fa fa-star-o"></i></span>
-                                            <span class="text-secondary">(12 đánh giá)</span>
-                                        </div>
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+										<div id="slideshow">
+												
+										</div>
+									</div>
+								}
+							   
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+									<div class="product-single">
+										<h2>@Model.ProductName</h2>
+										@{
+											<input name="ProductName" value="@Model.ProductName" hidden />
+										}
+										
+										@*Còn thiếu đánh giá*@
+										<div class="product-rating">
+											<span><i class="fa fa-star"></i></span>
+											<span><i class="fa fa-star"></i></span>
+											<span><i class="fa fa-star"></i></span>
+											<span><i class="fa fa-star"></i></span>
+											<span><i class="fa fa-star-o"></i></span>
+											<span class="text-secondary">(12 đánh giá)</span>
+										</div>
 
-                                    <p style="font-size: 25px;">
-                                        @{
-                                            if (Model.MinPrice < Model.MaxPrice)
-                                            {
-                                                <span id="old-price">@Model.MinPrice?.ToString("N0") VND - @Model.MaxPrice?.ToString("N0") VND</span>
-                                            }
-                                            else
-                                            {
-                                                <span id="old-price">@Model.MinPrice?.ToString("N0") VND</span>
-                                            }
-                                        }
-                                         @*giá khi chọn size và màu, thêm giỏ hàng chắc phải chỉnh lại để nhận giá*@
-                                        <span id="selected-price" class="product-price" style="font-size: 25px;">
-                                            <input type="number" name="Price" value="@Model.MaxPrice" hidden/>
-                                        </span>
-                                    </p>
+									<p style="font-size: 25px;">
+										@{
+											if (Model.MinPrice < Model.MaxPrice)
+											{
+												<span id="old-price">@Model.MinPrice?.ToString("N0") VND - @Model.MaxPrice?.ToString("N0") VND</span>
+											}
+											else
+											{
+												<span id="old-price">@Model.MinPrice?.ToString("N0") VND</span>
+											}
+										}
+										 @*giá khi chọn size và màu, thêm giỏ hàng chắc phải chỉnh lại để nhận giá*@
+										<span id="selected-price" class="product-price" style="font-size: 25px;">
+										   
+										</span>
+									</p>
 
 
-                                    <div class="box-capacity">
-                                        @{
-                                            var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
-                                            var uniquewh = lst.Select(item => new { Id = item.SizeId, Width = item.Width, Height = item.Height }).Distinct().ToList();
+									<div class="box-capacity">
+									@{
+										var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
+										var uniquewh = lst.Select(item => new { Id = item.SizeId, Width = item.Width, Height = item.Height }).Distinct().ToList();
 
-                                            foreach (var uniqueSize in uniquewh)
-                                            {
-                                                <a type="button" style="width:auto; height:auto" data-size-id="@uniqueSize.Id">
-                                                    <span class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</span>
-                                                </a>
-                                            }
-                                        }
-                                    </div>
+										foreach (var uniqueSize in uniquewh)
+										{
+											<input type="radio" name="sizeId" value="@uniqueSize.Id" data-size-id="@uniqueSize.Id" id="sizeId-@uniqueSize.Id" />
+											<label for="sizeId-@uniqueSize.Id" class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</label>
+										}
+									}
+								</div>
 
-                                    <div class="color-phone">
-                                        @{
-                                            var lstc = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
-                                            var uniqueColors = lstc.Select(item => new { Id = item.ColorId, ColorName = item.ColorName }).Distinct().ToList();
+								<div class="color-phone">
+									@{
+										var lstc = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
+										var uniqueColors = lstc.Select(item => new { Id = item.ColorId, ColorName = item.ColorName }).Distinct().ToList();
 
-                                            foreach (var uniqueColor in uniqueColors)
-                                            {
-                                                <a type="button" style="width:auto; height:auto"  data-color-id="@uniqueColor.Id">
-                                                    <span class="capacity">@uniqueColor.ColorName</span>
-                                                </a>
-                                            }
-                                        }
-                                    </div>
+										foreach (var uniqueColor in uniqueColors)
+										{
+											<input type="radio" name="colorId" value="@uniqueColor.Id" data-color-id="@uniqueColor.Id" id="colorId-@uniqueColor.Id" />
+											<label for="colorId-@uniqueColor.Id" class="capacity">@uniqueColor.ColorName</label>
+										}
+									}
+								</div>
 
-                                        <div class="product-quantity">
-                                            <h4>Số lượng</h4>
-                                            <div class="quantity mb20">
-                                                <input class="btn-quantity decrease-quantity" onclick="dcQuantity()"
-                                                    type="button" value="-">
-                                                    @*chinh lai ma*@
-                                                <input type="number" max="10" min="1" name="quantity" value="1"
-                                                    class="quantity-input" id="quantity-input">
-                                                <input class="btn-quantity increase-quantity" onclick="icQuantity()"
-                                                    type="button" value="+">
-                                            </div>
-                                            <span class="rest-quantity">@Model.AvailableQuantity sản phẩm có sẵn</span>
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-default btn-buy-now">
-                                                Mua Ngay
-                                            </button>
-                                            <button type="submit" class="btn btn-default" >
-                                                <i class="fa fa-shopping-cart"></i>&nbsp;Thêm vào giỏ hàng
-                                            </button>
+										<div class="product-quantity">
+											<h4>Số lượng</h4>
+											<div class="quantity mb20">
+												<input class="btn-quantity decrease-quantity" onclick="dcQuantity()"
+													type="button" value="-">
+													@*chinh lai ma*@
+												<input type="number" max="10" min="1" name="quantity" value="1"
+													class="quantity-input" id="quantity-input">
+												<input class="btn-quantity increase-quantity" onclick="icQuantity()"
+													type="button" value="+">
+											</div>
+											<span class="rest-quantity">@Model.AvailableQuantity sản phẩm có sẵn</span>
+										</div>
+										<div>
+											<button class="btn btn-default btn-buy-now">
+												Mua Ngay
+											</button>
+											<button type="submit" class="btn btn-default" >
+												<i class="fa fa-shopping-cart"></i>&nbsp;Thêm vào giỏ hàng
+											</button>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+										</div>
+									</div>
+								</div>
+							</form>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="box-head scroll-nav">
-                        <div class="head-title">
-                            <a class="page-scroll active" href="#product">Mô tả sản phẩm</a>
-                            <a class="page-scroll" href="#rating">Đánh giá và nhận xét</a>
-                            <a class="page-scroll" href="#review">Thêm nhận xét</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- highlights -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="description-details">
-                        <div class="description-left" style="width:70%">
-                            <h2 class="dgctpro">Đặc điểm nổi bật</h2>
-                            <div itemprop="description" class="content_hide content-desc" style="height: 600px;">
-                                @Model.Long_Description
-                            </div>
-                            <button class="less-evaluation text-center" style="display:none"><i
-                                    class="fa fa-minus-circle"></i> Rút gọn</button>
-                            <button class="more-evaluation text-center"><i class="fa fa-plus-circle"></i> Xem
-                                thêm</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="box-head scroll-nav">
+						<div class="head-title">
+							<a class="page-scroll active" href="#product">Mô tả sản phẩm</a>
+							<a class="page-scroll" href="#rating">Đánh giá và nhận xét</a>
+							<a class="page-scroll" href="#review">Thêm nhận xét</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- highlights -->
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="description-details">
+						<div class="description-left" style="width:70%">
+							<h2 class="dgctpro">Đặc điểm nổi bật</h2>
+							<div itemprop="description" class="content_hide content-desc" style="height: 600px;">
+								@Model.Long_Description
+							</div>
+							<button class="less-evaluation text-center" style="display:none"><i
+									class="fa fa-minus-circle"></i> Rút gọn</button>
+							<button class="more-evaluation text-center"><i class="fa fa-plus-circle"></i> Xem
+								thêm</button>
 
-                        </div>
-                        <div class="description-right" style="width:30%">
-                            <h2 class="dgctpro">Thông tin mô hình</h2>
-                            <table class="charactestic_table">
-                                <tbody>
-                                    <tr>
-                                        <td class="title_charactestic" style="width:35%">
-                                            Nhãn sản xuất:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            @Model.BrandName
-                                        </td>
-                                    </tr>
+						</div>
+						<div class="description-right" style="width:30%">
+							<h2 class="dgctpro">Thông tin mô hình</h2>
+							<table class="charactestic_table">
+								<tbody>
+									<tr>
+										<td class="title_charactestic" style="width:35%">
+											Nhãn sản xuất:
+										</td>
+										<td class="content_charactestic">
+											@Model.BrandName
+										</td>
+									</tr>
 
-                                    <tr>
-                                        <td class="title_charactestic" style="width:35%">
-                                            Loại mô hình:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            @Model.CategoryName
-                                        </td>
-                                    </tr>
+									<tr>
+										<td class="title_charactestic" style="width:35%">
+											Loại mô hình:
+										</td>
+										<td class="content_charactestic">
+											@Model.CategoryName
+										</td>
+									</tr>
 
-                                    <tr>
-                                        <td class="title_charactestic" style="width:35%">
-                                            Chất liệu:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            @Model.MaterialName
-                                        </td>
-                                    </tr>
+									<tr>
+										<td class="title_charactestic" style="width:35%">
+											Chất liệu:
+										</td>
+										<td class="content_charactestic">
+											@Model.MaterialName
+										</td>
+									</tr>
 
-                                    <tr>
-                                        <td class="title_charactestic" style="width:35%">
-                                            Size sẵn có:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            @{
-                                            var lst1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
-                                            // Tạo một danh sách chứa các đối tượng chứa Width và Height
-                                            var dimensionsList = lst1.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
+									<tr>
+										<td class="title_charactestic" style="width:35%">
+											Size sẵn có:
+										</td>
+										<td class="content_charactestic">
+											@{
+											var lst1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
+											// Tạo một danh sách chứa các đối tượng chứa Width và Height
+											var dimensionsList = lst1.Select(item => new { Width = item.Width, Height = item.Height }).Distinct().ToList();
 
-                                            // Tạo một danh sách chứa chuỗi các kích thước
-                                            var sizeList = dimensionsList.Select(d => $"{d.Width} cm x {d.Height} cm");
+											// Tạo một danh sách chứa chuỗi các kích thước
+											var sizeList = dimensionsList.Select(d => $"{d.Width} cm x {d.Height} cm");
 
-                                            // Hiển thị danh sách kích thước bằng cách sử dụng ul và li
-                                            <ul>
-                                                @foreach (var size in sizeList)
-                                                {
-                                                    <li>@size</li>
-                                                }
-                                            </ul>
+											// Hiển thị danh sách kích thước bằng cách sử dụng ul và li
+											<ul>
+												@foreach (var size in sizeList)
+												{
+													<li>@size</li>
+												}
+											</ul>
 }
 
-                                        </td>
+										</td>
 
-                                    </tr>
+									</tr>
 
-                                    <tr>
-                                        <td class="title_charactestic" style="width:35%">
-                                            Màu sẵn có:
-                                        </td>
-                                        <td class="content_charactestic">
-                                            @{
-                                                var lstc1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
-                                                var uniqueColors1 = lstc1.Select(item => item.ColorName).Distinct().ToList();
-                                                var colorString = string.Join(", ", uniqueColors1);
-                                                <p>@colorString</p>
-                                            }
-                                        </td>
-                                    </tr>
-
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <!-- rating reviews  -->
-            <div id="rating">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                        <div class="box container-rating-review">
-                            <div class="box-head">
-                                <h3 class="head-title">Đánh giá và nhận xét</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="row  rating-box">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="rating-review">
-                                            <div class="">
-                                                <h1 class="score-rating">4</h1>
-                                            </div>
-                                            <div>
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                </div>
-                                                <p class="text-secondary">12 nhận xét</p>
-                                            </div>
-                                        </div>
-                                        <div class="rating-view-details">
-                                            <div class="rating-level">
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                </div>
-                                                <span>12</span>
-                                            </div>
-
-                                            <div class="rating-level">
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                </div>
-                                                <span>0</span>
-                                            </div>
-                                            <div class="rating-level">
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                </div>
-                                                <span>0</span>
-                                            </div>
-
-                                            <div class="rating-level">
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                </div>
-                                                <span>0</span>
-                                            </div>
-                                            <div class="rating-level">
-                                                <div class="product-rating">
-                                                    <span><i class="fa fa-star"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                    <span><i class="fa fa-star-o"></i></span>
-                                                </div>
-                                                <span>0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row review-box">
-                                    <div class="customer-reviews">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <p class="reviews-text"><span class="text-default">Nika Nguyen</span> </p>
-                                            <div class="product-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star-o"></i></span>
-                                            </div>
-                                            <p>Giao hàng siêu đúng hẹn, hàng cũng được đóng gói cẩn thận.
-                                                Hiện tại mình xài được vài bữa thì không bị vấn đề gì.
-                                                Hàng của shopdunk thì không lo về chất lượng.</p>
-                                        </div>
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <div class="divider-line"></div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
+									<tr>
+										<td class="title_charactestic" style="width:35%">
+											Màu sẵn có:
+										</td>
+										<td class="content_charactestic">
+											@{
+												var lstc1 = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.ColorName);
+												var uniqueColors1 = lstc1.Select(item => item.ColorName).Distinct().ToList();
+												var colorString = string.Join(", ", uniqueColors1);
+												<p>@colorString</p>
+											}
+										</td>
+									</tr>
 
 
-                    </div>
-                </div>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<!-- rating reviews  -->
+			<div id="rating">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                <div id="review">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="box">
-                                <div class="box-head">
-                                    <h3 class="head-title">Đánh giá và nhận xét của bạn</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="review-form">
+						<div class="box container-rating-review">
+							<div class="box-head">
+								<h3 class="head-title">Đánh giá và nhận xét</h3>
+							</div>
+							<div class="box-body">
+								<div class="row  rating-box">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+										<div class="rating-review">
+											<div class="">
+												<h1 class="score-rating">4</h1>
+											</div>
+											<div>
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+												</div>
+												<p class="text-secondary">12 nhận xét</p>
+											</div>
+										</div>
+										<div class="rating-view-details">
+											<div class="rating-level">
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+												</div>
+												<span>12</span>
+											</div>
 
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 review-left">
-                                                <div class="review-rating">
-                                                    <h4>Đánh giá của bạn về sản phẩm này</h4><br />
-                                                    <div class="star-rate" id="rateYo"></div>
-                                                </div>
-                                            </div>
-                                            <form class="review-right">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label class="control-label sr-only " for="name"></label>
-                                                        <input id="name" type="text" class="form-control"
-                                                            placeholder="Họ tên" required="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label class="control-label sr-only " for="email"></label>
-                                                        <input id="email" type="text" class="form-control"
-                                                            placeholder="Email" required="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label class="control-label sr-only " for="textarea"></label>
-                                                        <textarea class="form-control" id="textarea" name="textarea"
-                                                            rows="4" placeholder="Mời bạn nhập bình luận"></textarea>
-                                                    </div>
-                                                    <button id="submit" name="singlebutton" class="btn btn-primary">Gửi
-                                                        đánh giá</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.reviews-form -->
+											<div class="rating-level">
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+												</div>
+												<span>0</span>
+											</div>
+											<div class="rating-level">
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+												</div>
+												<span>0</span>
+											</div>
 
-            </div>
+											<div class="rating-level">
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+												</div>
+												<span>0</span>
+											</div>
+											<div class="rating-level">
+												<div class="product-rating">
+													<span><i class="fa fa-star"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+													<span><i class="fa fa-star-o"></i></span>
+												</div>
+												<span>0</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row review-box">
+									<div class="customer-reviews">
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+											<p class="reviews-text"><span class="text-default">Nika Nguyen</span> </p>
+											<div class="product-rating">
+												<span><i class="fa fa-star"></i></span>
+												<span><i class="fa fa-star"></i></span>
+												<span><i class="fa fa-star"></i></span>
+												<span><i class="fa fa-star"></i></span>
+												<span><i class="fa fa-star-o"></i></span>
+											</div>
+											<p>Giao hàng siêu đúng hẹn, hàng cũng được đóng gói cẩn thận.
+												Hiện tại mình xài được vài bữa thì không bị vấn đề gì.
+												Hàng của shopdunk thì không lo về chất lượng.</p>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+											<div class="divider-line"></div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
 
 
-        </div>
-        <!-- /.product-description -->
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="box-head">
-                        <h3 class="head-title">Sản phẩm liên quan</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="box-body">
-                    <div class="row">
-                        <!-- product -->
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
-                            <div class="product-block">
-                                <div class="product-img"><img src="images/product_img_1.png" alt=""></div>
-                                <div class="product-content">
-                                    <h5><a href="#" class="product-title">Google Pixel <strong>(128GB,
-                                                Black)</strong></a></h5>
-                                    <div class="product-meta"><a href="#" class="product-price">$1100</a>
-                                        <a href="#" class="discounted-price">$1400</a>
-                                        <span class="offer-price">20%off</span>
-                                    </div>
-                                    <div class="shopping-btn">
-                                        <a href="#" class="product-btn btn-like"><i class="fa fa-heart"></i></a>
-                                        <a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.product -->                     
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.product-single -->
-    </div>
+					</div>
+				</div>
 
-    <script src="~/file/user/js/jquery.min.js" type="text/javascript"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="~/file/user/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="~/file/user/js/menumaker.js" type="text/javascript"></script>
-    <script type="text/javascript" src="~/file/user/js/jquery.sticky.js"></script>
-    <script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
-    <script type="text/javascript" src="~/file/user/js/scrolling-nav.js"></script>
-    <script type="text/javascript" src="~/file/user/js/jquery.easing.min.js"></script>
-    <script type="text/javascript" src="~/file/user/js/jquery.rateyo.min.js"></script>
-    <script src="~/file/user/js/jquery.desoslide.js"></script>
-    
-    <script type="text/javascript">
-        $('#slideshow').desoSlide({
-            thumbs: $('ul.slideshow_thumbs li > a'),
-            effect: {
-                provider: 'animate',
-                name: 'fade'
-            }
+				
+				<!-- /.reviews-form -->
 
-        });
-    </script>
+			</div>
 
-    <script type="text/javascript">
-        $(function () {
-            $("#rateYo").rateYo({
-                rating: 3.6,
-                starWidth: "25px"
-            });
 
-        });
-    </script>
+		</div>
+		<!-- /.product-description -->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="box-head">
+						<h3 class="head-title">Sản phẩm liên quan</h3>
+					</div>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-body">
+					<div class="row">
+						<!-- product -->
+						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
+							<div class="product-block">
+								<div class="product-img"><img src="images/product_img_1.png" alt=""></div>
+								<div class="product-content">
+									<h5><a href="#" class="product-title">Google Pixel <strong>(128GB,
+												Black)</strong></a></h5>
+									<div class="product-meta"><a href="#" class="product-price">$1100</a>
+										<a href="#" class="discounted-price">$1400</a>
+										<span class="offer-price">20%off</span>
+									</div>
+									<div class="shopping-btn">
+										<a href="#" class="product-btn btn-like"><i class="fa fa-heart"></i></a>
+										<a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.product -->                     
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.product-single -->
+	</div>
 
-    <script>
-        function dcQuantity() {
-            var result = document.getElementById('quantity-input');
-            var qty = result.value;
-            if (!isNaN(qty) && qty > 1) {
-                result.value--;
-                document.getElementById('quantity-input').innerHTML = qty;
-            }
-            return false;
-        };
-        function icQuantity() {
-            var result = document.getElementById('quantity-input');
-            var qty = result.value;
-            if (!isNaN(qty) && qty < 10) {
-                result.value++;
-                document.getElementById('quantity-input').innerHTML = qty;
-            }
-            return false;
-        }
-    </script>
+	<script src="~/file/user/js/jquery.min.js" type="text/javascript"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="~/file/user/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="~/file/user/js/menumaker.js" type="text/javascript"></script>
+	<script type="text/javascript" src="~/file/user/js/jquery.sticky.js"></script>
+	<script type="text/javascript" src="~/file/user/js/sticky-header.js"></script>
+	<script type="text/javascript" src="~/file/user/js/scrolling-nav.js"></script>
+	<script type="text/javascript" src="~/file/user/js/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="~/file/user/js/jquery.rateyo.min.js"></script>
+	<script src="~/file/user/js/jquery.desoslide.js"></script>
+	
+	<script type="text/javascript">
+		$('#slideshow').desoSlide({
+			thumbs: $('ul.slideshow_thumbs li > a'),
+			effect: {
+				provider: 'animate',
+				name: 'fade'
+			}
 
-    <script>
-        $(document).ready(function () {
-            $('.less-evaluation').click(function () {
-                $('.content-desc').css('height', '1180px');
-                $(this).css('display', 'none');
-                $('.more-evaluation').css('display', 'block');
-            })
-        })
+		});
+	</script>
 
-        $(document).ready(function () {
-            $('.more-evaluation').click(function () {
-                $('.content-desc').css('height', 'auto');
-                $(this).css('display', 'none');
-                $('.less-evaluation').css('display', 'block');
-            })
-        })
+	<script type="text/javascript">
+		$(function () {
+			$("#rateYo").rateYo({
+				rating: 3.6,
+				starWidth: "25px"
+			});
 
-        $(document).ready(function () {
-            $('.page-scroll').click(function () {
-                $('.page-scroll').removeClass('active');
-                $(this).addClass('active');
-            })
-        })
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		});
+	</script>
+
+	<script>
+		function dcQuantity() {
+			var result = document.getElementById('quantity-input');
+			var qty = result.value;
+			if (!isNaN(qty) && qty > 1) {
+				result.value--;
+				document.getElementById('quantity-input').innerHTML = qty;
+			}
+			return false;
+		};
+		function icQuantity() {
+			var result = document.getElementById('quantity-input');
+			var qty = result.value;
+			if (!isNaN(qty) && qty < 10) {
+				result.value++;
+				document.getElementById('quantity-input').innerHTML = qty;
+			}
+			return false;
+		}
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$('.less-evaluation').click(function () {
+				$('.content-desc').css('height', '1180px');
+				$(this).css('display', 'none');
+				$('.more-evaluation').css('display', 'block');
+			})
+		})
+
+		$(document).ready(function () {
+			$('.more-evaluation').click(function () {
+				$('.content-desc').css('height', 'auto');
+				$(this).css('display', 'none');
+				$('.less-evaluation').css('display', 'block');
+			})
+		})
+
+		$(document).ready(function () {
+			$('.page-scroll').click(function () {
+				$('.page-scroll').removeClass('active');
+				$(this).addClass('active');
+			})
+		})
+	</script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.size-button').click(function () {
-            // Lấy SizeId từ nút Size được nhấp
-            var sizeId = $(this).data('size-id');
+	$(document).ready(function () {
+		$('.size-button').click(function () {
+			// Lấy SizeId từ nút Size được nhấp
+			var sizeId = $(this).data('size-id');
 
-            // Tìm tất cả các nút Màu có cùng SizeId
-            var colorButtons = $('.color-button[data-size-id="' + sizeId + '"]');
+			// Tìm tất cả các nút Màu có cùng SizeId
+			var colorButtons = $('.color-button[data-size-id="' + sizeId + '"]');
 
-            // Bật (enable) tất cả các nút Màu và vô hiệu hóa (disable) các nút Màu khác
-            $('.color-button').prop('disabled', true);
-            colorButtons.prop('disabled', false);
-        });
-    });
+			// Bật (enable) tất cả các nút Màu và vô hiệu hóa (disable) các nút Màu khác
+			$('.color-button').prop('disabled', true);
+			colorButtons.prop('disabled', false);
+		});
+	});
 </script>
 
-    <script>
-        $(document).ready(function () {
-        var selectedSizeId = null;
-        var selectedColorId = null;
-        var previousSizeId = null;
-        var previousColorId = null;
+	<script>
+		$(document).ready(function () {
+		var selectedSizeId = null;
+		var selectedColorId = null;
+		var previousSizeId = null;
+		var previousColorId = null;
 
-        $(".box-capacity a").on("click", function () {
-            if ($(this).hasClass("selected")) {
-                previousSizeId = selectedSizeId;
-                selectedSizeId = null;
-                $(this).removeClass("selected");
-            } else {
-                $(".box-capacity a").removeClass("selected");
-                previousSizeId = selectedSizeId;
-                selectedSizeId = $(this).data("size-id");
-                $(this).addClass("selected");
-            }
-            updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
-        });
+		$(".box-capacity input").on("click", function () {
+			if ($(this).hasClass("selected")) {
+				previousSizeId = selectedSizeId;
+				selectedSizeId = null;
+				$(this).removeClass("selected");
+			} else {
+				$(".box-capacity input").removeClass("selected");
+				previousSizeId = selectedSizeId;
+				selectedSizeId = $(this).data("size-id");
+				$(this).addClass("selected");
+			}
+			updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
+		});
 
-        $(".color-phone a").on("click", function () {
-            if ($(this).hasClass("selected")) {
-                previousColorId = selectedColorId;
-                selectedColorId = null;
-                $(this).removeClass("selected");
-            } else {
-                $(".color-phone a").removeClass("selected");
-                previousColorId = selectedColorId;
-                selectedColorId = $(this).data("color-id");
-                $(this).addClass("selected");
-            }
-            updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
-        });
-    });
+		$(".color-phone input").on("click", function () {
+			if ($(this).hasClass("selected")) {
+				previousColorId = selectedColorId;
+				selectedColorId = null;
+				$(this).removeClass("selected");
+			} else {
+				$(".color-phone input").removeClass("selected");
+				previousColorId = selectedColorId;
+				selectedColorId = $(this).data("color-id");
+				$(this).addClass("selected");
+			}
+			updatePrice(selectedSizeId, selectedColorId, previousSizeId, previousColorId);
+		});
+	});
 
-    function updatePrice(sizeId, colorId, previousSizeId, previousColorId) {
-        if (sizeId !== null && colorId !== null) {
-            $.ajax({
-                type: "GET",
-                url: "/Product/GetPriceForProductDetail",
-                data: { productId: "@Model.Id", sizeId: sizeId, colorId: colorId },
-                success: function (newPrice) {
-                    $("#old-price").hide();
-                    $("#selected-price").text(newPrice.toLocaleString("en-US") + " VND");
-                },
-                error: function (error) {
-                    console.error("Error updating price: ", error);
-                }
-            });
-        } else if (previousSizeId !== null || previousColorId !== null) {
-            $("#old-price").show();
-            $("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
-        } else {
-            $("#old-price").show();
-            $("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
-        }
-    }
-    </script>
+	function updatePrice(sizeId, colorId, previousSizeId, previousColorId) {
+		if (sizeId !== null && colorId !== null) {
+			console.log("sizeId: ", sizeId);
+			console.log("colorId: ", colorId);
+			$.ajax({
+				type: "GET",
+				url: "/Product/GetPriceForProductDetail",
+				data: { productId: "@Model.Id", sizeId: sizeId, colorId: colorId },
+				success: function (newPrice) {
+					$("#old-price").hide();
+					$("#selected-price").text(newPrice.toLocaleString("en-US") + " VND");
+				},
+				error: function (error) {
+					console.error("Error updating price: ", error);
+				}
+			});
+		} else if (previousSizeId !== null || previousColorId !== null) {
+			$("#old-price").show();
+			$("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
+		} else {
+			$("#old-price").show();
+			$("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
+		}
+	}
+	</script>
 
 
 
