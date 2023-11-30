@@ -103,7 +103,7 @@ namespace BanMoHinh.API.Services
             return true;
         }
 
-        public async Task<CartItem> GetCartItemsByCartIds(Guid cartItemId)
+        public async Task<CartItem> GetCartItemsByCartIds(Guid ?cartItemId)
         {
             var item = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId);
             return item;

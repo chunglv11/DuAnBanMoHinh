@@ -1,4 +1,4 @@
-﻿@using BanMoHinh.Share.ViewModels;
+@using BanMoHinh.Share.ViewModels;
 @using BanMoHinh.Share.Models;
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @model IEnumerable<BanMoHinh.Share.ViewModels.ViewCartDetails>
@@ -11,6 +11,8 @@
     var productDetail = ViewData["productDetail"] as List<ProductDetailVM>;
     var ProductImage = ViewData["ProductImage"] as List<ProductImage>;
     var Voucher = ViewData["voucher"] as List<Voucher>;
+    var color = ViewData["color"] as List<Colors>;
+    var size = ViewData["size"] as List<Size>;
 
 }
 
@@ -25,55 +27,43 @@
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
-                            <th></th>
-                            <th>Ảnh</th>
-                            <th>Sản phẩm</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Size - Màu</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Thành tiền</th>
                             <th scope="col"></th>
 
                         </tr>
-                    </thead>
+                      </thead>
                 @foreach (var item in Model)
                 {
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="item-center pdl10"><input type="checkbox" class="checkboxStyle"></div>
-                            </td>
-                            <td>
-                            <img src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
-                            </td>
-                            <td>
-                                <div class="product-title item-center">
-                                    
-                                        <p>@item.ProductName</p>
-                                </div>
-                            </td>
-                            <td>
-                            @{
-                                price = Convert.ToInt32(item.PriceSale);
-                            }
-                                <div class="item-center">@price.ToString("n0") đ</div>
-                            </td>
-                            <td>
-                            <div class="item-center">
-                                <div style="justify-content:center; align-items: center">
-                                    <a asp-action="GiamSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color: #ff0000; ">-</a>
-                                    <input type="text" style="height: 50px; width: 50px; border-radius: 50%; border: none; text-align: center" disabled value="@item.Quantity" min="1">
-                                    <a asp-action="TangSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color:  #81ff00">+</a>
-                                </div>
-                                </div>
-                                
-                            </td>
+                  
+                    @if (!Model.Any())
+                    {
+                        <p>Không có sản phẩm nào trong giỏ hàng.</p>
+                    }
 
-                            <td>                     
-                                <div class="item-center text-red" id="total-price">
-                                @{
-                                    total = Convert.ToInt32(item.TotalPrice);
-                                }
-                                @total.ToString("n0") đ
+                    else
+                    {
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
+                                </td>
+                                <td>
+                                    <div class="item-center">
+                                        <p>@item.ProductName</p>
+                                </td>
+
+                                <td>                     
+                                    <div class="item-center text-red" id="total-price">
+                                        @{
+                                            total = Convert.ToInt32(item.TotalPrice);
+                                            totalAmount += total;
+                                        }
+                                        @total.ToString("n0") đ
                                 </div>
                             </td>
                             <td>
@@ -82,7 +72,7 @@
                         </tr>
 
 
-                    </tbody>
+                    </tbody>}
                     }
                 </table>
                 <div class="prices-summary">
@@ -94,39 +84,6 @@
             </div>
             <div class="right-con">
                 <div class="total-receipt">
-                    <ul class="prices pinside20">
-                        <li class="prices-item">
-                            <span class="prices-text">Tạm tính</span>
-
-                            @foreach (var item in Model)
-                            {
-                                totalAmount += Convert.ToInt32(item.TotalPrice);
-                            }
-                            <span class="prices-value">@totalAmount.ToString("n0")</span>
-
-
-                        </li>
-                        <li class="prices-item">
-                            <span class="prices-text">Giảm giá</span>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-gift"></i> Chọn Voucher
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    @foreach (var item in Voucher)
-                                    {
-                                    var date = DateTime.Now;
-                                    if (@item.Start_Date<= date && date <= @item.End_Date)
-                                        {
-                                            var viewDiscount = Convert.ToInt32(item.Value); 
-                                            <a class="dropdown-item" href="#">Mã voucher: @item.Code - Giảm: @viewDiscount.ToString("n0") đ</a>
-                                        }
-                                    }
-                                </div>
-                            </div>
-
-                        </li>
-                    </ul>
                     <div class="prices-total pinside20">
                         <span class="price-text">Tổng cộng</span>
                         <span class="prices-value prices-final text-red">
