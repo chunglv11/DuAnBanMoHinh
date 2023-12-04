@@ -6,6 +6,6 @@ namespace BanMoHinh.Client.IServices
     {
         public Task<Response> Login(LoginViewModel model, string url);
         public Task<Response> Register(RegisterViewModel model, string url);
-        public Task Logout();
+        public Task<Response> Logout();
     }
 }
