@@ -252,6 +252,7 @@ namespace BanMoHinh.Client.Controllers
         }
         public async Task<IActionResult> ProductDetailAsync(Guid id)
         {
+            var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
             var allproductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
             var allProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
@@ -259,8 +260,15 @@ namespace BanMoHinh.Client.Controllers
             allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => allproductDetail.Any(b => b.ProductId == c.Id)).ToList();
             var productdetail = allproductDetail.FirstOrDefault(c => c.ProductId == Product.Id);
             var lstProductImage = allProductImage.Where(c => c.ProductDetailId == productdetail.Id).ToList();
+            var idCate = Product.CategoryId;
+            var relatedProducts = allproduct
+                .Where(p => p.Id != id && p.CategoryId == idCate)
+                .Take(4) // Lấy 4 sản phẩm liên quan (hoặc số lượng mong muốn)
+                .ToList();
             ViewData["productDetail"] = allproductDetail;
             ViewData["lstProductImage"] = lstProductImage;
+            ViewData["lstProductImage1"] = allProductImage;
+            ViewData["lstCate"] = relatedProducts;
             //ViewData["lstallproduct"] = allproduct;
             return View(Product);
 

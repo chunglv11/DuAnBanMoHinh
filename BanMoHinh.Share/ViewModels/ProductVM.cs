@@ -43,6 +43,8 @@ namespace BanMoHinh.Share.ViewModels
             }
         }
         public bool? Status { get; set; }
+
         public virtual List<ProductDetail>? ProductDvms { get; set; }
-    }
+		public virtual List<ProductImage>? ProductImages { get; set; }
+	}
 }

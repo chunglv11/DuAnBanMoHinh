@@ -125,7 +125,9 @@ figcaption{
             </div>
             
             <div class="form-group">
-              <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+             @*  <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple> *@
+                <input type="file" id="file-input" asp-for="filecollection" accept="image/*" oninput="preview()" multiple>
+
               <label for="file-input">
                 <i class="fas fa-upload"></i> Chọn ảnh
               </label>
@@ -155,19 +157,19 @@ figcaption{
     const maxAllowedFiles = 5; // Số lượng tối đa ảnh được chọn
 
     function preview() {
+        console.log("Input changed!");
         let fileInput = document.getElementById("file-input");
         let imageContainer = document.getElementById("images");
 
+        // Mảng để lưu giữ tất cả đối tượng File và URL đã chọn
+        let tempSelectedImages = [...selectedImages];
+
         // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
-        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
+        if (fileInput.files.length + tempSelectedImages.length > maxAllowedFiles) {
             alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
             // Không thực hiện việc xoá giá trị đã chọn
         } else {
-            // Xoá tất cả các phần tử hiện tại trong imageContainer
-            imageContainer.innerHTML = '';
-
             for (let i = 0; i < fileInput.files.length; i++) {
-                let reader = new FileReader();
                 let figure = document.createElement("figure");
                 let deleteButton = document.createElement("button");
 
@@ -176,42 +178,53 @@ figcaption{
 
                 // Truyền tham số cho hàm deleteImage
                 deleteButton.onclick = function () {
-                    deleteImage(figure, fileInput.files[i]);
+                    deleteImage(figure, tempSelectedImages[i]);
                 };
 
                 figure.appendChild(deleteButton);
 
-                reader.onload = () => {
-                    let img = document.createElement("img");
-                    img.setAttribute("src", reader.result);
-                    figure.insertBefore(img, deleteButton);
+                let img = document.createElement("img");
+                let imageUrl = URL.createObjectURL(fileInput.files[i]);
+                img.setAttribute("src", imageUrl);
+                figure.insertBefore(img, deleteButton);
+
+                // Tạo đối tượng mới đại diện cho ảnh đã chọn
+                let selectedImage = {
+                    file: fileInput.files[i],
+                    imageUrl: imageUrl
                 };
 
-                imageContainer.appendChild(figure);
-                reader.readAsDataURL(fileInput.files[i]);
+                // Thêm đối tượng vào mảng tempSelectedImages
+                tempSelectedImages.push(selectedImage);
 
-                selectedImages.push(fileInput.files[i]);
+                imageContainer.appendChild(figure);
             }
         }
 
+        // Gán giá trị của mảng tạm thời cho selectedImages
+        selectedImages = tempSelectedImages;
+
         updateNumOfFiles();
     }
-   function deleteImage(figure, file) {
-    // Xoá hình ảnh khi nút xoá được nhấn
-    figure.remove();
-    removeFromSelectedImages(file);
-    updateNumOfFiles();
+    
+    function deleteImage(figure, file) {
+        // Xoá hình ảnh khi nút xoá được nhấn
+        figure.remove();
+        removeFromSelectedImages(file);
+        updateNumOfFiles();
     }
 
     function removeFromSelectedImages(file) {
-        // Loại bỏ ảnh khỏi mảng selectedImages
-        selectedImages = selectedImages.filter(img => img !== file);
+        // Loại bỏ ảnh khỏi mảng selectedImages dựa trên thuộc tính file
+        selectedImages = selectedImages.filter(img => img.file !== file.file);
     }
+
 
     function updateNumOfFiles() {
         numOfFiles.textContent = `${selectedImages.length} ảnh được chọn`;
     }
 </script>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
