@@ -55,15 +55,49 @@
                                 <td>
                                     <div class="item-center">
                                         <p>@item.ProductName</p>
+                                    </div>
                                 </td>
-
-                                <td>                     
-                                    <div class="item-center text-red" id="total-price">
-                                        @{
-                                            total = Convert.ToInt32(item.TotalPrice);
-                                            totalAmount += total;
+                            <td>
+                                <div style="align-items:start">
+                                    @foreach (var x in color)
+                                    {
+                                        if (item.ColorsId == x.ColorId)
+                                        {
+                                            <p>Màu: @x.ColorName</p>
                                         }
-                                        @total.ToString("n0") đ
+                                    }
+
+                                    @foreach (var x in size)
+                                    {
+                                        if (item.SizeId == x.Id)
+                                        {
+                                            <p>Size: @x.SizeName</p>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="item-center">
+                             @{
+                             price = Convert.ToInt32(item.PriceSale);
+                             }
+                                    <p>@price.ToString("n0") đ</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="item-center">
+                                    <a asp-action="GiamSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color: #ff0000; ">-</a>
+                                    <input type="text" style="height: 50px; width: 50px; border-radius: 50%; border: none; text-align: center" disabled value="@item.Quantity" min="1">
+                                    <a asp-action="TangSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color:  #81ff00">+</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="item-center text-red" id="total-price">
+                                    @{
+                                        total = Convert.ToInt32(item.TotalPrice);
+                                        totalAmount += total;
+                                    }
+                                    @total.ToString("n0") đ
                                 </div>
                             </td>
                             <td>
@@ -88,8 +122,8 @@
                         <span class="price-text">Tổng cộng</span>
                         <span class="prices-value prices-final text-red">
                             @(
-                                totalAmount.ToString("n0")
-                                )
+                                totalAmount.ToString("n0") 
+                                ) đ
                         </span>
                     </div>
                 </div>

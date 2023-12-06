@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     decimal? total = 0;
+    int voucherValue = 0;
     @if (ViewData["productdetail"] != null)
     {
         var productdetail = ViewData["productdetail"] as List<ProductDetail>;
@@ -125,7 +126,8 @@
                                              <select asp-for="VoucherId" class="form-control">
                                             @foreach (var type in voucher)
                                             {
-                                                <option value="@type.Id">@type.Value</option>
+                                                    voucherValue = Convert.ToInt32(type.Value);
+                                                    <option value="@type.Id">Mã Voucher: @type.Code - Khuyến mãi: @voucherValue.ToString("n0")</option>
                                             }
                                              </select>
                                         }
@@ -208,10 +210,10 @@
                                                     var product = products.FirstOrDefault(p => p.Id == productDetail.ProductId);
 
                                                     <tr>
-                                                        <td>
+                                                        <td style="align-items: start">
                                                             @product.ProductName <!-- Assuming there's a property named "ProductName" in your Product class -->
                                                         </td>
-                                                        <td>
+                                                        <td style="align-items: center">
                                                             $@item.Price <!-- Assuming there's a property named "Price" in your CartItem class -->
                                                             X @item.Quantity
                                                         </td>
