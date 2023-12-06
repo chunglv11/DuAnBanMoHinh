@@ -123,11 +123,11 @@
                                             var voucher = ViewData["voucher"] as List<Voucher>;
 
                                             <label asp-for="VoucherId" class="control-label">Voucher Value</label>
-                                             <select asp-for="VoucherId" class="form-control">
+                                            <select asp-for="VoucherId" class="form-control" id="voucherSelect">
                                             @foreach (var type in voucher)
                                             {
                                                     voucherValue = Convert.ToInt32(type.Value);
-                                                    <option value="@type.Id">Mã Voucher: @type.Code - Khuyến mãi: @voucherValue.ToString("n0")</option>
+                                                    <option value="@type.Id" data-value="@type.Value">Mã Voucher: @type.Code - Khuyến mãi: @voucherValue.ToString("n0")</option>
                                             }
                                              </select>
                                         }
@@ -227,11 +227,23 @@
                                         <tbody>
                                             <tr>
                                                 <th>
+                                                    <span>Tổng tiền sản phẩm</span>
+                                                </th>
+                                                <td>@string.Format("{0:N0}", total) đ</td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <span>Khuyến mãi voucher</span>
+                                                </th>
+                                                <td id ="voucherValueDisplay">0 đ</td>
+                                            </tr>
+                                            <tr>
+                                                <th>
                                                     <span>Tổng thanh toán</span>
                                                 </th>
-                                                <td>@string.Format("{0:N0}", total)</td>
+                                                <td id="totalAfterDiscount">@string.Format("{0:N0}", total)</td>
 
-                                                <input type="hidden" name="total" value="@total" />
                                             </tr>
                                         </tbody>
 
@@ -248,4 +260,16 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('voucherSelect').addEventListener('change', function () {
+            var selectedVoucher = this.options[this.selectedIndex];
+            var voucherValue = selectedVoucher.getAttribute('data-value');
+            var total = @total; // Giá trị tổng ban đầu từ server
+            var newTotal = total - voucherValue; // Tính toán tổng mới sau khi trừ giảm giá
+            document.getElementById('voucherValueDisplay').innerText = '-' + voucherValue + ' đ';
+            document.getElementById('totalAfterDiscount').innerText = newTotal + ' đ'; // Cập nhật giá trị cho trường input ẩn
+        });
+    });
+</script>
 
