@@ -220,29 +220,5 @@ namespace BanMoHinh.API.Controllers
             }
 
         }
-        [HttpPut("update-quantities")]
-        public async Task<IActionResult> UpdateProductQuantities([FromBody] List<ViewCartDetails> products)
-        {
-            if (products == null || !products.Any())
-            {
-                return BadRequest("Danh sách sản phẩm không hợp lệ.");
-            }
-
-            foreach (var productUpdate in products)
-            {
-                var product = await _cartItemService.GetCartItemsByCartIds(productUpdate.Id);
-                if (product != null)
-                {
-                    product.Quantity = productUpdate.Quantity;
-                    productUpdate.TotalPrice = product.Price * productUpdate.Quantity; 
-                    await _cartItemService.UpdateQuantityCartItem(product);
-                }
-                else
-                {
-                    return NotFound($"Không tìm thấy sản phẩm với ID: {productUpdate.Id}");
-                }
-            }
-            return Ok("Cập nhật số lượng sản phẩm thành công.");
-        }
     }
 }
