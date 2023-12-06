@@ -33,17 +33,20 @@ namespace BanMoHinh.Client.Services
             return response;
         }
 
-        public async Task Logout()
+        public async Task<Response> Logout()
         {
             var url = "https://localhost:7007/api/authentication/logout";
             Response response = new Response();
             var result = await _httpClient.GetAsync(url);
+            response.IsSuccess = false;
             if (result.IsSuccessStatusCode)
             {
                 response.IsSuccess = true;
+                response.Messages = result.RequestMessage.ToString();
 
             }
-            response.IsSuccess = false;
+            
+            return response;
         }
 
 

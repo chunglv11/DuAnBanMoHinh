@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
@@ -80,5 +81,12 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 			await _httpClient.DeleteAsync($"https://localhost:7007/api/voucher/delete-voucher-{id}");
 			return RedirectToAction("GetallVoucher");
 		}
-	}
+        public async Task<IActionResult> CreatevoucherProduct()
+        {
+            var allProduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
+            return View(allProduct);
+        }
+    }
+     
+
 }

@@ -43,6 +43,10 @@ namespace BanMoHinh.API.Controllers
             List<ViewCartDetails> view = new List<ViewCartDetails>();
             foreach (var item in cartItem)
             {
+                if (cartItem.Count == 0)
+                {
+                    return new OkObjectResult(new { message = "Không có sản phẩm nào trong giỏ hàng. <a href='/'>Quay lại trang chủ</a>", error = -1, data = view });
+                }
                 var prd = productDetails.FirstOrDefault(x => x.Id == item.ProductDetail_ID);
                 var pr = product.FirstOrDefault(x => x.Id == prd.ProductId);
                 var ha = productImage.FirstOrDefault(x => x.ProductDetailId == prd.Id);
@@ -62,11 +66,10 @@ namespace BanMoHinh.API.Controllers
                     ProductDetail_Id = prd.Id,
                     SizeId = sz.Id,
                     ColorsId = cl.ColorId,
-                    TotalPrice = Convert.ToInt32(prd.Price) * Convert.ToInt32(item.Quantity)
+                    TotalPrice = Convert.ToInt32(prd.PriceSale) * Convert.ToInt32(item.Quantity)
                 };
                 view.Add(cartDetails);
             }
-            if (view.Count <= 0) return new OkObjectResult(new { message = "Không có sản phẩm nào trong giỏ hàng. <a href='/'>Quay lại trang chủ</a>", error = -1, data = view });
             return Ok(view);
         }
         [HttpGet]
@@ -172,7 +175,7 @@ namespace BanMoHinh.API.Controllers
         }
         [HttpPost]
         [Route("Update/{id}")]
-        public async Task<IActionResult> UpdateCartDetails(Guid id, int Quantity, int Price)
+        public async Task<IActionResult> UpdateCartDetails(Guid id, int Quantity, int PriceSale)
         {
             var result = await _cartItemService.GetCartItemsByCartIds(id);
             if (result == null)
@@ -182,10 +185,10 @@ namespace BanMoHinh.API.Controllers
             else
             {
                 result.Quantity = Quantity;
-                result.Price = Price;
+                result.Price = PriceSale;
                 try
                 {
-                    await _cartItemService.UpdateCartItem(id, Quantity, Price);
+                    await _cartItemService.UpdateCartItem(id, Quantity, PriceSale);
                     return new OkObjectResult(new { message = "Cập nhập giỏ hàng thành công", error = 0 });
                 }
                 catch (Exception ex)

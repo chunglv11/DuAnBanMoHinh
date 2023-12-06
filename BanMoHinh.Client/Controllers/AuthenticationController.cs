@@ -71,9 +71,15 @@ namespace BanMoHinh.Client.Controllers
                 return View();
             }
         }
-        public async Task LogOut()
+        public async Task<IActionResult> LogOut()
         {
-           await _authenticationService.Logout();
+           var sd = await _authenticationService.Logout();
+            if (sd.IsSuccess)
+            {
+                Response.Cookies.Delete("Cookie_Cua_Trung");
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Indexs", "Home");
         }
         public async Task<IActionResult> Register()
         {

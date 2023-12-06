@@ -41,7 +41,7 @@ namespace BanMoHinh.API.Controllers
         public async Task<IActionResult> Logout()
         {
             await _userAuthentication.Logout();
-            return Ok();
+            return Ok(new { Message = "Đăng xuất thành công." });
         }
     }
 }

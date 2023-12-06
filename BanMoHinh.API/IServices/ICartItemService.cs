@@ -8,7 +8,7 @@ namespace BanMoHinh.API.IServices
         public Task<bool> AddCartItem(CartItem item);
 
         // Read (Lấy danh sách các mục trong CartItem bởi CartId)
-        public Task<CartItem> GetCartItemsByCartIds(Guid cartItemId);
+        public Task<CartItem> GetCartItemsByCartIds(Guid ?cartItemId);
         public Task<IEnumerable<CartItem>> GetAllCartItemsByCartId(Guid cartItemId);
 
         // Update (Cập nhật thông tin một mục trong CartItem)

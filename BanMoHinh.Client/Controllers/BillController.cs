@@ -81,16 +81,21 @@ namespace BanMoHinh.Client.Controllers
             order.Id = Guid.NewGuid();
             order.OrderCode = randomString;
             order.UserId =  new Guid(user);
-         
+            order.VoucherId = VoucherId;
             order.OrderStatusId = OrderStatusId;
             order.RecipientName = RecipientName;
             order.RecipientPhone = RecipientPhone;
             order.RecipientAddress = RecipientAddress;
-
+            foreach (var item in voucher)
+            {
+                if (item.Id == VoucherId)
+                {
+                    order.VoucherValue = item.Value;
+                }
+            }
             order.TotalAmout =total;
-            order.VoucherValue =/*Convert.ToInt32( form["VoucherValue"]);*/ 100000;
-            order.TotalAmoutAfterApplyingVoucher =Convert.ToInt32( order.TotalAmout - order.VoucherValue);
-            order.ShippingFee = 30000;
+            order.TotalAmoutAfterApplyingVoucher = order.TotalAmout - order.VoucherValue;
+            //order.ShippingFee = 30000;
             DateTime orderDate = DateTime.Now;
 
             order.Create_Date = orderDate;
@@ -127,6 +132,7 @@ namespace BanMoHinh.Client.Controllers
                         OrderId = order.Id,
                         ProductDetailId = item.ProductDetail_ID,
                         Quantity = item.Quantity,
+                        
                         Price = item.Price
                     };
 
