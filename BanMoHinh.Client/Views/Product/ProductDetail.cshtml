@@ -9,6 +9,8 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	List<ProductDetailVM> lstproductDetail = ViewData["productDetail"] as List<ProductDetailVM>;
 	List<ProductImage> lstProductImage = ViewData["lstProductImage"] as List<ProductImage>;
+	List<ProductImage> lstProductImage1 = ViewData["lstProductImage1"] as List<ProductImage>;
+	List<ProductVM> lstRelatedProducts = ViewData["lstCate"] as List<ProductVM>;
 }
 <style>
 	.selected {
@@ -20,16 +22,15 @@
         display: none;
     }
 
-    /* Thiết lập cho label để tạo ra giao diện button */
     .box-capacity label,
     .color-phone label {
         display: inline-block;
         padding: 8px 16px;
         margin: 0 4px;
         cursor: pointer;
-        background-color: #f0f0f0; /* Màu nền */
-        border: 1px solid #ddd; /* Viền */
-        border-radius: 4px; /* Bo góc */
+        background-color: #f0f0f0; 
+        border: 1px solid #ddd; 
+        border-radius: 4px; 
         transition: background-color 0.3s ease;
     }
 
@@ -42,9 +43,9 @@
     /* Khi input radio được chọn, thay đổi màu nền và viền */
     .box-capacity input[type="radio"]:checked + label,
     .color-phone input[type="radio"]:checked + label {
-        background-color: deepskyblue; /* Màu nền khi được chọn */
-        color: #fff; /* Màu chữ khi được chọn */
-        border-color: #007bff; /* Viền khi được chọn */
+        background-color: deepskyblue; 
+        color: #fff; 
+        border-color: #007bff; 
     }
 </style>
 <div class="page-header">
@@ -139,8 +140,9 @@
 
 										foreach (var uniqueSize in uniquewh)
 										{
-											<input type="radio" name="sizeId" value="@uniqueSize.Id" data-size-id="@uniqueSize.Id" id="sizeId-@uniqueSize.Id" />
-											<label for="sizeId-@uniqueSize.Id" class="capacity">@uniqueSize.Width cm - @uniqueSize.Height cm</label>
+											var sizeId = uniqueSize.Id;
+											<input type="radio" name="sizeId" value="@sizeId" data-size-id="@sizeId" id="sizeId-@sizeId" />
+											<label for="sizeId-@sizeId" class="capacity">@($"{uniqueSize.Width} cm - {uniqueSize.Height} cm")</label>
 										}
 									}
 								</div>
@@ -152,11 +154,13 @@
 
 										foreach (var uniqueColor in uniqueColors)
 										{
-											<input type="radio" name="colorId" value="@uniqueColor.Id" data-color-id="@uniqueColor.Id" id="colorId-@uniqueColor.Id" />
-											<label for="colorId-@uniqueColor.Id" class="capacity">@uniqueColor.ColorName</label>
+											var colorId = uniqueColor.Id;
+											<input type="radio" name="colorId" value="@colorId" data-color-id="@colorId" id="colorId-@colorId" />
+											<label for="colorId-@colorId" class="capacity">@uniqueColor.ColorName</label>
 										}
 									}
 								</div>
+
 
 										<div class="product-quantity">
 											<h4>Số lượng</h4>
@@ -426,27 +430,57 @@
 			</div>
 			<div class="box">
 				<div class="box-body">
-					<div class="row">
-						<!-- product -->
-						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
-							<div class="product-block">
-								<div class="product-img"><img src="images/product_img_1.png" alt=""></div>
-								<div class="product-content">
-									<h5><a href="#" class="product-title">Google Pixel <strong>(128GB,
-												Black)</strong></a></h5>
-									<div class="product-meta"><a href="#" class="product-price">$1100</a>
-										<a href="#" class="discounted-price">$1400</a>
-										<span class="offer-price">20%off</span>
+				<div class="row">
+					@foreach (var relatedProduct in lstRelatedProducts)
+					{
+						IEnumerable<ProductDetailVM> LstProductDetail = lstproductDetail.Where(c => c.ProductId == relatedProduct.Id);
+						var productDetailID = LstProductDetail.FirstOrDefault(c=>c.ProductId == relatedProduct.Id); // lấy productdetail
+						if (productDetailID != null)
+						{
+							var productDetailID1 = productDetailID.Id;
+							var lstProi = lstProductImage1.Where(c => c.ProductDetailId == productDetailID1);
+							var imgFirst = lstProi.First()?.ImageUrl;
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
+								<div class="product-block">
+									<div class="product-img">
+
+										<img src="@(Configuration["BaseAddress"] +imgFirst)" alt="">
+
 									</div>
-									<div class="shopping-btn">
-										<a href="#" class="product-btn btn-like"><i class="fa fa-heart"></i></a>
-										<a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
+									<div class="product-content">
+										<h5><a href="#" class="product-title">@relatedProduct.ProductName <strong>(@relatedProduct.CategoryName)</strong></a></h5>
+										<div class="product-meta">
+											<a href="#" class="product-price">
+												@{
+													if (relatedProduct.MinPrice < relatedProduct.MaxPrice)
+													{
+														<span id="old-price">@relatedProduct.MinPrice?.ToString("N0") VND - @relatedProduct.MaxPrice?.ToString("N0") VND</span>
+													}
+													else
+													{
+														<span id="old-price">@relatedProduct.MinPrice?.ToString("N0") VND</span>
+													}
+												}
+											</a>
+									
+										</div>
+										<div class="shopping-btn">
+											<a href="#" class="product-btn btn-like"><i class="fa fa-heart"></i></a>
+											<a href="#" class="product-btn btn-cart"><i class="fa fa-shopping-cart"></i></a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<!-- /.product -->                     
-					</div>
+						}
+						else
+						{
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
+								<p class="error-message">Không tìm thấy thông tin chi tiết sản phẩm</p>
+							</div>
+						}
+
+					}
+				</div>
 				</div>
 			</div>
 		</div>
@@ -529,23 +563,7 @@
 				$(this).addClass('active');
 			})
 		})
-	</script>
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-	$(document).ready(function () {
-		$('.size-button').click(function () {
-			// Lấy SizeId từ nút Size được nhấp
-			var sizeId = $(this).data('size-id');
-
-			// Tìm tất cả các nút Màu có cùng SizeId
-			var colorButtons = $('.color-button[data-size-id="' + sizeId + '"]');
-
-			// Bật (enable) tất cả các nút Màu và vô hiệu hóa (disable) các nút Màu khác
-			$('.color-button').prop('disabled', true);
-			colorButtons.prop('disabled', false);
-		});
-	});
-</script>
+	</script>	
 
 	<script>
 		$(document).ready(function () {
@@ -585,8 +603,6 @@
 
 	function updatePrice(sizeId, colorId, previousSizeId, previousColorId) {
 		if (sizeId !== null && colorId !== null) {
-			console.log("sizeId: ", sizeId);
-			console.log("colorId: ", colorId);
 			$.ajax({
 				type: "GET",
 				url: "/Product/GetPriceForProductDetail",

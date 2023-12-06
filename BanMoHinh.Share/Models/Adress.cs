@@ -16,6 +16,7 @@ namespace BanMoHinh.Share.Models
         public string? Province { get; set; } // Tỉnh/Thành phố
         public string? District { get; set; } // Quận/Huyện
         public string? Ward { get; set; } // Xã
+        //thêm thược tính địa chỉ chi tiết và isdefault
 
         [ForeignKey("UserId")]
         public User? User{ get; set; }
