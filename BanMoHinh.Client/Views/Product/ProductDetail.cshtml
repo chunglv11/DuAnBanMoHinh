@@ -213,7 +213,7 @@
 						<div class="description-left" style="width:70%">
 							<h2 class="dgctpro">Đặc điểm nổi bật</h2>
 							<div itemprop="description" class="content_hide content-desc" style="height: 600px;">
-								@Model.Long_Description
+								@Html.Raw(Model.Long_Description)
 							</div>
 							<button class="less-evaluation text-center" style="display:none"><i
 									class="fa fa-minus-circle"></i> Rút gọn</button>
@@ -272,7 +272,7 @@
 													<li>@size</li>
 												}
 											</ul>
-}
+											}
 
 										</td>
 
@@ -442,6 +442,7 @@
 							var imgFirst = lstProi.First()?.ImageUrl;
 							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mb30">
 								<div class="product-block">
+									<a href="/Product/ProductDetail/@relatedProduct.Id">
 									<div class="product-img">
 
 										<img src="@(Configuration["BaseAddress"] +imgFirst)" alt="">

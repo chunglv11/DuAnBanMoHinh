@@ -16,30 +16,30 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             _httpClient = httpClient;
         }
         //loại bỏ thẻ html
-        private string RemoveHtmlTags(string html)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
+        //private string RemoveHtmlTags(string html)
+        //{
+        //    var doc = new HtmlDocument();
+        //    doc.LoadHtml(html);
 
-            return doc.DocumentNode.InnerText;
-        }
-        public string ReplaceUnicodeCharacters(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return input;
-            }
+        //    return doc.DocumentNode.InnerText;
+        //}
+        //public string ReplaceUnicodeCharacters(string input)
+        //{
+        //    if (string.IsNullOrEmpty(input))
+        //    {
+        //        return input;
+        //    }
 
-            string normalized = input.Normalize(NormalizationForm.FormKD);
-            Encoding removal = Encoding.GetEncoding(Encoding.UTF8.CodePage,
-                                                    new EncoderReplacementFallback(""),
-                                                    new DecoderReplacementFallback(""));
-            byte[] bytes = removal.GetBytes(normalized);
-            string asciiString = Encoding.UTF8.GetString(bytes);
+        //    string normalized = input.Normalize(NormalizationForm.FormKD);
+        //    Encoding removal = Encoding.GetEncoding(Encoding.UTF8.CodePage,
+        //                                            new EncoderReplacementFallback(""),
+        //                                            new DecoderReplacementFallback(""));
+        //    byte[] bytes = removal.GetBytes(normalized);
+        //    string asciiString = Encoding.UTF8.GetString(bytes);
 
-            // Giải mã ký tự HTML
-            return HttpUtility.HtmlDecode(asciiString);
-        }
+        //    // Giải mã ký tự HTML
+        //    return HttpUtility.HtmlDecode(asciiString);
+        //}
         // GET: ProductController
         public async Task<IActionResult> GetAllProduct()
         {
@@ -83,8 +83,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             {
                 pro.Status = true;
                 pro.Long_Description = edit;
-                pro.Long_Description = RemoveHtmlTags(edit);
-                pro.Long_Description = ReplaceUnicodeCharacters(pro.Long_Description);
+                pro.Create_At = DateTime.Now;
+                pro.AvailableQuantity = 0;
+                pro.Update_At = null;
+                //pro.Long_Description = RemoveHtmlTags(edit);
+                //pro.Long_Description = ReplaceUnicodeCharacters(pro.Long_Description);
                 pro.Long_Description = HttpUtility.HtmlDecode(pro.Long_Description);
                 var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
                 if (createpro.IsSuccessStatusCode)
@@ -130,10 +133,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(Product pro)
+        public async Task<IActionResult> EditProduct(Product pro, string edit)
         {
             try
             {
+                pro.Long_Description = edit;
                 var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/product/update-product-{pro.Id}", pro);
                 return RedirectToAction("GetAllProduct");
             }

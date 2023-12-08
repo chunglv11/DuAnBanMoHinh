@@ -43,12 +43,12 @@
             <th>
                 Ngày cập nhật
             </th>
-            <th>
+            @* <th>
                 Mô tả
             </th>
             <th>
                 Mô tả chi tiết
-            </th>
+            </th> *@
             <th>
                 Trạng thái
             </th>
@@ -100,18 +100,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Update_At)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Long_Description)
-            </td>
+                @Html.Raw(item.Long_Description)
+            </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+                @if (item.Status == true)
+                    {
+                        <p style="color:green">Còn hoạt động</p>
+                    }
+                    else
+                    {
+                        <p style="color:red">Ngưng hoạt động</p>
+                    }
+                </td>
             <td>
                 @Html.ActionLink("Sửa", "EditProduct", new {  id=item.Id  }, new { @class = "btn btn-primary btn-sm" }) 
-                @Html.ActionLink("Xoá", "DeleteProduct", new { area="Admin", id =item.Id }, new {@class="btn btn-danger btn-sm"})
+                @Html.ActionLink("Xoá", "DeleteProduct", new { id =item.Id }, new {@class="btn btn-danger btn-sm"})
             </td>
         </tr>
 }

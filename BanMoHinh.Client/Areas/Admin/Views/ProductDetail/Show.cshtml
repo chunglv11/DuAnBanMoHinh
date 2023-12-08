@@ -70,14 +70,15 @@
                 @Html.DisplayFor(modelItem => item.Update_At)
             </td>
             <td >
-                @if (item.Status == true)
+                    @if (item.Status == true)
                     {
-                        <p>Còn hàng</p>
+                        <p style="color:green">Còn hoạt động</p>
                     }
                     else
                     {
-                        <p>Hết hàng</p>
+                        <p style="color:red">Ngưng hoạt động</p>
                     }
+                
 
             </td>
             <td >
