@@ -25,9 +25,12 @@ namespace BanMoHinh.Client.Controllers
             var ProductImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
             // Sắp xếp để lấy ra 4 sản phẩm mới nhất (theo ngày tạo)
             var newestProducts = result
-                              .OrderByDescending(pd => pd.Create_At)
-                              .Take(4)
-                              .ToList();
+            .OrderByDescending(pd => pd.Create_At)
+            .GroupBy(pd => new { pd.BrandId, pd.MaterialId, pd.CategoryId }) // Nhóm theo các thuộc tính 
+            .Select(group => group.First()) // Lấy phần tử đầu tiên từ mỗi nhóm
+            .Take(4)
+            .ToList();
+
             ViewData["NewestProducts"] = newestProducts;
             ViewData["productDetail"] = productDetail;
             ViewData["ProductImage"] = ProductImage;
