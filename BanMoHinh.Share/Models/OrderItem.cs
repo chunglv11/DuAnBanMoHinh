@@ -16,6 +16,7 @@ namespace BanMoHinh.Share.Models
         public Guid? ProductDetailId { get; set; }
         public int? Quantity { get; set; }
         public int? Price { get; set; }
+        //cái nào có giá thì sửa thành decimal
 
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }

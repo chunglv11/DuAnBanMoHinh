@@ -58,7 +58,7 @@ namespace BanMoHinh.Client.Services
 
             //request.Description = RemoveHtmlTags(edit);
             //request.Description = ReplaceUnicodeCharacters(request.Description);
-            request.Description = HttpUtility.HtmlDecode(request.Description);
+            //request.Description = HttpUtility.HtmlDecode(request.Description);
 
             requestContent.Add(new StringContent(request.ProductId.ToString()), "productid");
             requestContent.Add(new StringContent(request.ColorId.ToString()), "colorid");
@@ -70,6 +70,7 @@ namespace BanMoHinh.Client.Services
             requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
             requestContent.Add(new StringContent(request.Description), "description");
             requestContent.Add(new StringContent(request.Status.ToString()), "status");
+            requestContent.Add(new StringContent(request.filecollection.ToString()), "filecollection");
             foreach (var file in request.filecollection)
             {
                 requestContent.Add(new StreamContent(file.OpenReadStream())
@@ -151,7 +152,7 @@ namespace BanMoHinh.Client.Services
             request.Description = edit;
             //request.Description = RemoveHtmlTags(edit);
             //request.Description = ReplaceUnicodeCharacters(request.Description);
-            request.Description = HttpUtility.HtmlDecode(request.Description);
+            //request.Description = HttpUtility.HtmlDecode(request.Description);
             requestContent.Add(new StringContent(request.ColorId.ToString()), "colorid");
             requestContent.Add(new StringContent(request.SizeId.ToString()), "sizeid");
             requestContent.Add(new StringContent(request.Quantity.ToString()), "quantity");

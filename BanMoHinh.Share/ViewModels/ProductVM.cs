@@ -43,7 +43,7 @@ namespace BanMoHinh.Share.ViewModels
             }
         }
         public bool? Status { get; set; }
-
+        public List<string>? Images { get; set; } //lay link anh cua tbProImage
         public virtual List<ProductDetail>? ProductDvms { get; set; }
 		public virtual List<ProductImage>? ProductImages { get; set; }
 	}

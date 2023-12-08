@@ -125,8 +125,8 @@ figcaption{
             </div>
             
             <div class="form-group">
-             @*  <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple> *@
-                <input type="file" id="file-input" asp-for="filecollection" accept="image/*" oninput="preview()" multiple>
+              <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+                @* <input type="file" id="file-input" asp-for="filecollection" accept="image/*" oninput="preview()" multiple> *@
 
               <label for="file-input">
                 <i class="fas fa-upload"></i> Chọn ảnh
@@ -159,71 +159,120 @@ figcaption{
     function preview() {
         console.log("Input changed!");
         let fileInput = document.getElementById("file-input");
+        let hiddenFileInput = document.getElementById("hidden-file-input"); // input type file ẩn
         let imageContainer = document.getElementById("images");
 
-        // Mảng để lưu giữ tất cả đối tượng File và URL đã chọn
-        let tempSelectedImages = [...selectedImages];
+        // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
+        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
+            alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
+            return; // Ngăn không cho hàm tiếp tục thực thi
+        }
+
+        for (let i = 0; i < fileInput.files.length; i++) {
+            let file = fileInput.files[i];
+            // Thêm logic tương tự như trước để hiển thị ảnh
+            // ...
+
+            // Thêm file vào mảng selectedImages
+            selectedImages.push(file);
+        }
+
+        // Cập nhật input file ẩn với các file đã chọn
+        updateHiddenFileInput(hiddenFileInput);
+
+        // Cập nhật thông tin số lượng file đã chọn
+        updateNumOfFiles();
+    }
+
+    function updateHiddenFileInput(hiddenFileInput) {
+        // Xóa tất cả file hiện tại khỏi input ẩn
+        hiddenFileInput.value = '';
+
+        // Thêm tất cả các file từ selectedImages vào input ẩn
+        selectedImages.forEach(file => {
+            hiddenFileInput.files.add(file);
+        });
+    }
+
+    // Các hàm khác như deleteImage và updateNumOfFiles giữ nguyên
+</script>
+
+<script>
+    let numOfFiles = document.getElementById("num-of-files");
+    let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
+    const maxAllowedFiles = 5; // Số lượng tối đa ảnh được chọn
+
+    function preview() {
+        console.log("Input changed!");
+        let fileInput = document.getElementById("file-input");
+        let imageContainer = document.getElementById("images");
 
         // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
-        if (fileInput.files.length + tempSelectedImages.length > maxAllowedFiles) {
+        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
             alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
-            // Không thực hiện việc xoá giá trị đã chọn
-        } else {
-            for (let i = 0; i < fileInput.files.length; i++) {
+            return; // Ngăn không cho hàm tiếp tục thực thi
+        }
+
+        for (let i = 0; i < fileInput.files.length; i++) {
+            let file = fileInput.files[i];
+
+            // Kiểm tra xem file đã được thêm vào mảng trước đó hay chưa
+            if (!selectedImages.some(selectedImage => selectedImage.file.name === file.name)) {
                 let figure = document.createElement("figure");
                 let deleteButton = document.createElement("button");
 
                 deleteButton.textContent = "Xoá";
                 deleteButton.classList.add("delete-button");
 
-                // Truyền tham số cho hàm deleteImage
+                // Xử lý sự kiện click cho nút delete
                 deleteButton.onclick = function () {
-                    deleteImage(figure, tempSelectedImages[i]);
+                    // Truyền tham số là file để xóa
+                    deleteImage(figure, file);
                 };
 
                 figure.appendChild(deleteButton);
 
                 let img = document.createElement("img");
-                let imageUrl = URL.createObjectURL(fileInput.files[i]);
+                let imageUrl = URL.createObjectURL(file);
                 img.setAttribute("src", imageUrl);
                 figure.insertBefore(img, deleteButton);
 
-                // Tạo đối tượng mới đại diện cho ảnh đã chọn
+                // Tạo đối tượng mới đại diện cho file đã chọn
                 let selectedImage = {
-                    file: fileInput.files[i],
+                    file: file,
                     imageUrl: imageUrl
                 };
 
-                // Thêm đối tượng vào mảng tempSelectedImages
-                tempSelectedImages.push(selectedImage);
+                // Thêm đối tượng vào mảng selectedImages
+                selectedImages.push(selectedImage);
 
                 imageContainer.appendChild(figure);
             }
         }
 
-        // Gán giá trị của mảng tạm thời cho selectedImages
-        selectedImages = tempSelectedImages;
-
+        // Cập nhật thông tin số lượng file đã chọn
         updateNumOfFiles();
+
+        // Không reset input file ở đây nữa
+        // fileInput.value = '';
     }
-    
+
     function deleteImage(figure, file) {
-        // Xoá hình ảnh khi nút xoá được nhấn
+        // Xóa hình ảnh khỏi DOM
         figure.remove();
-        removeFromSelectedImages(file);
+
+        // Xóa file khỏi mảng selectedImages
+        selectedImages = selectedImages.filter(selectedImage => selectedImage.file !== file);
+
+        // Cập nhật thông tin số lượng file đã chọn
         updateNumOfFiles();
     }
-
-    function removeFromSelectedImages(file) {
-        // Loại bỏ ảnh khỏi mảng selectedImages dựa trên thuộc tính file
-        selectedImages = selectedImages.filter(img => img.file !== file.file);
-    }
-
 
     function updateNumOfFiles() {
-        numOfFiles.textContent = `${selectedImages.length} ảnh được chọn`;
+        numOfFiles.textContent = `${selectedImages.length} ảnh đã chọn`;
     }
 </script>
+
 
 
 @section Scripts {
