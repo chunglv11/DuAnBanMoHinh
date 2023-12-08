@@ -151,51 +151,7 @@ figcaption{
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-<script>
-    let numOfFiles = document.getElementById("num-of-files");
-    let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
-    const maxAllowedFiles = 5; // Số lượng tối đa ảnh được chọn
 
-    function preview() {
-        console.log("Input changed!");
-        let fileInput = document.getElementById("file-input");
-        let hiddenFileInput = document.getElementById("hidden-file-input"); // input type file ẩn
-        let imageContainer = document.getElementById("images");
-
-        // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
-        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
-            alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
-            return; // Ngăn không cho hàm tiếp tục thực thi
-        }
-
-        for (let i = 0; i < fileInput.files.length; i++) {
-            let file = fileInput.files[i];
-            // Thêm logic tương tự như trước để hiển thị ảnh
-            // ...
-
-            // Thêm file vào mảng selectedImages
-            selectedImages.push(file);
-        }
-
-        // Cập nhật input file ẩn với các file đã chọn
-        updateHiddenFileInput(hiddenFileInput);
-
-        // Cập nhật thông tin số lượng file đã chọn
-        updateNumOfFiles();
-    }
-
-    function updateHiddenFileInput(hiddenFileInput) {
-        // Xóa tất cả file hiện tại khỏi input ẩn
-        hiddenFileInput.value = '';
-
-        // Thêm tất cả các file từ selectedImages vào input ẩn
-        selectedImages.forEach(file => {
-            hiddenFileInput.files.add(file);
-        });
-    }
-
-    // Các hàm khác như deleteImage và updateNumOfFiles giữ nguyên
-</script>
 
 <script>
     let numOfFiles = document.getElementById("num-of-files");
