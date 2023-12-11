@@ -13,14 +13,17 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
     public class ProductDetailController : Controller
     {
         private IproductDetailApiClient _apiClient;
-        public ProductDetailController(IproductDetailApiClient iproductDetail)
+        private HttpClient _httpClient;
+        public ProductDetailController(IproductDetailApiClient iproductDetail, HttpClient httpClient)
         {
             _apiClient = iproductDetail;
+            _httpClient = httpClient;
         }
 
         public async Task<IActionResult> Show()
         {
             var response = await _apiClient.GetAllProductDetail();
+            
             return View(response);
 
         }
@@ -52,7 +55,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ProductDetailVM product, Guid productId, Guid sizeId, Guid colorId, string edit)
+        public async Task<IActionResult> Create([FromForm] ProductDetailVM product, Guid productId, Guid sizeId, Guid colorId)
         {
             if (!ModelState.IsValid)
             {
@@ -81,15 +84,13 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             });
             product.Status = true;
             product.Create_At = DateTime.Now;
-            var result = await _apiClient.CreateProduct(product, productId, sizeId, colorId, edit);
+            var result = await _apiClient.CreateProduct(product, productId, sizeId, colorId);
             if (result)
             {
-                TempData["result"] = "Thêm mới sản phẩm thành công";
-                return RedirectToAction("Show");
+                return Json(new { success = true, message = "Tạo sản phẩm thành công!" });
             }
+            return Json(new { success = true, message = "Tạo sản phẩm thất bại!" });
 
-            ModelState.AddModelError("", "Thêm sản phẩm thất bại");
-            return View(product);
         }
 
         [HttpGet]
@@ -110,10 +111,13 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 Selected = colorId.ToString() == x.ColorId.ToString()
             });
             var response = await _apiClient.GetByIdProductDetail(id);
+            //var producti = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
+            var productImages = await _apiClient.GetListProI();
+            ViewBag.ProductImages = productImages;
             return View(response);
         }
 
-        public async Task<IActionResult> Update(ProductDetailVM create, Guid sizeId, Guid colorId, string edit)
+        public async Task<IActionResult> Update(ProductDetailVM create, Guid sizeId, Guid colorId)
         {
             try
             {
@@ -131,8 +135,12 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                     Value = x.ColorId.ToString(),
                     Selected = colorId.ToString() == x.ColorId.ToString()
                 });
-                //var productImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
-                var response = await _apiClient.UpdateProduct(create, sizeId, colorId, edit);
+                //var producti = await _apiClient.GetListProI();
+                //ViewData["productImage"] = producti;
+                var productImages = await _apiClient.GetListProI();
+                ViewBag.ProductImages = productImages;
+                var response = await _apiClient.UpdateProduct(create, sizeId, colorId);
+                
                 if (response)
                 {
                     return RedirectToAction("Show");
@@ -171,5 +179,21 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
+        
+        public async Task<IActionResult> RemoveProI(Guid Id)
+        {
+        
+            var response = await _httpClient.DeleteAsync($"https://localhost:7007/api/productimage/delete-productimage-{Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Json(new { success = true, message = "Xoá ảnh thành công!" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Xoá ảnh thất bại!" });
+            }
+        }
+
     }
 }

@@ -49,7 +49,7 @@ figcaption{
 </div>
 <div class="row">
     <div class="container">
-        <form asp-action="Create" enctype="multipart/form-data" >
+        <form id="product-form" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly"  class="text-danger" ></div>
             
             <div class="form-group">
@@ -97,30 +97,11 @@ figcaption{
                 <input asp-for="PriceSale" class="form-control" />
                 <span asp-validation-for="PriceSale" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label class="control-label">Ngày nhập</label>
-                <input asp-for="Create_At" class="form-control" />
-                <span asp-validation-for="Create_At" class="text-danger"></span>
-            </div>*@
-            @*<div class="form-group">
-                <label  class="control-label">Ngày cập nhật</label>
-                <input asp-for="Update_At" class="form-control" />
-                <span asp-validation-for="Update_At" class="text-danger"></span>
-            </div>*@
+            
           
             <div class="form-group">
-                <label  class="control-label">Mô tả</label>
-                <div class="form-group space-top" >
-                    <!-- (2): textarea sẽ được thay thế bởi CKEditor -->
-                    <textarea asp-for="Description" id="edit" name="edit" cols="200" rows="80"></textarea>
-
-                    <!-- (3): Code Javascript thay thế textarea có id='editor1' bởi CKEditor -->
-                    <script>
-
-                        CKEDITOR.replace('edit');
-
-                    </script>
-                </div>
+                <label class="control-label">Mô tả</label>
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             
@@ -151,82 +132,91 @@ figcaption{
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-
-
 <script>
-    let numOfFiles = document.getElementById("num-of-files");
     let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
+</script>
+<script>
+    // let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
     const maxAllowedFiles = 5; // Số lượng tối đa ảnh được chọn
 
     function preview() {
-        console.log("Input changed!");
         let fileInput = document.getElementById("file-input");
         let imageContainer = document.getElementById("images");
-
-        // Kiểm tra nếu số lượng ảnh vượt quá giới hạn
-        if (fileInput.files.length + selectedImages.length > maxAllowedFiles) {
-            alert(`Chỉ được chọn tối đa ${maxAllowedFiles} ảnh.`);
-            return; // Ngăn không cho hàm tiếp tục thực thi
+        let files = Array.from(fileInput.files);
+        let newFiles = files.filter(file => !selectedImages.some(selectedImage => selectedImage.file.name === file.name));
+        console.log("OK");
+        // Kiểm tra nếu tổng số lượng ảnh sau khi thêm vào vượt quá giới hạn
+        if (selectedImages.length + newFiles.length > maxAllowedFiles) {
+            alert(`Bạn chỉ có thể chọn tối đa ${maxAllowedFiles} ảnh. Vui lòng bỏ bớt ảnh trước khi thử lại.`);
+            // Đặt lại input file 
+            fileInput.value = '';
+            return;
         }
 
-        for (let i = 0; i < fileInput.files.length; i++) {
-            let file = fileInput.files[i];
+        // Thêm các file mới vào danh sách và hiển thị
+        newFiles.forEach(file => {
+            let imageUrl = URL.createObjectURL(file);
+            let figure = document.createElement("figure");
+            let deleteButton = document.createElement("button");
+            deleteButton.textContent = "Xoá";
+            deleteButton.classList.add("delete-button");
+            deleteButton.onclick = function () {
+                deleteImage(figure, file);
+            };
 
-            // Kiểm tra xem file đã được thêm vào mảng trước đó hay chưa
-            if (!selectedImages.some(selectedImage => selectedImage.file.name === file.name)) {
-                let figure = document.createElement("figure");
-                let deleteButton = document.createElement("button");
+            figure.appendChild(deleteButton);
 
-                deleteButton.textContent = "Xoá";
-                deleteButton.classList.add("delete-button");
+            let img = document.createElement("img");
+            img.setAttribute("src", imageUrl);
+            figure.insertBefore(img, deleteButton);
 
-                // Xử lý sự kiện click cho nút delete
-                deleteButton.onclick = function () {
-                    // Truyền tham số là file để xóa
-                    deleteImage(figure, file);
-                };
+            selectedImages.push({ file: file, imageUrl: imageUrl });
+            imageContainer.appendChild(figure);
+        });
 
-                figure.appendChild(deleteButton);
-
-                let img = document.createElement("img");
-                let imageUrl = URL.createObjectURL(file);
-                img.setAttribute("src", imageUrl);
-                figure.insertBefore(img, deleteButton);
-
-                // Tạo đối tượng mới đại diện cho file đã chọn
-                let selectedImage = {
-                    file: file,
-                    imageUrl: imageUrl
-                };
-
-                // Thêm đối tượng vào mảng selectedImages
-                selectedImages.push(selectedImage);
-
-                imageContainer.appendChild(figure);
-            }
-        }
-
-        // Cập nhật thông tin số lượng file đã chọn
         updateNumOfFiles();
-
-        // Không reset input file ở đây nữa
-        // fileInput.value = '';
     }
 
     function deleteImage(figure, file) {
-        // Xóa hình ảnh khỏi DOM
+        URL.revokeObjectURL(file.imageUrl); // Giải phóng bộ nhớ
         figure.remove();
-
-        // Xóa file khỏi mảng selectedImages
         selectedImages = selectedImages.filter(selectedImage => selectedImage.file !== file);
-
-        // Cập nhật thông tin số lượng file đã chọn
         updateNumOfFiles();
     }
 
     function updateNumOfFiles() {
+        let numOfFiles = document.getElementById("num-of-files");
         numOfFiles.textContent = `${selectedImages.length} ảnh đã chọn`;
     }
+</script>
+
+<script>
+    document.getElementById('product-form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
+
+        let formData = new FormData(this); // Sử dụng FormData của form hiện tại
+
+        // Thêm tất cả các file đã chọn vào formData
+        selectedImages.forEach((selectedImage, index) => {
+            formData.append('filecollection', selectedImage.file);
+        });
+
+        // Gửi formData đến server
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Xử lý kết quả trả về từ server
+                // if (data.success) {
+                //     alert(data.message); // Hiển thị thông báo thành công
+                    window.location.href = '/Admin/ProductDetail/Show';
+            })
+            .catch(error => {
+                console.error(error); // Xử lý lỗi nếu có
+            });
+    });
 </script>
 
 

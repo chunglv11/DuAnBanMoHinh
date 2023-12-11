@@ -64,7 +64,7 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpPut("update-productdetail-{id}")]
+        [HttpPatch("update-productdetail-{id}")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ProductDetailVM>> Put(Guid id, [FromForm] ProductDetailVM obj)
         {

@@ -53,13 +53,18 @@ namespace BanMoHinh.API.Services
                     _dbContext.Product.Update(product);
                     await _dbContext.SaveChangesAsync();
                 }
-                int passcount = 0;
                 //save image
+                // HashSet để theo dõi các tên file đã xử lý
+                var processedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 if (item.filecollection != null)//không null 
                 {
                     foreach (var i in item.filecollection)
                     {
-
+                        // Bỏ qua file này nếu đã xử lý
+                        if (!processedFiles.Add(i.FileName))
+                        {
+                            continue;
+                        }
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
                         //create folder if not exist
                         if (!Directory.Exists(path))
@@ -68,7 +73,6 @@ namespace BanMoHinh.API.Services
                         using (var stream = new FileStream(imgPath, FileMode.Create))
                         {
                             await i.CopyToAsync(stream);
-                            passcount++;
                         }
                         var proi = new ProductImage()
                         {
@@ -200,28 +204,7 @@ namespace BanMoHinh.API.Services
             };
             return lstPrd;
             #endregion
-            //return await _dbContext.ProductDetail.Where(c => c.Id == id)
-            //    .Select(prd => new ProductDetailVM()
-            //    {
-            //        Id = prd.Id,
-            //        ProductId = prd.ProductId,
-            //        ProductName = product.ProductName,
-            //        SizeId = prd.SizeId,
-            //        SizeName = size.SizeName,
-            //        ColorId = prd.ColorId,
-            //        ColorName = color.ColorName,
-            //        Quantity = prd.Quantity,
-            //        Price = prd.Price,
-            //        PriceSale = prd.PriceSale,
-            //        Create_At = prd.Create_At,
-            //        Update_At = prd.Update_At,
-            //        Description = prd.Description,
-            //        Status = prd.Status,
-            //        ProductImage = prd.ProductImages.Select(b => new ProductImage()
-            //        {
-            //            ImageUrl = b.ImageUrl,
-            //        }).ToList(),
-            //    }).FirstOrDefaultAsync();
+
         }
 
         public async Task<bool> Update(ProductDetailVM item)
@@ -248,14 +231,19 @@ namespace BanMoHinh.API.Services
             productDetail.Status = item.Status;
 
             // Xóa hết các hình ảnh liên quan đến sản phẩm chi tiết
-            var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == productDetail.Id);
-            _dbContext.ProductImage.RemoveRange(images);
+            //var images = _dbContext.ProductImage.Where(i => i.ProductDetailId == productDetail.Id);
+            //_dbContext.ProductImage.RemoveRange(images);
 
             // Lưu lại thông tin hình ảnh mới (nếu có)
+            var processedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (item.filecollection != null)
             {
                 foreach (var file in item.filecollection)
                 {
+                    if (!processedFiles.Add(file.FileName))
+                    {
+                        continue;
+                    }
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
                     // Tạo thư mục nếu nó chưa tồn tại
