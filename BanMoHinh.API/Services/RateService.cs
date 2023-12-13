@@ -23,6 +23,7 @@ namespace BanMoHinh.API.Services
                     OrderItemId = item.OrderItemId,
                     Content = item.Content,
                     ImageUrl = item.ImageUrl,
+                    Reply = item.Reply,
                     Rating = item.Rating,
                 };
                 await _dbContext.Rate.AddAsync(rate);
@@ -78,6 +79,7 @@ namespace BanMoHinh.API.Services
 
                 rates.OrderItemId = orderid;
                 rates.ImageUrl = rate.ImageUrl;
+                rates.Reply = rate.Reply;
                 rates.Content = rate.Content;
                 rates.Rating = rate.Rating;
                 _dbContext.Rate.Update(rates);
