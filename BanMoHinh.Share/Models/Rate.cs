@@ -14,6 +14,7 @@ namespace BanMoHinh.Share.Models
         public Guid Id { get; set; }
         public Guid OrderItemId { get; set; }
         public string? Content { get; set; }
+        public string? Reply { get; set; }
         public string? ImageUrl { get; set; }
         public float? Rating { get; set; }
         //thêm thuộc tính reply

@@ -17,7 +17,8 @@ namespace BanMoHinh.Share.Models
         public string? Code { get; set; }
         public int? Quantity { get; set; }
         public int? Value { get; set; }
-        //thêm hình thức giảm
+        public int? Discount_Type { get; set; } // hinh thuc giam gia
+
         public int? Minimum_order_value { get; set; }
         public DateTime? Create_Date { get; set; }
         public DateTime? Start_Date { get; set; }

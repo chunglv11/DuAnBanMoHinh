@@ -25,6 +25,7 @@ namespace BanMoHinh.API.Services
                     Code = item.Code,
                     Quantity = item.Quantity,
                     Value = item.Value,
+                    Discount_Type = item.Discount_Type,
                     Minimum_order_value = item.Minimum_order_value,
                     Create_Date = item.Create_Date,
                     Start_Date = item.Start_Date,
@@ -85,6 +86,7 @@ namespace BanMoHinh.API.Services
                 VoucherForcus.VoucherTypeId = rank.VoucherTypeId;
                 VoucherForcus.VoucherStatusId = rank.VoucherStatusId;
                 VoucherForcus.Code = rank.Code;
+                VoucherForcus.Discount_Type = rank.Discount_Type;
                 VoucherForcus.Quantity = rank.Quantity;
                 VoucherForcus.Value = rank.Value;
                 VoucherForcus.Create_Date = rank.Create_Date;
