@@ -6,7 +6,6 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
 	ViewData["Title"] = "ProductDetail";
-	Layout = "~/Views/Shared/_Layout.cshtml";
 	List<ProductDetailVM> lstproductDetail = ViewData["productDetail"] as List<ProductDetailVM>;
 	List<ProductImage> lstProductImage = ViewData["lstProductImage"] as List<ProductImage>;
 	List<ProductImage> lstProductImage1 = ViewData["lstProductImage1"] as List<ProductImage>;
