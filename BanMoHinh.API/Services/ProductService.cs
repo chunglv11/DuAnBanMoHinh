@@ -114,6 +114,7 @@ namespace BanMoHinh.API.Services
                              Id = a.Id,
                              SizeName = b.SizeName,
                              ColorName = c.ColorName,
+                             ColorCode = c.ColorCode,
                              Quantity = a.Quantity,
                              Price = a.Price,
                              PriceSale = a.PriceSale,
