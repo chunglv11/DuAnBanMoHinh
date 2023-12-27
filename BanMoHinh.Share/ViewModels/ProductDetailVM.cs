@@ -19,6 +19,7 @@ namespace BanMoHinh.Share.ViewModels
         public double? Height { get; set; }
         public Guid? ColorId { get; set; }
         public string? ColorName { get; set; }
+        public string? ColorCode { get; set; }
         public int? Quantity { get; set; }
         public decimal? Price { get; set; }
         public decimal? PriceSale { get; set; }

@@ -5,9 +5,10 @@
 
 @{
     ViewData["Title"] = "ShowCart";
-    int total = 0;
-    int totalAmount = 0;
-    int price = 0;
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    decimal? total = 0;
+    decimal? totalAmount = 0;
+    decimal? price = 0;
     var productDetail = ViewData["productDetail"] as List<ProductDetailVM>;
     var ProductImage = ViewData["ProductImage"] as List<ProductImage>;
     var Voucher = ViewData["voucher"] as List<Voucher>;
@@ -15,125 +16,210 @@
     var size = ViewData["size"] as List<Size>;
 
 }
-
-    
-        <div class="container">
-            <div class="cart-content mt30 mb30">
-                <div class="title-header mb20">
-                    <h2 class="title">Giỏ Hàng</h2>
-                    <p><span class="text-blue">@Model.Count()</span> sản phẩm trong giỏ hàng của bạn</p>
-                </div>
-            
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Ảnh</th>
-                            <th scope="col">Sản phẩm</th>
-                            <th scope="col">Size - Màu</th>
-                            <th scope="col">Đơn giá</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Thành tiền</th>
-                            <th scope="col"></th>
-
-                        </tr>
-                      </thead>
-                @foreach (var item in Model)
-                {
-                  
-                    @if (!Model.Any())
-                    {
-                        <p>Không có sản phẩm nào trong giỏ hàng.</p>
-                    }
-
-                    else
-                    {
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <img src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
-                                </td>
-                                <td>
-                                    <div class="item-center">
-                                        <p>@item.ProductName</p>
-                                    </div>
-                                </td>
-                            <td>
-                                <div style="align-items:start">
-                                    @foreach (var x in color)
-                                    {
-                                        if (item.ColorsId == x.ColorId)
-                                        {
-                                            <p>Màu: @x.ColorName</p>
-                                        }
-                                    }
-
-                                    @foreach (var x in size)
-                                    {
-                                        if (item.SizeId == x.Id)
-                                        {
-                                            <p>Size: @x.SizeName</p>
-                                        }
-                                    }
-                                </div>
-                            </td>
-                            <td>
-                                <div class="item-center">
-                             @{
-                             price = Convert.ToInt32(item.PriceSale);
-                             }
-                                    <p>@price.ToString("n0") đ</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="item-center">
-                                    <a asp-action="GiamSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color: #ff0000; ">-</a>
-                                    <input type="text" style="height: 50px; width: 50px; border-radius: 50%; border: none; text-align: center" disabled value="@item.Quantity" min="1">
-                                    <a asp-action="TangSL" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId" style="font-size: 20px; color:  #81ff00">+</a>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="item-center text-red" id="total-price">
-                                    @{
-                                        total = Convert.ToInt32(item.TotalPrice);
-                                        totalAmount += total;
-                                    }
-                                    @total.ToString("n0") đ
-                                </div>
-                            </td>
-                            <td>
-                            <div class="item-center pinside10"><a asp-action="DeleteItemInCart" asp-route-id="@item.ProductDetail_Id" asp-route-idCartItem="@item.Id" asp-route-idgh="@item.CartId">Xóa</a></div>
-                            </td>
-                        </tr>
-
-
-                    </tbody>}
-                    }
-                </table>
-                <div class="prices-summary">
-            <div class="left-content">
-                <a href="product-list.html" class="derection-product text-blue">
-                    <i class="fas fa-long-arrow-alt-left"></i> Tiếp tục
-                    mua hàng
-                </a>
-            </div>
-            <div class="right-con">
-                <div class="total-receipt">
-                    <div class="prices-total pinside20">
-                        <span class="price-text">Tổng cộng</span>
-                        <span class="prices-value prices-final text-red">
-                            @(
-                                totalAmount.ToString("n0") 
-                                ) đ
-                        </span>
+@{
+    int checksz = 0; int checkcol = 0;
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<!-- End breadcumb Area -->
+<!--================Cart Area =================-->
+<div class="colorlib-product">
+    <div class="container">
+        <div class="row row-pb-lg">
+            <div class="col-md-10 offset-md-1">
+                <div class="process-wrap">
+                    <div class="process text-center active">
+                        <p><span>01</span></p>
+                        <h3>Giỏ hàng</h3>
+                    </div>
+                    <div class="process text-center">
+                        <p><span>02</span></p>
+                        <h3>Thanh toán</h3>
+                    </div>
+                    <div class="process text-center">
+                        <p><span>03</span></p>
+                        <h3>Hoàn thành</h3>
                     </div>
                 </div>
-                <a asp-controller="Bill" asp-action="Checkout" class="btn-default btn-checkout">Mua Hàng</a>
             </div>
         </div>
-       </div>
-    <!-- /.cart-total -->
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="cart-table table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="pro-quantity">STT</th>
+                                <th class="pro-thumbnail">Sản phẩm</th>
+                                <th class="pro-title">Tên</th>
+                                <th class="pro-quantity text-center">Size</th>
+                                <th class="pro-quantity text-center">Màu sắc</th>
+                                <th class="pro-quantity">Số lượng</th>
+                                <th class="pro-price">Giá</th>
+                                <th class="pro-subtotal">Tổng</th>
+                                <th class="pro-remove"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                                foreach (var item in Model)
+                                {
+                                    
+                                    <tr>
+                                        <td class="pro-quantity"><span>@stt</span></td>
+                                        <td class="pro-thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid img-cart-inx" src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
+                                            </a>
+                                        </td>
+                                        <td class="pro-title custom-title-cart">
+                                            <a data-toggle="tooltip"
+                                               title="@item.ProductName" asp-action="Details" asp-route-id="Products"> @item.ProductName</a>
+                                        </td>
+                                        <td class="pro-quantity text-center">
+                                            <select class="cart-tbl-select-custom ml-3 border-0" >
+                                                @foreach (var i in size)
+                                                {
+                                                    @if (item.SizeId == i.Id)
+                                                    {
+                                                        <option  value="@i.Id">@i.SizeName</option>
 
-    <script>
-        
-    </script>
+                                                        
+                                                        checksz++;
+                                                    }
+                                                    
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="pro-quantity text-center">
+                                            <select class="cart-tbl-select-custom ml-4 border-0" >
+                                                @foreach (var i in color)
+                                                {
+                                                    @if (item.ColorsId == i.ColorId)
+                                                    {
+                                                        <option value="@i.ColorId">@i.ColorName</option>
 
+                                                        
+                                                        checkcol++;
+                                                    }
+                                                    
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="pro-quantity">
+                                            <span>
+                                                <input name="sl" min="1" max="99" type="number"  onchange="" value="@item.Quantity" />
+                                            </span>
+                                        </td>
+                                        <td class="pro-subtotal">
+                                            @{
+                                                price = item.PriceSale;
+                                                
+                                            }
+                                            <span>@price?.ToString("N0")</span>
+                                        </td>
+                                        <td class="pro-price">
+                                            @{
+                                                total = item.TotalPrice;
+                                                totalAmount += total;
+                                            }
+                                            <span>@total?.ToString("N0")</span>
+                                        </td>
+                                        <td class="pro-remove"><a href="javascript:delCart();"><i class='bx bx-x bx-sm'></i></a></td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="stt" value="@stt" />
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="total-wrap">
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-sm-5 text-center">
+                            <div class="total">
+                                <div class="grand-total mt-3">
+                                    <p><span><strong>Tổng tiền:</strong></span> <span>@String.Format("{0:n0}", totalAmount) VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div class="checkout_btn_inner mt-3">
+
+                                <a class="primary-btn" asp-controller="Bill" asp-action="Checkout">Tiến hành thanh toán</a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* của họ, của mik toi xoá r, ô lcopy lại r sửa nh *@
+<script>
+    function clearCart() {
+        $("#imgCart").attr("src", '/images/bag.png');
+    }
+    function delCart(id) {
+        location.reload();
+        $.ajax({
+            type: "POST",
+            url: "/Home/DeleteCart",
+            data: {
+                id: id,
+            },
+            success: function (result) {
+                $("#tr_" + id).hide();
+                $("#spTotal").html(result);
+            }
+        });
+    }
+
+    function updateCart(id) {
+        var soluong = $("#txtQuantity_" + id).val();
+        var gia = $("#tdGia_" + id).html();
+        var thanhtien = soluong * gia;
+        var sizes = $("#size_" + id).val();
+        var colors = $("#color_" + id).val();
+
+        $("#tdTien_" + id).html(thanhtien);
+        location.reload();
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/UpdateCart",
+            data: {
+                id: id,
+                soluong: soluong,
+                size: sizes,
+                color: colors
+            },
+            success: function (result) {
+                $("#spTotal").html(result);
+            }
+        });
+    }
+</script>
+     
