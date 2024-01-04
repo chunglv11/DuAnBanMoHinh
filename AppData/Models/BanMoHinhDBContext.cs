@@ -28,14 +28,13 @@ namespace AppData.Models
         public DbSet<NhanVien> NhanViens { get; set; }
         public DbSet<BaiDang> BaiDangs { get; set; }
         public DbSet<DanhGia> DanhGias { get; set; }
-        public DbSet<QuyDoiDiem> QuyDoiDiems { get; set; }
         public DbSet<SanPham> SanPhams { get; set; }
         public DbSet<VaiTro> VaiTros { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Anh> Anhs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=desktop-aksdrer\momo;Initial Catalog=BanMoHinhTest;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=BanMoHinh27v12;Integrated Security=True");
         }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

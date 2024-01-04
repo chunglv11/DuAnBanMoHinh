@@ -172,15 +172,6 @@
                             <label class="col-sm-5 col-form-label">@tienhang.ToString("n0")</label>
                         </div>
                     </div>
-                    @if (@Model.lstlstd.Count != 0)
-                    {
-                        <div class="row  text-end">
-                            <label class="col-sm-6 col-form-label">Trừ tiêu điểm:</label>
-                            <div class="col-sm-6">
-                                <label class="col-sm-5 col-form-label">@Model.TruTieuDiem?.ToString("n0")</label>
-                            </div>
-                        </div>
-                    }
 
                     @if (@Model.voucher != null)
                     {
@@ -206,7 +197,7 @@
                         <label class="col-sm-6 col-form-label">Tổng cộng:</label>
                         <div class="col-sm-6 ">
                             @{
-                                var tongcong = Model.listsp.Sum(c => c.SoLuong * c.GiaLuu) + Model.TienShip - @voucher - Model.TruTieuDiem;
+                                var tongcong = Model.listsp.Sum(c => c.SoLuong * c.GiaLuu) + Model.TienShip - @voucher;
                                 <label class="col-sm-5 col-form-label">
                                     <b>
                                         @tongcong?.ToString("n0")
@@ -326,89 +317,7 @@
             </div>
         </div>
     }
-    <!--Lịch sử tích điểm-->
-    @if (@Model.KhachHang != "Khách lẻ")
-    {
-        <div class="tab-pane fade" id="lstd" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="d-flex mt-2">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">Mã tích điểm</th>
-                            <th scope="col">Điểm</th>
-                            <th scope="col">Loại</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (@Model.lstlstd.Count == 0)
-                        {
-                            <tr>
-                                <td colspan=3>
-                                    <p style="text-align:center">Không có lịch sử tích điểm nào</p>
-                                </td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @foreach (var item in @Model.lstlstd)
-                            {
-                                if (item.TrangThai == 1)
-                                {
-                                    <tr>
-                                        <td>@item.ID</td>
-                                        <td class="text-success">@item.Diem</td>
-                                        <td class="text-success">
-                                            Tích điểm
-                                        </td>
-                                    </tr>
-                                }
-                                else if(item.TrangThai == 0)
-                                {
-                                    <tr>
-                                        <td>@item.ID</td>
-                                        <td class="text-danger">@item.Diem</td>
-                                        <td class="text-danger">
-                                            Tiêu điểm
-                                        </td>
-                                    </tr>
-                                }
-                                else if(item.TrangThai == 2)
-                                {
-                                    <tr>
-                                        <td>@item.ID</td>
-                                        <td class="text-success">@item.Diem</td>
-                                        <td class="text-success">
-                                            Hoàn điểm đơn hủy
-                                        </td>
-                                    </tr>
-                                }
-                                else if(item.TrangThai == 3)
-                                {
-                                    <tr>
-                                        <td>@item.ID</td>
-                                        <td class="text-danger">@item.Diem</td>
-                                        <td class="text-danger">
-                                            Trừ điểm đơn hoàn hàng
-                                        </td>
-                                    </tr>
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td>@item.ID</td>
-                                        <td class="text-success">@item.Diem</td>
-                                        <td class="text-success">
-                                            Hoàn điểm đơn hoàn hàng
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    }
+
 </div>
 <script>
             $("#save").click(function(){

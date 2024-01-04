@@ -41,7 +41,7 @@ builder.Services.AddDbContext<BanMoHinhDBContext>(options => options.UseSqlServe
 //builder.Services.AddScoped<IChiTietKhuyenMaiServices,ChiTietKhuyenMaiServices>();
 builder.Services.AddScoped<IChiTietGioHangServices, ChiTietGioHangServices>();
 builder.Services.AddScoped<IGioHangServices, GioHangServices>();
-builder.Services.AddScoped<IQuyDoiDiemServices, QuyDoiDiemServices>();
+//builder.Services.AddScoped<IQuyDoiDiemServices, QuyDoiDiemServices>();
 builder.Services.AddScoped<IKhuyenMaiServices, KhuyenMaiServices>();
 builder.Services.AddScoped<IHoaDonService, HoaDonService>();
 builder.Services.AddScoped<IKhachHangService, KhachHangService>();

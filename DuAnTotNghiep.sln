@@ -3,17 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanMoHinh.Share", "BanMoHinh.Share\BanMoHinh.Share.csproj", "{F61897C3-01F1-4DDA-A2BF-8E03BE9AFD13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppAPI", "AppAPI\AppAPI.csproj", "{B87EC22C-55AB-42E1-84AE-91FDA138C3C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanMoHinh.API", "BanMoHinh.API\BanMoHinh.API.csproj", "{1B9206A7-91C0-41CF-9CB3-FED3B9775441}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppData", "AppData\AppData.csproj", "{59F492D0-A533-46BC-A1D8-4759692F0E65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanMoHinh.Client", "BanMoHinh.Client\BanMoHinh.Client.csproj", "{4EE1DC4E-1691-4B57-9B42-AAA96E52CAC5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppAPI", "AppAPI\AppAPI.csproj", "{B87EC22C-55AB-42E1-84AE-91FDA138C3C8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppData", "AppData\AppData.csproj", "{59F492D0-A533-46BC-A1D8-4759692F0E65}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppView", "AppView\AppView.csproj", "{1C338050-F6C8-46AE-A8C3-F04387FB7814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppView", "AppView\AppView.csproj", "{1C338050-F6C8-46AE-A8C3-F04387FB7814}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F61897C3-01F1-4DDA-A2BF-8E03BE9AFD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F61897C3-01F1-4DDA-A2BF-8E03BE9AFD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F61897C3-01F1-4DDA-A2BF-8E03BE9AFD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F61897C3-01F1-4DDA-A2BF-8E03BE9AFD13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B9206A7-91C0-41CF-9CB3-FED3B9775441}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B9206A7-91C0-41CF-9CB3-FED3B9775441}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B9206A7-91C0-41CF-9CB3-FED3B9775441}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B9206A7-91C0-41CF-9CB3-FED3B9775441}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EE1DC4E-1691-4B57-9B42-AAA96E52CAC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EE1DC4E-1691-4B57-9B42-AAA96E52CAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EE1DC4E-1691-4B57-9B42-AAA96E52CAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EE1DC4E-1691-4B57-9B42-AAA96E52CAC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B87EC22C-55AB-42E1-84AE-91FDA138C3C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B87EC22C-55AB-42E1-84AE-91FDA138C3C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87EC22C-55AB-42E1-84AE-91FDA138C3C8}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -23,7 +23,6 @@ namespace AppData.ViewModels.BanOffline
         public int? TienShip { get; set; }
         public int TrangThai { get; set; }
         public string PTTT { get; set; }
-        public int? TruTieuDiem { get; set; }
         public string GhiChu { get; set; }
         public int? KhachCanTra { get; set; }
         public int? TienKhachTra { get; set; }

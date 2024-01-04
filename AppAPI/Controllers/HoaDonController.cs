@@ -124,12 +124,12 @@ namespace AppAPI.Controllers
             var result = _iHoaDonService.HoanHang(idhd, idnv);
             return Ok(result);
         }
-        [HttpPut("HoanTCHD")]
-        public IActionResult HoanTCHD(Guid idhd, Guid idnv)
-        {
-            var result = _iHoaDonService.HoanHangThanhCong(idhd, idnv);
-            return Ok(result);
-        }
+        //[HttpPut("HoanTCHD")]
+        //public IActionResult HoanTCHD(Guid idhd, Guid idnv)
+        //{
+        //    var result = _iHoaDonService.HoanHangThanhCong(idhd, idnv);
+        //    return Ok(result);
+        //}
         [HttpPut("CopyHD")]
         public IActionResult TraHD(Guid idhd, Guid idnv)
         {

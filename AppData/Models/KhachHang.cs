@@ -21,7 +21,6 @@ namespace AppData.Models
         public string? DiaChi { get; set; }
         public string? SDT { get; set; }
         public int? DiemTich { get; set; }
-        public int? TienChiTieu { get; set; }
         public int? TrangThai { get; set; }
         public virtual GioHang? GioHang { get; set; }
         public virtual XepHang? XepHang { get; set; }

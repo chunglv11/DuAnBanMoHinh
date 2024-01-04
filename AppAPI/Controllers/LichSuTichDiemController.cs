@@ -33,12 +33,12 @@ namespace AppAPI.Controllers
             var listDonMua = await _lichsu.getAllDonMua(IDkhachHang);
             return listDonMua;
         }
-        [HttpGet("GetALLLichSuTichDiembyIdUser")]
-        public async Task<List<LichSuTichDiemTieuDiemViewModel>> GetALLLichSuTichDiembyIdUser(Guid IDkhachHang)
-        {
-            var listDonMua = await _lichsu.GetALLLichSuTichDiembyIdUser(IDkhachHang);
-            return listDonMua;
-        }
+        //[HttpGet("GetALLLichSuTichDiembyIdUser")]
+        //public async Task<List<LichSuTichDiemTieuDiemViewModel>> GetALLLichSuTichDiembyIdUser(Guid IDkhachHang)
+        //{
+        //    var listDonMua = await _lichsu.GetALLLichSuTichDiembyIdUser(IDkhachHang);
+        //    return listDonMua;
+        //}
         [HttpGet("GetAllDonMuaChiTiet")]
         public async Task<List<DonMuaChiTietViewModel>> GetAllDonMuaCT(Guid idHoaDon)
         {
@@ -59,7 +59,6 @@ namespace AppAPI.Controllers
             var AllCTSP = await (from LSTD in _dbcontext.LichSuTichDiems.AsNoTracking()
                                  join kh in _dbcontext.KhachHangs.AsNoTracking() on LSTD.IDKhachHang equals kh.IDKhachHang
                                  join hd in _dbcontext.HoaDons.AsNoTracking() on LSTD.IDHoaDon equals hd.ID
-                                 join qdd in _dbcontext.QuyDoiDiems.AsNoTracking() on LSTD.IDQuyDoiDiem equals qdd.ID
                                   
                                  select new LichSuTichDiemView()
                                  {
@@ -67,14 +66,10 @@ namespace AppAPI.Controllers
                                      IDKhachHang = kh.IDKhachHang,
                                      IDHoaDon = hd.ID,
                                      MaHD=hd.MaHD,
-                                     IDQuyDoiDiem = qdd.ID,
-                                     NgayTichOrTieuDiem = hd.NgayThanhToan,
                                      TenKhachHang = kh.Ten,
                                      SDT = kh.SDT,
                                      //SoDiemTichOrTieu = qdd.SoDiem,
-                                     DiemTichKH = kh.DiemTich,
-                                    
-                                     TrangThai = LSTD.TrangThai
+                                     DiemTichKH = kh.DiemTich
                                  }).Where(x=>x.IDKhachHang==idkh).ToListAsync();
             return AllCTSP;
         }
@@ -221,19 +216,19 @@ namespace AppAPI.Controllers
 
         // POST api/<LichSuTichDiemController>
         [HttpPost]
-        public bool Post(int diem, int trangthai, Guid IdKhachHang, Guid IdQuyDoiDiem, Guid IdHoaDon)
+        public bool Post( Guid IdKhachHang, Guid IdHoaDon)
         {
-            return _lichsu.Add(diem, trangthai, IdKhachHang, IdQuyDoiDiem, IdHoaDon);
+            return _lichsu.Add( IdKhachHang, IdHoaDon);
         }
 
         // PUT api/<LichSuTichDiemController>/5
         [HttpPut("{id}")]
-        public bool Put(Guid id, int diem, int trangthai, Guid IdKhachHang, Guid IdQuyDoiDiem, Guid IdHoaDon)
+        public bool Put(Guid id, Guid IdKhachHang, Guid IdHoaDon)
         {
             var lichsu= _lichsu.GetById(id);
             if (lichsu != null)
             {
-                return _lichsu.Update(lichsu.ID,diem, trangthai, IdKhachHang, IdQuyDoiDiem, IdHoaDon);
+                return _lichsu.Update(lichsu.ID, IdKhachHang,IdHoaDon);
             }
             else
             {

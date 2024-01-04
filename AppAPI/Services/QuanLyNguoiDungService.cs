@@ -398,19 +398,14 @@ namespace AppAPI.Services
             try
             {
                 var khachHang = context.KhachHangs.First(x => x.IDKhachHang == new Guid(id));
-                var quyDoiDiem = context.QuyDoiDiems.First(x => x.TrangThai > 0);
 
-                if (quyDoiDiem == null)
-                {
-                    return 0;
-                }
-                else if (diem > khachHang.DiemTich)
+                if (diem > khachHang.DiemTich)
                 {
                     return 0;
                 }
                 else
                 {
-                    return diem * quyDoiDiem.TiLeTieuDiem;
+                    return diem ;
                 }
             }
             catch (Exception)

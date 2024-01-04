@@ -16,14 +16,11 @@ namespace AppAPI.Services
         {
             _allRepository= new AllRepository<LichSuTichDiem>(context,context.LichSuTichDiems);
         }
-        public bool Add(int diem, int trangthai, Guid IdKhachHang, Guid IdQuyDoiDiem, Guid IdHoaDon)
+        public bool Add( Guid IdKhachHang, Guid IdHoaDon)
         {
             var lichsu = new LichSuTichDiem();
             lichsu.ID=Guid.NewGuid();
-            lichsu.Diem=diem;
-            lichsu.TrangThai=trangthai;
             lichsu.IDKhachHang=IdKhachHang;
-            lichsu.IDQuyDoiDiem = IdQuyDoiDiem;
             lichsu.IDHoaDon = IdHoaDon;
             return _allRepository.Add(lichsu);
         }
@@ -53,15 +50,12 @@ namespace AppAPI.Services
             return _allRepository.GetAll().First(x => x.ID==Id);
         }
 
-        public bool Update(Guid Id, int diem, int trangthai, Guid IdKhachHang, Guid IdQuyDoiDiem, Guid IdHoaDon)
+        public bool Update(Guid Id, Guid IdKhachHang, Guid IdHoaDon)
         {
             var lichsu= _allRepository.GetAll().First(x => x.ID == Id);
             if (lichsu != null)
             {
-                lichsu.Diem = diem;
-                lichsu.TrangThai = trangthai;
                 lichsu.IDKhachHang = IdKhachHang;
-                lichsu.IDQuyDoiDiem = IdQuyDoiDiem;
                 lichsu.IDHoaDon = IdHoaDon;
                 return _allRepository.Update(lichsu);
             }
@@ -146,9 +140,7 @@ namespace AppAPI.Services
                                          GiaTri = a.IDVoucher == null ? null : (context.Vouchers.First(x => x.ID == a.IDVoucher)).GiaTri,
                                          TrangThaiDanhGia = d.TrangThai,
                                          LoaiHoaDon = a.LoaiHD,
-                                         lichSuTichDiems = context.LichSuTichDiems.Where(p=>p.IDHoaDon == a.ID).ToList(),
-                                         TiLeTieuDiem = context.QuyDoiDiems.FirstOrDefault(p=>p.ID == context.LichSuTichDiems.FirstOrDefault(p => p.IDHoaDon == a.ID).IDQuyDoiDiem).TiLeTieuDiem,
-                                         TiLeTichDiem = context.QuyDoiDiems.FirstOrDefault(p => p.ID == context.LichSuTichDiems.FirstOrDefault(p => p.IDHoaDon == a.ID).IDQuyDoiDiem).TiLeTichDiem,
+                                         lichSuTichDiems = context.LichSuTichDiems.Where(p=>p.IDHoaDon == a.ID).ToList()
                                       }).ToListAsync();
                 return lstDonMuaCT;
             }
@@ -184,39 +176,6 @@ namespace AppAPI.Services
             catch
             {
                 return new ChiTietHoaDonDanhGiaViewModel();
-            }
-        }
-
-        public async Task<List<LichSuTichDiemTieuDiemViewModel>> GetALLLichSuTichDiembyIdUser(Guid idKhachHang)
-        {
-            try
-            {
-                var lstLichSuTichDiem = await(from a in context.LichSuTichDiems
-                                      join b in context.HoaDons on a.IDHoaDon equals b.ID
-                                      select new LichSuTichDiemTieuDiemViewModel()
-                                      {
-                                          IDHoaDon = b.ID,
-                                          NgayTao = b.NgayTao,
-                                          NgayThanhToan = b.NgayThanhToan,
-                                          NgayNhanHang = b.NgayNhanHang,
-                                          Ngaytao1 = null,
-                                          Ngaynhanhang1 = null,
-                                          Ngaythanhtoan1 = null,
-                                          TenNguoiNhan = b.TenNguoiNhan,
-                                          TrangThaiGiaoHang = b.TrangThaiGiaoHang,
-                                          IdNguoiDung = context.LichSuTichDiems.FirstOrDefault(p => p.IDHoaDon == b.ID) != null ? context.LichSuTichDiems.FirstOrDefault(p => p.IDHoaDon == b.ID).IDKhachHang.Value : null,
-                                          MaHD = b.MaHD,
-                                          TrangThaiLSTD = a.TrangThai,
-                                          Diem = a.Diem,
-                                          LoaiHoaDon = b.LoaiHD
-                                      }).ToListAsync();
-
-                lstLichSuTichDiem = lstLichSuTichDiem.Where(P => P.IdNguoiDung == idKhachHang).ToList();
-                return lstLichSuTichDiem;
-            }
-            catch
-            {
-                return new List<LichSuTichDiemTieuDiemViewModel>();
             }
         }
 

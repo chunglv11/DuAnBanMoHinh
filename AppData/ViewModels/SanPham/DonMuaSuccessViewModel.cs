@@ -15,8 +15,6 @@ namespace AppData.ViewModels.SanPham
         public string DiaChi { get; set; }
         public string PhuongThucThanhToan { get; set; }
         public int TongTien { get; set; }
-        public int DiemTich { get; set; }
-        public int DiemSuDung { get; set; }
         public string MaVoucher { get; set; }
         public bool Login { get; set; }
         public string GhiChu { get; set; }

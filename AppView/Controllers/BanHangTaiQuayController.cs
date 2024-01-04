@@ -352,9 +352,6 @@ namespace AppView.Controllers
                 //Voucher
                 string apiURL = $"https://localhost:7095/api/Voucher";
                 var listvc = await _httpClient.GetFromJsonAsync<List<Voucher>>(apiURL);
-                //Quy đổi điểm
-                var qdd = await _httpClient.GetFromJsonAsync<List<QuyDoiDiem>>("QuyDoiDiem");
-                var qddActive = qdd.FirstOrDefault(c => c.TrangThai != 0);
                 //Kiểm tra là hóa đơn của khách có tài khoản không?
                 var khachHang = "Khách lẻ";
                 Guid idkh = Guid.Empty;
@@ -364,7 +361,7 @@ namespace AppView.Controllers
                 {
                     var lstd = await _httpClient.GetFromJsonAsync<LichSuTichDiem>($"HoaDon/LichSuGiaoDich/{id}");
                     //Sửa lịch sử tích điểm nếu có thay đổi quy đổi điểm bên quản trị
-                    string url = $"LichSuTichDiem/{lstd.ID}?diem={lstd.Diem}&trangthai={lstd.TrangThai}&IdKhachHang={lstd.IDKhachHang}&IdQuyDoiDiem={qddActive.ID}&IdHoaDon={id}";
+                    string url = $"LichSuTichDiem/{lstd.ID}?IdKhachHang={lstd.IDKhachHang}&IdHoaDon={id}";
                     var lstdresponse = await _httpClient.PutAsync(url, null);
                     //Lấy tên kh
                     var kh = await _httpClient.GetFromJsonAsync<KhachHang>($"KhachHang/GetById?id={lstd.IDKhachHang}");
@@ -404,11 +401,9 @@ namespace AppView.Controllers
                     TongSL = soluong,
                     TongTien = ttien,
                     DiemKH = dtkh,
-                    DiemTichHD = qddActive != null && qddActive.TiLeTichDiem != 0 ? Convert.ToInt32(ttien / qddActive?.TiLeTichDiem) : 0,
+                    DiemTichHD = hd.TongTien,
                     NhanVien = loginInfor.Ten,
                 };
-                ViewBag.TLTieu = (qddActive != null && qddActive.TiLeTichDiem != 0) ? (qddActive.TiLeTieuDiem) : 0;
-                ViewBag.LoaiQDD = qddActive != null ? (qddActive.TrangThai) : 0;
                 ViewData["LstVoucher"] = listvc;
                 return PartialView("_ThanhToan", hdtt);
             }
@@ -477,8 +472,7 @@ namespace AppView.Controllers
                     var response = await _httpClient.PostAsJsonAsync(url, khview);
                     if (response.IsSuccessStatusCode) // Thêm khách hàng thành công -> tạo lịch sử tích điểm
                     {
-                        var qdd = await _httpClient.GetFromJsonAsync<List<QuyDoiDiem>>("QuyDoiDiem");
-                        var idqdd = qdd.FirstOrDefault(c => c.TrangThai != 0).ID;
+
                         var kh = new KhachHang();
                         if (request.SDT != null)
                         {
@@ -497,7 +491,7 @@ namespace AppView.Controllers
                             var lstdexist = await _httpClient.GetFromJsonAsync<LichSuTichDiem>($"HoaDon/LichSuGiaoDich/{IDHD}");
                             var deletelstd = await _httpClient.DeleteAsync($"LichSuTichDiem/{lstdexist.ID}");
                         }
-                        string apiUrl = $"https://localhost:7095/api/LichSuTichDiem?diem=0&trangthai=1&IdKhachHang={kh.IDKhachHang}&IdQuyDoiDiem={idqdd}&IdHoaDon={IDHD}";
+                        string apiUrl = $"https://localhost:7095/api/LichSuTichDiem?IdKhachHang={kh.IDKhachHang}&IdHoaDon={IDHD}";
                         var lstdresponse = await _httpClient.PostAsync(apiUrl, null);
                         return Json(new { success = true, message = "Thêm khách hàng thành công" });
 
@@ -516,18 +510,16 @@ namespace AppView.Controllers
         {
             try
             {
-                var qdd = await _httpClient.GetFromJsonAsync<List<QuyDoiDiem>>("QuyDoiDiem");
-                var idqdd = qdd.FirstOrDefault(c => c.TrangThai != 0).ID;
                 var checkexist = await _httpClient.GetFromJsonAsync<bool>($"HoaDon/CheckLSGDHD/{idhd}");
                 if (checkexist == true) // Tồn tại-> sửa
                 {
                     var lstd = await _httpClient.GetFromJsonAsync<LichSuTichDiem>($"HoaDon/LichSuGiaoDich/{idhd}");
-                    string apiUrl = $"https://localhost:7095/api/LichSuTichDiem/{lstd.ID}?diem={lstd.Diem}&trangthai={lstd.TrangThai}&IdKhachHang={idkh}&IdQuyDoiDiem={lstd.IDQuyDoiDiem}&IdHoaDon={idhd}";
+                    string apiUrl = $"https://localhost:7095/api/LichSuTichDiem/{lstd.ID}?IdKhachHang={idkh}&IdHoaDon={idhd}";
                     var response = await _httpClient.PutAsync(apiUrl, null);
                 }
                 else // Chưa có lstd-> tạo mới
                 {
-                    string apiUrl = $"https://localhost:7095/api/LichSuTichDiem?diem=0&trangthai=1&IdKhachHang={idkh}&IdQuyDoiDiem={idqdd}&IdHoaDon={idhd}";
+                    string apiUrl = $"https://localhost:7095/api/LichSuTichDiem?IdKhachHang={idkh}&IdHoaDon={idhd}";
                     var lstdresponse = await _httpClient.PostAsync(apiUrl, null);
                 }
                 return Json(new { success = true });
