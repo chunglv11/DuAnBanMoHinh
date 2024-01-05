@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AppData.Migrations
 {
-    public partial class vcuoi : Migration
+    public partial class vcuoii : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -376,30 +376,6 @@ namespace AppData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DiaChi",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdKhachHang = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThanhPho = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Huyen = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Xa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiaChiChiTiet = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDefault = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DiaChi", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DiaChi_KhachHang_IdKhachHang",
-                        column: x => x.IdKhachHang,
-                        principalTable: "KhachHang",
-                        principalColumn: "IDKhachHang");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "VoucherKH",
                 columns: table => new
                 {
@@ -587,11 +563,6 @@ namespace AppData.Migrations
                 column: "IDSanPham");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiaChi_IdKhachHang",
-                table: "DiaChi",
-                column: "IdKhachHang");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HoaDon_IDNhanVien",
                 table: "HoaDon",
                 column: "IDNhanVien");
@@ -660,9 +631,6 @@ namespace AppData.Migrations
 
             migrationBuilder.DropTable(
                 name: "ChiTietHoaDon");
-
-            migrationBuilder.DropTable(
-                name: "DiaChi");
 
             migrationBuilder.DropTable(
                 name: "LichSuMuaHang");

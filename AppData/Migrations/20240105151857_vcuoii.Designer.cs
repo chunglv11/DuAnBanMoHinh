@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppData.Migrations
 {
     [DbContext(typeof(BanMoHinhDBContext))]
-    [Migration("20240105141633_vcuoi")]
-    partial class vcuoi
+    [Migration("20240105151857_vcuoii")]
+    partial class vcuoii
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -232,49 +232,6 @@ namespace AppData.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("DanhGia", (string)null);
-                });
-
-            modelBuilder.Entity("AppData.Models.DiaChi", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DiaChiChiTiet")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Huyen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("IdKhachHang")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Sdt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ten")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ThanhPho")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Xa")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdKhachHang");
-
-                    b.ToTable("DiaChi", (string)null);
                 });
 
             modelBuilder.Entity("AppData.Models.GioHang", b =>
@@ -861,15 +818,6 @@ namespace AppData.Migrations
                     b.Navigation("SanPham");
                 });
 
-            modelBuilder.Entity("AppData.Models.DiaChi", b =>
-                {
-                    b.HasOne("AppData.Models.KhachHang", "KhachHang")
-                        .WithMany("DiaChis")
-                        .HasForeignKey("IdKhachHang");
-
-                    b.Navigation("KhachHang");
-                });
-
             modelBuilder.Entity("AppData.Models.HoaDon", b =>
                 {
                     b.HasOne("AppData.Models.NhanVien", "NhanVien")
@@ -1009,8 +957,6 @@ namespace AppData.Migrations
 
             modelBuilder.Entity("AppData.Models.KhachHang", b =>
                 {
-                    b.Navigation("DiaChis");
-
                     b.Navigation("LichSuTichDiems");
 
                     b.Navigation("VoucherKHs");

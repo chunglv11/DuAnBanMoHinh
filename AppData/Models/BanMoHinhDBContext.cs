@@ -24,7 +24,6 @@ namespace AppData.Models
         public DbSet<LoaiSP> LoaiSPs { get; set; }
         public DbSet<KhachHang> KhachHangs { get; set; }
         public DbSet<VoucherKH> voucherKHs { get; set; }
-        public DbSet<DiaChi> DiaChis { get; set; }
         public DbSet<XepHang> XepHangs { get; set; }
         public DbSet<NhanVien> NhanViens { get; set; }
         public DbSet<BaiDang> BaiDangs { get; set; }
@@ -35,7 +34,7 @@ namespace AppData.Models
         public DbSet<Anh> Anhs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-AKSDRER\MOMO;Initial Catalog=BanMoHinhTest;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-AKSDRER\MOMO;Initial Catalog=BanMoHinhTest1;Integrated Security=True");
         }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
