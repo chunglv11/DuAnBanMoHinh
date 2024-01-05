@@ -25,7 +25,6 @@ namespace AppData.Configurations
             builder.Property(x => x.DiemTich).HasColumnType("int");
             builder.Property(x => x.TrangThai).HasColumnType("int");
             builder.HasOne(x => x.XepHang).WithMany(x => x.KhachHangs).HasForeignKey(x => x.IDRank);
-            builder.HasOne(x => x.Voucher).WithMany(x => x.KhachHangs).HasForeignKey(x => x.IDVoucher);
             
         }
     }

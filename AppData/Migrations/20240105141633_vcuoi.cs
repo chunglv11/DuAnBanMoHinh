@@ -113,20 +113,6 @@ namespace AppData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuyDoiDiem",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TiLeTichDiem = table.Column<int>(type: "int", nullable: false),
-                    TiLeTieuDiem = table.Column<int>(type: "int", nullable: false),
-                    TrangThai = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuyDoiDiem", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "VaiTro",
                 columns: table => new
                 {
@@ -165,8 +151,8 @@ namespace AppData.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Ten = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    TienMin = table.Column<int>(type: "int", nullable: false),
-                    TienMax = table.Column<int>(type: "int", nullable: false),
+                    DiemMin = table.Column<int>(type: "int", nullable: false),
+                    DiemMax = table.Column<int>(type: "int", nullable: false),
                     Mota = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
@@ -233,7 +219,6 @@ namespace AppData.Migrations
                 {
                     IDKhachHang = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IDRank = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDVoucher = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Ten = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Password = table.Column<string>(type: "varchar(MAX)", nullable: false),
                     GioiTinh = table.Column<int>(type: "int", nullable: true),
@@ -242,7 +227,6 @@ namespace AppData.Migrations
                     DiaChi = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     SDT = table.Column<string>(type: "varchar(10)", nullable: true),
                     DiemTich = table.Column<int>(type: "int", nullable: true),
-                    TienChiTieu = table.Column<int>(type: "int", nullable: true),
                     TrangThai = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -254,11 +238,6 @@ namespace AppData.Migrations
                         principalTable: "GioHang",
                         principalColumn: "IDKhachHang",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_KhachHang_Voucher_IDVoucher",
-                        column: x => x.IDVoucher,
-                        principalTable: "Voucher",
-                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_KhachHang_XepHang_IDRank",
                         column: x => x.IDRank,
@@ -421,6 +400,29 @@ namespace AppData.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VoucherKH",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IDKhachHang = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IDVoucher = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VoucherKH", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VoucherKH_KhachHang_IDKhachHang",
+                        column: x => x.IDKhachHang,
+                        principalTable: "KhachHang",
+                        principalColumn: "IDKhachHang");
+                    table.ForeignKey(
+                        name: "FK_VoucherKH_Voucher_IDVoucher",
+                        column: x => x.IDVoucher,
+                        principalTable: "Voucher",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChiTietGioHang",
                 columns: table => new
                 {
@@ -481,41 +483,28 @@ namespace AppData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LichSuTichDiem",
+                name: "LichSuMuaHang",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Diem = table.Column<int>(type: "int", nullable: false),
-                    TrangThai = table.Column<int>(type: "int", nullable: false),
                     IDKhachHang = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IDQuyDoiDiem = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IDHoaDon = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LichSuTichDiem", x => x.ID);
+                    table.PrimaryKey("PK_LichSuMuaHang", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_LichSuTichDiem_HoaDon_IDHoaDon",
+                        name: "FK_LichSuMuaHang_HoaDon_IDHoaDon",
                         column: x => x.IDHoaDon,
                         principalTable: "HoaDon",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LichSuTichDiem_KhachHang_IDKhachHang",
+                        name: "FK_LichSuMuaHang_KhachHang_IDKhachHang",
                         column: x => x.IDKhachHang,
                         principalTable: "KhachHang",
                         principalColumn: "IDKhachHang");
-                    table.ForeignKey(
-                        name: "FK_LichSuTichDiem_QuyDoiDiem_IDQuyDoiDiem",
-                        column: x => x.IDQuyDoiDiem,
-                        principalTable: "QuyDoiDiem",
-                        principalColumn: "ID");
                 });
-
-            migrationBuilder.InsertData(
-                table: "QuyDoiDiem",
-                columns: new[] { "ID", "TiLeTichDiem", "TiLeTieuDiem", "TrangThai" },
-                values: new object[] { new Guid("16bd37c4-cef0-4e92-9bb5-511c43d99037"), 0, 0, 1 });
 
             migrationBuilder.InsertData(
                 table: "VaiTro",
@@ -528,13 +517,13 @@ namespace AppData.Migrations
 
             migrationBuilder.InsertData(
                 table: "XepHang",
-                columns: new[] { "Id", "Mota", "Ten", "TienMax", "TienMin" },
+                columns: new[] { "Id", "DiemMax", "DiemMin", "Mota", "Ten" },
                 values: new object[,]
                 {
-                    { new Guid("02a277fd-e8b4-42ae-b305-9d598fce3c80"), "rank vàng", "Vàng", 4000000, 2000000 },
-                    { new Guid("376e1049-0e36-4b89-a240-b5eb8409f503"), "rank kim cương", "Kim Cương", 9000000, 4000000 },
-                    { new Guid("491abc2c-3bfa-47dd-a55c-ed065295374c"), "Thành viên", "Thành viên", 0, 0 },
-                    { new Guid("c6c70bab-e95b-4e78-aaf1-4077e9508332"), "rank bạc", "Bạc", 2000000, 1000000 }
+                    { new Guid("02a277fd-e8b4-42ae-b305-9d598fce3c80"), 4000000, 2000000, "rank vàng", "Vàng" },
+                    { new Guid("376e1049-0e36-4b89-a240-b5eb8409f503"), 9000000, 4000000, "rank kim cương", "Kim Cương" },
+                    { new Guid("491abc2c-3bfa-47dd-a55c-ed065295374c"), 0, 0, "Thành viên", "Đồng" },
+                    { new Guid("c6c70bab-e95b-4e78-aaf1-4077e9508332"), 2000000, 1000000, "rank bạc", "Bạc" }
                 });
 
             migrationBuilder.InsertData(
@@ -618,24 +607,14 @@ namespace AppData.Migrations
                 column: "IDRank");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KhachHang_IDVoucher",
-                table: "KhachHang",
-                column: "IDVoucher");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LichSuTichDiem_IDHoaDon",
-                table: "LichSuTichDiem",
+                name: "IX_LichSuMuaHang_IDHoaDon",
+                table: "LichSuMuaHang",
                 column: "IDHoaDon");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LichSuTichDiem_IDKhachHang",
-                table: "LichSuTichDiem",
+                name: "IX_LichSuMuaHang_IDKhachHang",
+                table: "LichSuMuaHang",
                 column: "IDKhachHang");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LichSuTichDiem_IDQuyDoiDiem",
-                table: "LichSuTichDiem",
-                column: "IDQuyDoiDiem");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LoaiSP_IDLoaiSPCha",
@@ -656,6 +635,16 @@ namespace AppData.Migrations
                 name: "IX_SanPham_IDLoaiSP",
                 table: "SanPham",
                 column: "IDLoaiSP");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VoucherKH_IDKhachHang",
+                table: "VoucherKH",
+                column: "IDKhachHang");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VoucherKH_IDVoucher",
+                table: "VoucherKH",
+                column: "IDVoucher");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -676,7 +665,10 @@ namespace AppData.Migrations
                 name: "DiaChi");
 
             migrationBuilder.DropTable(
-                name: "LichSuTichDiem");
+                name: "LichSuMuaHang");
+
+            migrationBuilder.DropTable(
+                name: "VoucherKH");
 
             migrationBuilder.DropTable(
                 name: "ChiTietSanPham");
@@ -689,9 +681,6 @@ namespace AppData.Migrations
 
             migrationBuilder.DropTable(
                 name: "KhachHang");
-
-            migrationBuilder.DropTable(
-                name: "QuyDoiDiem");
 
             migrationBuilder.DropTable(
                 name: "KhuyenMai");
@@ -709,10 +698,10 @@ namespace AppData.Migrations
                 name: "NhanVien");
 
             migrationBuilder.DropTable(
-                name: "GioHang");
+                name: "Voucher");
 
             migrationBuilder.DropTable(
-                name: "Voucher");
+                name: "GioHang");
 
             migrationBuilder.DropTable(
                 name: "XepHang");

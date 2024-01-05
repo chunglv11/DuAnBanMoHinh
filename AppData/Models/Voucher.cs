@@ -13,7 +13,7 @@
         public string? MoTa { get; set; }
         public int TrangThai { get; set; }
         public virtual IEnumerable<HoaDon> HoaDons { get; set; }
-        public virtual IEnumerable<KhachHang> KhachHangs { get; set; }
+        public virtual IEnumerable<VoucherKH> VoucherKHs { get; set; }
        
     }
 }

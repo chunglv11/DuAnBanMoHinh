@@ -11,7 +11,6 @@ namespace AppData.Models
     {
         public Guid IDKhachHang { get; set; }
         public Guid IDRank { get; set; }
-        public Guid? IDVoucher { get; set; }
         public string Ten { get; set; }
         public string Password { get; set; }
         public int? GioiTinh { get; set; }
@@ -24,8 +23,8 @@ namespace AppData.Models
         public int? TrangThai { get; set; }
         public virtual GioHang? GioHang { get; set; }
         public virtual XepHang? XepHang { get; set; }
-        public virtual Voucher? Voucher { get; set; }
         public virtual IEnumerable<LichSuTichDiem>? LichSuTichDiems { get; set; }
+        public virtual IEnumerable<VoucherKH> VoucherKHs { get; set; }
         public virtual IEnumerable<DiaChi>? DiaChis { get; set; }
     }
 }

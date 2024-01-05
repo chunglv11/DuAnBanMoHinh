@@ -10,8 +10,8 @@ namespace AppData.Models
     {
         public Guid Id { get; set; }
         public string? Ten { get; set; }
-        public int? TienMin { get; set; }
-        public int? TienMax { get; set; }
+        public int? DiemMin { get; set; }
+        public int? DiemMax { get; set; }
         public string? Mota { get; set; }
         public virtual List<KhachHang>? KhachHangs { get; set; }
     }

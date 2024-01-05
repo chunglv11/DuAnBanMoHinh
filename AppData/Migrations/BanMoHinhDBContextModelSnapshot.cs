@@ -373,9 +373,6 @@ namespace AppData.Migrations
                     b.Property<Guid>("IDRank")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("IDVoucher")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("NgaySinh")
                         .HasColumnType("datetime");
 
@@ -396,8 +393,6 @@ namespace AppData.Migrations
                     b.HasKey("IDKhachHang");
 
                     b.HasIndex("IDRank");
-
-                    b.HasIndex("IDVoucher");
 
                     b.ToTable("KhachHang", (string)null);
                 });
@@ -470,7 +465,7 @@ namespace AppData.Migrations
 
                     b.HasIndex("IDKhachHang");
 
-                    b.ToTable("LichSuTichDiem", (string)null);
+                    b.ToTable("LichSuMuaHang", (string)null);
                 });
 
             modelBuilder.Entity("AppData.Models.LoaiSP", b =>
@@ -680,11 +675,40 @@ namespace AppData.Migrations
                     b.ToTable("Voucher", (string)null);
                 });
 
+            modelBuilder.Entity("AppData.Models.VoucherKH", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IDKhachHang")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IDVoucher")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IDKhachHang");
+
+                    b.HasIndex("IDVoucher");
+
+                    b.ToTable("VoucherKH", (string)null);
+                });
+
             modelBuilder.Entity("AppData.Models.XepHang", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("DiemMax")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DiemMin")
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.Property<string>("Mota")
                         .HasColumnType("nvarchar(100)");
@@ -692,14 +716,6 @@ namespace AppData.Migrations
                     b.Property<string>("Ten")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<int?>("TienMax")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TienMin")
-                        .IsRequired()
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -709,34 +725,34 @@ namespace AppData.Migrations
                         new
                         {
                             Id = new Guid("491abc2c-3bfa-47dd-a55c-ed065295374c"),
+                            DiemMax = 0,
+                            DiemMin = 0,
                             Mota = "Thành viên",
-                            Ten = "Đồng",
-                            TienMax = 0,
-                            TienMin = 0
+                            Ten = "Đồng"
                         },
                         new
                         {
                             Id = new Guid("c6c70bab-e95b-4e78-aaf1-4077e9508332"),
+                            DiemMax = 2000000,
+                            DiemMin = 1000000,
                             Mota = "rank bạc",
-                            Ten = "Bạc",
-                            TienMax = 2000000,
-                            TienMin = 1000000
+                            Ten = "Bạc"
                         },
                         new
                         {
                             Id = new Guid("02a277fd-e8b4-42ae-b305-9d598fce3c80"),
+                            DiemMax = 4000000,
+                            DiemMin = 2000000,
                             Mota = "rank vàng",
-                            Ten = "Vàng",
-                            TienMax = 4000000,
-                            TienMin = 2000000
+                            Ten = "Vàng"
                         },
                         new
                         {
                             Id = new Guid("376e1049-0e36-4b89-a240-b5eb8409f503"),
+                            DiemMax = 9000000,
+                            DiemMin = 4000000,
                             Mota = "rank kim cương",
-                            Ten = "Kim Cương",
-                            TienMax = 9000000,
-                            TienMin = 4000000
+                            Ten = "Kim Cương"
                         });
                 });
 
@@ -881,13 +897,7 @@ namespace AppData.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AppData.Models.Voucher", "Voucher")
-                        .WithMany("KhachHangs")
-                        .HasForeignKey("IDVoucher");
-
                     b.Navigation("GioHang");
-
-                    b.Navigation("Voucher");
 
                     b.Navigation("XepHang");
                 });
@@ -948,6 +958,21 @@ namespace AppData.Migrations
                     b.Navigation("LoaiSP");
                 });
 
+            modelBuilder.Entity("AppData.Models.VoucherKH", b =>
+                {
+                    b.HasOne("AppData.Models.KhachHang", "KhachHang")
+                        .WithMany("VoucherKHs")
+                        .HasForeignKey("IDKhachHang");
+
+                    b.HasOne("AppData.Models.Voucher", "Voucher")
+                        .WithMany("VoucherKHs")
+                        .HasForeignKey("IDVoucher");
+
+                    b.Navigation("KhachHang");
+
+                    b.Navigation("Voucher");
+                });
+
             modelBuilder.Entity("AppData.Models.ChatLieu", b =>
                 {
                     b.Navigation("SanPhams");
@@ -985,6 +1010,8 @@ namespace AppData.Migrations
                     b.Navigation("DiaChis");
 
                     b.Navigation("LichSuTichDiems");
+
+                    b.Navigation("VoucherKHs");
                 });
 
             modelBuilder.Entity("AppData.Models.KhuyenMai", b =>
@@ -1032,7 +1059,7 @@ namespace AppData.Migrations
                 {
                     b.Navigation("HoaDons");
 
-                    b.Navigation("KhachHangs");
+                    b.Navigation("VoucherKHs");
                 });
 
             modelBuilder.Entity("AppData.Models.XepHang", b =>
