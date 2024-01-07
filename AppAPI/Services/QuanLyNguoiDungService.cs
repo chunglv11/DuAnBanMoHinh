@@ -302,7 +302,7 @@ namespace AppAPI.Services
         {
             try
             {
-                var existingKhachHang = await context.KhachHangs.FirstOrDefaultAsync(kh => kh.Email == khachHang.Email || kh.SDT == khachHang.SDT);
+				var existingKhachHang = await context.KhachHangs.FirstOrDefaultAsync(kh => kh.Email == khachHang.Email || kh.SDT == khachHang.SDT);
                 if (existingKhachHang != null)
                 {
                     return null; // Tài khoản đã tồn tại
@@ -316,7 +316,9 @@ namespace AppAPI.Services
                     SDT = khachHang.SDT,
                     DiemTich = 0,
                     TrangThai = 1,
-                };
+                    GioiTinh=1,// thiếu giới tính form đăng kí
+					IDRank = Guid.Parse("491abc2c-3bfa-47dd-a55c-ed065295374c")
+				};
                 await context.KhachHangs.AddAsync(kh);
                 GioHang gioHang = new GioHang()
                 {
