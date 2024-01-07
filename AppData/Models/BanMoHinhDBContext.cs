@@ -34,7 +34,7 @@ namespace AppData.Models
         public DbSet<Anh> Anhs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-AKSDRER\MOMO;Initial Catalog=BanMoHinhTest1;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-AKSDRER\MOMO;Initial Catalog=BanMoHinhTest2;Integrated Security=True");
         }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
