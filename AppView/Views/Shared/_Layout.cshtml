@@ -70,6 +70,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                                 <li><a class="dropdown-item" asp-controller="Home" asp-action="Profile">Thông tin cá nhân</a></li>
                                                 <li><a class="dropdown-item" asp-controller="Home" asp-action="PurchaseOrder">Đơn mua</a></li>
+                                                <li><a class="dropdown-item" asp-controller="Vouchers" asp-action="GetAllVoucherUser" >Kho Voucher</a></li>
                                                 @if (loginInfor.vaiTro == 0)
                                                 {
                                                     <li><a class="dropdown-item" asp-controller="BanHangTaiQuay" asp-action="BanHang">Quản lý cửa hàng</a></li>

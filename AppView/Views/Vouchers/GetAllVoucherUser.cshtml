@@ -1,0 +1,58 @@
+﻿@model AppView.PhanTrang.PhanTrangVouchers
+
+@{
+    ViewData["Title"] = "GetAllVoucherUser";
+    Layout = "_Layout";
+
+}
+
+<h1>Kho Voucher</h1>
+
+<form asp-action="TimKiemTenVC" asp-controller="Vouchers" method="get" enctype="multipart/form-data">
+    <div class="input-group">
+        <input type="text" name="Ten" class="form-control" placeholder="Tìm kiếm Voucher theo mã">
+        <div class="input-group-append">
+            <span class="input-group-text bg-transparent text-primary">
+                <button type="submit" class="fa fa-search"></button>
+            </span>
+        </div>
+    </div>
+</form>
+    
+@foreach (var item in Model.listvouchers)
+{
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card voucher-thumbnail">
+                        <img src="voucher-image1.jpg" class="card-img-top" alt="Voucher Image 1">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Ten</h5>
+                    <p class="card-text">Đơn tối thiếu @item.SoTienCan Giảm tối đa @item.GiaTri.ToString("n0")</p>
+                            <p class="card-text"><a href="#" id="expiry-date-link1">Xem Hạn Sử Dụng</a></p>
+                            <a href="" class="btn btn-primary">Dùng ngay</a>
+                            <p class="card-text"><small class="text-muted">Hạn sử dụng: @item.NgayKetThuc</small></p>
+                            <a>Điều kiện</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+}
+<div class="col-12">
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+            {
+                <li class="page-item"><a class="page-link" href="/Vouchers/GetAllVoucher?ProductPage=@i">@i</a></li>
+
+            }
+
+
+        </ul>
+    </nav>
+</div>
+
+
+  

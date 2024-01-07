@@ -77,5 +77,10 @@ namespace AppAPI.Controllers
         {
             return _services.GetAllVoucherByTien(tongTien);
         }
+        [HttpGet("GetAllVoucherKH")]
+        public List<VoucherKH> GetAllVoucherKH(Guid idkh)
+        {
+            return _services.GetAllVoucherKH(idkh);
+        }
     }
 }

@@ -9,10 +9,12 @@ namespace AppAPI.Services
     public class VoucherServices : IVoucherServices
     {
         private readonly IAllRepository<Voucher> _allRepository;
+        private readonly IAllRepository<VoucherKH> _allRepositoryKH;
         BanMoHinhDBContext context= new BanMoHinhDBContext();
         public VoucherServices()
         {
             _allRepository= new AllRepository<Voucher>(context,context.Vouchers);
+            _allRepositoryKH = new AllRepository<VoucherKH>(context,context.voucherKHs);
         }
         public bool Add(VoucherView voucherview)
         {
@@ -93,5 +95,10 @@ namespace AppAPI.Services
         {
             return _allRepository.GetAll().Where(x=>x.NgayApDung<DateTime.Now && x.NgayKetThuc>DateTime.Now && x.SoTienCan<tongTien && x.TrangThai>0 && x.SoLuong>0).ToList();
         }
+        public List<VoucherKH> GetAllVoucherKH(Guid idkh)
+        {
+            return _allRepositoryKH.GetAll().Where(x => x.IDKhachHang == idkh).ToList();
+        }
+          
     }
 }

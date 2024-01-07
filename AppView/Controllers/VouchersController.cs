@@ -4,6 +4,7 @@ using AppData.ViewModels.ThongKe;
 using AppView.PhanTrang;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace AppView.Controllers
 {
@@ -48,6 +49,8 @@ namespace AppView.Controllers
             var response = await _httpClient.GetAsync(apiURL);
             var apiData = await response.Content.ReadAsStringAsync();
             var roles = JsonConvert.DeserializeObject<List<VoucherView>>(apiData);
+
+
             return View("GetAllVoucher", new PhanTrangVouchers
             {
                 listvouchers = roles.Where(x => x.Ten.Contains(Ten.Trim()))
@@ -369,5 +372,73 @@ namespace AppView.Controllers
             }
             
         }
+        public async Task<IActionResult> GetAllVoucherUser(Guid idkh, int productPage = 1)
+        {
+
+            try
+            {
+                var session = HttpContext.Session.GetString("LoginInfor");
+                if (session != null)
+                {
+                    LoginViewModel loginViewModel = JsonConvert.DeserializeObject<LoginViewModel>(session);
+                    idkh = loginViewModel.Id;
+                }
+            
+                string apiURL = $"https://localhost:7095/api/Voucher/GetAllVoucherKH?idkh={idkh}";
+                var response = await _httpClient.GetAsync(apiURL);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Xử lý trường hợp API trả về lỗi
+                    return StatusCode((int)response.StatusCode, "API error: " + response.ReasonPhrase);
+                }
+
+                var apiData = await response.Content.ReadAsStringAsync();
+                var vouchers = JsonConvert.DeserializeObject<List<VoucherKH>>(apiData);
+
+                // Lọc danh sách các voucher để chỉ lấy các voucher của khách hàng cụ thể
+                var customerVouchers = vouchers.Where(x => x.IDKhachHang == idkh).ToList();
+
+                // Gọi API để lấy thông tin chi tiết của các voucher
+                string apiURL1 = $"https://localhost:7095/api/Voucher";
+                var response1 = await _httpClient.GetAsync(apiURL1);
+
+                if (!response1.IsSuccessStatusCode)
+                {
+                    // Xử lý trường hợp API trả về lỗi
+                    return StatusCode((int)response1.StatusCode, "API error: " + response1.ReasonPhrase);
+                }
+
+                var apiData1 = await response1.Content.ReadAsStringAsync();
+                var allVouchers = JsonConvert.DeserializeObject<List<VoucherView>>(apiData1);
+
+                // Lấy thông tin chi tiết của các voucher của khách hàng từ danh sách tất cả các voucher
+                var customerVouchersDetails = allVouchers
+                    .Where(x => customerVouchers.Any(cv => cv.IDVoucher == x.Id))
+                    .ToList();
+
+                return View(new PhanTrangVouchers
+                {
+                    listvouchers = customerVouchersDetails
+                        .Skip((productPage - 1) * PageSize).Take(PageSize),
+                    PagingInfo = new PagingInfo
+                    {
+                        ItemsPerPage = PageSize,
+                        CurrentPage = productPage,
+                        TotalItems = customerVouchersDetails.Count()
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // Xử lý trường hợp có lỗi xảy ra trong quá trình gọi API
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+        public async Task<IActionResult> AddVoucherUser(Guid idkh, int productPage = 1)
+        {
+            return View();
+        }
+
     }
 }
