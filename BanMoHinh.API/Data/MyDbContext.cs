@@ -16,7 +16,9 @@ namespace BanMoHinh.API.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             base.OnModelCreating(builder);
+
             Create(builder);
 
         }

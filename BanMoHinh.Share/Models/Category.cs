@@ -13,9 +13,9 @@ namespace BanMoHinh.Share.Models
         [Key]
         public Guid Id { get; set; }
         public string? CategoryName { get; set; }
-        public Guid IdCategory { get; set; }
+        public Guid? IdCategory { get; set; }
         [ForeignKey("IdCategory")]
-        public Category? category { get; set; }
+        public virtual  Category? category { get; set; }
         public virtual List<Product>? Product { get; set; }
     }
 }
