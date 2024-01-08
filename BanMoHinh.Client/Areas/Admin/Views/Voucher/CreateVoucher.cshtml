@@ -4,8 +4,6 @@
 @{
 	ViewData["Title"] = "CreateVoucher";
 	Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
-	var vouchertype = ViewData["vouchertype"] as List<VoucherType>;
-	var voucherstatus = ViewData["voucherstatus"] as List<VoucherStatus>;
 }
 
 <div class="app-title">
@@ -19,28 +17,7 @@
 	<div class="container">
 		<form asp-action="CreateVoucher">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-group">
-				<label  class="control-label">Kiểu voucher</label>
-				<select asp-for="VoucherTypeId" class="form-control">
-					<option>--Chọn kiểu--</option>
-					@foreach (var type in vouchertype)
-					{
-						<option value="@type.Id">@type.Name</option>
-					}
-				</select>
-				<span asp-validation-for="VoucherTypeId" class="text-danger"></span>
-			</div>
-					 <div class="form-group">
-				<label  class="control-label">Trạng thái</label>
-				<select asp-for="VoucherStatusId" class="form-control">
-					<option>--Chọn trạng thái--</option>
-					@foreach (var status in voucherstatus)
-					{
-						  <option value="@status.Id">@status.Name</option>
-					}
-				</select>
-				<span asp-validation-for="VoucherStatusId" class="text-danger"></span>
-			</div>
+			
 			<div class="form-group">
 				<label class="control-label">Mã</label>
 				<input asp-for="Code" class="form-control" />

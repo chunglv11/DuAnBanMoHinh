@@ -4,8 +4,6 @@
 @{
     ViewData["Title"] = "detailVoucher";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
-    var vouchertype = ViewData["vouchertype"] as List<VoucherType>;
-    var voucherstatus = ViewData["voucherstatus"] as List<VoucherStatus>;
 
 }
 <div class="app-title">
@@ -19,33 +17,7 @@
     <dl class="row">
         <div class="col-12">
             <dt class="col-sm-2">Voucher Type</dt>
-            <dd class="col-sm-4">
-                @{
-                    var voucherType = vouchertype.FirstOrDefault(t => t.Id == Model.VoucherTypeId);
-                    if (voucherType != null)
-                    {
-                        @voucherType.Name
-                    }
-                    else
-                    {
-                        <span>No Voucher Type Found</span>
-                    }
-                }
-            </dd>
-            <dt class="col-sm-2">Voucher Status</dt>
-            <dd class="col-sm-4">
-                @{
-                    var voucherStatus = voucherstatus.FirstOrDefault(s => s.Id == Model.VoucherStatusId);
-                    if (voucherStatus != null)
-                    {
-                        @voucherStatus.Name
-                    }
-                    else
-                    {
-                        <span>No Voucher Status Found</span>
-                    }
-                }
-            </dd>
+            
             <dt class="col-sm-2">Code</dt>
             <dd class="col-sm-4">
                 @Html.DisplayFor(model => model.Code)

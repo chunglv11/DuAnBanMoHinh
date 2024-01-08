@@ -27,11 +27,7 @@ namespace BanMoHinh.API.Data
                     new Role() { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" },
                     new Role() { Id = Guid.NewGuid(), Name = "Guest", NormalizedName = "GUEST" }
                 ); 
-            builder.Entity<VoucherType>().HasData(
-                    new VoucherType() { Id = Guid.NewGuid(), Name = "Khánh hàng"},
-                    new VoucherType() { Id = Guid.NewGuid(), Name = "Sản phẩm"}
-                    
-                );
+        
             builder.Entity<Material>().HasData(
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Sắt"},
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Nhựa pvc"},
@@ -98,11 +94,7 @@ namespace BanMoHinh.API.Data
                new Colors() { ColorId = Guid.NewGuid(), ColorName = "Xám tro", ColorCode = "#C0C0C0" },
                new Colors() { ColorId = Guid.NewGuid(), ColorName = "Bạc", ColorCode = "#C0C0C0" }
                 );
-            builder.Entity<VoucherStatus>().HasData(
-                   new VoucherStatus() { Id = Guid.NewGuid(), Name = "Used" },
-                   new VoucherStatus() { Id = Guid.NewGuid(), Name = "Active" },
-                   new VoucherStatus() { Id = Guid.NewGuid(), Name = "Expired" }
-               );
+            
         }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Rank> Rank { get; set; }
@@ -122,9 +114,6 @@ namespace BanMoHinh.API.Data
         public DbSet<Size> Size { get; set; }
         public DbSet<Colors> Colors { get; set; }
         public DbSet<Voucher> Voucher { get; set; }
-        public DbSet<VoucherType> VoucherType { get; set; }
-        public DbSet<VoucherStatus> voucherstatus { get; set; }
-        public DbSet<VoucherProduct> VoucherDetails { get; set; }
         public DbSet<UserVoucher> VoucherUser { get; set; }
         public DbSet<Rate> Rate { get; set; }
         public DbSet<Post> Posts { get; set; }

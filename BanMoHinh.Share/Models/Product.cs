@@ -33,7 +33,6 @@ namespace BanMoHinh.Share.Models
         public Material? Material { get; set; }
 
         public virtual List<ProductDetail>? ProductDetails { get; set; }
-        public virtual List<VoucherProduct>? VoucherProduct { get; set; }
         public virtual List<WishList>? WishLists { get; set; }
     }
 }

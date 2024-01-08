@@ -24,11 +24,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         }
         public async Task<IActionResult> CreateVoucher()
 		{
-			var voucherStatus = await _httpClient.GetFromJsonAsync<List<VoucherStatus>>("https://localhost:7007/api/VoucherStatus");
-			var vouchertype = await _httpClient.GetFromJsonAsync<List<VoucherType>>("https://localhost:7007/api/VoucherType");
 
-			ViewData["vouchertype"] = vouchertype;
-			ViewData["voucherstatus"] = voucherStatus;
+
 
 			return View();
         }
@@ -47,11 +44,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
         public async Task<IActionResult> detailVoucher(Guid id)
         {
-            var voucherStatus = await _httpClient.GetFromJsonAsync<List<VoucherStatus>>("https://localhost:7007/api/VoucherStatus");
-            var vouchertype = await _httpClient.GetFromJsonAsync<List<VoucherType>>("https://localhost:7007/api/VoucherType");
 
-            ViewData["vouchertype"] = vouchertype;
-            ViewData["voucherstatus"] = voucherStatus;
 
             var result = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/get-{id}");
 
@@ -59,11 +52,6 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         }
         public async Task<IActionResult> editVoucher(Guid id)
 		{
-			var voucherStatus = await _httpClient.GetFromJsonAsync<List<VoucherStatus>>("https://localhost:7007/api/VoucherStatus");
-			var vouchertype = await _httpClient.GetFromJsonAsync<List<VoucherType>>("https://localhost:7007/api/VoucherType");
-
-			ViewData["vouchertype"] = vouchertype;
-			ViewData["voucherstatus"] = voucherStatus;
 
             var result = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/get-{id}");
 

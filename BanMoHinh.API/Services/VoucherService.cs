@@ -20,8 +20,6 @@ namespace BanMoHinh.API.Services
                 var voucher = new Voucher()
                 {
                   
-                    VoucherStatusId = item.VoucherStatusId,
-                    VoucherTypeId = item.VoucherTypeId,
                     Code = item.Code,
                     Quantity = item.Quantity,
                     Value = item.Value,
@@ -83,8 +81,6 @@ namespace BanMoHinh.API.Services
             {
                 var VoucherForcus = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == id);
 
-                VoucherForcus.VoucherTypeId = rank.VoucherTypeId;
-                VoucherForcus.VoucherStatusId = rank.VoucherStatusId;
                 VoucherForcus.Code = rank.Code;
                 VoucherForcus.Discount_Type = rank.Discount_Type;
                 VoucherForcus.Quantity = rank.Quantity;
