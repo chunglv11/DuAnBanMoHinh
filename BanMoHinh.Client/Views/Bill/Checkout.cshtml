@@ -1,275 +1,262 @@
-﻿@using BanMoHinh.Share.Models;
-@using BanMoHinh.Share.ViewModels;
-@model BanMoHinh.Share.Models.Order
-@{
-    ViewData["Title"] = "Checkout";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
-    decimal? total = 0;
-    int voucherValue = 0;
-    @if (ViewData["productdetail"] != null)
-    {
-        var productdetail = ViewData["productdetail"] as List<ProductDetail>;
-    }
-@if (ViewData["pro"] != null)
-    {
-        var products =ViewData["pro"] as List<Product>;
-    }
-    // var payment = ViewData["payment"] as List<Payment>;
-    // var dropDownItems = ViewBag.DropDownItems as List<SelectListItem>;
-
+﻿@{
+    long tienShip = 0;
 }
-<div class="content">
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
     <div class="container">
-        <div class="row">
-            <form action="Checkout" method="post" enctype="multipart/form-data">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
 
-            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                <div class="box checkout-form">
-                    <!-- checkout - form -->
-                    <div class="box-head">
-                        <h2 class="head-title">Thông tin của bạn</h2>
-                    </div>
-                    <div class="box-body">
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-ctn mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<!-- End breadcumb Area -->
+<!-- End Banner Area -->
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="checkout__title">Chi tiết thanh toán</h6>
                         <div class="row">
-                                @* <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only" for="name"></label>
-                                        <input name="name" type="text" class="form-control"
-                                               placeholder="Họ" required>
-                                    </div>
-                                </div> *@
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only" for="name"></label>
-                                        <input id="name" name="RecipientName" type="text" class="form-control"
-                                        placeholder="Tên" required>
-                                    </div>
+                            <div class="col-lg-12">
+                                <div class="checkout__input">
+                                    <label for="ten">Tên</label>
+                                    <input type="text" class="form-control" id="name" placeholder=""required="" style="height:38px">
+                                    <div class="invalid-feedback"> Không để trống tên</div>
                                 </div>
-                                @*  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only" for="email">Email</label>
-                                        <input id="email" name="email" type="text" class="form-control"
-                                               placeholder="Email address" required>
-                                    </div>
-                                </div> *@
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only" for="phone"></label>
-                                        <input id="phone" name="RecipientPhone" type="text" class="form-control"
-                                        placeholder="Phone" required>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="sdt">SĐT</label>
+                                    <input type="text" class="form-control" id="phone" placeholder="" required="" style="height:38px">
+                                    <div class="invalid-feedback"> Không để trống SDT </div>
                                 </div>
-                                @*  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only"> </label>
-                                        <select name="RecipientAddress" class="form-control" required>
-                                            <option value="">Việt Nam</option>
-                                            <option value="1">United Kingdom</option>
-                                            <option value="2">United States of America</option>
-                                        </select>
-                                    </div>
-                                </div> *@
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only"></label>
-                                        <input name="RecipientAddress" type="text" class="form-control"
-                                        placeholder="Địa chỉ" required   >
-
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control" id="email" placeholder="" required="" style="height:38px">
+                                    <div class="invalid-feedback"> Không để trống email </div>
                                 </div>
-
-                                @* <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                            <label class="control-label sr-only"> </label>
-                                        @if (ViewData["user"] != null)
-        {
-                                            var user = ViewData["user"] as UserViewModel;
-
-
-                                        <input name="UserId" type="text" class="form-control"
-                                               placeholder="Địa chỉ" required value="@user.Id">
-
-        }
-
-
-
-                                    </div>
-                                </div> *@
-
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only"></label>
-                                        @if (ViewData["payment"] != null)
-                                        {
-                                            var payment = ViewData["payment"] as List<Payment>;
-
-                                            <label asp-for="PaymentId" class="control-label">PHƯƠNG THỨC THANH TOÁN</label>
-                                            <select asp-for="PaymentId" class="form-control">
-                                                @foreach (var type in payment)
-                                                {
-                                                    <option value="@type.Id">@type.PaymentName</option>
-                                                }
-                                            </select>
-                                        }
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="tinh">Tỉnh</label>
+                                    <select class="custom-select d-block" id="province" required="">
+                                        <option selected id="dfprovince">--------------------Chọn tỉnh--------------------</option>
+                                    </select>
+                                    <div class="invalid-feedback"> Tên Tỉnh là bắt buộc. </div>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only"> </label>
-
-                                        @if (ViewData["voucher"] != null)
-                                        {
-                                            var voucher = ViewData["voucher"] as List<Voucher>;
-
-                                            <label asp-for="VoucherId" class="control-label">Voucher Value</label>
-                                            <select asp-for="VoucherId" class="form-control" id="voucherSelect">
-                                            @foreach (var type in voucher)
-                                            {
-                                                    voucherValue = Convert.ToInt32(type.Value);
-                                                    <option value="@type.Id" data-value="@type.Value">Mã Voucher: @type.Code - Khuyến mãi: @voucherValue.ToString("n0")</option>
-                                            }
-                                             </select>
-                                        }
-                                       
-
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="huyen">Huyện</label>
+                                    <select class="custom-select d-block w-100" id="district" required="">
+                                    </select>
+                                    <div class="invalid-feedback"> Tên Huyện là bắt buộc. </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="xa">Xã</label>
+                                    <select class="custom-select d-block w-100" id="ward" required="">
+                                    </select>
+                                    <div class="invalid-feedback"> Tên Xã là bắt buộc. </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <label for="diachi">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="address" placeholder="" required="" style="height:38px">
+                                    <div class="invalid-feedback"> Valid first name is required. </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="checkout__input">
+                                    <label for="pttt">Phương thức thanh toán</label>
+                                    <div style="box-shadow:0 0 0 1px #d9d9d9;border-radius:0.25rem">
+                                        <div style="display:flex!important;align-items:center;padding:0.8rem">
+                                            <input type="radio" name="pttt" value="COD" style="margin-bottom: 0px;width:20px;" />
+                                            <img style="padding-left:0.75rem" src="https://hstatic.net/0/0/global/design/seller/image/payment/cod.svg?v=6">
+                                            <p style="margin-bottom: 0px;padding-left: 10px;">Thanh toán khi giao hàng (COD)</p>
+                                        </div>
+                                        <div style="border-top: 1px solid #d9d9d9;display:flex!important;align-items:center;padding:0.8rem">
+                                            <input type="radio" name="pttt" value="VNPay" style="margin-bottom: 0px;width:20px" />
+                                            <div style="width:40px;height:40px;margin-left:0.75rem;border:1px solid #d9d9d9;border-radius:0.25rem">
+                                                <img style="width:30px;height:30px;margin:5px" src="/img/icon/vnpay.png">
                                             </div>
+                                            <p style="margin-bottom: 0px;padding-left: 10px;">Chuyển khoản qua VNPay</p>
+                                        </div>
                                     </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" hidden>
-                                    <div class="form-group">
-                                        <label class="control-label sr-only"> </label>
 
-                                        @if (ViewData["orderstatus"] != null)
-                                        {
-                                            var orderstatus = ViewData["orderstatus"] as List<OrderStatus>;
+                                    <div id="pttt-error" style="display:none;color:red">Vui lòng chọn phương thức thanh toán</div>
 
-                                            <label asp-for="OrderStatusId" class="control-label"></label>
-                                            <select asp-for="OrderStatusId" class="form-control">
-                                                @foreach (var type in orderstatus)
-                                                {
-                                                    <option value="@type.Id">@type.OrderStatusName</option>
-                                                }
-                                            </select>
-                                        }
-
-
-                                    </div>
+                                    <div id="pttt-error" style="display:none;color:red; font-size:12px;">Vui lòng chọn phương thức thanh toán</div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="checkout__input">
+                                    <label for="ten">Ghi chú</label>
+                                    <textarea class="form-control" id="note" placeholder="" value=""></textarea>
+                                    <div class="invalid-feedback"> Không để trống tên</div>
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="control-label sr-only" for="textarea"></label>
-                                        <textarea class="form-control" id="textarea" name="Description" rows="4"
-                                                  placeholder="Ghi chú"></textarea>
-                                    </div>
-                                    <button class="btn btn-primary " type="submit">Xác nhận thanh toán</button>
-                                    <div class="checkbox alignright mt20">
-                                        <label>
-                                            <input type="checkbox" value="">
-                                            <span>Đăng kí tài khoản?</span>
-                                        </label>
-                                    </div>
                                 </div>
-                            <!-- /.checkout-form -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cart__discount" style="margin-bottom:20px!important">
+                            <h6>Hình thức giảm giá</h6>
+                            <div style="position:relative;margin-bottom:5px">
+                                <input type="text" id="voucher" placeholder="Nhập mã giảm giá" style="font-size:14px;color:#b7b7b7;height: 50px;width: 100%;border: 1px solid #e1e1e1;padding-left: 20px;" list="vouchers" />
+                                <datalist id="vouchers">
+                                </datalist>
+                                <button onclick="usevoucher()" style="font-size: 14px;color: #ffffff;font-weight: 700;letter-spacing: 2px;text-transform: uppercase;background: #111111;padding: 0 30px;border: none;position: absolute;right: 0;top: 0;height: 100%;">
+                                    Áp dụng
+                                </button>
+                            </div>
+                        </div>
+                        <div class="checkout__order">
+                            <h4 class="order__title">Đơn hàng của bạn</h4>
+                            <ul class="checkout__order__products">
+                                <li>Tiền hàng <span id="tienHang"></span></li>
+                                <li id="moneyvoucher" hidden></li>
+                                <li id="moneyscore" hidden></li>
+                                <li>Tiền ship <span id="fee">0 VND</span></li>
+                                <li>Tổng tiền <span id="total"></span></li>
+                            </ul>
+                            <button onclick="createhoadon()" class="site-btn">
+                                XÁC NHẬN
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- product total -->
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <div class="box mb30">
-                        <div class="box-head">
-                            <h3 class="head-title">Đơn hàng của bạn</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <!-- product total -->
-                                <div class="pay-amount ">
-                                    <table class="table mb20">
-                                        <thead class="" style="border-bottom: 1px solid #e8ecf0;  text-transform: uppercase;">
-                                            <tr>
-                                                <th>
-                                                    <span>Sản phẩm</span>
-                                                </th>
-                                                <th>
-                                                    <span>Giá tiền</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (ViewData["cartitem"] != null && ViewData["productdetail"] != null && ViewData["pro"] != null)
-                                            {
-                                                var cartItems = ViewData["cartitem"] as List<CartItem>;
-                                                var productDetails = ViewData["productdetail"] as List<ProductDetailVM>;
-
-                                                var products = ViewData["pro"] as List<Product>;
-
-                                                foreach (var item in cartItems)
-                                                {
-                                                    var productDetail = productDetails.FirstOrDefault(p => p.Id == item.ProductDetail_ID);
-                                                    var product = products.FirstOrDefault(p => p.Id == productDetail.ProductId);
-
-                                                    <tr>
-                                                        <td style="align-items: start">
-                                                            @product.ProductName <!-- Assuming there's a property named "ProductName" in your Product class -->
-                                                        </td>
-                                                        <td style="align-items: center">
-                                                            $@item.Price <!-- Assuming there's a property named "Price" in your CartItem class -->
-                                                            X @item.Quantity
-                                                        </td>
-                                                    </tr>
-
-                                                    var thanhtien = Convert.ToDecimal(item.Price) * item.Quantity;
-                                                    total += thanhtien;
-                                                }
-                                            }
-                                        </tbody>
-                                        <tbody>
-                                            <tr>
-                                                <th>
-                                                    <span>Tổng tiền sản phẩm</span>
-                                                </th>
-                                                <td>@string.Format("{0:N0}", total) đ</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <span>Khuyến mãi voucher</span>
-                                                </th>
-                                                <td id ="voucherValueDisplay">0 đ</td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    <span>Tổng thanh toán</span>
-                                                </th>
-                                                <td id="totalAfterDiscount">@string.Format("{0:N0}", total)</td>
-
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                                <!-- /.product total -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-
         </div>
-    </div>
-</div>
+    </section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('voucherSelect').addEventListener('change', function () {
-            var selectedVoucher = this.options[this.selectedIndex];
-            var voucherValue = selectedVoucher.getAttribute('data-value');
-            var total = @total; // Giá trị tổng ban đầu từ server
-            var newTotal = total - voucherValue; // Tính toán tổng mới sau khi trừ giảm giá
-            document.getElementById('voucherValueDisplay').innerText = '-' + voucherValue + ' đ';
-            document.getElementById('totalAfterDiscount').innerText = newTotal + ' đ'; // Cập nhật giá trị cho trường input ẩn
+
+   
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
+            headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                // Xóa các option hiện tại trong dropdown
+                $("#province").empty();
+                    $('#dfprovince').remove();
+                // Thêm option mặc định
+                $("#province").append('<option disabled selected hidden>Vui lòng chọn tỉnh</option>');
+                for (var i = 0; i < data.data.length; i++) {
+                    var option = $("<option>").val(data.data[i].ProvinceID).text(data.data[i].ProvinceName);
+                    $("#province").append(option);
+                }
+            },
+            error: function (response) {
+                console.error(response);
+            }
+        });
+
+        $("#province").change(function () {
+            var provinceId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=" + provinceId,
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#district").empty();
+
+                    // Thêm option mặc định
+                    $("#district").append('<option disabled selected hidden>Vui lòng chọn huyện</option>');
+                    for (var i = 0; i < data.data.length; i++) {
+                        var option = $("<option>").val(data.data[i].DistrictID).text(data.data[i].DistrictName);
+                        $("#district").append(option);
+                    }
+                },
+                error: function (response) {
+                    console.error(response);
+                }
+            });
+        });
+
+        $("#district").change(function () {
+            var districtId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=" + districtId,
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#ward").empty();
+
+                    // Thêm option mặc định
+                    $("#ward").append('<option disabled selected hidden>Vui lòng chọn Xã</option>');
+                    for (var i = 0; i < data.data.length; i++) {
+                        var option = $("<option>").val(data.data[i].WardCode).text(data.data[i].WardName);
+                        $("#ward").append(option);
+                    }
+                },
+                error: function (response) {
+                    console.error(response);
+                }
+            });
+        });
+        $("#ward").change(function () {
+            var value1 = document.getElementById("ward").value;
+            var value2 = document.getElementById("district").value;
+            //xa = document.getElementById(value1).innerHTML;
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378?to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500 * 1+"&service_type_id=2",// 500*1 trong đó 1 là số lượng *********************
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#dfward').remove();
+                    tienShip = data.data.total;
+                    console.log("API Response:", data); // Log phản hồi từ API để kiểm tra dữ liệu
+
+                    // Cập nhật giá trị của thẻ span có id là "fee" để hiển thị tiền ship mới
+                    document.getElementById("fee").innerHTML = data.data.total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                    var total = tienShip ; // công thức tính tổng tiền **********************
+                    if (total < 0) {
+                        total = 0
+                    }
+                    document.getElementById("total").innerHTML = total.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                },
+                error: function (reponse) {
+                    alert(reponse.responseText);
+                }
+            });
         });
     });
 </script>
-
