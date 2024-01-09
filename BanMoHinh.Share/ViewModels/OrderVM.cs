@@ -11,7 +11,7 @@ namespace BanMoHinh.Share.ViewModels
         public Guid Id { get; set; }
         public Guid? UserId { get; set; }
         public Guid? OrderStatusId { get; set; }
-        public Guid? PaymentId { get; set; }
+        public string? PaymentType { get; set; }
         public Guid? VoucherId { get; set; }
         public string? OrderCode { get; set; } // mã bill
         public string? RecipientName { get; set; }

@@ -44,7 +44,6 @@ builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IStorageService, FileStorageService>();
 
