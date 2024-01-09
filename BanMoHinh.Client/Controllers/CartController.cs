@@ -22,22 +22,16 @@ namespace BanMoHinh.Client.Controllers
                 var userIdClaim = identity.FindFirst(ClaimTypes.Name);
                 if (userIdClaim != null)
                 {
-                    var userName = userIdClaim.Value;
-                    var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
-                    var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={getUserbyName.Id}");
                     var getColor = await _httpClient.GetFromJsonAsync<List<Colors>>("https://localhost:7007/api/color/get-all-Color");
                     var getCate = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
                     var getSize = await _httpClient.GetFromJsonAsync<List<Size>>("https://localhost:7007/api/size/get-all-size");
+                    var id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={id}");
+
                     var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
-                    var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
-                    var voucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
-                    var productImage = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
-                    ViewData["productDetail"] = productDetail;
-                    ViewData["voucher"] = voucher;
+                    var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
                     ViewData["color"] = getColor;
                     ViewData["size"] = getSize;
-                    ViewData["category"] = getCate;
-                    var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
                     return View(listcartDetailbyIdCart);
                 }
                 else

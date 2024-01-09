@@ -44,6 +44,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        // GET api/<CartItemController>/5
+        [HttpGet("getcartitembycartid")]
+        public async Task<ActionResult<CartItem>> GetCartItemByCartId(Guid cartid)
+        {
+            try
+            {
+                return Ok(await _cartItemService.GetCartItemsByCartIds(cartid));
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
 
         // POST api/<CartItemController>
         [HttpPost("Insert-Cart-Item")]

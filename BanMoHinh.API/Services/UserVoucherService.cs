@@ -58,6 +58,19 @@ namespace BanMoHinh.API.Services
             return await _dbContext.VoucherUser.ToListAsync();
         }
 
+        public async Task<UserVoucher> GetSoHuu(Guid voucherId, Guid userId)
+        {
+            try
+            {
+                return await _dbContext.VoucherUser.Where(c => c.VoucherId == voucherId && c.UserId == userId).FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+
         public async Task<UserVoucher> GetItem(Guid id)
         {
             return await _dbContext.VoucherUser.FindAsync(id);

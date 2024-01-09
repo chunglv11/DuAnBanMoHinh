@@ -42,14 +42,14 @@ namespace BanMoHinh.API.Data
             );
 
             builder.Entity<OrderStatus>().HasData(
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Đang được xử lý" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Chờ lấy hàng" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Đang giao hàng" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Giao hàng thành công" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Giao hàng không thành công" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Hủy đơn" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Yêu cầu trả hàng" },
-                    new OrderStatus() { Id = Guid.NewGuid(), OrderStatusName = "Chấp nhận trả hàng" }
+                    new OrderStatus() { Id = Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Đang được xử lý" },
+                    new OrderStatus() { Id = Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Chờ lấy hàng" },
+                    new OrderStatus() { Id = Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Đang giao hàng" },
+                    new OrderStatus() { Id = Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Giao hàng thành công" },
+                    new OrderStatus() { Id = Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Giao hàng không thành công" },
+                    new OrderStatus() { Id = Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Hủy đơn" },
+                    new OrderStatus() { Id = Guid.Parse("7C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Yêu cầu trả hàng" },
+                    new OrderStatus() { Id = Guid.Parse("8C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Chấp nhận trả hàng" }
                 );
             builder.Entity<Brand>().HasData(
                 new Brand() { Id = Guid.NewGuid(), BrandName = "Brand 1" },
@@ -74,10 +74,6 @@ namespace BanMoHinh.API.Data
                 new Category() { Id = Guid.NewGuid(), CategoryName = "Category 4" },
                 new Category() { Id = Guid.NewGuid(), CategoryName = "Category 5" }
             );
-            builder.Entity<Payment>().HasData(
-                    new Payment() { Id = Guid.NewGuid(), PaymentName = "Thanh toán khi nhận hàng" },
-                    new Payment() { Id = Guid.NewGuid(), PaymentName = "Thanh toán Online" }
-                );
             builder.Entity<Colors>().HasData(
                new Colors() { ColorId = Guid.NewGuid(), ColorName = "Đen", ColorCode = "#000000" },
                new Colors() { ColorId = Guid.NewGuid(), ColorName = "Trắng", ColorCode = "#FFFFFF" },
@@ -108,7 +104,6 @@ namespace BanMoHinh.API.Data
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
-        public DbSet<Payment> Payment { get; set; }
         public DbSet<WishList> WishList { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }

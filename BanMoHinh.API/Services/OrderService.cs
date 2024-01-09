@@ -20,8 +20,8 @@ namespace BanMoHinh.API.Services
                 {
                     Id = item.Id,
                     UserId = item.UserId,
-                    PaymentId = item.PaymentId,
                     VoucherId = item.VoucherId,
+                    PaymentType = item.PaymentType,
                     OrderStatusId = item.OrderStatusId,
                     OrderCode = item.OrderCode,
                     RecipientAddress = item.RecipientAddress,
@@ -86,7 +86,6 @@ namespace BanMoHinh.API.Services
                 var order = await _dbContext.Order.FirstOrDefaultAsync(c => c.Id == id);
 
                 order.UserId = item.UserId;
-                order.PaymentId = item.PaymentId;
                 order.VoucherId = item.VoucherId;
                 order.OrderStatusId = item.OrderStatusId;
                 order.OrderCode = item.OrderCode;

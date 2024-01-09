@@ -29,7 +29,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("get-{id}")]
+        [HttpGet("getbyid/{id}")]
         public async Task<ActionResult<Voucher>> Get(Guid id)
         {
             try
@@ -42,6 +42,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("getbycode/{code}")]
+        public async Task<ActionResult<Voucher>> Get(string code)
+        {
+            try
+            {
+                return Ok(await _voucherservice.GetItemByCode(code));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+
         [HttpPost("create-voucher")]
         public async Task<ActionResult<Voucher>> Post(Voucher voucher)
         {
