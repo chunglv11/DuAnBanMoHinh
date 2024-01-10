@@ -124,8 +124,8 @@ namespace BanMoHinh.Client.Controllers
 
                         string vnp_Returnurl = "https://localhost:7095/Bill/PaymentCallBack"; //URL nhan ket qua tra ve 
                         string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
-                        string vnp_TmnCode = "P4VW9FD1"; //Ma định danh merchant kết nối (Terminal Id)
-                        string vnp_HashSecret = "OPHRXNCKQAUVHIJNWXXTMPPYBVPAXUTF"; //Secret Key
+                        string vnp_TmnCode = "IHE4U2JP"; //Ma định danh merchant kết nối (Terminal Id)
+                        string vnp_HashSecret = "KGUFENFAPPMWXGAYUBTNECEYOYEWEPWR"; //Secret Key
                         string ipAddr = HttpContext.Connection.RemoteIpAddress?.ToString();
                         //Get payment input
                         //Save order to db
@@ -173,7 +173,7 @@ namespace BanMoHinh.Client.Controllers
             {
                 if (Request.Query.Count > 0)
                 {
-                    string vnp_HashSecret = "OPHRXNCKQAUVHIJNWXXTMPPYBVPAXUTF"; //Chuoi bi mat
+                    string vnp_HashSecret = "KGUFENFAPPMWXGAYUBTNECEYOYEWEPWR"; //Chuoi bi mat
                     var vnpayData = Request.Query;
                     VnPayLibrary vnpay = new VnPayLibrary();
 
@@ -209,7 +209,7 @@ namespace BanMoHinh.Client.Controllers
                             var responses = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={_orderId}&StatusId={DaThanhToanStatus}");
                             if (responses.IsSuccessStatusCode)
                             {
-                                return RedirectToAction("CheckOutSuccess");
+                                return RedirectToAction("CheckOutSuccess"); // trang return thành công
                             }
                         }
                     }
