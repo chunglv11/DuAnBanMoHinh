@@ -112,5 +112,22 @@ namespace BanMoHinh.API.Services
                 return false;
             }
         }
+
+        public async Task<bool> UpdateStatus(Guid OrderId, Guid StatusId)
+        {
+            try
+            {
+                var order = await _dbContext.Order.FirstOrDefaultAsync(c => c.Id == OrderId);
+                order.OrderStatusId = StatusId;
+                _dbContext.Update(order);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
     }
 }

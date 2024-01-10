@@ -62,6 +62,17 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
+        [HttpGet("updatestatus")]
+        public async Task<ActionResult<OrderVM>> UpdateStatus(Guid OrderId, Guid StatusId)
+        {
+            var result = await _iorderService.UpdateStatus(OrderId, StatusId);
+            if (result)
+            {
+                return Ok("Đã sửa thành công");
+            }
+            return Ok("Lỗi!");
+        }
+
         [HttpDelete("delete-{id}")]
         public async Task<ActionResult<OrderVM>> Delete(Guid id)
         {

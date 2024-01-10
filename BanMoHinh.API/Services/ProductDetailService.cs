@@ -297,5 +297,22 @@ namespace BanMoHinh.API.Services
             }
             throw new Exception("Không tìm thấy giá sản phẩm chi tiết/ chưa có size,color này.");
         }
+
+        public async Task<bool> UpdateQuantityById(Guid productDetailId, int quantity)
+        {
+            try
+            {
+                var productDetail =   _dbContext.ProductDetail.FirstOrDefault(c=>c.Id== productDetailId);
+                productDetail.Quantity -= quantity;
+                _dbContext.ProductDetail.Update(productDetail);
+                 _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
+        }
     }
 }
