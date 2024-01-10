@@ -8,6 +8,7 @@ namespace BanMoHinh.API.IServices
         public Task<bool> Create(OrderVM item);
 
         public Task<bool> Delete(Guid id);
+        public Task<bool> UpdateStatus(Guid OrderId,Guid StatusId);
 
         public Task<List<Order>> GetAll();
 

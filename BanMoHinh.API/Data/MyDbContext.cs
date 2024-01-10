@@ -44,6 +44,7 @@ namespace BanMoHinh.API.Data
             builder.Entity<OrderStatus>().HasData(
                     new OrderStatus() { Id = Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Đang được xử lý" },
                     new OrderStatus() { Id = Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Chờ lấy hàng" },
+                    new OrderStatus() { Id = Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Chờ Thanh toán" },
                     new OrderStatus() { Id = Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Đang giao hàng" },
                     new OrderStatus() { Id = Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Giao hàng thành công" },
                     new OrderStatus() { Id = Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"), OrderStatusName = "Giao hàng không thành công" },

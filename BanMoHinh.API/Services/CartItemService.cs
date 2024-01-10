@@ -37,12 +37,12 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<bool> DeleteCartItem(Guid cartItemId, Guid productdetailId, Guid CartId)
+        public async Task<bool> DeleteCartItem( Guid CartId)
         {
             try
             {
-                var item = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId && c.ProductDetail_ID == productdetailId && c.CartId == CartId);
-                _dbContext.CartItem.Remove(item);
+                var item =  _dbContext.CartItem.Where(c => c.CartId == CartId);
+                _dbContext.CartItem.RemoveRange(item);
                 await _dbContext.SaveChangesAsync();
                 return true;
 
@@ -60,11 +60,11 @@ namespace BanMoHinh.API.Services
             return await _dbContext.CartItem.ToListAsync();
         }
 
-        public async Task<IEnumerable<CartItem>> GetAllCartItemsByCartId(Guid id)
+        public async Task<IEnumerable<CartItem>> GetAllCartItemsByCartId(Guid cariId)
         {
             try
             {
-                var model = await _dbContext.CartItem.Where(x => x.CartId == id).ToListAsync();
+                var model = await _dbContext.CartItem.Where(x => x.CartId == cariId).ToListAsync();
                 return model;
             }
             catch (Exception)

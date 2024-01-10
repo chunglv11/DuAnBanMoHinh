@@ -16,6 +16,7 @@ namespace BanMoHinh.API.IServices
         public Task<IEnumerable<ProductDetailVM>> GetAll();
 
         public Task<ProductDetailVM> GetItem(Guid id);
+        public Task<bool> UpdateQuantityById(Guid productDetailId, int quantity);
 
 
         public Task<bool> Update(ProductDetailVM item);

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BanMoHinh.API.Migrations
 {
-    public partial class mg10012024 : Migration
+    public partial class mg1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -605,9 +605,9 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("74c8ddf0-8cd6-452b-989a-0b563c4de7cb"), "e761cc1b-7235-4361-a4b3-8cbbc0089ee7", "Admin", "ADMIN" },
-                    { new Guid("d6f1294a-2e4c-4e3c-9a75-3ef8c12e3f6b"), "87f0dff6-2755-44c9-8082-c6a830bf0f02", "User", "USER" },
-                    { new Guid("e7757cb6-288b-4a50-99e4-32e185af8e30"), "c18270c3-e556-4ffd-b620-a084c201cce5", "Guest", "GUEST" }
+                    { new Guid("3181cde5-49ae-4010-8d53-43b1158ad17d"), "6a18639b-28c5-4569-8560-922cf11fba2f", "User", "USER" },
+                    { new Guid("4dbcc71a-a83e-4478-9903-cb7cff1ca347"), "a07ecc31-d0d0-4fc2-8f75-055db66e54e3", "Admin", "ADMIN" },
+                    { new Guid("7a82b3a9-0657-4fef-91bd-7de63d793585"), "ea87e4e7-7a4f-4ebc-8bec-849f33d0a835", "Guest", "GUEST" }
                 });
 
             migrationBuilder.InsertData(
@@ -615,11 +615,11 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "Id", "BrandName" },
                 values: new object[,]
                 {
-                    { new Guid("4c87bcd9-98dd-48b2-b461-d789548956bd"), "Brand 1" },
-                    { new Guid("607044d4-5059-4265-8a8e-8850b7ffbb02"), "Brand 3" },
-                    { new Guid("6d3fa7eb-aa83-4444-9954-9c4bb860b320"), "Brand 4" },
-                    { new Guid("dd5e6096-26ce-4cee-8567-35778141557d"), "Brand 5" },
-                    { new Guid("dd911d36-b47f-4aa5-8cb5-2c968c86e92c"), "Brand 2" }
+                    { new Guid("427e5f12-e3ab-45a6-8b6e-28dc9bade3f9"), "Brand 3" },
+                    { new Guid("56f44bb4-6bbd-4c54-8ed4-acf624c9e345"), "Brand 5" },
+                    { new Guid("9f92518f-3134-4f24-a3f1-0282cb2c0d86"), "Brand 2" },
+                    { new Guid("9f981032-9016-4fe4-b9ad-a6a8b78dfbd2"), "Brand 1" },
+                    { new Guid("9fad7d2a-d1e4-4002-a469-ac1ab8311509"), "Brand 4" }
                 });
 
             migrationBuilder.InsertData(
@@ -627,11 +627,11 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "Id", "CategoryName", "IdCategory" },
                 values: new object[,]
                 {
-                    { new Guid("2c60a701-471b-40e8-93ca-9588b20d8e2f"), "Category 2", null },
-                    { new Guid("95adba4c-6829-48e0-b7f5-117b19644d38"), "Category 4", null },
-                    { new Guid("9a851e69-1c44-492f-89d4-1fc4a5458f50"), "Category 3", null },
-                    { new Guid("a5f6bf37-4e4a-42a8-ae43-3cf7ae75c2d4"), "Category 5", null },
-                    { new Guid("d81cb393-0e25-45df-8f9b-124868ee9d5f"), "Category 1", null }
+                    { new Guid("57b6d09e-86f2-4759-a914-96de35c90a4e"), "Category 1", null },
+                    { new Guid("aae27ee6-5927-4bfd-bb1a-e8b242458790"), "Category 2", null },
+                    { new Guid("cc9b1ce7-5de5-41fd-8ba6-c849f76b955d"), "Category 5", null },
+                    { new Guid("cd8a9feb-73fb-4bfd-9e6c-967492dc8d28"), "Category 4", null },
+                    { new Guid("d912eacc-a19a-47cc-819d-19213c53eeb5"), "Category 3", null }
                 });
 
             migrationBuilder.InsertData(
@@ -639,22 +639,22 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "ColorId", "ColorCode", "ColorName" },
                 values: new object[,]
                 {
-                    { new Guid("097a4c02-856e-4af7-a7a8-84acd1eb3124"), "#00BFFF", "Xanh da trời" },
-                    { new Guid("4787b849-f2c9-4f35-8fbc-56f67f459a32"), "#FF0000", "Đỏ" },
-                    { new Guid("48b2d586-c2d5-414b-b9e4-eb8371dcd762"), "#FFFF00", "Vàng" },
-                    { new Guid("4f8cab4e-297e-40d5-bc35-f0696fa55a75"), "#FFFFFF", "Trắng" },
-                    { new Guid("6dab3007-0021-4c71-93e0-c80e50d96824"), "#808080", "Xám" },
-                    { new Guid("96ebc133-1293-4a64-9018-cb51f337fd25"), "#000080", "Xanh lam" },
-                    { new Guid("99c64155-35c5-4d9e-9457-aa3104a2178c"), "#C0C0C0", "Bạc" },
-                    { new Guid("a7857de2-fc08-4d5c-bafe-9306704d481f"), "#FFDAB9", "Hồng phấn" },
-                    { new Guid("ad883261-0222-4ae1-a813-6562368744e0"), "#00FF00", "Xanh lá cây" },
-                    { new Guid("ada32613-b0f3-40d5-ac52-1c0ef12635d3"), "#800080", "Tím" },
-                    { new Guid("b5886267-f0d5-4d55-86eb-30c03fa59625"), "#000000", "Đen" },
-                    { new Guid("cdf03d6a-2d48-451f-83a1-63c0e4e7fcee"), "#A52A2A", "Nâu" },
-                    { new Guid("d0bcc330-6644-493f-9935-88c9624e8bb5"), "#FFA500", "Cam" },
-                    { new Guid("ea59c97c-896c-49ac-bc01-b6f14fd70154"), "#C0C0C0", "Xám tro" },
-                    { new Guid("ef788b61-009b-429d-82f5-ec05a2658748"), "#0000FF", "Xanh dương" },
-                    { new Guid("fbccabca-ea3a-4e95-a835-69c256bb9f8c"), "#FFC0CB", "Hồng" }
+                    { new Guid("27c2227c-14b8-418d-9d8f-989224b315a0"), "#808080", "Xám" },
+                    { new Guid("350098e3-739e-4192-9225-efcbdb2a62e9"), "#000080", "Xanh lam" },
+                    { new Guid("4583e8fb-bde0-4666-92b2-4efbbca07a2b"), "#0000FF", "Xanh dương" },
+                    { new Guid("45933062-62ef-47e5-91ab-bea4fee40454"), "#800080", "Tím" },
+                    { new Guid("52a24444-b410-4b2e-a2fc-259cc6dc6e48"), "#FFDAB9", "Hồng phấn" },
+                    { new Guid("5314d1e4-fe93-48a4-9523-f466604e0f28"), "#00FF00", "Xanh lá cây" },
+                    { new Guid("5ae579b2-09d1-482a-a550-70d1b1ce5f05"), "#C0C0C0", "Bạc" },
+                    { new Guid("6763390e-d19e-48f5-b640-e28284491443"), "#FFC0CB", "Hồng" },
+                    { new Guid("794e6a11-9b0c-4113-bc6b-b0dc3af986b2"), "#000000", "Đen" },
+                    { new Guid("8759af48-a70f-42a6-943b-02724774cd55"), "#FFFFFF", "Trắng" },
+                    { new Guid("88223ab8-8e5b-4f92-9419-14ae622509a7"), "#00BFFF", "Xanh da trời" },
+                    { new Guid("8bd34d2a-abb9-42bb-a112-1c5677215ab5"), "#FF0000", "Đỏ" },
+                    { new Guid("bda8f6a4-1909-4ac0-8202-7f8f5395118f"), "#C0C0C0", "Xám tro" },
+                    { new Guid("d3fc402c-d72e-4d63-b572-c32ebc0aa1a9"), "#FFFF00", "Vàng" },
+                    { new Guid("e5cb153b-b1ad-44eb-904c-e7be15ffa132"), "#A52A2A", "Nâu" },
+                    { new Guid("e658e93c-6166-4030-829d-c922f1713165"), "#FFA500", "Cam" }
                 });
 
             migrationBuilder.InsertData(
@@ -662,9 +662,9 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "Id", "MaterialName" },
                 values: new object[,]
                 {
-                    { new Guid("899e7298-b2f5-4e74-a822-8040f32d5b0a"), "Gỗ" },
-                    { new Guid("bb755ed1-cee9-4ab0-a87c-a7fad807963f"), "Nhựa pvc" },
-                    { new Guid("d03473cf-8a6d-4ef2-a420-08cc154e2b5a"), "Sắt" }
+                    { new Guid("1b4fb220-155a-479b-8da5-d00353bf906f"), "Nhựa pvc" },
+                    { new Guid("80cf4244-60a6-44a1-bb31-4ac7ff6d9bb0"), "Gỗ" },
+                    { new Guid("bf8c1bab-31e3-4ab1-9aa3-085b1547f423"), "Sắt" }
                 });
 
             migrationBuilder.InsertData(
@@ -672,40 +672,41 @@ namespace BanMoHinh.API.Migrations
                 columns: new[] { "Id", "OrderStatusName" },
                 values: new object[,]
                 {
-                    { new Guid("0e5b1312-991f-489b-acad-16bed944b996"), "Đang được xử lý" },
-                    { new Guid("381f63d7-16ff-4a31-84b6-72a4bd52f568"), "Đang giao hàng" },
-                    { new Guid("4b422c4a-43a0-4a6b-b5eb-cdd6fe5c5052"), "Chờ lấy hàng" },
-                    { new Guid("75b27bac-c54d-468c-9974-2816fcf4a52f"), "Yêu cầu trả hàng" },
-                    { new Guid("a5d7198b-6c43-4686-acf9-c110459cc154"), "Giao hàng không thành công" },
-                    { new Guid("ca0f721b-bdc2-4665-bf3d-b8916029b924"), "Hủy đơn" },
-                    { new Guid("d16698a0-8b35-4087-945d-351baef5eb8c"), "Chấp nhận trả hàng" },
-                    { new Guid("d5576178-3028-44f7-ad83-bda93455b18b"), "Giao hàng thành công" }
+                    { new Guid("1c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Đang được xử lý" },
+                    { new Guid("2c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Chờ lấy hàng" },
+                    { new Guid("3c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Đang giao hàng" },
+                    { new Guid("4c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Giao hàng thành công" },
+                    { new Guid("5c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Giao hàng không thành công" },
+                    { new Guid("6c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Hủy đơn" },
+                    { new Guid("7c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Yêu cầu trả hàng" },
+                    { new Guid("8c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Chấp nhận trả hàng" },
+                    { new Guid("9c54c2dd-2fa5-4041-9b94-fb613bebdfbc"), "Chờ Thanh toán" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Rank",
+                columns: new[] { "Id", "Description", "Name", "PoinsMax", "PointsMin" },
+                values: new object[] { new Guid("ac9a9fe7-d20e-41d6-bc4e-4f124c6b74b5"), null, "Bạc", 1000000, 0 });
 
             migrationBuilder.InsertData(
                 table: "Rank",
                 columns: new[] { "Id", "Description", "Name", "PoinsMax", "PointsMin" },
                 values: new object[,]
                 {
-                    { new Guid("3d508518-691f-4c1a-bc87-689af8922e05"), null, "Vàng", 3000000, 1000001 },
-                    { new Guid("49e9bc02-691e-4f5b-8016-315ef712ca39"), null, "Kim Cương", 10000000, 3000001 }
+                    { new Guid("af48bf81-c9d1-4e2e-8c89-91d2fb187141"), null, "Kim Cương", 10000000, 3000001 },
+                    { new Guid("d5bf7e86-6fa0-4e53-9b7e-1766d5475fcb"), null, "Vàng", 3000000, 1000001 }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Rank",
-                columns: new[] { "Id", "Description", "Name", "PoinsMax", "PointsMin" },
-                values: new object[] { new Guid("8f93d785-e39d-4da2-bd3b-f05dbc392eab"), null, "Bạc", 1000000, 0 });
 
             migrationBuilder.InsertData(
                 table: "Size",
                 columns: new[] { "Id", "Height", "SizeName", "Width" },
                 values: new object[,]
                 {
-                    { new Guid("60dd87d8-72e9-4b13-b6d1-ce6118d6aced"), 30.0, "Size 4", 30.0 },
-                    { new Guid("8ba47d74-a350-46db-885b-ee145d086b5c"), 30.0, "Size 2", 30.0 },
-                    { new Guid("b93b551e-06bd-43b1-bbe5-ca8ed61aafa9"), 30.0, "Size 5", 30.0 },
-                    { new Guid("c268013a-54a8-4548-b8bc-cd696d85832c"), 30.0, "Size 1", 30.0 },
-                    { new Guid("d0946c33-da0b-45b7-a903-5de27e98bf2b"), 30.0, "Size 3", 30.0 }
+                    { new Guid("3b52eb13-e49f-4553-ba45-d3c67f4cd82c"), 30.0, "Size 5", 30.0 },
+                    { new Guid("8e4f1f7c-111c-4e71-8761-f993fba81631"), 30.0, "Size 4", 30.0 },
+                    { new Guid("bf2c1a98-89fd-40af-94f3-a4689f9a0f8e"), 30.0, "Size 2", 30.0 },
+                    { new Guid("e650cb77-bd18-4ed5-8c4f-6725e4867e10"), 30.0, "Size 3", 30.0 },
+                    { new Guid("e7f3b568-3fe7-4f18-87c7-89314a11a76a"), 30.0, "Size 1", 30.0 }
                 });
 
             migrationBuilder.CreateIndex(

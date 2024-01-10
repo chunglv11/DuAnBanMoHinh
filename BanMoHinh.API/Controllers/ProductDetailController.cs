@@ -96,5 +96,11 @@ namespace BanMoHinh.API.Controllers
             var price = _iproductDetailService.GetPriceForProductDetail(productId, sizeId, colorId);
             return Ok(price);
         }
+        [HttpGet("UpdateQuantityById")]
+        public async Task<IActionResult> UpdateQuantityById(Guid productDetailId, int quantity)
+        {
+            var productdetail = await _iproductDetailService.UpdateQuantityById(productDetailId, quantity);
+            return Ok(productdetail);
+        }
     }
 }
