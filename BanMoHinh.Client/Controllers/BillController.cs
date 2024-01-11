@@ -91,7 +91,17 @@ namespace BanMoHinh.Client.Controllers
                 var response = await _httpClient.PostAsJsonAsync<OrderVM>("https://localhost:7007/api/order/create", order); // tạo order
                 if (response.IsSuccessStatusCode)// nếu done
                 {
-                    //TempData["order"] = order;
+                    if (order.VoucherId!=null)
+                    {
+                        // - số lượng voucher 
+
+                        var updateSL = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=true");
+
+                        // - sửa trạng thái trong uservoucher  
+
+                        var updateStatus = await _httpClient.GetFromJsonAsync<UserVoucher>($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
+
+                    }
                     var OrderJson = JsonConvert.SerializeObject(order);
                     // Lưu chuỗi JSON vào TempData
                     TempData["Order"] = OrderJson;
@@ -114,6 +124,12 @@ namespace BanMoHinh.Client.Controllers
                         var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
                         var responseDeleteCartItem = await _httpClient.DeleteAsync($"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={myCartId}");// xoá sp trong cart
                         var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                    }
+                    // trừ số lượng sp trong db
+                    var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                    if (!updateSLSPfromDb.IsSuccessStatusCode)
+                    {
+                        return "CheckOutFails";
                     }
                     if (hoaDon.PaymentType == "COD")
                     {
@@ -214,13 +230,12 @@ namespace BanMoHinh.Client.Controllers
                             }
                         }
                     }
-                    return BadRequest(); // return về thanh toán thất bại
                 }
-                return BadRequest(); // return về thanh toán thất bại
+                return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
             catch
             {
-                return BadRequest(); // return về thanh toán thất bại
+                return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
         }
 
@@ -296,13 +311,18 @@ namespace BanMoHinh.Client.Controllers
                 return View(new ViewCartDetails());
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> CheckOutFails()
+        {
+            return View();
+        }
         //Xuất PDF
         [HttpGet("/Bill/ExportPDF/{idhd}")]
         public async Task<IActionResult> ExportPDF(Guid idhd)
         {
             try
             {
-                var cthd = await _httpClient.GetFromJsonAsync<Order>($"https://localhost:7007/api/order/get-{idhd}");
+                var cthd = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetQLHDWithDetails?orderId={idhd}");
                 var view = new ViewAsPdf("ExportHD", cthd)
                 {
                     FileName = $"{cthd.OrderCode}.pdf",
@@ -316,13 +336,13 @@ namespace BanMoHinh.Client.Controllers
                 return RedirectToAction("_QuanLyHoaDon", "QuanLyHoaDon");
             }
         }
-        ////In hóa đơn
-        //[HttpGet("/QuanLyHoaDon/PrintHD/{idhd}")]
-        //public async Task<IActionResult> PrintHD(Guid idhd)
-        //{
-        //    var cthd = await _httpClient.GetFromJsonAsync<ChiTietHoaDonQL>($"HoaDon/ChiTietHoaDonQL/{idhd}");
-        //    return View("ExportHD", cthd);
-        //}
+        //In hóa đơn
+        [HttpGet("/Bill/PrintBill/{idhd}")]
+        public async Task<IActionResult> PrintHD(Guid idhd)
+        {
+            var cthd = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetQLHDWithDetails?orderId={idhd}");
+            return View("ExportHD", cthd);
+        }
     }
 
 }

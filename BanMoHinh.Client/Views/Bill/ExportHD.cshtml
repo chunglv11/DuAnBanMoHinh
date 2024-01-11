@@ -1,4 +1,4 @@
-﻿@model BanMoHinh.Share.Models.Order
+﻿@model BanMoHinh.Share.ViewModels.QLHDViewModel
 @{
     ViewData["Title"] = "View";
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -160,20 +160,20 @@
         </tr>
     </thead>
     <tbody>
-@*        @foreach (var item in Model.OrderItem)
+        @foreach (var item in Model.OrderItem)
         {
-            var tt = @item.Price * @item.Quantity;
+            var tt = @item.PriceSale * @item.Quantity;
             string masp = "SP" + DateTime.Now.Millisecond;
             <tr>
                 <td>@masp</td>
-                <td>@item.productDetail.Product.ProductName</td>
-                <td style="max-width:200px">@item.productDetail.Colors.ColorName/@item.productDetail.Size.SizeName</td>
+                <td>@item.ProductName</td>
+                <td style="max-width:200px">@item.ColorName/@item.SizeName</td>
                 <td style="text-align:right">@item.Quantity</td>
-                <td class="bold right">@item.Price?.ToString("n0")</td>
-                <td class="bold right">@tt?.ToString("n0")</td>
+                <td class="bold right">@item.PriceSale.ToString("n0")</td>
+                <td class="bold right">@tt.ToString("n0")</td>
             </tr>
         }
-*@
+
         @{
             decimal? tienhang = Model.TotalAmoutAfterApplyingVoucher - Model.VoucherValue;
             decimal? voucher = Model.VoucherValue;
@@ -259,7 +259,7 @@
             }
             else
             {
-                <td class="large">Chờ nhận hàng</td>
+                <td class="large"></td>
                 <td>@Model.TotalAmout?.ToString("n0")</td>
                 <td class="large total">Chưa thanh toán</td>
             }

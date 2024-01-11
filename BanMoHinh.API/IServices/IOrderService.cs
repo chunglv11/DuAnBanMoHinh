@@ -9,7 +9,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<bool> Delete(Guid id);
         public Task<bool> UpdateStatus(Guid OrderId,Guid StatusId);
-
+        public  Task<QLHDViewModel> GetQLHDWithDetails(Guid orderId);
         public Task<List<Order>> GetAll();
 
         public Task<Order> GetItem(Guid id);

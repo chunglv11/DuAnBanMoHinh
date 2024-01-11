@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BanMoHinh.API.IServices
 {
@@ -12,6 +13,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<UserVoucher> GetItem(Guid id);
         public Task<UserVoucher> GetSoHuu(Guid voucherId,Guid userId);
+        public Task<bool> UpdateTrangThai(Guid voucherId,Guid userId, bool status);
 
         public Task<bool> Update(Guid id, UserVoucher userVoucher);
     }

@@ -2,6 +2,7 @@
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
 
 namespace BanMoHinh.API.Services
 {
@@ -95,6 +96,23 @@ namespace BanMoHinh.API.Services
             {
 
                 Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateTrangThai(Guid voucherId, Guid userId, bool status)
+        {
+            try
+            {
+                var uservoucher = await _dbContext.VoucherUser.Where(c => c.VoucherId == voucherId && c.UserId == userId).FirstOrDefaultAsync();
+                uservoucher.Status = status;
+                _dbContext.VoucherUser.Update(uservoucher);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+
                 return false;
             }
         }

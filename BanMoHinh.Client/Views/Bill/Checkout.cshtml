@@ -335,9 +335,10 @@
             url: '/Bill/UseVoucher',
             data: { ma: value, tongTien: @tongtien},
             success: function (response) {
+                voucher = value;
+                idvoucher = response.VoucherId;
                 if (response.trangThai == true) {
-                    voucher = value;
-                    idvoucher = response.VoucherId;
+                    
                     if (response.hinhThuc == 1) { // theo %
                         tienVoucher = (@tongtien * response.giaTri) / 100;
                     }
