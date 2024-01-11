@@ -2,6 +2,7 @@
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using static System.Net.WebRequestMethods;
@@ -30,7 +31,10 @@ namespace BanMoHinh.Client.Controllers
                     var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={id}");
 
                     var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
-                    var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
+                    List<ViewCartDetails>? listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id).ToList();
+                    var listcartDetailbyIdCartJson = JsonConvert.SerializeObject(listcartDetailbyIdCart);
+                    // Lưu chuỗi JSON vào TempData
+                    TempData["Cart"] = listcartDetailbyIdCartJson;
                     ViewData["color"] = getColor;
                     ViewData["size"] = getSize;
                     return View(listcartDetailbyIdCart);
