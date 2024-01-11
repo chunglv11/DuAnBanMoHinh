@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // add Dependency Injection
-
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
