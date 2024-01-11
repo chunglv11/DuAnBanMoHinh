@@ -58,5 +58,6 @@ app.UseEndpoints(endpoints =>
     name: "default",
     pattern: "{controller=Authentication}/{action=Login}/{id?}");
 });
-
+IWebHostEnvironment env = app.Environment;
+Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, "../Rotativa/Windows");
 app.Run();

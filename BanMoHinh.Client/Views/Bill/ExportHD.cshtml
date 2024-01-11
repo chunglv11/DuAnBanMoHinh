@@ -163,7 +163,7 @@
         @foreach (var item in Model.OrderItem)
         {
             var tt = @item.Price * @item.Quantity;
-            string masp = "SP"+DateTime.Now.Millisecond;
+            string masp = "SP" + DateTime.Now.Millisecond;
             <tr>
                 <td>@masp</td>
                 <td>@item.productDetail.Product.ProductName</td>
@@ -200,16 +200,16 @@
                     </td>
                 </tr>
             }
-                <tr class="p-0 m-0">
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td colspan="2">
-                        Phí vận chuyển
-                    </td>
-                    <td>
-                        @Model.ShippingFee?.ToString("n0")
-                    </td>
-                </tr>
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="2">
+                    Phí vận chuyển
+                </td>
+                <td>
+                    @Model.ShippingFee?.ToString("n0")
+                </td>
+            </tr>
             <tr class="p-0 m-0">
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
