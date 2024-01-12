@@ -15,5 +15,13 @@ namespace BanMoHinh.API.IServices
         public Task<Order> GetItem(Guid id);
 
         public Task<bool> Update(Guid id, Guid UserId, OrderVM item);
+        public  Task<bool> UpdateTrangThaiGiaoHang(Guid idHoaDon, Guid idtrangThai, Guid? idNhanVien);
+        public  Task<bool> ThanhCong(Guid idHoaDon, Guid? idNhanVien);
+        public  Task<bool> HuyHD(Guid idhd, Guid idnv);
+
+        public bool UpdateRank(int? point);
+
+        public bool UpdateGhiChuHD(Guid idhd, Guid idnv, string ghichu);
+
     }
 }

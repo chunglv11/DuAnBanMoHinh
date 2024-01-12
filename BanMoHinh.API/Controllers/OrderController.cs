@@ -83,5 +83,27 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
+        [HttpPut]
+        public async Task<bool> UpdateTrangThai(Guid idhoadon, Guid trangthai, Guid? idnhanvien)
+        {
+            return  await _iorderService.UpdateTrangThaiGiaoHang(idhoadon, trangthai, idnhanvien);
+        }
+        [HttpPut("GiaoThanhCong")]
+        public IActionResult GiaoThanhCong(Guid idhd, Guid idnv)
+        {
+            var result = _iorderService.ThanhCong(idhd, idnv);
+            return Ok(result);
+        }
+        [HttpPut("HuyHD")]
+        public IActionResult HuyHD(Guid idhd, Guid idnv)
+        {
+            var result = _iorderService.HuyHD(idhd, idnv);
+            return Ok(result);
+        }
+        [HttpPut("UpdateGhichu")]
+        public bool UpdateGhiChuHD(Guid idhd, Guid idnv, string ghichu)
+        {
+            return _iorderService.UpdateGhiChuHD(idhd, idnv, ghichu);
+        }
     }
 }

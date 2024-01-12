@@ -3,6 +3,8 @@ using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BanMoHinh.API.Services
 {
@@ -125,7 +127,197 @@ namespace BanMoHinh.API.Services
             }
             catch (Exception)
             {
+                return false;
+            }
+        }
+        public bool UpdateRank(int? point)
+        {
+            var ranks = _dbContext.Rank.ToList();
+            if (ranks != null)
+            {
 
+            
+            foreach (var item in ranks)
+            {
+                if (point >= item.PointsMin && point <= item.PoinsMax)
+                {
+                    var user = _dbContext.Users.FirstOrDefault(c => c.Points == point);
+                    user.RankId = item.Id;
+                    _dbContext.Users.Update(user);
+                    _dbContext.SaveChanges();
+                    return true;
+                }
+            }
+        }
+            return false;
+        }
+        public async Task<bool> UpdateTrangThaiGiaoHang(Guid idHoaDon, Guid idtrangThai, Guid? idNhanVien)
+        {
+            var update = await _dbContext.Order.FirstOrDefaultAsync(p => p.Id == idHoaDon);
+            var chitiethoadon = await _dbContext.OrderItem.Where(p => p.OrderId == idHoaDon).ToListAsync();
+
+            if (update != null)
+            {
+                if (idtrangThai == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                {
+                    foreach (var item in chitiethoadon)
+                    {
+                        var CTsanPham = await _dbContext.ProductDetail.FirstOrDefaultAsync(p => p.Id == item.ProductDetailId);
+                        CTsanPham.Quantity += item.Quantity;
+
+                        var product = await _dbContext.Product.FindAsync(CTsanPham.ProductId);
+                        if (product != null)
+                        {
+                            product.AvailableQuantity += item.Quantity;
+                            _dbContext.Product.Update(product);
+                        }
+
+                        _dbContext.ProductDetail.Update(CTsanPham);
+                    }
+                }
+
+                if (idtrangThai == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                {
+                    var kh = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == idNhanVien);
+                    var hoadon = await _dbContext.Order.FirstOrDefaultAsync(c => c.Id == idHoaDon);
+                    if (kh != null && hoadon != null)
+                    {
+                        kh.Points += Convert.ToInt32(hoadon.TotalAmout);
+                        UpdateRank(kh.Points);
+                        _dbContext.Users.Update(kh);
+                    }
+
+                    update.Payment_Date ??= DateTime.Now;
+                    update.Ship_Date ??= DateTime.Now;
+                }
+
+                update.OrderStatusId = idtrangThai;
+                update.UserId = idNhanVien;
+
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception and possibly rollback changes
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public async Task<bool> ThanhCong(Guid idHoaDon, Guid? idNhanVien) // Chỉ cho đơn online
+        {
+            try
+            {
+                var hd = _dbContext.Order.FirstOrDefault(c => c.Id == idHoaDon);
+                hd.OrderStatusId = Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                hd.UserId = idNhanVien;
+                hd.Ship_Date = DateTime.Now;
+                hd.Payment_Date = DateTime.Now;
+                _dbContext.Order.Update(hd);
+                _dbContext.SaveChanges();
+                //Cộng tích điểm cho khách
+                var kh = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == idNhanVien);
+
+                var hoadon = await _dbContext.Order.FirstOrDefaultAsync(c => c.Id == idHoaDon);
+                if (kh != null && hoadon != null)
+                {
+                    kh.Points += Convert.ToInt32(hoadon.TotalAmout);
+                    UpdateRank(kh.Points);
+                    _dbContext.Users.Update(kh);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<bool> HuyHD(Guid idhd, Guid idnv)
+        {
+            try
+            {
+                var hd = _dbContext.Order.Where(c => c.Id == idhd).FirstOrDefault();
+                //Update hd
+                hd.UserId = idnv;
+                hd.OrderStatusId = Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                //hd.TongTien = 0;
+                _dbContext.Order.Update(hd);
+               await _dbContext.SaveChangesAsync();
+
+                // Cộng lại số lượng hàng
+                var chitiethoadon = await _dbContext.OrderItem.Where(p => p.OrderId == idhd).ToListAsync();
+
+
+                if (chitiethoadon != null)
+                {
+
+
+                    foreach (var item in chitiethoadon)
+                    {
+                        var CTsanPham = await _dbContext.ProductDetail.FirstOrDefaultAsync(p => p.Id == item.ProductDetailId);
+                        CTsanPham.Quantity += item.Quantity;
+
+                        var product = await _dbContext.Product.FindAsync(CTsanPham.ProductId);
+                        if (product != null)
+                        {
+                            product.AvailableQuantity += item.Quantity;
+                            _dbContext.Product.Update(product);
+                            await _dbContext.SaveChangesAsync();
+
+                        }
+
+                        _dbContext.ProductDetail.Update(CTsanPham);
+                        await _dbContext.SaveChangesAsync();
+
+                    }
+
+                }
+                    // Cộng lại số lượng voucher nếu áp dụng
+                if (hd.VoucherId != null)
+                {
+                    var vc = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == hd.VoucherId);
+                    var uservc = await  _dbContext.VoucherUser.FirstOrDefaultAsync(c => c.VoucherId == vc.Id && c.UserId == hd.UserId);
+                    vc.Quantity += 1;
+                    uservc.Status = true;
+                    _dbContext.Voucher.Update(vc);
+                    _dbContext.VoucherUser.Update(uservc);
+                    await _dbContext.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool UpdateGhiChuHD(Guid idhd, Guid idnv, string ghichu)
+        {
+            try
+            {
+                var hd = _dbContext.Order.FirstOrDefault(c => c.Id == idhd);
+                if (ghichu == "null")
+                {
+                    hd.Description = null;
+                    hd.UserId = idnv;
+                }
+                else
+                {
+                    hd.Description = ghichu;
+                }
+                _dbContext.Order.Update(hd);
+                _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
         }
