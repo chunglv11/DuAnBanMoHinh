@@ -1,7 +1,9 @@
-﻿@{
+﻿@using BanMoHinh.Share.Models;
+@{
     long tienShip = 0;
     string? tongtien = TempData.Peek("TongTien") as string;
     string? soLuong = TempData.Peek("SoLuong") as string;
+    var user = ViewData["user"] as User;
 }
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
@@ -34,7 +36,7 @@
                             <div class="col-lg-12">
                                 <div class="checkout__input">
                                     <label for="ten">Tên</label>
-                                    <input type="text" class="form-control" id="name" placeholder=""required="" style="height:38px">
+                                    <input type="text" class="form-control" id="name" placeholder=""required="" style="height:38px" value="@user.UserName">
                                     <div class="invalid-feedback"> Không để trống tên</div>
                                 </div>
                             </div>
@@ -43,7 +45,7 @@
                             <div class="col-lg-12">
                                 <div class="checkout__input">
                                     <label for="sdt">SĐT</label>
-                                    <input type="text" class="form-control" id="phone" placeholder="" required="" style="height:38px">
+                                <input type="text" class="form-control" id="phone" placeholder="" required="" style="height:38px" value="@user.PhoneNumber">
                                     <div class="invalid-feedback"> Không để trống SDT </div>
                                 </div>
                             </div>
@@ -157,7 +159,7 @@
     var voucher = "";
     var tienVoucher = 0;
     var tienShip = 0;
-    var idvoucher = "";
+    var VoucherId = "";
 
     $(document).ready(function () {
         var tienHang = @tongtien;
@@ -238,7 +240,7 @@
             //xa = document.getElementById(value1).innerHTML;
             $.ajax({
                 type: "GET",
-                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378?to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500+"&service_type_id=2",// 500*1 trong đó 1 là số lượng *********************
+                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378?to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500 * @soLuong + "&service_type_id=2",// 500*1 trong đó 1 là số lượng *********************
                 headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -306,7 +308,7 @@
             alert("Vui long dien day du thong tin");
         }
         else {
-            var objHoaDon = { RecipientName: ten, RecipientPhone: sdt, RecipientAddress: diachi + ", " + xa + ", " + huyen + ", " + tinh, ShippingFee: tienShip, PaymentType: pttt, VoucherId: idvoucher, TotalAmout: tienShip + @tongtien, VoucherValue: tienVoucher, TotalAmoutAfterApplyingVoucher: tienShip + @tongtien - tienVoucher, Description: ghiChu };
+            var objHoaDon = { RecipientName: ten, RecipientPhone: sdt, RecipientAddress: diachi + ", " + xa + ", " + huyen + ", " + tinh, ShippingFee: tienShip, PaymentType: pttt, VoucherId: VoucherId, TotalAmout: tienShip + @tongtien, VoucherValue: tienVoucher, TotalAmoutAfterApplyingVoucher: tienShip + @tongtien - tienVoucher, Description: ghiChu };
         $.ajax({
             async: false,
             type: 'POST',
@@ -335,8 +337,9 @@
             url: '/Bill/UseVoucher',
             data: { ma: value, tongTien: @tongtien},
             success: function (response) {
+                console.log(response);
                 voucher = value;
-                idvoucher = response.VoucherId;
+                VoucherId = String(response.voucherId);
                 if (response.trangThai == true) {
                     
                     if (response.hinhThuc == 1) { // theo %
