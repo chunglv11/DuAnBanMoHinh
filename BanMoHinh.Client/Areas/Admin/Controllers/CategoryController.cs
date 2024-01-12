@@ -1,6 +1,9 @@
 ﻿using BanMoHinh.Share.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
@@ -29,18 +32,34 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         // GET: CategoryController/Create
         public async Task<IActionResult> Create()
         {
+           
+            var responseLoaiSP = _client.GetAsync("https://localhost:7007/api/Category/get-all-Category").Result;
+            if (responseLoaiSP.IsSuccessStatusCode)
+            {
+                ViewData["listLoaiSP"] = JsonConvert.DeserializeObject<List<Category>>(responseLoaiSP.Content.ReadAsStringAsync().Result);
+            }
             return View();
         }
 
         // POST: CategoryController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Create(Category ct)
         {
             try
             {
-                var createCategory = await _client.PostAsJsonAsync("https://localhost:7007/api/Category/create-Category", ct);
-                return RedirectToAction("GetAllCategory");
+                ct.Id = Guid.NewGuid();
+                string apiURL = $"https://localhost:7007/api/Category/create-Category";
+                var content = new StringContent(JsonConvert.SerializeObject(ct), Encoding.UTF8, "application/json");
+                var response = await _client.PostAsync(apiURL, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("GetAllCategory");
+                }
+                else
+                {
+                    return View();
+                }
             }
             catch
             {

@@ -18,31 +18,25 @@
     <thead>
         <tr>
             <th>
-                Kiểu voucher
-            </th>
-            <th>
-                Trạng thái kiểu
-            </th>
-            <th>
                 Mã
             </th>
             <th>
                 Số lượng
+            </th>        
+            <th>
+                Giá trị voucher
             </th>
             <th>
-                Giá trị
+                Hình thức giảm
             </th>
             <th>
-                Giá trị tối thiểu
-            </th>
-            <th>
-                Ngày tạo
+                Giá trị đơn hàng
             </th>
             <th>
                 Ngày bắt đầu
             </th>
             <th>
-                Ngày kết thức
+                Ngày kết thúc
             </th>
             <th>
                 Trạng thái
@@ -64,10 +58,17 @@
                 @Html.DisplayFor(modelItem => item.Value)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Minimum_order_value)
-            </td>
+                @if (item.Discount_Type == 1)
+                    {
+                        <p>Giảm %</p>
+                    }
+                    else if(item.Discount_Type == 0)
+                    {
+                        <p>Giảm theo tiền</p>
+                    }
+               
             <td>
-                @Html.DisplayFor(modelItem => item.Create_Date)
+                @Html.DisplayFor(modelItem => item.Minimum_order_value)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Start_Date)
@@ -76,7 +77,14 @@
                 @Html.DisplayFor(modelItem => item.End_Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @if(item.Status == true)
+                {
+                     <p>Sử dụng</p>
+                }
+                else
+                {
+                    <p>Ngừng áp dụng</p>
+                }
             </td>
             <td>
                  <a class="btn btn-primary btn-sm" type="button" href="editVoucher/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>

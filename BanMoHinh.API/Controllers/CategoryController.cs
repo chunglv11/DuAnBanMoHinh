@@ -43,7 +43,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create-Category"), HttpPut("create-Category")]
+        [HttpPost("create-Category")]
         public async Task<ActionResult<Category>> Post(CategoryVM obj)
         {
             var result = await _iCategoryService.Create(obj);
