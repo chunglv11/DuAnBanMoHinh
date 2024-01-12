@@ -1,6 +1,7 @@
 ﻿using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
 namespace BanMoHinh.API.Services
 {
@@ -12,23 +13,43 @@ namespace BanMoHinh.API.Services
         {
             _dbContext = dbContext;
         }
-        public async Task<bool> Create(Category item)
+        public async Task<Category> Create(CategoryVM item)
         {
             try
             {
-                var category = new Category()
+                var cate = await _dbContext.Category.FindAsync(item.Id);
+                //check ton tai
+                var exist = await _dbContext.Category.Where(c=>c.CategoryName.ToLower().Trim() == item.CategoryName.ToLower().Trim() && c.Id != item.Id).FirstOrDefaultAsync();
+                if (exist != null)
                 {
-                    Id = item.Id,
-                    CategoryName = item.CategoryName,
-                };
-                await _dbContext.Category.AddAsync(category);
-                await _dbContext.SaveChangesAsync();
-                return true;
+                    return null;
+                }
+                if(cate != null)
+                {
+                    cate.CategoryName = item.CategoryName;
+                    cate.IdCategory = item.Id;
+                    _dbContext.Category.Update(cate);
+                    await _dbContext.SaveChangesAsync();
+                    return cate;
+                }
+                else
+                {
+                    Category ct = new Category()
+                    {
+                        Id = new Guid(),
+                        CategoryName = item.CategoryName,
+                        IdCategory = item.IdCategoryPa
+                    };
+                    await _dbContext.Category.AddAsync(ct);
+                    await _dbContext.SaveChangesAsync();
+                    return ct;
+                }
+                
+               
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                return false;
+                throw;
             }
         }
 
@@ -37,6 +58,10 @@ namespace BanMoHinh.API.Services
             try
             {
                 var item = await _dbContext.Category.FirstOrDefaultAsync(c => c.Id == id);
+                if (_dbContext.Product.Any(c => c.CategoryId == id))
+                {
+                    return false;
+                }
                 _dbContext.Category.Remove(item);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -52,7 +77,7 @@ namespace BanMoHinh.API.Services
 
         public async Task<List<Category>> GetAll()
         {
-            return await _dbContext.Category.ToListAsync();
+            return await _dbContext.Category.AsNoTracking().ToListAsync();
         }
 
         public async Task<Category> GetItem(Guid id)

@@ -73,6 +73,42 @@ namespace BanMoHinh.API.Services
 
         }
 
+        public async Task<List<DonMuaChiTietVM>> getAllDonMuaChiTiet(Guid idHoaDon)
+        {
+            var lstDonMuaCT = await(from a in _dbContext.OrderItem
+                                    where a.OrderId == idHoaDon
+                                    join b in _dbContext.Order on a.OrderId equals b.Id
+                                    //join c in _dbContext.Rate on a.Id equals c.Id //ko hiểu sao thêm cái này lại trả về []
+                                    join d in _dbContext.ProductDetail on a.ProductDetailId equals d.Id
+                                    join e in _dbContext.Size on d.SizeId equals e.Id
+                                    join f in _dbContext.Colors on d.ColorId equals f.ColorId
+                                    join g in _dbContext.Product on d.ProductId equals g.Id
+                                    select new DonMuaChiTietVM()
+                                    {
+                                        ID = b.Id,
+                                        NgayTao = b.Create_Date,
+                                        NgayThanhToan = b.Payment_Date,
+                                        TenNguoiNhan = b.RecipientName,
+                                        SDT = b.RecipientPhone,
+                                        DiaChi = b.RecipientAddress,
+                                        TienShip = b.ShippingFee,
+                                        TrangThaiGiaoHang = b.OrderStatusId,
+                                        PhuongThucThanhToan = b.PaymentType,
+                                        IDCTHD = a.Id,
+                                        DonGia = a.Price,
+                                        SoLuong = a.Quantity,
+                                        TenKichCo = e.SizeName,
+                                        TenMau = f.ColorName,
+                                        TenSanPham = g.ProductName,
+                                        DuongDan = _dbContext.ProductImage.First(c => c.ProductDetailId == d.Id).ImageUrl,
+                                        HinhThucGiamGia = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Discount_Type,
+                                        GiaTriVC = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Value,
+                                        
+
+                                    }).ToListAsync();
+            return lstDonMuaCT;
+        }
+
         public async Task<Order> GetItem(Guid id)
         {
             return await _dbContext.Order.FindAsync(id);

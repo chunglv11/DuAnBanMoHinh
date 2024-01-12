@@ -28,6 +28,12 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("GetAllDonMuaChiTiet")]
+        public async Task<List<DonMuaChiTietVM>> GetAllDonMuaCT(Guid idHoaDon)
+        {
+            var listDonMuaCT = await _iorderService.getAllDonMuaChiTiet(idHoaDon);
+            return listDonMuaCT;
+        }
         [HttpGet("get-{id}")]
         public async Task<ActionResult<Order>> Get(Guid id)
         {
