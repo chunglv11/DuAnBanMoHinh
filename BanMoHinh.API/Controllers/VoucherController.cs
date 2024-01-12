@@ -42,6 +42,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("TangGiamSoLuongTheoId")]
+        public async Task<ActionResult<Voucher>> TangGiamSoLuongTheoId(Guid voucherId, bool tanggiam)
+        {
+            try
+            {
+                return Ok(await _voucherservice.TangGiamSoLuongTheoId( voucherId,  tanggiam));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+
         [HttpGet("getbycode/{code}")]
         public async Task<ActionResult<Voucher>> Get(string code)
         {

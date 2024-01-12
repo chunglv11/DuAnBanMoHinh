@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // add Dependency Injection
-
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
@@ -59,5 +58,6 @@ app.UseEndpoints(endpoints =>
     name: "default",
     pattern: "{controller=Authentication}/{action=Login}/{id?}");
 });
-
+IWebHostEnvironment env = app.Environment;
+Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath, "../Rotativa/Windows");
 app.Run();

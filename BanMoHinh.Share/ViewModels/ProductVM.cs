@@ -12,6 +12,7 @@ namespace BanMoHinh.Share.ViewModels
         public Guid Id { get; set; }
         public Guid? CategoryId { get; set; }
         public string? CategoryName { get; set; }
+        public string? CategoryNamePa { get; set; }
         public Guid? BrandId { get; set; }
         public string? BrandName { get; set; }
         public Guid? MaterialId { get; set; }

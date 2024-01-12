@@ -28,6 +28,12 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("GetAllDonMuaChiTiet")]
+        public async Task<List<DonMuaChiTietVM>> GetAllDonMuaCT(Guid idHoaDon)
+        {
+            var listDonMuaCT = await _iorderService.getAllDonMuaChiTiet(idHoaDon);
+            return listDonMuaCT;
+        }
         [HttpGet("get-{id}")]
         public async Task<ActionResult<Order>> Get(Guid id)
         {
@@ -41,6 +47,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("GetQLHDWithDetails")]
+        public async Task<ActionResult<QLHDViewModel>> GetQLHDWithDetails(Guid orderId)
+        {
+            try
+            {
+                return Ok(await _iorderService.GetQLHDWithDetails(orderId));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+
         [HttpPost("create")]
         public async Task<ActionResult<OrderVM>> Post([FromBody] OrderVM obj)
         {

@@ -184,5 +184,40 @@ namespace BanMoHinh.API.Services
                 return true;
             }
         }
+
+        public async Task<bool> UpdateSLTheoSPCT()
+        {
+            try
+            {
+                var products = await _dbContext.Product.ToListAsync();
+
+                foreach (var product in products)
+                {
+                    var productDetails = await _dbContext.ProductDetail
+                        .Where(pd => pd.ProductId == product.Id)
+                        .ToListAsync();
+
+                    // Tính tổng số lượng của tất cả sản phẩm chi tiết
+                    int? totalQuantity = productDetails.Sum(pd => pd.Quantity);
+
+                    // Cập nhật số lượng sản phẩm chính
+                    product.AvailableQuantity = totalQuantity;
+
+                    // Cập nhật vào cơ sở dữ liệu
+                    _dbContext.Product.Update(product);
+                }
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception tại đây (log, throw, ...)
+                return false;
+            }
+        }
+
     }
 }

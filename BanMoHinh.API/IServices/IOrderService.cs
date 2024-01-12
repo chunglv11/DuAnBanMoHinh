@@ -9,10 +9,11 @@ namespace BanMoHinh.API.IServices
 
         public Task<bool> Delete(Guid id);
         public Task<bool> UpdateStatus(Guid OrderId,Guid StatusId);
-
+        public  Task<QLHDViewModel> GetQLHDWithDetails(Guid orderId);
         public Task<List<Order>> GetAll();
 
         public Task<Order> GetItem(Guid id);
+        public Task<List<DonMuaChiTietVM>> getAllDonMuaChiTiet(Guid idHoaDon);
 
         public Task<bool> Update(Guid id, Guid UserId, OrderVM item);
         public  Task<bool> UpdateTrangThaiGiaoHang(Guid idHoaDon, Guid idtrangThai, Guid? idNhanVien);

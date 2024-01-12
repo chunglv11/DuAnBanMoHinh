@@ -17,6 +17,7 @@ namespace BanMoHinh.Share.Models
         public string? Reply { get; set; }
         public string? ImageUrl { get; set; }
         public float? Rating { get; set; }
+        public int Status { get; set; }
         //thêm thuộc tính reply
         [ForeignKey("OrderItemId")]
         public OrderItem? OrderItem { get; set; }

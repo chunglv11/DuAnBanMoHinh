@@ -43,15 +43,11 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPost("create-Category")]
-        public async Task<ActionResult<Category>> Post([FromBody] Category obj)
+        [HttpPost("create-Category"), HttpPut("create-Category")]
+        public async Task<ActionResult<Category>> Post(CategoryVM obj)
         {
             var result = await _iCategoryService.Create(obj);
-            if (result)
-            {
-                return Ok("Đã thêm thành công");
-            }
-            return Ok("Lỗi!");
+            return Ok(result);
         }
 
         [HttpPut("update-Category-{id}")]

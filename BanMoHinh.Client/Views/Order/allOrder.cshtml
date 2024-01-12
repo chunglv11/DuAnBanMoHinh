@@ -1,114 +1,197 @@
-﻿@model IEnumerable<BanMoHinh.Share.Models.Order>
+﻿@model X.PagedList.IPagedList<BanMoHinh.Share.Models.Order>
+@using X.PagedList.Mvc.Core;
 
 @{
-    ViewData["Title"] = "allOrder";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
-    <h2 style="text-align:center;margin-top:20px" class="title">Hóa đơn của bạn</h2>
 
-<style>
-    .button-container {
-        display: flex;
-        gap: 10px; /* Khoảng cách giữa các nút */
-    }
 
-    .button-style {
-        border: none;
-        background-color: transparent;
-        padding: 10px; /* Kích thước nút */
-        cursor: pointer;
-        outline: none;
-        transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
-    }
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Lịch sử đơn hàng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
 
-        .button-style:hover {
-            background-color: #a8dadc; /* Màu khi chỉ vào */
-        }
-</style>
+<div class="colorlib-product">
+    <div class="container">
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="cart-table table-responsive">
+                    <table class="table tbl-history">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <a class="custom-txt-history" >
+                                        <span>Ngày đặt</span><i class="bx bxs-sort-alt ml-2"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="custom-txt-history" >
+                                        <span>Tổng tiền</span><i class="bx bxs-sort-alt ml-2"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="custom-txt-history">
+                                        <span>Tiền Thanh Toán</span><i class="bx bxs-sort-alt ml-2"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <p>Ngày thanh toán</p>
+                                </th>
+                                <th>
+                                    <p>Trạng thái</p>
+                                </th>
+                                
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Create_Date)
+                                    </td>
+                                    <td>
+                                        @string.Format("{0:0,0 VND}", item.TotalAmout)
+                                    </td>
+                                    <td>
+                                        @string.Format("{0:0,0 VND}", item.TotalAmoutAfterApplyingVoucher)
+                                    </td>
+                                    <td>
+                                        @if (item.Payment_Date == null)
+                                        {
+                                            <p>Chờ thanh toán</p>
+                                        }
+                                        else
+                                        {
+                                            <p>@item.Payment_Date</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Đang được xử lý</p>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Chờ lấy hàng</p>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Đang giao hàng</p>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Giao hàng thành công</p>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Giao hàng không thành công</p>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Huỷ đơn</p>
+                                        }
+                                    </td>
+                                   
+                                    <td class="custom-history">
+                                        <a class="primary-btn custom-history-details" href="@Url.Action("OrderDetails", "Order", new { idHoaDon = item.Id })">
+                                            <i class='bx bx-detail bx-sm'></i>
+                                        </a>
+                                        @if (item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC") || item.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <a class="primary-btn custom-history-trash" onclick="Cancel('@item.Id', '@item.OrderStatusId')">
+                                                <i class="bx bx-trash bx-sm"></i> Hủy
+                                            </a>
+                                        }
 
-<!-- Mã HTML -->
-<div class="button-container">
-    <button class="button-style col-4"><a href="@Url.Action("allOrder", "Order")" class="button-style col-4">Tất cả</a></button>
-    <button class="button-style col-1">  <a href="@Url.Action("Xacnhan", "Order")" class="button-style col-1">Đang xác nhận</a></button>
-    <button class="button-style col-1"> <a href="@Url.Action("Danggiao", "Order")" class="button-style col-1">Đang giao</a> </button>
-    <button class="button-style col-1"> <a href="@Url.Action("Cholayhang", "Order")" class="button-style col-1">Chờ lấy hàng</a></button>
-    <button class="button-style col-1">    <a href="@Url.Action("Hoanthanh", "Order")" class="button-style col-1">Hoàn thành</a></button>
-    <button class="button-style col-1"></button>   <a href="@Url.Action("Yeucautrahang", "Order")" class="button-style col-1">Yêu cầu trả hàng</a>
-    <button class="button-style col-1"> <a href="@Url.Action("Xacnhantrahang", "Order")" class="button-style col-1">Xác nhận trả hàng</a></button>
-    <button class="button-style col-1">  <a href="@Url.Action("Huydon", "Order")" class="button-style col-1">Hủy đơn</a></button>
-    <button class="button-style col-1"></button>
+                                        else if (item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <a class="primary-btn custom-history-trash" onclick="show();">
+                                                <i class="bx bx-trash bx-sm"></i> Hủy
+                                            </a>
+                                        }
+                                        else if (item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <a class="primary-btn custom-history-trash  custom-history-trash-disable" disabled="disabled">
+                                                <i class="bx bx-trash bx-sm"></i> Đã hủy
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="primary-btn custom-history-trash  custom-history-trash-success" disabled="disabled">
+                                                <i class="bx bx-check bx-sm"></i> Đã nhận
+                                            </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-12 mt-3 p-3 pagin-history">
+                <div class="shadow-sm">
+                    <div class="pagin-left float-left font-weight-lighter mt-1">
+                        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    </div>
+                    <div class="pagin-right float-right">
+                        @Html.PagedListPager(Model, page => Url.Action("allOrder", new { page}))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script>
+    function show() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Đơn hàng đang được giao',
+            text: 'Liên hệ với Admin: 0987654321'
+        })
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RecipientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecipientAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmout)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderStatusId)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.PaymentType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherId)
-            </td>
-         @*   <td>
-                @Html.DisplayFor(modelItem => item.OrderCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmout)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmoutAfterApplyingVoucher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Create_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ship_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Payment_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Delivery_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>*@
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    function Cancel(idHoaDon, idTrangThai) {
+        $.ajax({
+            type: "POST",
+            url: "/Order/HuyDon",
+            data: {
+                idHoaDon: idHoaDon,
+                idTrangThai: idTrangThai
+            },
+            success: function (result) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Hủy thành công',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setTimeout(function () {
+                    location.reload();
+                }, 2000)
+            }
+        });
+    }
+
+</script>
+
+

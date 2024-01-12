@@ -1,0 +1,115 @@
+﻿@using BanMoHinh.Share.Models;
+@using BanMoHinh.Share.ViewModels;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@{
+    decimal? total = 0;
+    decimal? totalAmount = 0;
+    decimal? price = 0;
+    var Cart = ViewData["Cart"] as List<ViewCartDetails>;
+    var Order = ViewData["Order"] as OrderVM;
+    var color = ViewData["color"] as List<Colors>;
+    var size = ViewData["size"] as List<Size>;
+}
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<div class="container" style="width:930px">
+    <div class="success-w">
+        @if (Order.TotalAmout < 0)
+        {
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-check" style="margin-right:5px"></i>Đặt hàng thất bại do chứa sản phẩm hết hàng
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-check" style="margin-right:5px"></i>Đặt hàng thành công
+            </div>
+            <div class="row" style="margin-top:20px">
+                <div class="col-lg-6" style="font-size:20px"><strong>Tên: </strong>@Order.RecipientName</div>
+                <div class="col-lg-6" style="font-size:20px"><strong>SDT: </strong>@Order.RecipientPhone</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="font-size:20px"><strong>Địa chỉ: </strong>@Order.RecipientAddress</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" style="font-size:20px"><strong>Hình thức thanh toán: </strong>@Order.PaymentType</div>
+                <div class="col-lg-6" style="font-size:20px"><strong>Tiền Ship: </strong>@Order.ShippingFee?.ToString("n0") VND</div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6" style="font-size:20px"><strong>Tổng tiền: </strong>@Order.TotalAmout?.ToString("n0") VND</div>
+                @if (Order.VoucherValue==0)
+                {
+                    <div class="col-lg-6" style="font-size:20px"><strong>Giá trị voucher: </strong>Không áp dụng</div>
+                }
+                else
+                {
+                    <div class="col-lg-6" style="font-size:20px"><strong>Giá trị voucher: </strong>@Order.VoucherValue?.ToString("n0") VND</div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="font-size:20px"><strong>Ghi chú: </strong>@Order.Description</div>
+            </div>
+            <div class="shopping__cart__table" style="margin-top:20px">
+                <table style="width:100%" class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th style="text-align:center">Biến thể</th>
+                            <th style="text-align:center">Số lượng</th>
+                            <th style="text-align:center">Giá Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt = 0;
+                            foreach (var item in Cart)
+                            {
+                                stt++;
+                                <tr>
+                                    <td class="pro-quantity"><span>@stt</span></td>
+                                    <td class="pro-thumbnail">
+                                        <a href="#">
+                                            <img class="img-fluid img-cart-inx" src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
+                                        </a>
+                                    </td>
+                                    <td class="pro-title custom-title-cart">
+                                        <a data-toggle="tooltip"
+                                           title="@item.ProductName" > @item.ProductName</a>
+                                    </td>
+                                    <td class="pro-quantity text-center">
+                                        <a data-toggle="tooltip"
+                                           title="@item.ProductName"> @color.FirstOrDefault(c=>c.ColorId==item.ColorsId).ColorName/@size.FirstOrDefault(c=>c.Id==item.SizeId).SizeName</a>
+                                    </td>
+                                    <td class="pro-title  text-center">
+                                        <a data-toggle="tooltip"
+                                           title="@item.ProductName">@item.Quantity</a>
+                                    </td>
+                                    <td class="pro-price">
+                                        @{
+                                            total = item.TotalPrice;
+                                            totalAmount += total;
+                                        }
+                                        <span>@total?.ToString("N0")</span>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button onclick="location.href='/Bill/ExportPDF/@Order.Id'" class="btn btn-secondary" style="margin-right:5px">Xuất PDF</button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Quay về trang chủ</a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,12 +1,9 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Text.RegularExpressions;
+using Rotativa.AspNetCore;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -26,7 +23,7 @@ namespace BanMoHinh.Client.Controllers
         private string GenerateRandomString(int length)
         {
             Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
             return new string(Enumerable.Repeat(chars, length)
               .Select(c => c[random.Next(c.Length)]).ToArray());
@@ -94,6 +91,20 @@ namespace BanMoHinh.Client.Controllers
                 var response = await _httpClient.PostAsJsonAsync<OrderVM>("https://localhost:7007/api/order/create", order); // tạo order
                 if (response.IsSuccessStatusCode)// nếu done
                 {
+                    if (order.VoucherId!=null)
+                    {
+                        // - số lượng voucher 
+
+                        var updateSL = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=true");
+
+                        // - sửa trạng thái trong uservoucher  
+
+                        var updateStatus = await _httpClient.GetFromJsonAsync<UserVoucher>($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
+
+                    }
+                    var OrderJson = JsonConvert.SerializeObject(order);
+                    // Lưu chuỗi JSON vào TempData
+                    TempData["Order"] = OrderJson;
                     _orderId = order.Id;
                     // get cart
                     var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userId}");
@@ -114,9 +125,15 @@ namespace BanMoHinh.Client.Controllers
                         var responseDeleteCartItem = await _httpClient.DeleteAsync($"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={myCartId}");// xoá sp trong cart
                         var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
                     }
+                    // trừ số lượng sp trong db
+                    var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                    if (!updateSLSPfromDb.IsSuccessStatusCode)
+                    {
+                        return "CheckOutFails";
+                    }
                     if (hoaDon.PaymentType == "COD")
                     {
-                        return "url_thanhtoancod";
+                        return "https://localhost:7095/Bill/CheckOutSuccess";
                     }
                     else
                     {
@@ -213,13 +230,12 @@ namespace BanMoHinh.Client.Controllers
                             }
                         }
                     }
-                    return BadRequest();
                 }
-                return BadRequest();
+                return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
             catch
             {
-                return BadRequest();
+                return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
         }
 
@@ -275,5 +291,58 @@ namespace BanMoHinh.Client.Controllers
                 return Json(new { HinhThuc = false, GiaTri = 0, Loi = "Voucher không hợp lệ catch" });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> CheckOutSuccessAsync()
+        {
+            try
+            {
+                var getColor = await _httpClient.GetFromJsonAsync<List<Colors>>("https://localhost:7007/api/color/get-all-Color");
+                var getSize = await _httpClient.GetFromJsonAsync<List<Size>>("https://localhost:7007/api/size/get-all-size");
+                ViewData["color"] = getColor;
+                ViewData["size"] = getSize;
+                var Cart = JsonConvert.DeserializeObject<List<ViewCartDetails>>(TempData.Peek("Cart") as string);
+                var Order = JsonConvert.DeserializeObject<OrderVM>(TempData.Peek("Order") as string);
+                ViewData["Cart"] = Cart;
+                ViewData["Order"] = Order;
+                return View();
+            }
+            catch
+            {
+                return View(new ViewCartDetails());
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> CheckOutFails()
+        {
+            return View();
+        }
+        //Xuất PDF
+        [HttpGet("/Bill/ExportPDF/{idhd}")]
+        public async Task<IActionResult> ExportPDF(Guid idhd)
+        {
+            try
+            {
+                var cthd = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetQLHDWithDetails?orderId={idhd}");
+                var view = new ViewAsPdf("ExportHD", cthd)
+                {
+                    FileName = $"{cthd.OrderCode}.pdf",
+                    PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                    PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                };
+                return view;
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("_QuanLyHoaDon", "QuanLyHoaDon");
+            }
+        }
+        //In hóa đơn
+        [HttpGet("/Bill/PrintBill/{idhd}")]
+        public async Task<IActionResult> PrintHD(Guid idhd)
+        {
+            var cthd = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetQLHDWithDetails?orderId={idhd}");
+            return View("ExportHD", cthd);
+        }
     }
+
 }
