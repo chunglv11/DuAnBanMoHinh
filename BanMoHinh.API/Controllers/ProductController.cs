@@ -56,6 +56,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("UpdateSLTheoSPCT")]
+        public async Task<ActionResult<bool>> UpdateSLTheoSPCT()
+        {
+            try
+            {
+                return Ok(await _iproductService.UpdateSLTheoSPCT());
+    }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+}
+        }
+
         [HttpPost("create-product")]
         public async Task<ActionResult<ProductVM>> Post([FromBody] ProductVM obj)
         {

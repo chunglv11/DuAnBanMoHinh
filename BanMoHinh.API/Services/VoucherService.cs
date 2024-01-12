@@ -2,6 +2,8 @@
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BanMoHinh.API.Services
 {
@@ -62,6 +64,21 @@ namespace BanMoHinh.API.Services
         public async Task<List<Voucher>> GetAll()
         {
             return await _dbContext.Voucher.ToListAsync();
+        }
+        public async Task<bool> TangGiamSoLuongTheoId(Guid voucherId, bool tanggiam)
+        {
+            try
+            {
+                var voucher = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == voucherId);
+                voucher.Quantity += tanggiam ? 1 : -1;
+                _dbContext.Voucher.Update(voucher);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<Voucher> GetItem(Guid id)

@@ -16,6 +16,7 @@ namespace BanMoHinh.API.IServices
         public Task<IEnumerable<Product>> GetAll();
         public Task<IEnumerable<ProductVM>> GetAllVM();
 
+        public Task<bool> UpdateSLTheoSPCT();
         public Task<Product> GetItem(Guid id);
 
         public Task<bool> Update(Guid id, ProductVM item);

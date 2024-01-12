@@ -11,6 +11,7 @@ namespace BanMoHinh.API.IServices
         public Task<List<Voucher>> GetAll();
 
         public Task<Voucher> GetItem(Guid id);
+        public Task<bool> TangGiamSoLuongTheoId(Guid voucherId,bool tanggiam);
         public Task<Voucher> GetItemByCode(string code);
 
         public Task<bool> Update(Guid id, Voucher rank);
