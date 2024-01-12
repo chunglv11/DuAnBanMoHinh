@@ -27,7 +27,7 @@ namespace BanMoHinh.API.Services
                 if(cate != null)
                 {
                     cate.CategoryName = item.CategoryName;
-                    cate.IdCategory = item.Id;
+                    cate.IdCategory = item.IdCategoryPa;
                     _dbContext.Category.Update(cate);
                     await _dbContext.SaveChangesAsync();
                     return cate;
