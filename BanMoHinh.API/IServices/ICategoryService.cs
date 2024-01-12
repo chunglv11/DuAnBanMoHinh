@@ -1,10 +1,11 @@
 ﻿using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 
 namespace BanMoHinh.API.IServices
 {
     public interface ICategoryService
     {
-        public Task<bool> Create(Category item);
+        public Task<Category> Create(CategoryVM item);
 
         public Task<bool> Delete(Guid id);
 
