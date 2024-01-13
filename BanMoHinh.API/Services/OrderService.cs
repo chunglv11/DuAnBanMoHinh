@@ -491,7 +491,9 @@ namespace BanMoHinh.API.Services
             return qlhdWithDetails;
         }
 
-
-
+        public Task<bool> HuyDon(Guid OrderId, Guid StatusId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

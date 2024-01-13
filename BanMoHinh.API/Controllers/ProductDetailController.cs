@@ -12,10 +12,12 @@ namespace BanMoHinh.API.Controllers
     public class ProductDetailController : ControllerBase
     {
         private IProductDetailService _iproductDetailService;
+        private IProductService _iproductService;
 
-        public ProductDetailController(IProductDetailService iproductDetailService)
+        public ProductDetailController(IProductDetailService iproductDetailService, IProductService iproductService)
         {
             _iproductDetailService = iproductDetailService;
+            _iproductService = iproductService;
         }
         [HttpGet("get-all-productdetail")]
         public async Task<IActionResult> GetAll()
@@ -100,6 +102,7 @@ namespace BanMoHinh.API.Controllers
         public async Task<IActionResult> UpdateQuantityById(Guid productDetailId, int quantity)
         {
             var productdetail = await _iproductDetailService.UpdateQuantityById(productDetailId, quantity);
+            var updateslProduct = await _iproductService.UpdateSLTheoSPCT();
             return Ok(productdetail);
         }
     }

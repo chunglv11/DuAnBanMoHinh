@@ -204,7 +204,16 @@
                                                 </a>
                                             </h6>
                                             <div class="price d-flex">
-                                                <h6 class="d-flex">@item.MinPrice đ  - @item.MaxPrice đ <span class="text-lowercase"></span></h6>
+                                                @if (item.MinPrice == item.MaxPrice )
+                                                {
+
+                                                    <h6 class="d-flex">@item.MinPrice?.ToString("n0") đ<span class="text-lowercase"></span></h6>
+                                                }
+                                                else
+                                                {
+
+                                                    <h6 class="d-flex">@item.MinPrice?.ToString("n0") đ  - @item.MaxPrice?.ToString("n0") đ <span class="text-lowercase"></span></h6>
+                                                }
                                             </div>
                                             <div class="prd-bottom">
                                                 <a class="addProduct social-info" href="/Product/ProductDetail/@item.Id">

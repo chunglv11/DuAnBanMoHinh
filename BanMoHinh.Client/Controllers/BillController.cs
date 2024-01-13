@@ -35,7 +35,8 @@ namespace BanMoHinh.Client.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
             var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={id}");
-
+            var user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{identity.FindFirst(ClaimTypes.Name).Value}");
+            ViewData["user"] = user;
             var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
             var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
             decimal? tongtien = 0;
@@ -50,7 +51,7 @@ namespace BanMoHinh.Client.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<string> CheckOut(Order hoaDon)
+        public async Task<string> CheckOut(Order hoaDon)    
         {
             try
             {
@@ -95,11 +96,11 @@ namespace BanMoHinh.Client.Controllers
                     {
                         // - số lượng voucher 
 
-                        var updateSL = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=true");
+                        var updateSL = await _httpClient.GetAsync($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=false");
 
                         // - sửa trạng thái trong uservoucher  
 
-                        var updateStatus = await _httpClient.GetFromJsonAsync<UserVoucher>($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
+                        var updateStatus = await _httpClient.GetAsync($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
 
                     }
                     var OrderJson = JsonConvert.SerializeObject(order);
