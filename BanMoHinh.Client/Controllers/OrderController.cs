@@ -70,15 +70,14 @@ namespace BanMoHinh.Client.Controllers
 
                 }
                 //hoàn lại số lượng
-                var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");
-                var productDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+                var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
+                
                 var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
                 foreach (var hdct in lsthdct)
                 {
-                    var ctsp = productDetail.FirstOrDefault(c => c.Id == hdct.ProductDetailId);
-                    ctsp.Quantity += hdct.Quantity;
-                    var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/productDetail/update-productdetail-{ctsp.Id}", ctsp);
+                    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
                 }
+                var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                 return RedirectToAction("allOrder");
             }
 

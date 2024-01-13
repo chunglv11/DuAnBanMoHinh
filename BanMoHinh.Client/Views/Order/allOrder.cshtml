@@ -170,27 +170,42 @@
     }
 
     function Cancel(idHoaDon, idTrangThai) {
-        $.ajax({
-            type: "POST",
-            url: "/Order/HuyDon",
-            data: {
-                idHoaDon: idHoaDon,
-                idTrangThai: idTrangThai
-            },
-            success: function (result) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Hủy thành công',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                setTimeout(function () {
-                    location.reload();
-                }, 2000)
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn hủy đơn hàng?',
+            text: 'Hành động này sẽ không thể hoàn tác!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu người dùng chọn Yes, thì gọi controller
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/HuyDon",
+                    data: {
+                        idHoaDon: idHoaDon,
+                        idTrangThai: idTrangThai
+                    },
+                    success: function (result) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Hủy thành công',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000)
+                    }
+                });
             }
         });
     }
+
 
 </script>
 
