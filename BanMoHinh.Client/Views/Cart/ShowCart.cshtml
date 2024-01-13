@@ -11,11 +11,47 @@
     decimal? price = 0;
     var color = ViewData["color"] as List<Colors>;
     var size = ViewData["size"] as List<Size>;
+    var productDetailCheck = ViewData["productDetailCheck"] as List<ProductDetail>;
 
 }
 @{
     int checksz = 0; int checkcol = 0;
 }
+<style>
+    .exceeded-message {
+        background-color: #ffcccc; /* Màu nền đỏ */
+        padding: 10px;
+        top: 0;
+        left: 0;
+        width: -30%; /* Chiều rộng bằng phần tử chứa */
+        height: 100%; /* Chiều cao bằng phần tử chứa */
+        display: flex; /* Sử dụng flexbox để căn giữa nội dung */
+        justify-content: center; /* Canh giữa theo chiều ngang */
+        align-items: center; /* Canh giữa theo chiều dọc */
+        z-index: 1; /* Đảm bảo nằm trên các phần tử khác */
+        opacity: 0.9; /* Độ mờ */
+    }
+
+        .exceeded-message p {
+            margin: 0;
+        }
+
+        .exceeded-message button {
+            margin-top: 5px;
+        }
+
+    .pro-quantity {
+    position: relative; /* Đặt vị trí của td thành relative */
+}
+
+.input-group {
+    position: absolute; /* Đặt vị trí của input group bên trong td thành absolute */
+    top: 50%; /* Đưa input group lên giữa theo chiều cao của td */
+    left: 50%; /* Đưa input group vào giữa theo chiều rộng của td */
+    transform: translate(-50%, -50%); /* Dịch chuyển input group điều chỉnh vị trí chính xác */
+}
+
+</style>
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
     <div class="container">
@@ -63,12 +99,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="pro-quantity">STT</th>
-                                <th class="pro-thumbnail">Sản phẩm</th>
-                                <th class="pro-title">Tên</th>
-                                <th class="pro-quantity text-center">Size</th>
-                                <th class="pro-quantity text-center">Màu sắc</th>
-                                <th class="pro-quantity">Số lượng</th>
+                                <th >STT</th>
+                                <th >Sản phẩm</th>
+                                <th >Tên</th>
+                                <th>Biến thể</th>
+                                <th class="pro-quantity" style="width:180px">Số lượng</th>
                                 <th class="pro-price">Giá</th>
                                 <th class="pro-subtotal">Tổng</th>
                                 <th class="pro-remove"></th>
@@ -79,7 +114,13 @@
                                 int stt = 0;
                                 foreach (var item in Model)
                                 {
+                                    var checkSL = productDetailCheck.Where(c => c.Id == item.ProductDetail_Id && c.Quantity < item.Quantity).Count();
+                                    var idProductDetail = item.ProductDetail_Id;
                                     stt++;
+                                    <div hidden class="product-detail" data-id="@item.ProductDetail_Id">
+                                        <!-- Nội dung sản phẩm chi tiết -->
+                                    </div>
+
                                     <tr>
                                         <td class="pro-quantity"><span>@stt</span></td>
                                         <td class="pro-thumbnail">
@@ -92,55 +133,53 @@
                                                title="@item.ProductName" asp-action="Details" asp-route-id="Products"> @item.ProductName</a>
                                         </td>
                                         <td class="pro-quantity text-center">
-                                            <select class="cart-tbl-select-custom ml-3 border-0" >
-                                                @foreach (var i in size)
-                                                {
-                                                    @if (item.SizeId == i.Id)
-                                                    {
-                                                        <option  value="@i.Id">@i.SizeName</option>
-
-                                                        
-                                                        checksz++;
-                                                    }
-                                                    
-                                                }
-                                            </select>
-                                        </td>
-                                        <td class="pro-quantity text-center">
-                                            <select class="cart-tbl-select-custom ml-4 border-0" >
-                                                @foreach (var i in color)
-                                                {
-                                                    @if (item.ColorsId == i.ColorId)
-                                                    {
-                                                        <option value="@i.ColorId">@i.ColorName</option>
-
-                                                        
-                                                        checkcol++;
-                                                    }
-                                                    
-                                                }
-                                            </select>
-                                        </td>
-                                        <td class="pro-quantity">
-                                            <span>
-                                                <input name="sl" min="1" max="99" type="number"  onchange="" value="@item.Quantity" />
+                                           <span>
+                                                @size.FirstOrDefault(c=>c.Id==item.SizeId).SizeName /  @color.FirstOrDefault(c=>c.ColorId == item.ColorsId).ColorName
                                             </span>
+
                                         </td>
-                                        <td class="pro-subtotal">
-                                            @{
-                                                price = item.PriceSale;
-                                                
-                                            }
-                                            <span>@price?.ToString("N0")</span>
-                                        </td>
-                                        <td class="pro-price">
-                                            @{
-                                                total = item.TotalPrice;
-                                                totalAmount += total;
-                                            }
-                                            <span>@total?.ToString("N0")</span>
-                                        </td>
-                                        <td class="pro-remove"><a href="javascript:delCart();"><i class='bx bx-x bx-sm'></i></a></td>
+                                        @if (checkSL==1)
+                                        {
+                                            <td class="pro-quantity text-center" colspan="4">
+                                            <div class="exceeded-message">
+                                                <p>Sản phẩm vượt quá số lượng</p>
+                                                <button class="btn btn-success">Xoá khỏi giỏ hàng</button>
+                                            </div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="pro-quantity">
+
+                                                <div class="form-group col-md flex-grow-0">
+                                                    <div class="input-group mb-3 input-spinner">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-light" onclick="TruSL('@idProductDetail')" type="button" id="button-minus-@idProductDetail">-</button>
+                                                        </div>
+                                                        <input type="text" class="form-control" value="@item.Quantity" name="sl" onchange="updateQuantity('@idProductDetail')" id="quantity-input-@idProductDetail">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" onclick="CongSL('@idProductDetail')" type="button" id="button-plus-@idProductDetail">+</button>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                            
+                                            <td class="pro-subtotal">
+                                                @{
+                                                    price = item.PriceSale;
+
+                                                }
+                                                <span>@price?.ToString("N0")</span>
+                                            </td>
+                                            <td class="pro-price">
+                                                @{
+                                                    total = item.PriceSale * item.Quantity;
+                                                    totalAmount += total;
+                                                }
+                                                <span id="totalPrice-@idProductDetail">@total</span>
+                                            </td>
+                                            <td class="pro-remove"><a href="javascript:delCart();"><i class='bx bx-x bx-sm'></i></a></td>
+                                        }
+                                        
                                     </tr>
 
                                 }
@@ -163,8 +202,18 @@
                                 </div>
                             </div>
                             <div class="checkout_btn_inner mt-3">
+                                @if (productDetailCheck.Count!=0)
+                                {
 
-                                <a class="primary-btn" asp-controller="Bill" asp-action="Checkout">Tiến hành thanh toán</a>
+                                    <button class="btn btn-secondary" asp-controller="Bill" asp-action="Checkout" disabled="disabled">Tiến hành thanh toán</button>
+
+
+                                }
+                                else
+                                {
+
+                                    <a class="primary-btn" asp-controller="Bill" asp-action="Checkout">Tiến hành thanh toán</a>
+                                }
                                 
                             </div>
                         </div>
@@ -218,5 +267,53 @@
             }
         });
     }
+
+    function CongSL(idProductDetail) {
+        var quantityInput = document.getElementById('quantity-input-' + idProductDetail);
+        var newQuantity = parseInt(quantityInput.value) + 1;
+        UpdateSLInCart(idProductDetail, newQuantity);
+    }
+
+    function TruSL(idProductDetail) {
+        var quantityInput = document.getElementById('quantity-input-' + idProductDetail);
+        var newQuantity = parseInt(quantityInput.value) - 1;
+        if (newQuantity < 1) {
+            // Số lượng không thể nhỏ hơn 1
+            return;
+        }
+        UpdateSLInCart(idProductDetail, newQuantity);
+    }
+
+    function UpdateSLInCart(idProductDetail, newQuantity) {
+        $.ajax({
+            type: "POST",
+            url: "/Cart/UpdateSLInCart",
+            data: {
+                idProductDetail: idProductDetail,
+                newQuantity: newQuantity
+            },
+            success: function (result) {
+                if (result.status == true) {
+                    var quantityInput = document.getElementById('quantity-input-' + idProductDetail);
+                    quantityInput.value = newQuantity;
+
+                    location.reload();
+                } else {
+                    alert(result.message);
+                    location.reload();
+                }
+            },
+            error: function (error) {
+                alert(result.message);
+                location.reload();
+            }
+        });
+    }
+
+    function updateQuantity(idProductDetail) {
+        var newQuantity = document.getElementById('quantity-input-' + idProductDetail).value;
+        UpdateSLInCart(idProductDetail, newQuantity);
+    }
+
 </script>
      

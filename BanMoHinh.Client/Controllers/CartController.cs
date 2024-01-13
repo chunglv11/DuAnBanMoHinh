@@ -3,8 +3,10 @@ using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using System.Security.Policy;
 using static System.Net.WebRequestMethods;
 
 namespace BanMoHinh.Client.Controllers
@@ -32,22 +34,24 @@ namespace BanMoHinh.Client.Controllers
 
                     var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
                     List<ViewCartDetails>? listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id).ToList();
+                    var getAllProductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetail>>("https://localhost:7007/api/productDetail/get-all-productdetail"); // lấy hết spct
+                    var productDetailCheck = getAllProductDetail.Where(productDetail =>listcartDetailbyIdCart.Any(cartDetail =>cartDetail.ProductDetail_Id == productDetail.Id && cartDetail.Quantity > productDetail.Quantity)).ToList();
+                    // lấy sp sao cho sl trong cart> sl kho
                     var listcartDetailbyIdCartJson = JsonConvert.SerializeObject(listcartDetailbyIdCart);
                     // Lưu chuỗi JSON vào TempData
                     TempData["Cart"] = listcartDetailbyIdCartJson;
+                    ViewData["productDetailCheck"] = productDetailCheck;
                     ViewData["color"] = getColor;
                     ViewData["size"] = getSize;
                     return View(listcartDetailbyIdCart);
                 }
                 else
                 {
-                    // ban chua dang nhap cho em no ra cho dang nhao anh oi
                     return RedirectToAction("Login", "Authentication");
                 }
             }
             else
             {
-                // ban chua dang nhap cho em no ra cho dang nhao anh oi
                 return RedirectToAction("Login", "Authentication");
             }
 
@@ -135,6 +139,30 @@ namespace BanMoHinh.Client.Controllers
                 return View("Error");
             }
 
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdateSLInCart(Guid idProductDetail, int newQuantity)
+        {
+           var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");
+            var ListCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}");
+            var cartItem = ListCartItem.FirstOrDefault(c => c.ProductDetail_ID == idProductDetail); // cartitemid
+            var ProductDetail = await _httpClient.GetFromJsonAsync<ProductDetailVM>($"https://localhost:7007/api/productDetail/get/{idProductDetail}"); // sp kho
+            if (ProductDetail.Quantity< newQuantity)
+            {
+                return Json(new { message = "Sản phẩm vượt quá giới hạn trong kho", status = false });
+            }
+            if (newQuantity <=0)
+            {
+                return Json(new { message = "Sản phẩm tối thiểu là 1", status = false });
+            }
+            var Response = await _httpClient.GetAsync($"https://localhost:7007/api/cartitem/UpdateQuantityCartItem?cartItemId={cartItem.Id}&quantity={newQuantity}");
+            if (Response.IsSuccessStatusCode)
+            {
+                return Json(new { message ="OK", status = true });
+            }
+            return Json(new { message = "Lỗi không xác định", status = false });
         }
         public async Task<IActionResult> DeleteItemInCart(Guid id, Guid idCartItem, Guid idgh)
         {

@@ -108,5 +108,26 @@ namespace BanMoHinh.API.Services
             var item = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId);
             return item;
         }
+
+        public async Task<bool> UpdateQuantity(Guid cartItemId, int? newquantity)
+        {
+            try
+            {
+                var cartitem = await _dbContext.CartItem.FirstOrDefaultAsync(c => c.Id == cartItemId);
+                if (cartitem != null)
+                {
+                    cartitem.Quantity = newquantity;
+                    _dbContext.CartItem.Update(cartitem);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
     }
 }
