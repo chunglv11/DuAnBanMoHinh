@@ -20,6 +20,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> ShowList()
         {
+            var user = await _client.GetFromJsonAsync<List<UserViewModel>>("https://localhost:7007/api/users/getall");
+            ViewData["User"] = user;
             string apiurl = "https://localhost:7007/api/order/getall";
             var response = await _client.GetAsync(apiurl);
             var data = await response.Content.ReadAsStringAsync();
@@ -100,8 +102,9 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> DoiTrangThai(Guid idhd, Guid idtrangthai)// Dùng cho trạng thái truyền  vào: 10, 3
+        public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai)// Dùng cho trạng thái truyền  vào: 10, 3
         {
+
             try
             {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -111,35 +114,74 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 {
                     var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
 
-                  
+
                     var idnv = userID;
-                    if (idtrangthai == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                   
+                     if(trangthai == 2) // chờ lấy hàng
                     {
-                        string url = $"order/GiaoThanhCong?idhd={idhd}&idnv={idnv}";
+                        Guid idtt = Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                        string url = $"https://localhost:7007/api/order/updatett?idhoadon={idhd}&trangthai={idtt}&idnhanvien={idnv}";
                         var response = await _client.PutAsync(url, null);
                         if (response.IsSuccessStatusCode)
                         {
-                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                            TempData["SuccessMessage"] = "Cập nhật trạng thái thành công!";
+                            var successMessage = TempData["SuccessMessage"] as string;
+                            if (!string.IsNullOrEmpty(successMessage))
+                            {
+                                ViewData["SuccessMessage"] = successMessage;
+                                ViewData["ShowSuccessMessage"] = true;
+                            }
+                            return RedirectToAction("ShowList");
+
                         }
                     }
-                    else
+                    else if (trangthai == 3)// dang giao hàng
                     {
-                        string url = $"order?idhoadon={idhd}&trangthai={idtrangthai}&idnhanvien={idnv}";
+                        Guid idtt = Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                        string url = $"https://localhost:7007/api/order/updatett?idhoadon={idhd}&trangthai={idtt}&idnhanvien={idnv}";
                         var response = await _client.PutAsync(url, null);
                         if (response.IsSuccessStatusCode)
                         {
-                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                            ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                            return RedirectToAction("ShowList");
+
                         }
                     }
+                    else if (trangthai == 4)//giao hàng thành công
+                    {
+                        string url = $"https://localhost:7007/api/order/GiaoThanhCong?idhd={idhd}&idnv={idnv}";
+                        var response = await _client.PutAsync(url, null);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                            return RedirectToAction("ShowList");
+
+                        }
+                    }
+                    else if (trangthai == 5)//giao hàng không thành công
+                    {
+                        Guid idtt = Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                        string url = $"https://localhost:7007/api/order/updatett?idhoadon={idhd}&trangthai={idtt}&idnhanvien={idnv}";
+                        var response = await _client.PutAsync(url, null);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                            return RedirectToAction("ShowList");
+
+                        }
+                    }
+                   
                 }
-                return Json(new { success = false, message = "Cập nhật trạng thái thất bại" });
+                ViewBag.ErrorMessage = "Cập nhật trạng thái thất bại";
+                return RedirectToAction("ShowList");
+
             }
             catch (Exception)
             {
-                return RedirectToAction("_QuanLyHoaDon", "QuanLyHoaDon");
+                return RedirectToAction("ShowList", "Order");
             }
         }
-        [HttpGet("/QuanLyHoaDon/HuyHD")]
+        [HttpGet("/Order/HuyHD")]
         public async Task<IActionResult> HuyHD(Guid idhd, string ghichu)
         {
             try
@@ -154,26 +196,43 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                     var idnv = userID;
                     if (ghichu != null)
                     {
-                        string url = $"HoaDon/HuyHD?idhd={idhd}&idnv={idnv}";
+                        string url = $"https://localhost:7007/api/order/HuyHD?idhd={idhd}&idnv={idnv}";
                         var response = await _client.PutAsync(url, null);
                         if (response.IsSuccessStatusCode)
                         {
-                            var stringURL = $"https://localhost:7095/api/HoaDon/UpdateGhichu?idhd={idhd}&idnv={idnv}&ghichu={ghichu}";
+                            var stringURL = $"https://localhost:7007/api/order/UpdateGhichu?idhd={idhd}&idnv={idnv}&ghichu={ghichu}";
                             var responseghichu = await _client.PutAsync(stringURL, null);
                             if (responseghichu.IsSuccessStatusCode)
                             {
-                                return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                                ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                                return RedirectToAction("ShowList");
+
+
                             }
                         }
                     }
                 }
-                    return Json(new { success = false, message = "Ghi chú không được để null" });
-                
+                ViewBag.ErrorMessage = "Ghi chú không được trống";
+                return RedirectToAction("ShowList");
+
+
+
             }
             catch (Exception ex)
             {
-                return RedirectToAction("_QuanLyHoaDon", "QuanLyHoaDon");
+                return RedirectToAction("ShowList", "Order");
+
             }
+        }
+        [HttpGet("/Order/ViewChiTietHD/{idhd}")]
+        public async Task<IActionResult> ViewChiTietHD(string idhd)
+        {
+            var hd = await _client.GetFromJsonAsync<DonMuaChiTietVM>($"https://localhost:7007/api/order/GetAllDonMuaChiTiet1/{idhd}");
+            if (hd == null)
+            {
+                return NotFound();
+            }
+            return PartialView("ChiTietHD", hd);
         }
     }
 }
