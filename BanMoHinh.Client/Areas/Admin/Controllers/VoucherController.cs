@@ -12,11 +12,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
         private readonly HttpClient _httpClient;
 		private readonly IHttpClientFactory _httpClientFactory;
-
-		public VoucherController(HttpClient httpClient, IHttpClientFactory httpClientFactory)
+        public VoucherController(HttpClient httpClient, IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClient;
 			_httpClientFactory = httpClientFactory;
+
 			ScheduleUpdateVoucherStatus();
         }
 		// Hàm thực hiện cập nhật trạng thái voucher
@@ -50,56 +50,12 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 			
             return View(allvoucher);
         }
-        public async Task<IActionResult> addVoucher(Voucher voucher)
-        {
-			voucher.Id = Guid.NewGuid();
-			voucher.Create_Date = DateTime.Now;
-			voucher.Status = true;
-			var response = await _httpClient.PostAsJsonAsync($"https://localhost:7007/api/voucher/create-voucher", voucher);
-
-			if (response.IsSuccessStatusCode)
-			{
-				var alluser = await _httpClient.GetFromJsonAsync<List<User>>("https://localhost:7007/api/users/getall");
-				//add voucher sở hữu
-				foreach (var user in alluser)
-				{
-					UserVoucher uv = new UserVoucher();
-					uv.Id = Guid.NewGuid();
-					uv.VoucherId = voucher.Id;
-					uv.UserId = user.Id;
-					uv.Status = true;
-					var createUV = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/UserVoucher/create-uservoucher", uv);
-					if (!createUV.IsSuccessStatusCode)
-					{
-                        return BadRequest();
-					}
-				}
-				TempData["SuccessMessage"] = "Voucher đã được tạo thành công!";
-                var successMessage = TempData["SuccessMessage"] as string;
-                if (!string.IsNullOrEmpty(successMessage))
-                {
-                    ViewData["SuccessMessage"] = successMessage;
-                    ViewData["ShowSuccessMessage"] = true;
-                }
-
-                return RedirectToAction("GetallVoucher");
-			}
-            return View();
-		}
+       
         //addvoucher rank
-        public async Task<IActionResult> AddVoucherForRank()
-        {
-            var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
-            ViewData["lstRank"] = allranks;
-            return View();
-		}
-		[HttpPost]      
-		
         public async Task<IActionResult> AddVoucherForRank(string selectedRank, Voucher vc)
         {
             // Lấy danh sách tất cả rank
             var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
-			ViewData["lstRank"] = allranks;
             var rank = allranks.FirstOrDefault(r => r.Name == selectedRank);
             if (rank == null)
             {
@@ -143,24 +99,29 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 					return BadRequest();
                 }
             }
-            return RedirectToAction("GetallVoucherRank");
+			TempData["SuccessMessage"] = "Voucher đã được tạo thành công!";
+			var successMessage = TempData["SuccessMessage"] as string;
+			if (!string.IsNullOrEmpty(successMessage))
+			{
+				ViewData["SuccessMessage"] = successMessage;
+				ViewData["ShowSuccessMessage"] = true;
+			}
+			return RedirectToAction("GetallVoucherRank");
         }
-        public async Task<IActionResult> GetallVoucherRank()
-        {
-            var allvoucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
-
-            return View(allvoucher);
-        }
+        
         public async Task<IActionResult> CreateVoucher()
 		{
-            return View();
+			var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
+			ViewData["lstRank"] = allranks;
+			return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateVoucher(Voucher voucher)
+        public async Task<IActionResult> CreateVoucher(string selectedRank, Voucher voucher)
 		{
 			try
 			{
-				
+				var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
+				ViewData["lstRank"] = allranks;
 				var allvoucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
 				if (voucher.Minimum_order_value != null || voucher.Code != null || voucher.Value != null || voucher.Discount_Type != null || voucher.Start_Date != null || voucher.End_Date != null)
 				{
@@ -204,7 +165,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 							{
 								if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
 								{
-									await addVoucher(voucher);
+									await AddVoucherForRank(selectedRank,voucher);
 								}
 							}
 						}
@@ -216,7 +177,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 								{
 									if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
 									{
-										await addVoucher(voucher);
+										await AddVoucherForRank(selectedRank, voucher);
 									}
 								}
 								if (voucher.Value > 100 || voucher.Value <= 0)
@@ -249,7 +210,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 							{
 								if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
 								{
-									await addVoucher(voucher);
+									await  AddVoucherForRank(selectedRank, voucher);
 								}
 							}
 						}
@@ -266,7 +227,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 								{
 									if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
 									{
-										await addVoucher(voucher);
+										await AddVoucherForRank(selectedRank, voucher);
 									}
 								}
 							}
@@ -287,27 +248,85 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 			}
 			
         }
-
-        public async Task<IActionResult> detailVoucher(Guid id)
-        {
-
-
-            var result = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/get-{id}");
-
-            return View(result);
-        }
-        public async Task<IActionResult> editVoucher(Guid id)
+		[HttpGet]
+		public async Task<IActionResult> editVoucher(Guid id)
 		{
 
-            var result = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/get-{id}");
+            var result = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/getbyid/{id}");
 
 			return View(result);
 		}
 		[HttpPost]
 		public async Task<IActionResult> editVoucher(Voucher voucher)
 		{
-			var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
-			return RedirectToAction("GetallVoucher");
+            try
+            {
+                if (voucher.Start_Date <= DateTime.Now)
+                {
+                    ViewData["NgayBd"] = "Ngày bắt đầu phải lớn hơn ngày hiện tại";
+                }
+                if (voucher.End_Date < voucher.Start_Date)
+                {
+                    ViewData["Ngay"] = "Ngày kết thúc phải lớn hơn ngày áp dụng";
+                }
+                if (voucher.Quantity <= 0)
+                {
+                    ViewData["SoLuong"] = "Mời bạn nhập số lượng lớn hơn 0";
+                }
+                
+                if (voucher.Minimum_order_value == 0)
+                {
+
+                    if (voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date)
+                    {
+                        
+
+                        var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("GetAllVoucher");
+                        }
+                        return View();
+                    }
+                }
+                if (voucher.Minimum_order_value > 0)
+                {
+                    if (voucher.Minimum_order_value < voucher.Value)
+                    {
+                        ViewData["SoTienCan"] = "Số tiền cần phải lớn hơn giá trị";
+
+                    }
+                    if (voucher.Minimum_order_value >= voucher.Value)
+                    {
+                        if (voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date)
+                        {
+
+                            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return RedirectToAction("GetAllVoucher");
+                            }
+                            return View();
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    if (voucher.Minimum_order_value < 0)
+                    {
+                        ViewData["SoTienCan"] = "Mời bạn nhập số tiền cần không âm";
+                    }
+                    
+                    return View();
+                }
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+            
 		}
 
 		public async Task<IActionResult> DeleteVoucher(Guid id)
@@ -315,10 +334,51 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 			await _httpClient.DeleteAsync($"https://localhost:7007/api/voucher/delete-voucher-{id}");
 			return RedirectToAction("GetallVoucher");
 		}
-        public async Task<IActionResult> CreatevoucherProduct()
+        public async Task<IActionResult> SuDung(Guid id)
         {
-            var allProduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
-            return View(allProduct);
+            try
+            {
+                var allvoucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
+                var timkiem = allvoucher.FirstOrDefault(x => x.Id == id);
+                if (timkiem != null)
+                {
+                    timkiem.Status = true;
+                    var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{timkiem.Id}", timkiem);
+                    return RedirectToAction("GetAllVoucher");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch
+            {
+                return View();
+            }
+
+        }
+        public async Task<IActionResult> KoSuDung(Guid id)
+        {
+            try
+            {
+                var allvoucher = await _httpClient.GetFromJsonAsync<List<Voucher>>("https://localhost:7007/api/voucher/get-vouchers");
+                var timkiem = allvoucher.FirstOrDefault(x => x.Id == id);
+                if (timkiem != null)
+                {
+                    timkiem.Status = false;
+                    var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{timkiem.Id}", timkiem);
+                    return RedirectToAction("GetAllVoucher");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch
+            {
+                return View();
+            }
+
         }
     }
      

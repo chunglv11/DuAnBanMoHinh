@@ -145,7 +145,12 @@
                                 </p>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quản lý voucher</p>
+                            </a>
+                        </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
@@ -203,30 +208,7 @@
 
                             </ul>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    Quản lý mã giảm giá
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Voucher theo người dùng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucherRank" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Voucher theo rank</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
+                       
                         
                     </ul>
                 </nav>
