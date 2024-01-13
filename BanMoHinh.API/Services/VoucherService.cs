@@ -21,7 +21,7 @@ namespace BanMoHinh.API.Services
             {
                 var voucher = new Voucher()
                 {
-                  
+                    Id = item.Id,
                     Code = item.Code,
                     Quantity = item.Quantity,
                     Value = item.Value,
@@ -101,6 +101,7 @@ namespace BanMoHinh.API.Services
                 VoucherForcus.Quantity = rank.Quantity;
                 VoucherForcus.Start_Date = rank.Start_Date;
                 VoucherForcus.End_Date = rank.End_Date;
+                VoucherForcus.Status = rank.Status;
                 _dbContext.Voucher.Update(VoucherForcus);
                 await _dbContext.SaveChangesAsync();
                 return true;

@@ -14,6 +14,7 @@
 <p>
     <a asp-action="CreateVoucher" class="btn btn-success m-1">Thêm mới</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -79,11 +80,11 @@
             <td>
                 @if(item.Status == true)
                 {
-                     <p>Sử dụng</p>
+                     <p style="color:green">Sử dụng</p>
                 }
                 else
                 {
-                    <p>Ngừng áp dụng</p>
+                    <p style="color:red">Ngừng áp dụng</p>
                 }
             </td>
             <td>
