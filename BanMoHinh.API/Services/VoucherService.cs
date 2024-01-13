@@ -97,7 +97,7 @@ namespace BanMoHinh.API.Services
             try
             {
                 var VoucherForcus = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == id);
-                VoucherForcus.Minimum_order_value = rank.Minimum_order_value;      
+                VoucherForcus.Minimum_order_value = rank.Minimum_order_value;  
                 VoucherForcus.Quantity = rank.Quantity;
                 VoucherForcus.Start_Date = rank.Start_Date;
                 VoucherForcus.End_Date = rank.End_Date;
