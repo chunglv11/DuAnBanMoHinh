@@ -46,17 +46,38 @@ namespace BanMoHinh.Client.Controllers
         public async Task<IActionResult> HuyDon(Guid idHoaDon, Guid? idTrangThai)
         {
             var listOrder = await _httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7007/api/order/getall");
-
+            
             var firstOrder = listOrder.FirstOrDefault();
             if (firstOrder != null)
             {
-                idTrangThai = firstOrder.OrderStatusId = Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                idTrangThai = firstOrder.OrderStatusId = Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");//huỷ đơn
             }
-
+            //update trạng thái hoá đơn
             HttpResponseMessage responseDonMua = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={idHoaDon}&StatusId={idTrangThai}");
-
+            
             if (responseDonMua.IsSuccessStatusCode)
             {
+                //hoàn lại voucher
+                if (firstOrder.VoucherId != null)
+                {
+                    // + số lượng voucher 
+
+                    var updateSL = await _httpClient.GetAsync($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={firstOrder.VoucherId}&tanggiam=true");
+
+                    //  sửa trạng thái trong uservoucher  
+
+                    var updateStatus = await _httpClient.GetAsync($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={firstOrder.VoucherId}&userId={firstOrder.UserId}&status=true");
+
+                }
+                //hoàn lại số lượng
+                var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
+                
+                var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
+                foreach (var hdct in lsthdct)
+                {
+                    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
+                }
+                var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                 return RedirectToAction("allOrder");
             }
 

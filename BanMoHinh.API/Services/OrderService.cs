@@ -3,6 +3,8 @@ using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BanMoHinh.API.Services
 {
@@ -83,11 +85,18 @@ namespace BanMoHinh.API.Services
                                     join e in _dbContext.Size on d.SizeId equals e.Id
                                     join f in _dbContext.Colors on d.ColorId equals f.ColorId
                                     join g in _dbContext.Product on d.ProductId equals g.Id
+                                    join x in _dbContext.Users on b.UserId equals x.Id
                                     select new DonMuaChiTietVM()
                                     {
                                         ID = b.Id,
                                         NgayTao = b.Create_Date,
                                         NgayThanhToan = b.Payment_Date,
+                                        Ship_Date = b.Ship_Date,
+                                        Delivery_Date = b.Delivery_Date,
+                                        Description = b.Description,
+                                        OrderCode = b.OrderCode,
+                                        TotalAmout = b.TotalAmout,
+                                        TotalAmoutAfterApplyingVoucher = b.TotalAmoutAfterApplyingVoucher,
                                         TenNguoiNhan = b.RecipientName,
                                         SDT = b.RecipientPhone,
                                         DiaChi = b.RecipientAddress,
@@ -103,9 +112,78 @@ namespace BanMoHinh.API.Services
                                         DuongDan = _dbContext.ProductImage.First(c => c.ProductDetailId == d.Id).ImageUrl,
                                         HinhThucGiamGia = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Discount_Type,
                                         GiaTriVC = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Value,
-                                        
+                                        TenNguoiDung = b.UserId == null ? null : (_dbContext.Users.FirstOrDefault(c => c.Id == b.UserId)).UserName,
+
 
                                     }).ToListAsync();
+            return lstDonMuaCT;
+        }
+        public async Task<DonMuaChiTietVM> getAllDonMuaChiTiet1(Guid idhd)
+        {
+            var lstDonMuaCT = await (from a in _dbContext.OrderItem
+                                     where a.OrderId == idhd
+                                     join b in _dbContext.Order on a.OrderId equals b.Id
+                                     //join c in _dbContext.Rate on a.Id equals c.Id //ko hiểu sao thêm cái này lại trả về []
+                                     join d in _dbContext.ProductDetail on a.ProductDetailId equals d.Id
+                                     join e in _dbContext.Size on d.SizeId equals e.Id
+                                     join f in _dbContext.Colors on d.ColorId equals f.ColorId
+                                     join g in _dbContext.Product on d.ProductId equals g.Id
+                                     join x in _dbContext.Users on b.UserId equals x.Id
+                                     select new DonMuaChiTietVM()
+                                     {
+                                         ID = b.Id,
+                                         NgayTao = b.Create_Date,
+                                         NgayThanhToan = b.Payment_Date,
+                                         Ship_Date = b.Ship_Date,
+                                         Delivery_Date = b.Delivery_Date,
+                                         Description = b.Description,
+                                         OrderCode = b.OrderCode,
+                                         TotalAmout = b.TotalAmout,
+                                         TotalAmoutAfterApplyingVoucher = b.TotalAmoutAfterApplyingVoucher,
+                                         TenNguoiNhan = b.RecipientName,
+                                         SDT = b.RecipientPhone,
+                                         DiaChi = b.RecipientAddress,
+                                         TienShip = b.ShippingFee,
+                                         TrangThaiGiaoHang = b.OrderStatusId,
+                                         PhuongThucThanhToan = b.PaymentType,
+                                         IDCTHD = a.Id,
+                                         DonGia = a.Price,
+                                         SoLuong = a.Quantity,
+                                         TenKichCo = e.SizeName,
+                                         TenMau = f.ColorName,
+                                         TenSanPham = g.ProductName,
+                                         DuongDan = _dbContext.ProductImage.First(c => c.ProductDetailId == d.Id).ImageUrl,
+                                         HinhThucGiamGia = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Discount_Type,
+                                         GiaTriVC = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Value,
+                                         TenNguoiDung = b.UserId == null ? null : (_dbContext.Users.FirstOrDefault(c => c.Id == b.UserId)).UserName,
+
+                                         OrderItem = (from odi in _dbContext.OrderItem
+                                                      join prd in _dbContext.ProductDetail on odi.ProductDetailId equals prd.Id
+                                                      join pr in _dbContext.Product on prd.ProductId equals pr.Id
+                                                      join cl in _dbContext.Colors on prd.ColorId equals cl.ColorId
+                                                      join sz in _dbContext.Size on prd.SizeId equals sz.Id
+                                                      where odi.OrderId == idhd
+                                                      select new OrderItemCTViewModel1
+                                                      {
+                                                          Id = odi.Id,
+                                                          OrderId = idhd,
+                                                          ProductDetailId = prd.Id,
+                                                          ProductName = pr.ProductName,
+                                                          ProductId = pr.Id,
+                                                          SizeId = sz.Id,
+                                                          SizeName = sz.SizeName,
+                                                          ColorId = cl.ColorId,
+                                                          ColorName = cl.ColorName,
+                                                          Quantity = odi.Quantity ?? 0,
+                                                          PriceSale = odi.Price ?? 0,
+                                                          ProductImages = (from pi in _dbContext.ProductImage
+                                                                           where pi.ProductDetailId == prd.Id
+                                                                           select pi.ImageUrl).ToList()
+                                                      }).ToList()
+                                                      
+                                     }).FirstOrDefaultAsync();
+
+       
             return lstDonMuaCT;
         }
 
@@ -161,7 +239,201 @@ namespace BanMoHinh.API.Services
             }
             catch (Exception)
             {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateRank(int? point)
+        {
+            var ranks = await _dbContext.Rank.ToListAsync();
+            if (ranks != null)
+            {
 
+            
+            foreach (var item in ranks)
+            {
+                if (point >= item.PointsMin && point <= item.PoinsMax)
+                {
+                    var user = await _dbContext.Users.FirstOrDefaultAsync(c => c.RankId == item.Id);
+                        user.Points = point;
+                    _dbContext.Users.Update(user);
+                     await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+            }
+        }
+            return false;
+        }
+        public async Task<bool> UpdateTrangThaiGiaoHang(Guid idHoaDon, Guid idtrangThai, Guid? idNhanVien)
+        {
+            var update = await _dbContext.Order.FirstOrDefaultAsync(p => p.Id == idHoaDon);
+            var chitiethoadon = await _dbContext.OrderItem.Where(p => p.OrderId == idHoaDon).ToListAsync();
+
+            if (update != null)
+            {
+                if (idtrangThai == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                {
+                    foreach (var item in chitiethoadon)
+                    {
+                        var CTsanPham = await _dbContext.ProductDetail.FirstOrDefaultAsync(p => p.Id == item.ProductDetailId);
+                        CTsanPham.Quantity += item.Quantity;
+
+                        var product = await _dbContext.Product.FindAsync(CTsanPham.ProductId);
+                        if (product != null)
+                        {
+                            product.AvailableQuantity += item.Quantity;
+                            _dbContext.Product.Update(product);
+                        }
+
+                        _dbContext.ProductDetail.Update(CTsanPham);
+                    }
+                }
+
+                if (idtrangThai == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                {
+                    var kh = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == idNhanVien);
+                    var hoadon = await _dbContext.Order.FirstOrDefaultAsync(c => c.Id == idHoaDon);
+                    if (kh != null && hoadon != null)
+                    {
+                        kh.Points += Convert.ToInt32(hoadon.TotalAmout);
+                        UpdateRank(kh.Points);
+                    }
+
+                    update.Payment_Date ??= DateTime.Now;
+                    update.Ship_Date ??= DateTime.Now;
+                }
+
+                update.OrderStatusId = idtrangThai;
+                update.UserId = idNhanVien;
+                _dbContext.Order.Update(update);
+
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception and possibly rollback changes
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public  bool ThanhCong(Guid idHoaDon, Guid? idNhanVien) // Chỉ cho đơn online
+        {
+            try
+            {
+                var hd =  _dbContext.Order.FirstOrDefault(c => c.Id == idHoaDon);
+                if (hd != null)
+                {
+                    hd.OrderStatusId = Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                    hd.UserId = idNhanVien;
+                    hd.Ship_Date = DateTime.Now;
+                    hd.Payment_Date = DateTime.Now;
+                    _dbContext.Order.Update(hd);
+                    _dbContext.SaveChanges(); // Chờ đợi lưu thay đổi vào cơ sở dữ liệu
+
+                    //Cộng tích điểm cho khách
+                    //var kh = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == idNhanVien);
+                    //if (kh != null)
+                    //{
+                    //    kh.Points += Convert.ToInt32(hd.TotalAmout);
+                    //    UpdateRank(kh.Points);
+                    //}
+                    return true;
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> HuyHD(Guid idhd, Guid idnv)
+        {
+            try
+            {
+                var hd = _dbContext.Order.Where(c => c.Id == idhd).FirstOrDefault();
+                //Update hd
+                hd.UserId = idnv;
+                hd.OrderStatusId = Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
+                //hd.TongTien = 0;
+                _dbContext.Order.Update(hd);
+               await _dbContext.SaveChangesAsync();
+
+                // Cộng lại số lượng hàng
+                var chitiethoadon = await _dbContext.OrderItem.Where(p => p.OrderId == idhd).ToListAsync();
+
+
+                if (chitiethoadon != null)
+                {
+
+
+                    foreach (var item in chitiethoadon)
+                    {
+                        var CTsanPham = await _dbContext.ProductDetail.FirstOrDefaultAsync(p => p.Id == item.ProductDetailId);
+                        CTsanPham.Quantity += item.Quantity;
+
+                        var product = await _dbContext.Product.FindAsync(CTsanPham.ProductId);
+                        if (product != null)
+                        {
+                            product.AvailableQuantity += item.Quantity;
+                            _dbContext.Product.Update(product);
+                            await _dbContext.SaveChangesAsync();
+
+                        }
+
+                        _dbContext.ProductDetail.Update(CTsanPham);
+                        await _dbContext.SaveChangesAsync();
+
+                    }
+
+                }
+                    // Cộng lại số lượng voucher nếu áp dụng
+                if (hd.VoucherId != null)
+                {
+                    var vc = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == hd.VoucherId);
+                    var uservc = await  _dbContext.VoucherUser.FirstOrDefaultAsync(c => c.VoucherId == vc.Id && c.UserId == hd.UserId);
+                    vc.Quantity += 1;
+                    uservc.Status = true;
+                    _dbContext.Voucher.Update(vc);
+                    _dbContext.VoucherUser.Update(uservc);
+                    await _dbContext.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool UpdateGhiChuHD(Guid idhd, Guid idnv, string ghichu)
+        {
+            try
+            {
+                var hd = _dbContext.Order.FirstOrDefault(c => c.Id == idhd);
+                if (ghichu == "null")
+                {
+                    hd.Description = null;
+                    hd.UserId = idnv;
+                }
+                else
+                {
+                    hd.Description = ghichu;
+                }
+                _dbContext.Order.Update(hd);
+                _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
         }
@@ -190,6 +462,7 @@ namespace BanMoHinh.API.Services
                                              Payment_Date = od.Payment_Date,
                                              Delivery_Date = od.Delivery_Date,
                                              Description = od.Description,
+
                                              OrderItem = (from odi in _dbContext.OrderItem
                                                           join prd in _dbContext.ProductDetail on odi.ProductDetailId equals prd.Id
                                                           join pr in _dbContext.Product on prd.ProductId equals pr.Id

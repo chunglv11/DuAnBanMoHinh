@@ -105,5 +105,12 @@ namespace BanMoHinh.API.Controllers
             var updateslProduct = await _iproductService.UpdateSLTheoSPCT();
             return Ok(productdetail);
         }
+        [HttpGet("UpdateQuantityOrderFail")]
+        public async Task<IActionResult> UpdateQuantityOrderFail(Guid productDetailId, int quantity)
+        {
+            var productdetail = await _iproductDetailService.UpdateQuantityOrderFail(productDetailId, quantity);
+            var updateslProduct = await _iproductService.UpdateSLTheoSPCT();
+            return Ok(productdetail);
+        }
     }
 }

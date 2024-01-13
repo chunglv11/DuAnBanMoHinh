@@ -29,6 +29,7 @@ namespace BanMoHinh.Share.ViewModels
         public DateTime? Payment_Date { get; set; } // ngày thanh toán
         public DateTime? Delivery_Date { get; set; } // ngày nhận hàng
         public string? Description { get; set; } // mô tả
+        public string? TenNguoiDung { get; set; } // mô tả
 
         public OrderStatus? OrderStatus { get; set; }
 
