@@ -137,16 +137,6 @@
                                 </p>
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a  asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Quản lí mã giảm giá
-                                </p>
-                            </a>
-                        </li>
-
                          <li class="nav-item">
                             <a asp-area="Admin" asp-controller="Order" asp-action="ShowList" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -217,43 +207,27 @@
                             <a class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
-                                    Danh mục
+                                    Quản lý mã giảm giá
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="Rate" asp-action="ShowList" class="nav-link">
+                                    <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Quản lý đánh giá</p>
+                                        <p>Voucher theo người dùng</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/tables/data.html" class="nav-link">
+                                    <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucherRank" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>DataTables</p>
+                                        <p>Voucher theo rank</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    Pages
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="pages/examples/invoice.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Invoice</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
