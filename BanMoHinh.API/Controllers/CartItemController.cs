@@ -82,6 +82,16 @@ namespace BanMoHinh.API.Controllers
             }
             return BadRequest("Lỗi");
         }
+        [HttpGet("UpdateQuantityCartItem")]
+        public async Task<ActionResult<CartItem>> UpdateQuantityCartItem(Guid cartItemId,int quantity)
+        {
+            var result = await _cartItemService.UpdateQuantity(cartItemId, quantity);
+            if (result)
+            {
+                return Ok("Sửa thành công");
+            }
+            return BadRequest("Lỗi");
+        }
 
         // DELETE api/<CartItemController>/5
         [HttpDelete("Delete-CartItem")]

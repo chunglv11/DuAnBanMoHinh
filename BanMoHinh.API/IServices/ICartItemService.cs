@@ -13,6 +13,7 @@ namespace BanMoHinh.API.IServices
 
         // Update (Cập nhật thông tin một mục trong CartItem)
         public Task<bool> UpdateCartItem(Guid cartItemId, int? newquantity, int? newPrice);
+        public Task<bool> UpdateQuantity(Guid cartItemId, int? newquantity);
         public Task<bool> UpdateQuantityCartItem(CartItem cartItem);
 
         // Delete (Xóa một mục trong CartItem)

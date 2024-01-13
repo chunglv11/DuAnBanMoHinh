@@ -242,7 +242,7 @@ namespace BanMoHinh.Client.Controllers
             ViewData["ProductImage"] = ProductImage;
 
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
-            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id)).ToList();
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id&& c.AvailableQuantity>0)).ToList();
             if (!string.IsNullOrWhiteSpace(name))
             {
                 allproduct = await Search(name, allproduct);

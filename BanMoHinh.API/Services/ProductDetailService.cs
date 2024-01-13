@@ -305,7 +305,7 @@ namespace BanMoHinh.API.Services
                 var productDetail =   _dbContext.ProductDetail.FirstOrDefault(c=>c.Id== productDetailId);
                 productDetail.Quantity -= quantity;
                 _dbContext.ProductDetail.Update(productDetail);
-                 _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
