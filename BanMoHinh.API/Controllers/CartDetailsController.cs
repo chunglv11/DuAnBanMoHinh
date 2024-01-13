@@ -210,9 +210,13 @@ namespace BanMoHinh.API.Controllers
                 var respon = result.FirstOrDefault(x => x.CartId == idgh && x.ProductDetail_ID == id && x.Id == idCartItem);
                 if (respon != null)
                 {
-                    //var delete = await _cartItemService.DeleteCartItem(idCartItem, id, idgh);   
+                    var delete = await _cartItemService.DeleteCartItem(respon.Id);
+                    if (delete)
+                    {
+						return new OkObjectResult(new { error = 1, message = "Sản phẩm đã được xóa" });
+					}
                 }
-                return new OkObjectResult(new { error = -1, message = "Sản phẩm đã được xóa" });
+                return new OkObjectResult(new { error = -1, message = "Có lỗi xảy ra. Cập nhập số lượng sản phẩm thất bại" });
             }
             catch (Exception)
             {

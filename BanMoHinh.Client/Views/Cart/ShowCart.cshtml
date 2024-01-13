@@ -18,6 +18,7 @@
     int checksz = 0; int checkcol = 0;
 }
 <style>
+
     .exceeded-message {
         background-color: #ffcccc; /* Màu nền đỏ */
         padding: 10px;
@@ -106,7 +107,7 @@
                                 <th class="pro-quantity" style="width:180px">Số lượng</th>
                                 <th class="pro-price">Giá</th>
                                 <th class="pro-subtotal">Tổng</th>
-                                <th class="pro-remove"></th>
+                                <th class="pro-remove"><button  onclick="clearCart()"><i class='bx bx-x bx-sm'></i></button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,7 +144,7 @@
                                             <td class="pro-quantity text-center" colspan="4">
                                             <div class="exceeded-message">
                                                 <p>Sản phẩm vượt quá số lượng</p>
-                                                <button class="btn btn-success">Xoá khỏi giỏ hàng</button>
+                                                    <button class="btn btn-outline-danger" onclick="removeItem('@item.ProductDetail_Id')">Xoá bỏ</button>
                                             </div>
                                             </td>
                                         }
@@ -161,6 +162,7 @@
                                                             <button class="btn btn-light" onclick="CongSL('@idProductDetail')" type="button" id="button-plus-@idProductDetail">+</button>
                                                         </div>
                                                     </div>
+                                               </div>
                                             </td>
                                             
                                             <td class="pro-subtotal">
@@ -177,7 +179,7 @@
                                                 }
                                                 <span id="totalPrice-@idProductDetail">@total</span>
                                             </td>
-                                            <td class="pro-remove"><a href="javascript:delCart();"><i class='bx bx-x bx-sm'></i></a></td>
+                                            <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')"><i class='bx bx-x bx-sm'></i></button></td>
                                         }
                                         
                                     </tr>
@@ -226,47 +228,52 @@
 @* của họ, của mik toi xoá r, ô lcopy lại r sửa nh *@
 <script>
     function clearCart() {
-        $("#imgCart").attr("src", '/images/bag.png');
-    }
-    function delCart(id) {
-        location.reload();
         $.ajax({
-            type: "POST",
-            url: "/Home/DeleteCart",
-            data: {
-                id: id,
-            },
+            type: "GET",
+            url: "/Cart/DeleteAllItemInCart",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             success: function (result) {
-                $("#tr_" + id).hide();
-                $("#spTotal").html(result);
+                if (result.status) {
+                    alert(result.message);
+                    // Xử lý các thao tác khác sau khi xóa giỏ hàng thành công
+                } else {
+                    alert(result.message);
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi khi xóa giỏ hàng.");
+                location.reload();
             }
         });
     }
 
-    function updateCart(id) {
-        var soluong = $("#txtQuantity_" + id).val();
-        var gia = $("#tdGia_" + id).html();
-        var thanhtien = soluong * gia;
-        var sizes = $("#size_" + id).val();
-        var colors = $("#color_" + id).val();
-
-        $("#tdTien_" + id).html(thanhtien);
-        location.reload();
-
+    function removeItem(ProductDetailId) {
         $.ajax({
             type: "POST",
-            url: "/Home/UpdateCart",
-            data: {
-                id: id,
-                soluong: soluong,
-                size: sizes,
-                color: colors
-            },
+            url: "/Cart/DeleteItemInCart",
+            data: { ProductDetailId: ProductDetailId },
             success: function (result) {
-                $("#spTotal").html(result);
+                // Xử lý kết quả trả về từ server
+                if (result.success) {
+                    // Nếu xóa thành công, cập nhật giao diện người dùng
+                    alert(result.message); // Hiển thị thông báo thành công
+                    location.reload();
+                } else {
+                    // Nếu xóa không thành công, hiển thị thông báo lỗi
+                    alert(result.message);
+                    location.reload();
+                }
+            },
+            error: function () {
+                // Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu AJAX
+                alert("Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng thử lại sau.");
+                location.reload();
             }
         });
     }
+
 
     function CongSL(idProductDetail) {
         var quantityInput = document.getElementById('quantity-input-' + idProductDetail);
