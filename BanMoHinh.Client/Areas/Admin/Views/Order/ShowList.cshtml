@@ -1,111 +1,201 @@
 ﻿@model IEnumerable<BanMoHinh.Share.Models.Order>
+@using BanMoHinh.Share.Models;
+@using BanMoHinh.Share.ViewModels;
 
 @{
     ViewData["Title"] = "ShowList";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
+<div class="d-flex align-items-center p-3" style="height:80px">
+    <h3 class="heading-page">
+        <span><b>Hóa đơn</b></span>
+    </h3>
+</div>
+<body >
+<div class="row">
 
-<h1>ShowList</h1>
+        
+        
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.OrderCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecipientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecipientAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecipientPhone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmout)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VoucherValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmoutAfterApplyingVoucher)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Create_Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ship_Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Payment_Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Delivery_Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecipientPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmout)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmoutAfterApplyingVoucher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Create_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ship_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Payment_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Delivery_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {  id = item.Id }) |
-                    @Html.ActionLink("Details", "DetailsOrder", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "DeleteC", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <!--DANH SÁCH HÓA ĐƠN-->
+    <div class="d-flex flex-column p-12 bg-white flex-grow-1 col-md-9">
+        <div class="d-flex flex-row p-1 bg-white align-items-center">
+            <div class="d-flex me-auto" style="justify-content:center">
+                <div class="searchhd">
+                    <div class="dropdown">
+                        <div class="defaultOption"><span id="searchtype">Hóa đơn</span> <i class="bi bi-caret-down-fill ms-auto"></i></div>
+
+                        <ul class="ul chonkieu">
+                            <li data-value="1">Hóa đơn</li>
+                            <li data-value="2">Khách hàng</li>
+                        </ul>
+                    </div>
+                    <div class="searchField">
+                        <input type="text" class="input" id="inputhd" autocomplete="off" placeholder="Nhập mã hóa đơn, SĐT đặt hàng">
+                        <div class="btnsearch" onclick="timKiemHD()">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex ms-auto" style="justify-content:center">
+                <ul id="pagination-demo" class="pagination mx-2 my-2"></ul>
+            </div>
+        </div>
+            <table class="table table-hover table-bordered tbbills" align="center" cellpadding="10">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Mã hóa đơn</th>
+                        <th scope="col">Thời gian</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col" class="text-end">Tổng tiền hàng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr onclick="billDetail('@item.Id');">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrderCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Create_Date)
+                            </td>
+                                @{
+                                    var user = ViewData["User"] as List<UserViewModel>;
+                                  @if(user != null){
+
+                                @foreach (var item1 in user)
+                                {
+                                    if (item.UserId == item1.Id)
+                                    {
+                                        <td>@item1.UserName</td>
+                                    }
+                                }
+                                }
+                                }
+                                        
+
+                            <td>
+                                
+                                @if(item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-warning text-dark">Đang được xử lý</span>
+                                }
+                                else if (item.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-primary">Chờ lấy hàng</span>
+                                }
+                                else if(item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-primary">Đang giao hàng</span>
+                                }
+                               
+                                else if(item.OrderStatusId ==Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-success">Giao hàng thành công</span>
+                                }
+                                else if(item.OrderStatusId == Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-danger text-dark">Giao hàng không thành công</span>
+                                }
+                                else if(item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-danger text-dark">Hủy đơn</span>
+                                }
+                                else if(item.OrderStatusId == Guid.Parse("7C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-primary">Yêu cầu trả hàng</span>
+                                }
+                                else if (item.OrderStatusId == Guid.Parse("8C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-success">Chấp nhận trả hàng</span>
+                                }
+                                else if (item.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                {
+                                    <span class="badge bg-primary">Chờ Thanh toán</span>
+                                }
+                                
+                            </td>
+                            
+                            <td class="text-end">
+                                    @item.TotalAmout?.ToString("n0") 
+                            </td>
+
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+  
+    <div class="col-md-3" style="float:left">
+<div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Lọc theo trạng thái</h5>
+            </div>
+            <div class="card-body">
+                <div class="btn-group-vertical" id="select-trangThai">
+                    <button type="button" class="btn btn-outline-primary btn-text">Tất cả</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Đang được xử lý</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Chờ lấy hàng</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Đang giao hàng</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Giao hàng thành công</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Giao hàng không thành công</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Hủy đơn</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Yêu cầu trả hàng</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Chấp nhận trả hàng</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Chờ Thanh toán</button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Lọc theo ngày</h5>
+            </div>
+            <div class="card-body">
+                <div class="btn-group-vertical" id="select-ngay">
+                    <button type="button" class="btn btn-outline-primary btn-text">Tất cả</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Hôm nay</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Hôm qua</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Tuần này</button>
+                    <button type="button" class="btn btn-outline-primary btn-text">Tháng này</
+    </div>
+</div>
+<div class="modal fade" id="chitiethd" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content cthdcontent">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Chi tiết hóa đơn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body cthd-body">
+            </div>
+            @* <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>*@
+        </div>
+    </div>
+</div>
+    </div>
+</body>
+<script>
+       
+    function billDetail(idhd){
+        $(".cthd-body").load("/Order/ViewChiTietHD/" + idhd);
+    $("#chitiethd").modal("show");console.log(idhd);
+    }
+       function timKiemHD() {
+        var type = $("#searchtype").text();
+        var input = $("#inputhd").val();
+        var trangthai = $("#select-trangThai .btn-text").text();
+        var bdau = $("#bdau").text();
+        var ketthuc = $("#ketthuc").text();
+        var url = "/Order/ShowList?input=" + input + "&type=" + type + "&trangthai=" + trangthai + "&bdau=" + bdau + "&ketthuc=" + ketthuc;
+        window.location.href = url;
+    }
+</script>
+
+
