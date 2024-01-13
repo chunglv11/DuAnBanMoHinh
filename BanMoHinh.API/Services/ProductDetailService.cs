@@ -314,5 +314,21 @@ namespace BanMoHinh.API.Services
             }
             
         }
+
+        public async Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int quantity)
+        {
+            try
+            {
+                var productDetail = _dbContext.ProductDetail.FirstOrDefault(c => c.Id == productDetailId);
+                productDetail.Quantity += quantity;
+                _dbContext.ProductDetail.Update(productDetail);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }

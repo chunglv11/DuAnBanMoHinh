@@ -17,7 +17,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<ProductDetailVM> GetItem(Guid id);
         public Task<bool> UpdateQuantityById(Guid productDetailId, int quantity);
-
+        public Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int quantity);
 
         public Task<bool> Update(ProductDetailVM item);
         public decimal GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId);
