@@ -4,6 +4,8 @@ using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace BanMoHinh.API.Controllers
 {
@@ -31,7 +33,7 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<Product>> Get(Guid id)
+        public async Task<ActionResult<Rank>> Get(Guid id)
         {
             try
             {
@@ -43,6 +45,9 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        
+
+
         [HttpPost("create-rank")]
         public async Task<ActionResult<Rank>> Post([FromBody] Rank rank)
         {
@@ -55,7 +60,7 @@ namespace BanMoHinh.API.Controllers
         }
 
         [HttpPut("update-rank/{id}")]
-        public async Task<ActionResult<Post>> Put(Guid id, Rank rank)
+        public async Task<ActionResult<Rank>> Put(Guid id, Rank rank)
         {
             var result = await _rankService.Update(id, rank);
             if (result)
@@ -65,7 +70,7 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpDelete("delete-rank/{id}")]
-        public async Task<ActionResult<ProductVM>> Delete(Guid id)
+        public async Task<ActionResult<Rank>> Delete(Guid id)
         {
             var result = await _rankService.Delete(id);
             if (result)
