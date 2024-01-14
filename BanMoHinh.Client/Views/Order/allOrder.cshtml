@@ -113,29 +113,31 @@
                                         <a class="primary-btn custom-history-details" href="@Url.Action("OrderDetails", "Order", new { idHoaDon = item.Id })">
                                             <i class='bx bx-detail bx-sm'></i>
                                         </a>
+                                        @* đang được xử lý, chờ lấy hàng *@
                                         @if (item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC") || item.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                         {
                                             <a class="primary-btn custom-history-trash" onclick="Cancel('@item.Id', '@item.OrderStatusId')">
                                                 <i class="bx bx-trash bx-sm"></i> Hủy
                                             </a>
                                         }
-
+                                        @* đang giao *@
                                         else if (item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                         {
                                             <a class="primary-btn custom-history-trash" onclick="show();">
                                                 <i class="bx bx-trash bx-sm"></i> Hủy
                                             </a>
                                         }
+                                        @* huỷ đơn *@
                                         else if (item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                         {
                                             <a class="primary-btn custom-history-trash  custom-history-trash-disable" disabled="disabled">
-                                                <i class="bx bx-trash bx-sm"></i> Đã hủy
+                                                <i class="bx bx-trash bx-sm"></i>
                                             </a>
                                         }
                                         else
                                         {
                                             <a class="primary-btn custom-history-trash  custom-history-trash-success" disabled="disabled">
-                                                <i class="bx bx-check bx-sm"></i> Đã nhận
+                                                <i class="bx bx-check bx-sm"></i>
                                             </a>
                                         }
 
