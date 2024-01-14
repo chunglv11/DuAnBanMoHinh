@@ -60,8 +60,11 @@ namespace BanMoHinh.Client.Controllers
 		[HttpPost]
 		public async Task<JsonResult> AddtoCart(string ProductName, Guid colorId, Guid sizeId, int quantity)
         {
-			//
-
+            //
+            if (quantity<=0)
+            {
+                return Json(new { message = "Số lượng sản phẩm phải là số lớn hơn 0", status = false });
+            }
 			if (colorId == Guid.Parse("00000000-0000-0000-0000-000000000000") || sizeId == Guid.Parse("00000000-0000-0000-0000-000000000000"))
             {
 				return Json(new { message = "Vui lòng chọn biến thể", status = false });
