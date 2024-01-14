@@ -289,7 +289,7 @@ namespace BanMoHinh.Client.Controllers
             }
             catch
             {
-                return Json(new { HinhThuc = false, GiaTri = 0, Loi = "Voucher không hợp lệ catch" });
+                return Json(new { HinhThuc = false, GiaTri = 0, Loi = "Bạn không nằm trong danh sách áp dụng voucher" });
             }
         }
         [HttpGet]
