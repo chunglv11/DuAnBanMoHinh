@@ -23,6 +23,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 // add Dependency Injection
 
 builder.Services.AddScoped<IAdressService, AdressService>();
+builder.Services.AddScoped<IThongKeService, ThongKeService>();
 builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<ICartItemService, CartItemService>();
