@@ -56,61 +56,95 @@ namespace BanMoHinh.Client.Controllers
             }
 
         }
-        public async Task<IActionResult> AddtoCart(string ProductName, Guid colorId, Guid sizeId, int quantity)
+		[HttpPost]
+		public async Task<JsonResult> AddtoCart(string ProductName, Guid colorId, Guid sizeId, int quantity)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
+			//
+
+			if (colorId == Guid.Parse("00000000-0000-0000-0000-000000000000") || sizeId == Guid.Parse("00000000-0000-0000-0000-000000000000"))
             {
-                    var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
-                    var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");// get my cart                 
-                    var ItemInMyCart = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}"); // lấy item in cart
-                    var prodctDetailViewModel = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail"); // get productdetail model
-                    var ProductDetailToAddCart = prodctDetailViewModel.FirstOrDefault(c => c.ProductName == ProductName && c.ColorId == colorId && c.SizeId == sizeId);
-                    // lấy được product detail để add cart, lấy được cart item
-                    // check exist trong cart item
-                    var checkExistInCartItem = ItemInMyCart.Where(c => c.ProductDetail_ID == ProductDetailToAddCart.Id);
-                    if (checkExistInCartItem.Count()!=1) // nếu sp không tồn tại trong cart item
-                    {
-                        var cartItem = new CartItem()
-                        {
-                            ProductDetail_ID = ProductDetailToAddCart.Id,
-                            CartId = MyCart.Id,
-                            Price = (int)(ProductDetailToAddCart.PriceSale),
-                        };
-                        if (ProductDetailToAddCart.Quantity<quantity)
-                        {
-                            return BadRequest("Số lượng k đủ trong kho");
-                        }
-                        else
-                        {
-                            cartItem.Quantity = quantity;
-                            var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/cartitem/Insert-Cart-Item", cartItem);
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                return BadRequest("Lỗi Post sp ");
-                            }
-                            return RedirectToAction("ShowCart", "Cart");
-                        }
-
-                    }
-                    else
-                    {
-                        var productDetailInCart =  checkExistInCartItem.FirstOrDefault();
-                        productDetailInCart.Quantity += quantity;
-                        var updateResponse = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/cartitem/Update-CartItem?id={productDetailInCart.Id}", productDetailInCart);
-                        if (!updateResponse.IsSuccessStatusCode)
-                        {
-                            return BadRequest("Lỗi Post sp ");
-                        }
-                        return RedirectToAction("ShowCart", "Cart");
-                    }
-
-            }
+				return Json(new { message = "Vui lòng chọn biến thể", status = false });
+			}
             else
             {
-                // ban chua dang nhap cho em no ra cho dang nhao anh oi
-                return RedirectToAction("Login", "Authentication");
-            }
+				var identity = HttpContext.User.Identity as ClaimsIdentity;
+				if (identity != null)
+				{
+					var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
+					var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");// get my cart                 
+					var ItemInMyCart = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}"); // lấy item in cart
+					var prodctDetailViewModel = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail"); // get productdetail model
+					var ProductDetailToAddCart = prodctDetailViewModel.FirstOrDefault(c => c.ProductName == ProductName && c.ColorId == colorId && c.SizeId == sizeId);
+					// lấy được product detail để add cart, lấy được cart item
+					// check exist trong cart item
+					var checkExistInCartItem = ItemInMyCart.Where(c => c.ProductDetail_ID == ProductDetailToAddCart.Id);
+					if (checkExistInCartItem.Count() != 1) // nếu sp không tồn tại trong cart item
+					{
+						var cartItem = new CartItem()
+						{
+							ProductDetail_ID = ProductDetailToAddCart.Id,
+							CartId = MyCart.Id,
+							Price = (int)(ProductDetailToAddCart.PriceSale),
+						};
+						if (ProductDetailToAddCart.Quantity < quantity)
+						{
+							return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
+						}
+                        if (ProductDetailToAddCart.Quantity <= 0)
+						{
+							return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+						}
+
+						else
+						{
+							if (ProductDetailToAddCart.Quantity < quantity)
+							{
+								return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
+							}
+							if (ProductDetailToAddCart.Quantity <= 0)
+							{
+								return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+							}
+
+							cartItem.Quantity = quantity;
+							var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/cartitem/Insert-Cart-Item", cartItem);
+							if (!response.IsSuccessStatusCode)
+							{
+								return Json(new { message = "Thêm sản phẩm thất bại!!", status = false });
+							}
+							return Json(new { message = "Thêm thành công vào giỏ hàng", status = true });
+						}
+
+					}
+					else
+					{
+						if (ProductDetailToAddCart.Quantity < quantity)
+						{
+							return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
+						}
+						if (ProductDetailToAddCart.Quantity <= 0)
+						{
+							return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+						}
+
+						var productDetailInCart = checkExistInCartItem.FirstOrDefault();
+						productDetailInCart.Quantity += quantity;
+						var updateResponse = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/cartitem/Update-CartItem?id={productDetailInCart.Id}", productDetailInCart);
+						if (!updateResponse.IsSuccessStatusCode)
+						{
+							return Json(new { message = "Vui lòng chọn biến thể", status = false });
+						}
+						return Json(new { message = "Thêm thành công", status = true });
+					}
+
+				}
+				else
+				{
+					// ban chua dang nhap cho em no ra cho dang nhao anh oi
+					return Json(new { message = "Vui lòng đăng nhập để mua hàng", status = false });
+				}
+			}
+           
         }
         public async Task<IActionResult> TangSL(Guid id, Guid idCartItem, Guid idgh)
         {
@@ -164,19 +198,56 @@ namespace BanMoHinh.Client.Controllers
             }
             return Json(new { message = "Lỗi không xác định", status = false });
         }
-        public async Task<IActionResult> DeleteItemInCart(Guid id, Guid idCartItem, Guid idgh)
+        [HttpGet]
+        public async Task<JsonResult> DeleteAllItemInCart()
         {
             try
             {
-                var url = $"https://localhost:7007/api/CartDetails/Delete/{id}?idCartItem={idCartItem}&idgh={idgh}";
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");
+                var url = $"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={MyCart.Id}";
                 var response = await _httpClient.DeleteAsync(url);
-                return RedirectToAction("ShowCart");
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { message = "Xoá giỏ hàng thành công!!!", status = true });
+                }
+                return Json(new { message = "Lỗi không xác định", status = false });
             }
             catch (Exception)
             {
-                return View("Error");
+                return Json(new { message = "Lỗi không xác định", status = false });
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteItemInCart(Guid ProductDetailId)
+        {
+            try
+            {
+			
+				var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");
+                var lstCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}");
+                var cartItem = lstCartItem.FirstOrDefault(c => c.ProductDetail_ID == ProductDetailId);
+
+				var url = $"https://localhost:7007/api/CartDetails/Delete/{ProductDetailId}?idCartItem={cartItem.Id}&idgh={MyCart.Id}";
+                var response = await _httpClient.DeleteAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                return Json(new { message = "Xoá giỏ hàng thành công!!!", status = true });
+                }
+                return Json(new { message = "Lỗi không xác định", status = false });
+            }
+            catch (Exception)
+            {
+                return Json(new { message = "Lỗi không xác định", status = false });
+
             }
 
         }
+
+
     }
 }

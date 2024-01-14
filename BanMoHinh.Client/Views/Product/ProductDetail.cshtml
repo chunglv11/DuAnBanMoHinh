@@ -70,7 +70,6 @@
 </section>
 <!-- End breadcumb Area -->
 <!--================Single Product Area =================-->
-<form asp-controller="Cart" asp-action="AddtoCart" method="post">
 <div class="product_image_area">
 	<div class="container">
 		<div class="row s_product_inner">
@@ -140,8 +139,8 @@
 										foreach (var uniqueSize in uniquewh)
 										{
 											var sizeId = uniqueSize.Id;
-											<input type="radio" name="sizeId" value="@sizeId" data-size-id="@sizeId" id="sizeId-@sizeId" />
-										<label class="capacity" for="sizeId-@sizeId">@($"{uniqueSize.Width} cm - {uniqueSize.Height} cm")</label>
+											<input type="radio" name="sizeId"  value="@sizeId" data-size-id="@sizeId" id="sizeId-@sizeId" />
+										<label for="sizeId-@sizeId">@($"{uniqueSize.Width} cm - {uniqueSize.Height} cm")</label>
 										}
 									}
 							</div>				
@@ -165,20 +164,31 @@
 						</div>
 						<div class="block-26-color product_count">
 							<h4>Số lượng:</h4>
-								<input type="number" name="quantity" min="1" max="99" value="1"
-								   class="input-text qty">
+
+								<div class="form-group col-md flex-grow-0">
+									<div class="input-group mb-3 input-spinner">
+										<div class="input-group-prepend">
+											<button class="btn btn-light"type="button" id="button-minus">-</button>
+										</div>
+										<input name="quantity" type="number" class="form-control" min="1" value="1" onchange="updateQuantity()" id="quantity-input">
+										<div class="input-group-append">
+											<button class="btn btn-light" type="button" id="button-plus">+</button>
+										</div>
+									</div>
+								</div>
 						</div>
 						<div class="card_area d-flex align-items-center">
 							@if (Model.Status == true)
 							{
-								<button type="submit" style="color:white" class="primary-btn d-flex align-items-center justify-content-center">
+								<button type="button" onclick="addToCart()" style="color:white" class="primary-btn d-flex align-items-center justify-content-center">
 									<i class='bx bx-shopping-bag bx-sm'></i>&nbsp;&nbsp;
 									Thêm vào giỏ hàng
 								</button>
+
 							}
 							else
 							{
-								<a class="primary-btn custom-history-trash-disable" disabled="disabled">Thêm vào giỏ hàng</a>
+								<button onclick="addToCart()" class="primary-btn custom-history-trash-disable"  disabled="disabled">Thêm vào giỏ hàng</button>
 							}
 							<input type="text" class="d-none" id="myInput">
 							<button onclick="Share()" title="Copy link" data-toggle="tooltip" onmouseout="outFunc()" class="btn-share  d-flex align-items-center justify-content-center">
@@ -192,7 +202,7 @@
 		</div>
 	</div>
 </div>
-</form>
+
 <!--================End Single Product Area =================-->
 <!--================Product Description Area =================-->
 <section class="product_description_area" data-aos="fade-up">
@@ -313,6 +323,38 @@
 			$("#selected-price").empty(); // Xóa nội dung của selected-price để tránh hiển thị cùng lúc với old-price
 		}
 	}
+	function addToCart() {
+		// Lấy giá trị của các trường input
+		var productName = $("input[name='ProductName']").val();
+		var sizeId = $("input[name='sizeId']:checked").val();
+		var colorId = $("input[name='colorId']:checked").val();
+		var quantity = $("input[name='quantity']").val();
+
+		// Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+		$.ajax({
+			url: "/Cart/AddToCart",
+			type: "POST",
+			data: {
+				productName: productName,
+				sizeId: sizeId,
+				colorId: colorId,
+				quantity: quantity
+			},
+			success: function (response) {
+				// Xử lý kết quả trả về sau khi thêm vào giỏ hàng thành công
+				if (response.status) {
+					alert(response.message);
+				} else {
+					alert(response.message);
+				}
+			},
+			error: function () {
+				// Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu AJAX
+				alert("Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng thử lại sau.");
+			}
+		});
+	}
+
 </script>
 
 

@@ -2,6 +2,7 @@
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BanMoHinh.API.Services
@@ -37,12 +38,14 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<bool> DeleteCartItem( Guid CartId)
+
+        [HttpGet]
+        public async Task<bool> DeleteCartItem( Guid cartId)
         {
             try
             {
-                var item =  _dbContext.CartItem.Where(c => c.CartId == CartId);
-                _dbContext.CartItem.RemoveRange(item);
+                var item =  await _dbContext.CartItem.FirstOrDefaultAsync(c => c.CartId == cartId);
+                _dbContext.CartItem.Remove(item);
                 await _dbContext.SaveChangesAsync();
                 return true;
 
