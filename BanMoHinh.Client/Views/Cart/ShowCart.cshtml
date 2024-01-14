@@ -86,7 +86,7 @@
                                 <th class="pro-quantity" style="width:180px">Số lượng</th>
                                 <th class="pro-price">Giá</th>
                                 <th class="pro-subtotal">Tổng</th>
-                                <th class="pro-remove"><button  onclick="clearCart()"><i class='bx bx-x bx-sm'></i></button></th>
+                                <th class="pro-remove"><button onclick="clearCart()"> <i class="bx bx-trash bx-sm"></i> </button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -154,9 +154,11 @@
                                                     total = item.PriceSale * item.Quantity;
                                                     totalAmount += total;
                                                 }
-                                                <span id="totalPrice-@idProductDetail">@total</span>
+                                                <span id="totalPrice-@idProductDetail">
+                                                    @String.Format("{0:n0}", total) VNĐ
+                                                </span>
                                             </td>
-                                            <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')"><i class='bx bx-x bx-sm'></i></button></td>
+                                            <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')" class="primary-btn custom-history-trash"> <i class="bx bx-trash bx-sm"></i> Xoá</button></td>
                                         }      
                                     </tr>
                                 }
@@ -212,6 +214,7 @@
                 if (result.status) {
                     alert(result.message);
                     // Xử lý các thao tác khác sau khi xóa giỏ hàng thành công
+                    location.reload();
                 } else {
                     alert(result.message);
                     location.reload();
