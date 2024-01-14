@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
@@ -80,16 +81,22 @@ namespace BanMoHinh.Client.Controllers
 					var checkExistInCartItem = ItemInMyCart.Where(c => c.ProductDetail_ID == ProductDetailToAddCart.Id);
 					if (checkExistInCartItem.Count() != 1) // nếu sp không tồn tại trong cart item
 					{
+                        
 						var cartItem = new CartItem()
 						{
 							ProductDetail_ID = ProductDetailToAddCart.Id,
 							CartId = MyCart.Id,
 							Price = (int)(ProductDetailToAddCart.PriceSale),
 						};
-						if (ProductDetailToAddCart.Quantity < quantity)
+						if (ProductDetailToAddCart.Quantity ==0)
+						{
+							return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+						}
+                        if (ProductDetailToAddCart.Quantity < quantity)
 						{
 							return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
 						}
+
                         if (ProductDetailToAddCart.Quantity <= 0)
 						{
 							return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
@@ -97,6 +104,10 @@ namespace BanMoHinh.Client.Controllers
 
 						else
 						{
+							if (ProductDetailToAddCart.Quantity == 0)
+							{
+								return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+							}
 							if (ProductDetailToAddCart.Quantity < quantity)
 							{
 								return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
@@ -105,7 +116,6 @@ namespace BanMoHinh.Client.Controllers
 							{
 								return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
 							}
-
 							cartItem.Quantity = quantity;
 							var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/cartitem/Insert-Cart-Item", cartItem);
 							if (!response.IsSuccessStatusCode)
@@ -118,16 +128,21 @@ namespace BanMoHinh.Client.Controllers
 					}
 					else
 					{
-						if (ProductDetailToAddCart.Quantity < quantity)
-						{
-							return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
-						}
-						if (ProductDetailToAddCart.Quantity <= 0)
+						if (ProductDetailToAddCart.Quantity == 0)
 						{
 							return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
 						}
-
 						var productDetailInCart = checkExistInCartItem.FirstOrDefault();
+
+						if (ProductDetailToAddCart.Quantity < quantity + productDetailInCart.Quantity)
+						{
+							return Json(new { message = "Số lượng sản phẩm trong giỏ hàng và số lượng muốn thêm vào vượt quá số lượng tồn kho. Vui lòng giảm số lượng hoặc chọn sản phẩm khác.", status = false });
+						}
+						if (ProductDetailToAddCart.Quantity <= 0)
+						{
+							return Json(new { message = "Sản phẩm đã hết hàng hoặc số lượng không hợp lệ. Vui lòng chọn số lượng hợp lệ.", status = false });
+						}
+
 						productDetailInCart.Quantity += quantity;
 						var updateResponse = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/cartitem/Update-CartItem?id={productDetailInCart.Id}", productDetailInCart);
 						if (!updateResponse.IsSuccessStatusCode)
@@ -246,6 +261,28 @@ namespace BanMoHinh.Client.Controllers
 
             }
 
+        }
+
+
+
+        // Trong controller
+        [HttpGet]
+        public async Task<IActionResult> GetCartTotalItems()
+        {
+
+
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");
+                var ListCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}");
+                // Lấy giỏ hàng từ session (hoặc từ cơ sở dữ liệu nếu bạn lưu trữ giỏ hàng ở đó)
+
+                // Tính tổng số lượng của các CartItem
+               var totalItems = ListCartItem?.Count()?? 0;
+
+                // Trả về tổng số lượng dưới dạng JSON
+                 return Json(new { totalItems });
+           
         }
 
 

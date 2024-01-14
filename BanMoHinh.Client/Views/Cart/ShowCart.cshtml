@@ -12,9 +12,6 @@
     var color = ViewData["color"] as List<Colors>;
     var size = ViewData["size"] as List<Size>;
     var productDetailCheck = ViewData["productDetailCheck"] as List<ProductDetail>;
-
-}
-@{
     int checksz = 0; int checkcol = 0;
 }
 <style>
@@ -77,24 +74,6 @@
 <div class="colorlib-product">
     <div class="container">
         <div class="row row-pb-lg">
-            <div class="col-md-10 offset-md-1">
-                <div class="process-wrap">
-                    <div class="process text-center active">
-                        <p><span>01</span></p>
-                        <h3>Giỏ hàng</h3>
-                    </div>
-                    <div class="process text-center">
-                        <p><span>02</span></p>
-                        <h3>Thanh toán</h3>
-                    </div>
-                    <div class="process text-center">
-                        <p><span>03</span></p>
-                        <h3>Hoàn thành</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row row-pb-lg">
             <div class="col-md-12">
                 <div class="cart-table table-responsive">
                     <table class="table">
@@ -114,13 +93,11 @@
                             @{
                                 int stt = 0;
                                 foreach (var item in Model)
-                                {
+                                { 
                                     var checkSL = productDetailCheck.Where(c => c.Id == item.ProductDetail_Id && c.Quantity < item.Quantity).Count();
                                     var idProductDetail = item.ProductDetail_Id;
                                     stt++;
-                                    <div hidden class="product-detail" data-id="@item.ProductDetail_Id">
-                                        <!-- Nội dung sản phẩm chi tiết -->
-                                    </div>
+                                   
 
                                     <tr>
                                         <td class="pro-quantity"><span>@stt</span></td>
@@ -130,7 +107,7 @@
                                             </a>
                                         </td>
                                         <td class="pro-title custom-title-cart">
-                                            <a data-toggle="tooltip"
+                                            <a 
                                                title="@item.ProductName" asp-action="Details" asp-route-id="Products"> @item.ProductName</a>
                                         </td>
                                         <td class="pro-quantity text-center">
@@ -144,7 +121,7 @@
                                             <td class="pro-quantity text-center" colspan="4">
                                             <div class="exceeded-message">
                                                 <p>Sản phẩm vượt quá số lượng</p>
-                                                    <button class="btn btn-outline-danger" onclick="removeItem('@item.ProductDetail_Id')">Xoá bỏ</button>
+                                                    <button class="btn btn-outline-danger" onclick="removeItem('@item.ProductDetail_Id')"><i class="bx bx-trash bx-sm"></i>Xoá bỏ</button>
                                             </div>
                                             </td>
                                         }
@@ -180,12 +157,9 @@
                                                 <span id="totalPrice-@idProductDetail">@total</span>
                                             </td>
                                             <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')"><i class='bx bx-x bx-sm'></i></button></td>
-                                        }
-                                        
+                                        }      
                                     </tr>
-
                                 }
-
                             }
                         </tbody>
                     </table>
@@ -225,8 +199,9 @@
         </div>
     </div>
 </div>
-@* của họ, của mik toi xoá r, ô lcopy lại r sửa nh *@
+
 <script>
+
     function clearCart() {
         $.ajax({
             type: "GET",
