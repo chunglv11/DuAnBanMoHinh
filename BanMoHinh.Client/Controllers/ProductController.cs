@@ -274,13 +274,20 @@ namespace BanMoHinh.Client.Controllers
 
         }
 
-        public async Task<decimal> GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
+        public async Task<JsonResult> GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
-            var price = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/getpriceforproductD?productId={productId}&sizeId={sizeId}&colorId={colorId}");
-            string apiData = await price.Content.ReadAsStringAsync();
-            var culture = CultureInfo.InvariantCulture;
-            var result = decimal.Parse(apiData, culture);
-            return result;
-        }
+            
+            try
+            {
+				var productdetail = await _httpClient.GetFromJsonAsync<ProductDetail>($"https://localhost:7007/api/productDetail/GetProductDetail?productId={productId}&sizeId={sizeId}&colorId={colorId}");
+				return Json(new { message = "OK", status = true, quantity = productdetail.Quantity, price = productdetail.PriceSale });
+			}
+            catch (Exception)
+            {
+
+				return Json(new { message = "Lỗi", status = false });
+
+			}
+		}
     }
 }
