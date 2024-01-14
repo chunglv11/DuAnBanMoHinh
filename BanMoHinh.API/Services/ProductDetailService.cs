@@ -226,7 +226,7 @@ namespace BanMoHinh.API.Services
             productDetail.SizeId = item.SizeId;
             productDetail.ColorId = item.ColorId;
             productDetail.Quantity = item.Quantity;
-            productDetail.Price = item.Price;
+            //productDetail.Price = item.Price;
             productDetail.PriceSale = item.PriceSale;
             productDetail.Update_At = item.Update_At;
             productDetail.Description = item.Description;

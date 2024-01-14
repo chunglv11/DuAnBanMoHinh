@@ -53,12 +53,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
             return View(allproduct);
         }
-
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+    
 
         // GET: ProductController/Create
         public async Task<IActionResult> CreateProduct()
@@ -81,19 +76,28 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             try
             {
-                pro.Status = true;
-                pro.Long_Description = edit;
-                pro.Create_At = DateTime.Now;
-                pro.AvailableQuantity = 0;
-                pro.Update_At = null;
-                //pro.Long_Description = RemoveHtmlTags(edit);
-                //pro.Long_Description = ReplaceUnicodeCharacters(pro.Long_Description);
-                pro.Long_Description = HttpUtility.HtmlDecode(pro.Long_Description);
-                var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
-                if (createpro.IsSuccessStatusCode)
+                if (pro.CategoryId == null || pro.BrandId == null || pro.CategoryId == null || pro.ProductName == null )
                 {
-                    return RedirectToAction("GetAllProduct");
+                    ViewData["Null"] = "Không được để trống";
                 }
+                var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
+                if (pro.CategoryId != null || pro.BrandId != null || pro.CategoryId != null || pro.ProductName != null)
+                {
+                    if (pro.ProductName.ToLower() == allproduct.FirstOrDefault().ProductName.ToLower())
+                    {
+                        ViewData["Nam"] = "Đã có sản phẩm này";
+                    }
+                    pro.Status = true;
+                    pro.Long_Description = edit;
+                    pro.Create_At = DateTime.Now;
+                    pro.AvailableQuantity = 0;
+                    pro.Update_At = null;
+                    var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
+                    if (createpro.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("GetAllProduct");
+                    }
+                }              
                 return RedirectToAction("CreateProduct");
             }
             catch
