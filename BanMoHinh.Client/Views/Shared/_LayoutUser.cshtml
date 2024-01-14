@@ -46,16 +46,10 @@
 
                     <ul class="social-media order-lg-last nav navbar-right nav-center">
                         <li class="nav-item submenu dropdown">
-                            <a>
-
-                            </a><a class="minicart-btn cart cart-deskop" id="cart" href="/Cart/ShowCart">
+                             
+                            <a class="" href="/Cart/ShowCart">
                                 <span class="bx bx-shopping-bag bx-sm">
-                                    <span class="num-cart-product">0</span>
-                                </span>
-                            </a>
-                            <a class="cart cart-mobile" href="/Home/Cart">
-                                <span class="bx bx-shopping-bag bx-sm">
-                                    <span class="num-cart-product">0</span>
+                                    <span class="num-cart-product" id="cart-total-items">0</span>
                                 </span>
                             </a>
                         </li>
@@ -317,6 +311,29 @@
         FptLiveChatScript.onload = function () {
             fpt_ai_render_chatbox(FptLiveChatConfigs, liveChatBaseUrl, LiveChatSocketUrl)
         }
+        //////////////////////
+        // Trong JavaScript của layout
+        function updateCartTotalItems() {
+            // Gửi yêu cầu AJAX để lấy tổng số lượng từ endpoint đã tạo
+            $.ajax({
+                url: "/Cart/GetCartTotalItems", // Thay ControllerName bằng tên controller thực tế
+                type: "GET",
+                success: function (response) {
+                    // Cập nhật phần tử hiển thị tổng số lượng
+                    $('#cart-total-items').text(response.totalItems);
+                },
+                error: function () {
+                    // Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu AJAX
+                    console.error("Error updating cart total items");
+                }
+            });
+        }
+
+        // Gọi hàm updateCartTotalItems khi trang đã tải hoàn toàn
+        $(document).ready(function () {
+            updateCartTotalItems();
+        });
+
     </script>
 </body>
 </html>

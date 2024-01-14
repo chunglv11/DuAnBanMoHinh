@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
@@ -260,6 +261,28 @@ namespace BanMoHinh.Client.Controllers
 
             }
 
+        }
+
+
+
+        // Trong controller
+        [HttpGet]
+        public async Task<IActionResult> GetCartTotalItems()
+        {
+
+
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userID}");
+                var ListCartItem = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}");
+                // Lấy giỏ hàng từ session (hoặc từ cơ sở dữ liệu nếu bạn lưu trữ giỏ hàng ở đó)
+
+                // Tính tổng số lượng của các CartItem
+               var totalItems = ListCartItem?.Count()?? 0;
+
+                // Trả về tổng số lượng dưới dạng JSON
+                 return Json(new { totalItems });
+           
         }
 
 
