@@ -20,7 +20,7 @@
     <!--DANH SÁCH HÓA ĐƠN-->
     <div class="d-flex flex-column p-12 bg-white flex-grow-1 col-md-9">
         <div class="d-flex flex-row p-1 bg-white align-items-center">
-            <div class="d-flex me-auto" style="justify-content:center">
+            @* <div class="d-flex me-auto" style="justify-content:center">
                 <div class="searchhd">
                     <div class="dropdown">
                         <div class="defaultOption"><span id="searchtype">Hóa đơn</span> <i class="bi bi-caret-down-fill ms-auto"></i></div>
@@ -40,13 +40,13 @@
             </div>
             <div class="d-flex ms-auto" style="justify-content:center">
                 <ul id="pagination-demo" class="pagination mx-2 my-2"></ul>
-            </div>
+            </div> *@
         </div>
             <table class="table table-hover table-bordered tbbills" align="center" cellpadding="10">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Mã hóa đơn</th>
-                        <th scope="col">Thời gian</th>
+                        <th scope="col">Thời gian tạo</th>
                         <th scope="col">Khách hàng</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col" class="text-end">Tổng tiền hàng</th>
@@ -75,8 +75,6 @@
                                 }
                                 }
                                 }
-                                        
-
                             <td>
                                 
                                 @if(item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
