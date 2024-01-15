@@ -44,18 +44,18 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create-post")]
-        public async Task<ActionResult<Post>> Post([FromBody] Post post)
+        public async Task<ActionResult<PostVM>> Post([FromForm] PostVM post)
         {
             var result = await _postService.Create(post);
             if (result)
             {
                 return Ok("Đã thêm thành công");
             }
-            return Ok("Lỗi!");
+            return BadRequest("Lỗi!");
         }
       
         [HttpPut("update-post/{id}/{UserId}")]
-        public async Task<ActionResult<Post>> Put(Guid id,  Post post, Guid UserId)
+        public async Task<ActionResult<Post>> Put(Guid id,  PostVM post, Guid UserId)
         {
             var result = await _postService.Update(id,UserId, post);
             if (result)

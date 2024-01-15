@@ -236,7 +236,8 @@
                 <button type="button" onclick="InHD('@Model.ID')" class="btn btn-success fw-normal text-white">In Hóa đơn</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" onclick="location.href='@Url.Action("ExportPDF", "QuanLyHoaDon", new{idhd = @Model.ID})'" class="btn btn-success fw-normal text-white"> Xuất PDF</button>
+                <button onclick="location.href='/Bill/ExportPDF/@Model.ID'" class="btn btn-secondary" style="margin-right:5px">Xuất PDF</button>
+
             </div>
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-danger fw-normal text-white" data-bs-dismiss="modal"> Đóng</button>

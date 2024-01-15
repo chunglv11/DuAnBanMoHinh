@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BanMoHinh.Share.Models.Post>
+﻿@model IEnumerable<BanMoHinh.Share.ViewModels.PostVM>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
 @{
     ViewData["Title"] = "Index";
@@ -19,9 +20,6 @@
     <thead>
         <tr>
 
-            <th>
-                Người đăng
-            </th>
             <th>
                 Ảnh đại diện
             </th>
@@ -46,11 +44,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
+          
                 <td>
-                    @Html.DisplayFor(modelItem => item.TittleImage)
+                    <img height="150" width="170" class="d-block " src="@(Configuration["BaseAddress"]+ item.TittleImage)">
                 </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tittle)

@@ -114,7 +114,8 @@
                         </li>
                         <li class="nav-item">
                             <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-user"></i>
+
                                 <p>
                                    Quản lí người dùng
                                 </p>
@@ -122,24 +123,20 @@
                         </li>
                         <li class="nav-item">
                             <a asp-area="Admin" asp-controller="Rank" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+
+                                <i class="nav-icon fas fa-chart-simple"></i>
+
                                 <p>
                                    Quản lí xếp hạng
                                 </p>
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Quản lí Bài Viết
-                                </p>
-                            </a>
-                        </li>
+                        
                          <li class="nav-item">
                             <a asp-area="Admin" asp-controller="Order" asp-action="ShowList" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+
                                 <p>
                                     Quản lí đơn hàng
                                 </p>
@@ -149,6 +146,13 @@
                             <a asp-area="Admin" asp-controller="Voucher" asp-action="GetallVoucher" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Quản lý voucher</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="nav-link">
+
+                                <i class="nav-icon fas fa-newspaper"></i>
+                                <p>Quản lý bài viết</p>
                             </a>
                         </li>
                         <li class="nav-item has-treeview">
@@ -208,7 +212,11 @@
 
                             </ul>
                         </li>
-                       
+                                    <li class="nav-item"><a asp-controller="Authentication" asp-action="Logout" class="nav-link">
+                                <i class="nav-icon fas fa-backward "></i>
+
+                                        Đăng xuất</a></li>
+
                         
                     </ul>
                 </nav>

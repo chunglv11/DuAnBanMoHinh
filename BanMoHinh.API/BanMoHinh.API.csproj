@@ -28,4 +28,8 @@
     <ProjectReference Include="..\BanMoHinh.Share\BanMoHinh.Share.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\postimages\" />
+  </ItemGroup>
+
 </Project>
