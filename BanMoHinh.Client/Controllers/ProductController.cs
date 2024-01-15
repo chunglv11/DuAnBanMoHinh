@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using System.Globalization;
 using System.Net.Http;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -210,8 +211,11 @@ namespace BanMoHinh.Client.Controllers
         }
 
 
-        public async Task<IActionResult> ListProductAsync(string? name, string? sortOrder, Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice)
+        public async Task<IActionResult> ListProductAsync(string? name, string? sortOrder, Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice, int? page)
         {
+            if (page == null) page = 1;
+            int pageSize = 21;
+            int pageNumber = (page ?? 1);
 
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
             var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
@@ -240,15 +244,18 @@ namespace BanMoHinh.Client.Controllers
             ViewData["productMaterial"] = selectListItemsProductMaterial;
             ViewData["productDetail"] = productDetail;
             ViewData["ProductImage"] = ProductImage;
+            ViewBag.name = name;
+            ViewBag.minPrice = minPrice;
+            ViewBag.maxPrice = maxPrice;
 
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
-            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id&& c.AvailableQuantity>0)).ToList();
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0)).ToList();
             if (!string.IsNullOrWhiteSpace(name))
             {
                 allproduct = await Search(name, allproduct);
             }
             allproduct = await Filter(SelectedCategory, SelectedBrand, SelectedMaterial, minPrice, maxPrice, sortOrder, allproduct);
-            return View(allproduct);
+            return View(allproduct.ToPagedList(pageNumber, pageSize));
         }
         public async Task<IActionResult> ProductDetailAsync(Guid id)
         {

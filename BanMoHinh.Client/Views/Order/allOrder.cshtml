@@ -26,27 +26,95 @@
     </div>
 </section>
 
+<div class="colorlib-product colorlib-product-details ">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="process-wrap process-wrap-details ">
+                    <div class="steps-timeline">
+
+                        <a href="/Order/allOrder?status=0" class="col-md-2">
+                            <div class="steps-one text-center active">
+                                <p><span class='bx bx-layer  bx-tada bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Tất cả
+                                </h3>
+                            </div>
+                        </a>
+                        
+                        <a href="/Order/allOrder?status=-1" class="col-md-2">
+                            <div class="steps-one text-center active">
+                                <p><span class='bx bx-wallet-alt bx-tada bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Chờ thanh toán
+                                </h3>
+                            </div>
+                        </a>
+                        <a href="/Order/allOrder?status=1" class="col-md-2">
+                            <div class="steps-one text-center active">
+                                <p><span class='bx bx-cog bx-spin bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Đang xử lý
+                                </h3>
+                            </div>
+                        </a>
+
+                        <a href="/Order/allOrder?status=2" class="col-md-2">
+                            <div class="steps-two text-center" onclick="activateStep(this)">
+                                <p><span class='bx bxs-package bx-tada bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Chờ lấy hàng
+                                </h3>
+                            </div>
+                        </a>
+                        <a href="/Order/allOrder?status=3" class="col-md-2">
+                            <div class="steps-three text-center" onclick="activateStep(this)">
+                                <p><span class='bx bxs-truck bx-tada bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Đang giao hàng
+                                </h3>
+                            </div>
+                        </a>
+                        <a href="/Order/allOrder?status=4" class="col-md-2">
+                            <div class="steps-four text-center" id="processingStep" onclick="activateStep(this)">
+                                <p><span class='bx bx-badge-check bx-tada bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Đã nhận
+                                </h3>
+                            </div>
+                        </a>
+                        <a href="/Order/allOrder?status=5" class="col-md-2">
+                            <div class="steps-five text-center" id="packagingStep" onclick="activateStep(this)">
+                                <p><span class='bx bxs-x-circle bx-spin bx-lg'></span></p>
+                                <h3 class="steps-name">
+                                    Đã hủy
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="colorlib-product">
     <div class="container">
         <div class="row row-pb-lg">
             <div class="col-md-12">
                 <div class="cart-table table-responsive">
+
                     <table class="table tbl-history">
                         <thead>
                             <tr>
                                 <th>
-                                    <a class="custom-txt-history" >
+                                    <a class="custom-txt-history">
                                         <span>Ngày đặt</span><i class="bx bxs-sort-alt ml-2"></i>
                                     </a>
                                 </th>
                                 <th>
-                                    <a class="custom-txt-history" >
-                                        <span>Tổng tiền</span><i class="bx bxs-sort-alt ml-2"></i>
-                                    </a>
-                                </th>
-                                <th>
                                     <a class="custom-txt-history">
-                                        <span>Tiền Thanh Toán</span><i class="bx bxs-sort-alt ml-2"></i>
+                                        <span>Tổng tiền</span><i class="bx bxs-sort-alt ml-2"></i>
                                     </a>
                                 </th>
                                 <th>
@@ -55,7 +123,7 @@
                                 <th>
                                     <p>Trạng thái</p>
                                 </th>
-                                
+
                                 <th>Chức năng</th>
                             </tr>
                         </thead>
@@ -68,9 +136,6 @@
                                     </td>
                                     <td>
                                         @string.Format("{0:0,0 VND}", item.TotalAmout)
-                                    </td>
-                                    <td>
-                                        @string.Format("{0:0,0 VND}", item.TotalAmoutAfterApplyingVoucher)
                                     </td>
                                     <td>
                                         @if (item.Payment_Date == null)
@@ -107,8 +172,13 @@
                                         {
                                             <p>Huỷ đơn</p>
                                         }
+                                        else if (item.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                        {
+                                            <p>Chờ thanh toán</p>
+                                        }
+
                                     </td>
-                                   
+
                                     <td class="custom-history">
                                         <a class="primary-btn custom-history-details" href="@Url.Action("OrderDetails", "Order", new { idHoaDon = item.Id })">
                                             <i class='bx bx-detail bx-sm'></i>
@@ -134,6 +204,18 @@
                                                 <i class="bx bx-trash bx-sm"></i>
                                             </a>
                                         }
+
+                                        else if (item.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")) // chờ thanh toán
+                                        {
+                                            <a class="primary-btn custom-history-trash">
+                                                <i class="bx bx-trash bx-sm"></i>
+                                            </a>
+                                            <a class="primary-btn custom-history-trash  custom-history-trash-success" href="" onclick="continueCheckOut('@item.Id')">
+                                                <i class="bx bxl-paypal bx-sm"></i>
+                                            </a>
+
+
+                                        }
                                         else
                                         {
                                             <a class="primary-btn custom-history-trash  custom-history-trash-success" disabled="disabled">
@@ -154,10 +236,11 @@
                         Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
                     </div>
                     <div class="pagin-right float-right">
-                        @Html.PagedListPager(Model, page => Url.Action("allOrder", new { page}))
+                        @Html.PagedListPager(Model, page => Url.Action("allOrder", new { page,status = ViewBag.status}))
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -204,6 +287,24 @@
                         }, 2000)
                     }
                 });
+            }
+        });
+    }
+
+    function continueCheckOut(idhd) {
+        $.ajax({
+            url: '/Bill/ContinueCheckOut', // Thay ControllerName bằng tên controller thực tế
+            type: 'POST',
+            data: { idhd: idhd }, // Dữ liệu gửi đi, trong trường hợp này là idhd
+            success: function (response) {
+                // Xử lý dữ liệu trả về từ phương thức ContinueCheckOut
+                console.log('Payment URL:', response);
+                // Redirect tới trang thanh toán, hoặc làm gì đó với payment URL nếu cần thiết
+                window.location.href = response;
+            },
+            error: function () {
+                // Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu AJAX
+                console.error('Error calling ContinueCheckOut');
             }
         });
     }
