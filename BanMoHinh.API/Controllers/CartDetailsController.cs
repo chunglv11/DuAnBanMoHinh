@@ -72,6 +72,52 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok(view);
         }
+
+        [HttpPost]
+        [Route("Get-cartItemViewFromLstCartItem")]
+        public async Task<IActionResult> GetAllCartDetail(List<CartItem> lstCartItem)
+        {
+            var cartItem = lstCartItem;
+            var productDetails = await _productDetailService.GetAll();
+            var productImage = await _productImageService.GetAll();
+            var color = await _colorService.GetAll();
+            var cate = await _categoryService.GetAll();
+            var product = await _productService.GetAll();
+            var size = await _sizeService.GetAll();
+            List<ViewCartDetails> view = new List<ViewCartDetails>();
+            foreach (var item in cartItem)
+            {
+                if (cartItem.Count == 0)
+                {
+                    return new OkObjectResult(new { message = "Không có sản phẩm nào trong giỏ hàng. <a href='/'>Quay lại trang chủ</a>", error = -1, data = view });
+                }
+                var prd = productDetails.FirstOrDefault(x => x.Id == item.ProductDetail_ID);
+                var pr = product.FirstOrDefault(x => x.Id == prd.ProductId);
+                var ha = productImage.First(x => x.ProductDetailId == prd.Id);
+                var cl = color.FirstOrDefault(x => x.ColorId == prd?.ColorId);
+                var ct = cate.FirstOrDefault(x => x.Id == pr.CategoryId);
+                var sz = size.FirstOrDefault(x => x.Id == prd.SizeId);
+                ViewCartDetails cartDetails = new ViewCartDetails()
+                {
+                    Id = item.Id,
+                    ImageName = ha.ImageUrl,
+                    ProductName = pr.ProductName,
+                    Price = prd.Price,
+                    PriceSale = prd.PriceSale,
+                    Quantity = item.Quantity,
+                    CategoryId = ct.Id,
+                    CartId = item.CartId,
+                    ProductDetail_Id = prd.Id,
+                    SizeId = sz.Id,
+                    ColorsId = cl.ColorId,
+                    TotalPrice = Convert.ToInt32(prd.PriceSale) * Convert.ToInt32(item.Quantity)
+                };
+                view.Add(cartDetails);
+            }
+            return Ok(view);
+        }
+
+
         [HttpGet]
         [Route("GetById/{id}")]
         public async Task<IActionResult> GetCartDetailById(Guid id)

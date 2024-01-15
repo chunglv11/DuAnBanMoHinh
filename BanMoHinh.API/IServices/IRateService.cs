@@ -13,6 +13,6 @@ namespace BanMoHinh.API.IServices
         public Task<Rate> GetItem(Guid id);
         public Task<List<Rate>> GetListRatebyorderId(Guid orderId);
 
-        public Task<bool> Update(Guid id,Guid orderid, Rate rate);
+        public Task<bool> Update(Guid orderid, int star, string? comment);
     }
 }

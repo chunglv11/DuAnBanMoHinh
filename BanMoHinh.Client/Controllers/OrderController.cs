@@ -16,18 +16,51 @@ namespace BanMoHinh.Client.Controllers
 		{
 			_httpClient = httpClient;
 		}
-        public async Task<IActionResult> allOrder(Guid id, int? page)
+        public async Task<IActionResult> allOrder(Guid id, int? page,int status)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            var userIdClaim = identity.FindFirst(ClaimTypes.Name);
             if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
+            ViewBag.status = status;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = identity.FindFirst(ClaimTypes.Name);
             var userName = userIdClaim.Value;
             var getUserbyName = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{userName}");
             var listOrder = await _httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7007/api/order/getall");
-            var listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id);
-            int pageSize = 6;
-            int pageNumber = (page ?? 1);
+            var listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id).OrderByDescending(c=>c.Create_Date);
+            
+            if (status==-1)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+
+            }
+            if (status==0)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id).OrderByDescending(c => c.Create_Date);
+            }
+            if (status==1)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+            }
+            if (status==2)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+            }
+            if (status==3)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+            }
+            if (status==4)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+            }
+            if (status==5)
+            {
+                listorderbyUser = listOrder.Where(c => c.UserId == getUserbyName.Id&& c.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")).OrderByDescending(c => c.Create_Date);
+            }
+
             return View(listorderbyUser.ToPagedList(pageNumber, pageSize));
 
         }
