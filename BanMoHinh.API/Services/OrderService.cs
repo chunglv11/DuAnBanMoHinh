@@ -253,14 +253,26 @@ namespace BanMoHinh.API.Services
             
             foreach (var item in ranks)
             {
-                if (point >= item.PointsMin && point <= item.PoinsMax)
-                {
-                    var user = await _dbContext.Users.FirstOrDefaultAsync(c => c.RankId == item.Id);
+                  var user = await _dbContext.Users.FirstOrDefaultAsync(c => c.RankId == item.Id);
                         user.Points = point;
+                        if(user.Points >= 0 && user.Points <= 1000000)
+                        {
+                            var ranknamne = await _dbContext.Rank.FirstOrDefaultAsync(c => c.Name == "Bạc");
+                            user.RankId = ranknamne.Id;
+                        }else if(user.Points >= 2000001 && user.Points <= 30000000)
+                        {
+                            var ranknamne = await _dbContext.Rank.FirstOrDefaultAsync(c => c.Name == "Vàng");
+                            user.RankId = ranknamne.Id;
+                        }else if(user.Points >= 30000001 && user.Points <= 10000000)
+                        {
+                            var ranknamne = await _dbContext.Rank.FirstOrDefaultAsync(c => c.Name == "Kim Cương");
+                            user.RankId = ranknamne.Id;
+                        }
+                       
                     _dbContext.Users.Update(user);
                      await _dbContext.SaveChangesAsync();
                     return true;
-                }
+                
             }
         }
             return false;
@@ -301,7 +313,7 @@ namespace BanMoHinh.API.Services
                     }
 
                     update.Payment_Date ??= DateTime.Now;
-                    update.Ship_Date ??= DateTime.Now;
+                    update.Delivery_Date ??= DateTime.Now;
                 }
 
                 update.OrderStatusId = idtrangThai;
@@ -334,18 +346,18 @@ namespace BanMoHinh.API.Services
                 {
                     hd.OrderStatusId = Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
                     hd.UserId = idNhanVien;
-                    hd.Ship_Date = DateTime.Now;
+                    hd.Delivery_Date = DateTime.Now;
                     hd.Payment_Date = DateTime.Now;
                     _dbContext.Order.Update(hd);
                     _dbContext.SaveChanges(); // Chờ đợi lưu thay đổi vào cơ sở dữ liệu
 
-                    //Cộng tích điểm cho khách
-                    //var kh = await _dbContext.Users.FirstOrDefaultAsync(c => c.Id == idNhanVien);
-                    //if (kh != null)
-                    //{
-                    //    kh.Points += Convert.ToInt32(hd.TotalAmout);
-                    //    UpdateRank(kh.Points);
-                    //}
+                   // Cộng tích điểm cho khách
+                    var kh =  _dbContext.Users.FirstOrDefault(c => c.Id == idNhanVien);
+                    if (kh != null)
+                    {
+                        kh.Points += Convert.ToInt32(hd.TotalAmout);
+                        UpdateRank(kh.Points);
+                    }
                     return true;
 
                 }

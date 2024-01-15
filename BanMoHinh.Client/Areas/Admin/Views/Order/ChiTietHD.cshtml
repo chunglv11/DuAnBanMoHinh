@@ -204,7 +204,7 @@
                     <a type="button"class="btn btn-primary fw-normal text-white" asp-area="Admin" asp-controller="Order" asp-action="DoiTrangThai" asp-route-idhd="@Model.ID" asp-route-trangthai="2">Xác nhận hóa đơn</a>
                 </div>
                 <div class="d-flex p-2">
-                    <a type="button" class="btn btn-danger fw-normal text-white" asp-area="Admin" asp-controller="Order" asp-action="HuyHD" asp-route-idhd="@Model.ID" asp-route-ghichu="@Model.Description">Hủy bỏ</a>
+                    <a type="button" class="btn btn-danger fw-normal text-white" onclick="huyDon('@Model.ID')">Hủy bỏ</a>
                 </div>
             }
             @if (@Model.TrangThaiGiaoHang == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
@@ -297,7 +297,7 @@
         var gc = $("#ghiChuinTTHD").val();
         console.log($("#ghiChuinTTHD").val())
         if (gc === '' || gc == '@Model.Description') {
-            toastr.error('Vui lòng nhập ghi chú hóa đơn', "Error Alert", { timeOut: 1000 });
+            toastr.error('Vui lòng nhập ghi chú hóa đơn', "Error Alert", { timeOut: 300 });
         } else {
             var ans = confirm("Bạn có chắc chắn hủy Hóa đơn này?");
             if (ans) {
@@ -312,7 +312,6 @@
                     contentType: 'application/json',
                     success: function (response) {
                         toastr.success(response.message, "Success Alert", { timeOut: 300 });
-                        billDetail(IDHD);
                     },
                     error: function (err) {
                         toastr.error('Thay đổi trạng thái thất bại', "Error Alert", { timeOut: 300 });

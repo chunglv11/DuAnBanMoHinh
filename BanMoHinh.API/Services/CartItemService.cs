@@ -40,12 +40,12 @@ namespace BanMoHinh.API.Services
 
 
         [HttpGet]
-        public async Task<bool> DeleteCartItem( Guid cartId)
+        public async Task<bool> DeleteCartItem( Guid CartId)
         {
             try
             {
-                var item =  await _dbContext.CartItem.FirstOrDefaultAsync(c => c.CartId == cartId);
-                _dbContext.CartItem.Remove(item);
+                var item =   _dbContext.CartItem.Where(c => c.CartId == CartId);
+                _dbContext.CartItem.RemoveRange(item);
                 await _dbContext.SaveChangesAsync();
                 return true;
 

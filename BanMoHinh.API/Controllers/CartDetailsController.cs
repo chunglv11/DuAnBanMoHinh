@@ -49,7 +49,7 @@ namespace BanMoHinh.API.Controllers
                 }
                 var prd = productDetails.FirstOrDefault(x => x.Id == item.ProductDetail_ID);
                 var pr = product.FirstOrDefault(x => x.Id == prd.ProductId);
-                var ha = productImage.FirstOrDefault(x => x.ProductDetailId == prd.Id);
+                var ha = productImage.First(x => x.ProductDetailId == prd.Id);
                 var cl = color.FirstOrDefault(x => x.ColorId == prd?.ColorId);
                 var ct = cate.FirstOrDefault(x => x.Id == pr.CategoryId);
                 var sz = size.FirstOrDefault(x => x.Id == prd.SizeId);

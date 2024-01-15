@@ -211,8 +211,9 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                             }
                         }
                     }
+                    ViewBag.ErrorMessage = "Ghi chú không được trống";
+
                 }
-                ViewBag.ErrorMessage = "Ghi chú không được trống";
                 return RedirectToAction("ShowList");
 
 

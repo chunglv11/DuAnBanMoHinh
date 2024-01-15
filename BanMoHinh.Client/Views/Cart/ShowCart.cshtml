@@ -15,6 +15,10 @@
     int checksz = 0; int checkcol = 0;
 }
 <style>
+    .error-message {
+        color: red;
+        font-weight: bold;
+    }
 
     .exceeded-message {
         background-color: #ffcccc; /* Màu nền đỏ */
@@ -39,15 +43,15 @@
         }
 
     .pro-quantity {
-    position: relative; /* Đặt vị trí của td thành relative */
-}
+        position: relative; /* Đặt vị trí của td thành relative */
+    }
 
-.input-group {
-    position: absolute; /* Đặt vị trí của input group bên trong td thành absolute */
-    top: 50%; /* Đưa input group lên giữa theo chiều cao của td */
-    left: 50%; /* Đưa input group vào giữa theo chiều rộng của td */
-    transform: translate(-50%, -50%); /* Dịch chuyển input group điều chỉnh vị trí chính xác */
-}
+    .input-group {
+        position: absolute; /* Đặt vị trí của input group bên trong td thành absolute */
+        top: 50%; /* Đưa input group lên giữa theo chiều cao của td */
+        left: 50%; /* Đưa input group vào giữa theo chiều rộng của td */
+        transform: translate(-50%, -50%); /* Dịch chuyển input group điều chỉnh vị trí chính xác */
+    }
 
 </style>
 <!-- Start Banner Area -->
@@ -79,25 +83,26 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th >STT</th>
-                                <th >Sản phẩm</th>
-                                <th >Tên</th>
+                                <th>STT</th>
+                                <th>Sản phẩm</th>
+                                <th>Tên</th>
                                 <th>Biến thể</th>
                                 <th class="pro-quantity" style="width:180px">Số lượng</th>
                                 <th class="pro-price">Giá</th>
                                 <th class="pro-subtotal">Tổng</th>
-                                <th class="pro-remove"><button  onclick="clearCart()"><i class='bx bx-x bx-sm'></i></button></th>
+                                <th class="pro-remove"><a onclick="clearCart()"> <i class="bx bx-x-circle  bx-sm"></i> </a></th>
                             </tr>
                         </thead>
                         <tbody>
+
                             @{
                                 int stt = 0;
                                 foreach (var item in Model)
-                                { 
+                                {
                                     var checkSL = productDetailCheck.Where(c => c.Id == item.ProductDetail_Id && c.Quantity < item.Quantity).Count();
                                     var idProductDetail = item.ProductDetail_Id;
                                     stt++;
-                                   
+
 
                                     <tr>
                                         <td class="pro-quantity"><span>@stt</span></td>
@@ -107,22 +112,24 @@
                                             </a>
                                         </td>
                                         <td class="pro-title custom-title-cart">
-                                            <a 
-                                               title="@item.ProductName" asp-action="Details" asp-route-id="Products"> @item.ProductName</a>
+                                            <a title="@item.ProductName" asp-action="Details" asp-route-id="Products"> @item.ProductName</a>
                                         </td>
                                         <td class="pro-quantity text-center">
-                                           <span>
+                                            <span>
                                                 @size.FirstOrDefault(c=>c.Id==item.SizeId).SizeName /  @color.FirstOrDefault(c=>c.ColorId == item.ColorsId).ColorName
                                             </span>
 
                                         </td>
-                                        @if (checkSL==1)
+                                        @if (checkSL == 1)
                                         {
                                             <td class="pro-quantity text-center" colspan="4">
-                                            <div class="exceeded-message">
-                                                <p>Sản phẩm vượt quá số lượng</p>
-                                                    <button class="btn btn-outline-danger" onclick="removeItem('@item.ProductDetail_Id')"><i class="bx bx-trash bx-sm"></i>Xoá bỏ</button>
-                                            </div>
+                                                <div class="exceeded-message">
+                                                    <p>Sản phẩm vượt quá số lượng</p>
+                                                    <a class="primary-btn custom-history-trash" onclick="removeItem('@item.ProductDetail_Id')">
+                                                        <i class="bx bx-trash bx-sm"></i> Hủy
+                                                    </a>
+                                                    \
+                                                </div>
                                             </td>
                                         }
                                         else
@@ -139,9 +146,9 @@
                                                             <button class="btn btn-light" onclick="CongSL('@idProductDetail')" type="button" id="button-plus-@idProductDetail">+</button>
                                                         </div>
                                                     </div>
-                                               </div>
+                                                </div>
                                             </td>
-                                            
+
                                             <td class="pro-subtotal">
                                                 @{
                                                     price = item.PriceSale;
@@ -154,12 +161,21 @@
                                                     total = item.PriceSale * item.Quantity;
                                                     totalAmount += total;
                                                 }
-                                                <span id="totalPrice-@idProductDetail">@total</span>
+                                                <span id="totalPrice-@idProductDetail">
+                                                    @String.Format("{0:n0}", total) VNĐ
+                                                </span>
                                             </td>
-                                            <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')"><i class='bx bx-x bx-sm'></i></button></td>
-                                        }      
+                                            <td class="pro-remove"><button onclick="removeItem('@item.ProductDetail_Id')" class="primary-btn custom-history-trash"> <i class="bx bx-trash bx-sm"></i> Xoá</button></td>
+                                        }
                                     </tr>
                                 }
+                            }
+                            @if (Model.Count() == 0)
+                            {
+
+                            <td class="pro-price" colspan="8">
+                                <h3 class="error-message">Giỏ hàng trống!</h3>
+                            </td>
                             }
                         </tbody>
                     </table>
@@ -178,19 +194,33 @@
                                 </div>
                             </div>
                             <div class="checkout_btn_inner mt-3">
-                                @if (productDetailCheck.Count!=0)
+                                @if (productDetailCheck.Count != 0)
                                 {
 
                                     <button class="btn btn-secondary" asp-controller="Bill" asp-action="Checkout" disabled="disabled">Tiến hành thanh toán</button>
 
-
                                 }
                                 else
                                 {
+                                    if (totalAmount > 1000000000)
+                                    {
 
-                                    <a class="primary-btn" asp-controller="Bill" asp-action="Checkout">Tiến hành thanh toán</a>
+                                        <button class="btn btn-secondary" asp-controller="Bill" asp-action="Checkout" disabled="disabled">Tiến hành thanh toán</button>
+                                        <p class="error-message">Tổng số tiền cần thanh toán vượt quá 1 tỷ. Vui lòng giảm bớt sản phẩm để tiếp tục thanh toán! .</p>
+                                    }
+                                    else if (totalAmount == 0)
+                                    {
+
+                                        <button class="btn btn-secondary" asp-controller="Bill" asp-action="Checkout" disabled="disabled">Tiến hành thanh toán</button>
+                                    }
+
+                                    else
+                                    {
+                                        <a class="primary-btn" asp-controller="Bill" asp-action="Checkout">Tiến hành thanh toán</a>
+
+                                    }
                                 }
-                                
+
                             </div>
                         </div>
                     </div>
@@ -212,6 +242,7 @@
                 if (result.status) {
                     alert(result.message);
                     // Xử lý các thao tác khác sau khi xóa giỏ hàng thành công
+                    location.reload();
                 } else {
                     alert(result.message);
                     location.reload();
@@ -298,4 +329,3 @@
     }
 
 </script>
-     
