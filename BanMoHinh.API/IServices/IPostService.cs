@@ -5,7 +5,7 @@ namespace BanMoHinh.API.IServices
 {
     public interface IPostService
     {
-        public Task<bool> Create(Post item);
+        public Task<bool> Create(PostVM item);
 
         public Task<bool> Delete(Guid id, Guid UserId);
 
@@ -13,6 +13,6 @@ namespace BanMoHinh.API.IServices
 
         public Task<Post> GetItem(Guid id);
 
-        public Task<bool> Update(Guid id,Guid UserId, Post item);
+        public Task<bool> Update(Guid id,Guid UserId, PostVM item);
     }
 }

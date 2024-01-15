@@ -1,6 +1,7 @@
 ﻿using BanMoHinh.API.Data;
 using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Intrinsics.Arm;
 
@@ -14,24 +15,45 @@ namespace BanMoHinh.API.Services
         {
             _dbContext = dbContext;
         }
-        public async Task<bool> Create(Post item)
+        public async Task<bool> Create(PostVM item)
         {
             try
             {
-                var post = new Post()
+                if (item.filecollection != null)//không null 
                 {
-                    UserId = item.UserId,
-                    Tittle = item.Tittle,
-                    TittleImage = item.TittleImage,
-                    Contents = item.Contents,
-                    CreateAt = item.CreateAt,
-                    UpdateAt = item.UpdateAt,
-                    Description = item.Description,
-                    Status = item.Status
-                };
-                await _dbContext.Posts.AddAsync(post);
-                await _dbContext.SaveChangesAsync();
-                return true;
+
+                    // Bỏ qua file này nếu đã xử lý
+                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/postimages");
+                        //create folder if not exist
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+                        string imgPath = Path.Combine(path, item.filecollection.FileName);
+                        using (var stream = new FileStream(imgPath, FileMode.Create))
+                        {
+                            await item.filecollection.CopyToAsync(stream);
+                        }
+
+
+
+                        var post = new Post()
+                        {
+                            Id = Guid.NewGuid(),
+                            UserId = item.UserId,
+                            Tittle = item.Tittle,
+                            TittleImage = "/postimages/" + item.filecollection.FileName,
+                            Contents = item.Contents,
+                            CreateAt = item.CreateAt,
+                            UpdateAt = item.UpdateAt,
+                            Description = item.Description,
+                            Status = item.Status
+                        };
+                        await _dbContext.Posts.AddAsync(post);
+                    await _dbContext.SaveChangesAsync();
+
+                    return true;
+
+                }
+                return false;
             }
             catch (Exception e)
             {
@@ -68,21 +90,37 @@ namespace BanMoHinh.API.Services
             return await _dbContext.Posts.FindAsync(id);
         }
 
-        public async Task<bool> Update(Guid id, Guid UserId, Post item)
+        public async Task<bool> Update(Guid id, Guid UserId, PostVM item)
         {
             try
             {
-                var postForcus = await _dbContext.Posts.FirstOrDefaultAsync(c => c.Id == id && c.UserId == UserId);
-                postForcus.Tittle = item.Tittle;
-                postForcus.TittleImage = item.TittleImage;
-                postForcus.Contents = item.Contents;
-                postForcus.CreateAt = item.CreateAt;
-                postForcus.UpdateAt = item.UpdateAt;
-                postForcus.Description = item.Description;
-                postForcus.Status = item.Status;
-                 _dbContext.Posts.Update(postForcus);
-                await _dbContext.SaveChangesAsync();
-                return true;
+                if (item.filecollection != null)//không null 
+                {
+
+                    // Bỏ qua file này nếu đã xử lý
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/postimages");
+                    //create folder if not exist
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    string imgPath = Path.Combine(path, item.filecollection.FileName);
+                    using (var stream = new FileStream(imgPath, FileMode.Create))
+                    {
+                        await item.filecollection.CopyToAsync(stream);
+                    }
+
+                    var postForcus = await _dbContext.Posts.FirstOrDefaultAsync(c => c.Id == id && c.UserId == UserId);
+                    postForcus.Tittle = item.Tittle;
+                    postForcus.TittleImage = "/postimages/" + item.filecollection.FileName;
+                    postForcus.Contents = item.Contents;
+                    postForcus.CreateAt = item.CreateAt;
+                    postForcus.UpdateAt = item.UpdateAt;
+                    postForcus.Description = item.Description;
+                    postForcus.Status = item.Status;
+                    _dbContext.Posts.Update(postForcus);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
             }
             catch (Exception e)
             {

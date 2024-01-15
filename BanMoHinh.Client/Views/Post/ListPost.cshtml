@@ -1,38 +1,39 @@
-﻿@model IEnumerable<BanMoHinh.Share.Models.Post>
+﻿@* @model IEnumerable<BanMoHinh.Share.ViewModels.PostVM>
+
+@{
+    ViewData["Title"] = "ListPost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="breadcrumb-ctn mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Bài Đăng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
 
 <div class="space-medium">
     <div class="container">
-        <div class="row">
-            <div class="isotope">
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 post-masonry ">
-                    @foreach (var item in Model)
-                    {
-                        <div class="post-block">
-                            <!-- post block -->
-                            <h3 class="post-title"><a href="#" class="title">@item.Tittle</a></h3>
-                            <div class="meta">
-                                <span class="meta-date">20 December 10, 2020</span>
-                                <span>|&nbsp; &nbsp;</span>
-                                <span class="meta-admin">By <a href="#" class="meta-title">Admin</a></span>
-                            </div>
-                            <div class="post-img">
-                                <a href="#" class="imghover">
-                                    <img src="@item.TittleImage" class="img-responsive">
-                                </a>
-                            </div>
-                            <div class="post-content">
-                                <p>
-                                    @item.Description.Substring(0, Math.Min(100, item.Description.Length));
-                                </p>
-                                <a href="#" class="btn-link"><center>ĐỌC THÊM </center></a>
-                            </div>
-                        </div>
-                    }          
-                    
-                </div>
-            </div>
+         <div class="row">
+             @foreach (var item in Model)
+             {
+                 
+  <div class="col-md-4">
+    <div class="thumbnail">
+      <a href="/Post/DetailPost/@item.Id">
+                                       <img class="d-block w-100" src="@(Configuration["BaseAddress"]+ item.TittleImage)">
+
+        <div class="caption">
+            <h6>@item.Tittle</h6>
+          <p>@item.Description</p>
         </div>
-        <div class="row">
+      </a>
+    </div>
+  </div>
+             }
             <div class="st-pagination">
                 <ul class="pagination">
                     <li><a href="#" aria-label="previous"><span aria-hidden="true">Trang trước</span></a></li>
@@ -44,4 +45,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
