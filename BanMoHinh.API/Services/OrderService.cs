@@ -80,13 +80,15 @@ namespace BanMoHinh.API.Services
             var lstDonMuaCT = await(from a in _dbContext.OrderItem
                                     where a.OrderId == idHoaDon
                                     join b in _dbContext.Order on a.OrderId equals b.Id
-                                    //join c in _dbContext.Rate on a.Id equals c.Id //ko hiểu sao thêm cái này lại trả về []
+                                    
                                     join d in _dbContext.ProductDetail on a.ProductDetailId equals d.Id
                                     join e in _dbContext.Size on d.SizeId equals e.Id
                                     join f in _dbContext.Colors on d.ColorId equals f.ColorId
                                     join g in _dbContext.Product on d.ProductId equals g.Id
                                     join x in _dbContext.Users on b.UserId equals x.Id
-                                    select new DonMuaChiTietVM()
+									join c in _dbContext.Rate on a.Id equals c.Id into rateJoin
+									from c in rateJoin.DefaultIfEmpty()
+									select new DonMuaChiTietVM()
                                     {
                                         ID = b.Id,
                                         NgayTao = b.Create_Date,
@@ -113,9 +115,9 @@ namespace BanMoHinh.API.Services
                                         HinhThucGiamGia = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Discount_Type,
                                         GiaTriVC = b.VoucherId == null ? null : (_dbContext.Voucher.FirstOrDefault(c => c.Id == b.VoucherId)).Value,
                                         TenNguoiDung = b.UserId == null ? null : (_dbContext.Users.FirstOrDefault(c => c.Id == b.UserId)).UserName,
+										TrangThaiDanhGia = c != null ? c.Status : 0
 
-
-                                    }).ToListAsync();
+									}).ToListAsync();
             return lstDonMuaCT;
         }
         public async Task<DonMuaChiTietVM> getAllDonMuaChiTiet1(Guid idhd)

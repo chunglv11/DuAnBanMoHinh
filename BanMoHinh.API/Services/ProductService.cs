@@ -172,9 +172,9 @@ namespace BanMoHinh.API.Services
                 idp.CategoryId = item.CategoryId;
                 idp.BrandId = item.BrandId;
                 idp.MaterialId = item.MaterialId;
-                idp.ProductName = item.ProductName;
-                idp.AvailableQuantity = item.AvailableQuantity;
-                idp.Create_At = item.Create_At;
+                //idp.ProductName = item.ProductName;
+                //idp.AvailableQuantity = item.AvailableQuantity;
+                //idp.Create_At = item.Create_At;
                 idp.Update_At = item.Update_At;
                 idp.Description = item.Description;
                 idp.Long_Description = item.Long_Description;

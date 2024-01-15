@@ -56,9 +56,9 @@ namespace BanMoHinh.API.Controllers
             return Ok("Lỗi!");
         }
         [HttpPut("update-rate-{id}")]
-        public async Task<ActionResult<Rate>> Put(Guid id, Rate rate, Guid orderid)
+        public async Task<ActionResult<Rate>> Put(Guid orderid, int star, string? comment)
         {
-            var result = await _rateService.Update(id, orderid, rate);
+            var result = await _rateService.Update(orderid, star, comment);
             if (result)
             {
                 return Ok("Đã sửa thành công");
