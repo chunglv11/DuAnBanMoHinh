@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Rotativa.AspNetCore;
 using Newtonsoft.Json.Linq;
+using BanMoHinh.Client.Services;
+using Microsoft.AspNet.Identity;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -32,25 +34,52 @@ namespace BanMoHinh.Client.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
-
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={id}");
-            var user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{identity.FindFirst(ClaimTypes.Name).Value}");
-            ViewData["user"] = user;
-            var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
-            var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
-            decimal? tongtien = 0;
-            int soluong = 0;
-            foreach (var item in listcartDetailbyIdCart)
+            if (User.Identity.IsAuthenticated)
             {
-                tongtien += item.PriceSale * item.Quantity;
-                soluong++;
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var getCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={id}");
+                var user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/get/{identity.FindFirst(ClaimTypes.Name).Value}");
+                ViewData["user"] = user;
+                var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
+                var listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id);
+                decimal? tongtien = 0;
+                int soluong = 0;
+                foreach (var item in listcartDetailbyIdCart)
+                {
+                    tongtien += item.PriceSale * item.Quantity;
+                    soluong++;
+                }
+                TempData["TongTien"] = tongtien.ToString();
+                TempData["SoLuong"] = soluong.ToString();
+                return View();
             }
-            TempData["TongTien"] = tongtien.ToString();
-            TempData["SoLuong"] = soluong.ToString();
-            return View();
+            else
+            {
+                var LstCartItem = SessionServices.GetCartItemFromSession(HttpContext.Session, "Cart");
+                var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/CartDetails/Get-cartItemViewFromLstCartItem", LstCartItem);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    var ViewCartDetails = JsonConvert.DeserializeObject<List<ViewCartDetails>>(responseData);
+                    // Lưu chuỗi JSON vào TempData
+                    ViewData["user"] = new User();
+                    decimal? tongtien = 0;
+                    int soluong = 0;
+                    foreach (var item in ViewCartDetails)
+                    {
+                        tongtien += item.PriceSale * item.Quantity;
+                        soluong++;
+                    }
+                    TempData["TongTien"] = tongtien.ToString();
+                    TempData["SoLuong"] = soluong.ToString();
+                    return View();
+                }
+                return BadRequest();
+            }
+           
         }
+
         [HttpPost]
         public async Task<string> CheckOut(Order hoaDon)    
         {
@@ -62,8 +91,16 @@ namespace BanMoHinh.Client.Controllers
                 // trừ sp trong database
                 // update mã giảm giá
                 // update rank kh sau khi nhận hàng
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                Guid userId = Guid.NewGuid();
+                if (User.Identity.IsAuthenticated)
+                {
+                    var identity = HttpContext.User.Identity as ClaimsIdentity;
+                     userId = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                }
+                else
+                {
+                    userId = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB");
+                }
                 var order = new OrderVM(); // tạo mới đối tượng order
                 order.Id = Guid.NewGuid();
                 order.UserId = userId;
@@ -100,33 +137,66 @@ namespace BanMoHinh.Client.Controllers
                         var updateSL = await _httpClient.GetAsync($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=false");
 
                         // - sửa trạng thái trong uservoucher  
+                        if (!User.Identity.IsAuthenticated)
+                        {
+                            var updateStatus = await _httpClient.GetAsync($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
 
-                        var updateStatus = await _httpClient.GetAsync($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
+                        }
 
                     }
                     var OrderJson = JsonConvert.SerializeObject(order);
                     // Lưu chuỗi JSON vào TempData
                     TempData["Order"] = OrderJson;
                     // get cart
-                    var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userId}");
-                    // get cartitem
-                    var myCartId = MyCart.Id;
-                    var GetItemMyCart = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={myCartId}");
-                    foreach (var item in GetItemMyCart)
+                    if (User.Identity.IsAuthenticated)
                     {
-                        var orderItem = new OrderItemVM()// tạo order item
+                        var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userId}");
+                        // get cartitem
+                        var myCartId = MyCart.Id;
+                        var GetItemMyCart = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={myCartId}");
+                        foreach (var item in GetItemMyCart)
                         {
-                            Id = Guid.NewGuid(),
-                            OrderId = order.Id,
-                            ProductDetailId = item.ProductDetail_ID,
-                            Quantity = item.Quantity,
-                            Price = item.Price
-                        };
-                        var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
-                        var responseDeleteCartItem = await _httpClient.DeleteAsync($"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={myCartId}");// xoá sp trong cart
-                        var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                            var orderItem = new OrderItemVM()// tạo order item
+                            {
+                                Id = Guid.NewGuid(),
+                                OrderId = order.Id,
+                                ProductDetailId = item.ProductDetail_ID,
+                                Quantity = item.Quantity,
+                                Price = item.Price
+                            };
+                            var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
+                            var responseDeleteCartItem = await _httpClient.DeleteAsync($"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={myCartId}");// xoá sp trong cart
+                            var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                        }
+                        // trừ số lượng sp trong db
                     }
-                    // trừ số lượng sp trong db
+                    else // không đăng nhập
+                    {
+                        var lstCartItem = SessionServices.GetCartItemFromSession(HttpContext.Session, "Cart");
+                        // tạo orderItem
+                        foreach (var item in lstCartItem)
+                        {
+                            var orderItem = new OrderItemVM()// tạo order item
+                            {
+                                Id = Guid.NewGuid(),
+                                OrderId = order.Id,
+                                ProductDetailId = item.ProductDetail_ID,
+                                Quantity = item.Quantity,
+                                Price = item.Price
+                            };
+                            var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
+                            var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                        }
+
+                        // xoá sp trong cart session
+                        for (int i = lstCartItem.Count - 1; i >= 0; i--)
+                        {
+                            lstCartItem.RemoveAt(i);
+                        }
+
+                        SessionServices.SetCartItemToSession(HttpContext.Session, "Cart", lstCartItem);
+                        
+                    }
                     var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                     if (!updateSLSPfromDb.IsSuccessStatusCode)
                     {
@@ -134,7 +204,7 @@ namespace BanMoHinh.Client.Controllers
                     }
                     if (hoaDon.PaymentType == "COD")
                     {
-                        return "https://localhost:7095/Bill/CheckOutSuccess";
+                        return $"https://localhost:7095/Bill/CheckOutSuccess?orderid={order.Id}";
                     }
                     else
                     {
@@ -272,7 +342,7 @@ namespace BanMoHinh.Client.Controllers
                             var responses = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={idhd}&StatusId={DaThanhToanStatus}");
                             if (responses.IsSuccessStatusCode)
                             {
-                                return RedirectToAction("OK"); // trang return thành công
+                                return Redirect($"/Bill/CheckOutSuccess?orderid={idhd}");
                             }
                         }
                     }
@@ -337,19 +407,12 @@ namespace BanMoHinh.Client.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> CheckOutSuccessAsync()
+        public async Task<IActionResult> CheckOutSuccessAsync(Guid orderid)
         {
             try
             {
-                var getColor = await _httpClient.GetFromJsonAsync<List<Colors>>("https://localhost:7007/api/color/get-all-Color");
-                var getSize = await _httpClient.GetFromJsonAsync<List<Size>>("https://localhost:7007/api/size/get-all-size");
-                ViewData["color"] = getColor;
-                ViewData["size"] = getSize;
-                var Cart = JsonConvert.DeserializeObject<List<ViewCartDetails>>(TempData.Peek("Cart") as string);
-                var Order = JsonConvert.DeserializeObject<OrderVM>(TempData.Peek("Order") as string);
-                ViewData["Cart"] = Cart;
-                ViewData["Order"] = Order;
-                return View();
+                var BillCT = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetQLHDWithDetails?orderId={orderid}");
+                return View(BillCT);
             }
             catch
             {

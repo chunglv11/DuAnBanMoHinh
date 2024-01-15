@@ -399,8 +399,10 @@
 			success: function (response) {
 				// Xử lý kết quả trả về sau khi thêm vào giỏ hàng thành công
 				if (response.status) {
+					location.reload();
 					alert(response.message);
 				} else {
+					location.reload();
 					alert(response.message);
 				}
 			},

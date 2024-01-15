@@ -18,25 +18,26 @@ namespace BanMoHinh.API.Data
         {
 
             base.OnModelCreating(builder);
-
             Create(builder);
-
         }
         private void Create(ModelBuilder builder)
         {
+
             builder.Entity<Role>().HasData(
-                    new Role() { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" },
+                    new Role() { Id = Guid.Parse("2FA6148D-B530-421F-878E-CE1D54BFC6AB"), Name = "Admin", NormalizedName = "ADMIN" },
                     new Role() { Id = Guid.NewGuid(), Name = "User", NormalizedName = "USER" },
-                    new Role() { Id = Guid.NewGuid(), Name = "Guest", NormalizedName = "GUEST" }
+                    new Role() { Id = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB") , Name = "Guest", NormalizedName = "GUEST" }
                 ); 
-        
+            builder.Entity<User>().HasData(
+                    new User() { Id = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB") ,Points=0,UserName="Guest",AccessFailedCount=0,RankId= Guid.Parse("2FA0118D-B530-421F-878E-CE4D54BFC6AB") ,LockoutEnabled=true,TwoFactorEnabled=false,PhoneNumberConfirmed=false,EmailConfirmed=false,NormalizedUserName="GUEST"}
+                ); 
+            
             builder.Entity<Material>().HasData(
-                new Material() { Id = Guid.NewGuid(), MaterialName = "Sắt"},
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Nhựa pvc"},
                 new Material() { Id = Guid.NewGuid(), MaterialName = "Gỗ"}
             );
             builder.Entity<Rank>().HasData(
-                new Rank() { Id = Guid.NewGuid(), Name = "Bạc", PointsMin = 0,PoinsMax = 1000000},
+                new Rank() { Id = Guid.Parse("2FA0118D-B530-421F-878E-CE4D54BFC6AB"), Name = "Bạc", PointsMin = 0,PoinsMax = 1000000},
                 new Rank() { Id = Guid.NewGuid(), Name = "Vàng", PointsMin = 1000001, PoinsMax =  3000000},
                 new Rank() { Id = Guid.NewGuid(), Name = "Kim Cương", PointsMin = 3000001, PoinsMax = 10000000 }
             );

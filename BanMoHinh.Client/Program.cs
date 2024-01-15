@@ -9,16 +9,18 @@ builder.Services.AddControllersWithViews();
 
 // add Dependency Injection
 builder.Services.AddHttpClient();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian timeout của session
+    options.Cookie.HttpOnly = true; // Chỉ cho phép HTTP truy cập cookie
+    options.Cookie.IsEssential = true; // Đặt cookie là cần thiết cho hoạt động của ứng dụng
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IproductDetailApiClient, ProductDetailApiClient>();
-builder.Services.AddSession();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
-});
 // add authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
    .AddCookie(options =>
