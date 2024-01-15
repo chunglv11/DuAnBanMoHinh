@@ -71,17 +71,14 @@ namespace BanMoHinh.API.Services
             return rates;
         }
 
-        public async Task<bool> Update(Guid id,Guid orderid, Rate rate)
+        public async Task<bool> Update(Guid orderid, int star, string? comment)
         {
             try
             {
-                var rates = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == id&&c.OrderItemId == orderid);
-
-                rates.OrderItemId = orderid;
-                rates.ImageUrl = rate.ImageUrl;
-                rates.Reply = rate.Reply;
-                rates.Content = rate.Content;
-                rates.Rating = rate.Rating;
+                var rates = await _dbContext.Rate.FirstOrDefaultAsync(c => c.Id == orderid);
+                rates.Content = comment;
+                rates.Rating = star;
+                rates.Status = 1;
                 _dbContext.Rate.Update(rates);
                 await _dbContext.SaveChangesAsync();
                 return true;

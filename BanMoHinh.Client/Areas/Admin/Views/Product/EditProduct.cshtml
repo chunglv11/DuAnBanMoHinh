@@ -21,7 +21,6 @@
             <div class="form-group">
                 <label class="control-label">Danh mục</label>
                 <select asp-for="CategoryId" class="form-control">
-                    <option>--Chọn danh mục--</option>
                     @foreach (var type in proCategory)
                     {
                         <option value="@type.Id">@type.CategoryName</option>
@@ -32,7 +31,6 @@
             <div class="form-group">
                 <label  class="control-label">Nhãn sản xuất</label>
                 <select asp-for="BrandId" class="form-control">
-                    <option>--Chọn nhãn sản xuất--</option>
                     @foreach (var type in proBrand)
                     {
                         <option value="@type.Id">@type.BrandName</option>
@@ -41,9 +39,8 @@
                 <span asp-validation-for="BrandId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label  class="control-label">Chất liệu</label>
+                <label class="control-label">Chất liệu</label>
                 <select asp-for="MaterialId" class="form-control">
-                    <option>--Chọn chất liệu--</option>
                     @foreach (var type in proMaterial)
                     {
                         <option value="@type.Id">@type.MaterialName</option>
@@ -52,29 +49,9 @@
                 <span asp-validation-for="MaterialId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label  class="control-label">Tên sản phẩm</label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label  class="control-label">Tổng số lượng</label>
-                <input asp-for="AvailableQuantity" class="form-control" />
-                <span asp-validation-for="AvailableQuantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Ngày nhập</label>
-                <input asp-for="Create_At" class="form-control" />
-                <span asp-validation-for="Create_At" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label  class="control-label">Ngày cập nhật</label>
-                <input asp-for="Update_At" class="form-control" />
-                <span asp-validation-for="Update_At" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label class="control-label">Mô tả</label>
                 <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <span class="text-danger">@ViewData["Null"]</span>
             </div>
             <div class="form-group">
                 <label class="control-label">Mô tả chi tiết</label>
@@ -89,16 +66,16 @@
 
                     </script>
                 </div>
-                <span asp-validation-for="Long_Description" class="text-danger"></span>
+                <span class="text-danger">@ViewData["Null"]</span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label class="control-label">Trạng thái</label>
                 <select asp-for="Status" class="form-select">
                     <option value="true" selected>Đang hoạt động</option>
                     <option value="false">Ngưng hoạt động</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <button class="btn btn-success m-1" type="submit" >Cập nhật</button>
                 <a class="btn btn-secondary" asp-action="GetAllProduct" >Quay lại</a>

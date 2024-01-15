@@ -15,31 +15,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             _httpClient = httpClient;
         }
-        //loại bỏ thẻ html
-        //private string RemoveHtmlTags(string html)
-        //{
-        //    var doc = new HtmlDocument();
-        //    doc.LoadHtml(html);
-
-        //    return doc.DocumentNode.InnerText;
-        //}
-        //public string ReplaceUnicodeCharacters(string input)
-        //{
-        //    if (string.IsNullOrEmpty(input))
-        //    {
-        //        return input;
-        //    }
-
-        //    string normalized = input.Normalize(NormalizationForm.FormKD);
-        //    Encoding removal = Encoding.GetEncoding(Encoding.UTF8.CodePage,
-        //                                            new EncoderReplacementFallback(""),
-        //                                            new DecoderReplacementFallback(""));
-        //    byte[] bytes = removal.GetBytes(normalized);
-        //    string asciiString = Encoding.UTF8.GetString(bytes);
-
-        //    // Giải mã ký tự HTML
-        //    return HttpUtility.HtmlDecode(asciiString);
-        //}
+        
         // GET: ProductController
         public async Task<IActionResult> GetAllProduct()
         {
@@ -53,12 +29,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
             return View(allproduct);
         }
-
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+    
 
         // GET: ProductController/Create
         public async Task<IActionResult> CreateProduct()
@@ -66,7 +37,6 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
             var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
             var productMaterial = await _httpClient.GetFromJsonAsync<List<Material>>("https://localhost:7007/api/Material/getall");
-
             ViewData["productCategory"] = productCategory;
             ViewData["productBrand"] = productBrand;
             ViewData["productMaterial"] = productMaterial;
@@ -81,14 +51,32 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             try
             {
+                var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
+                var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
+                var productMaterial = await _httpClient.GetFromJsonAsync<List<Material>>("https://localhost:7007/api/Material/getall");
+                ViewData["productCategory"] = productCategory;
+                ViewData["productBrand"] = productBrand;
+                ViewData["productMaterial"] = productMaterial;
+                if (pro.ProductName == null || pro.Description == null || pro.Long_Description == null)
+                {
+                    ViewData["Null"] = "Không được để trống";
+                }
+                var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
+                if (pro.Category != null || pro.BrandId != null || pro.MaterialId != null || pro.ProductName != null || pro.Description != null || pro.Long_Description != null)
+                {
+                    var timkiem = allproduct.FirstOrDefault(x => x.ProductName.Trim().ToLower() == pro.ProductName.Trim().ToLower());
+                    if (timkiem != null)
+                    {
+                        ViewData["Name"] = "Đã có sản phẩm này";
+                        return View();
+                    }
+                    
+                }
                 pro.Status = true;
                 pro.Long_Description = edit;
                 pro.Create_At = DateTime.Now;
                 pro.AvailableQuantity = 0;
                 pro.Update_At = null;
-                //pro.Long_Description = RemoveHtmlTags(edit);
-                //pro.Long_Description = ReplaceUnicodeCharacters(pro.Long_Description);
-                pro.Long_Description = HttpUtility.HtmlDecode(pro.Long_Description);
                 var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
                 if (createpro.IsSuccessStatusCode)
                 {
@@ -101,21 +89,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> DetailProDuct(Guid id)
-        {
-            var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
-            var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
-            var productMaterial = await _httpClient.GetFromJsonAsync<List<Material>>("https://localhost:7007/api/Material/getall");
-
-            ViewData["productCategory"] = productCategory;
-            ViewData["productBrand"] = productBrand;
-            ViewData["productMaterial"] = productMaterial;
-
-            var result = await _httpClient.GetFromJsonAsync<Product>($"https://localhost:7007/api/product/get-{id}");
-
-            return View(result);
-        }
-        // GET: ProductController/Edit/5
+        
         public async Task<IActionResult> EditProduct(Guid id)
         {
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
@@ -137,7 +111,20 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             try
             {
+                var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");
+                var productBrand = await _httpClient.GetFromJsonAsync<List<Brand>>("https://localhost:7007/api/brand/getall");
+                var productMaterial = await _httpClient.GetFromJsonAsync<List<Material>>("https://localhost:7007/api/Material/getall");
+                ViewData["productCategory"] = productCategory;
+                ViewData["productBrand"] = productBrand;
+                ViewData["productMaterial"] = productMaterial;
+                if (pro.Description == null || pro.Long_Description == null)
+                {
+                    ViewData["Null"] = "Không được để trống";
+                    return View();
+                }
                 pro.Long_Description = edit;
+                pro.Update_At = DateTime.Now;
+                pro.Status = true;
                 var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/product/update-product-{pro.Id}", pro);
                 return RedirectToAction("GetAllProduct");
             }

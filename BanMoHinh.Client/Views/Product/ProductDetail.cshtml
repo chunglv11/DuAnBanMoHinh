@@ -408,7 +408,12 @@
 			},
 			error: function () {
 				// Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu AJAX
-				alert("Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng thử lại sau.");
+				Swal.fire({
+					title: 'Lỗi!',
+					text: 'Đã xảy ra lỗi khi thực hiện thao tác. Vui lòng thử lại sau.',
+					icon: 'error',
+					confirmButtonText: 'Đóng'
+				});
 			}
 		});
 	}
