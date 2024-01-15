@@ -165,11 +165,8 @@ namespace BanMoHinh.Client.Services
             requestContent.Add(new StringContent(request.ColorId.ToString()), "colorid");
             requestContent.Add(new StringContent(request.SizeId.ToString()), "sizeid");
             requestContent.Add(new StringContent(request.Quantity.ToString()), "quantity");
-            requestContent.Add(new StringContent(request.Price.ToString()), "price");
             requestContent.Add(new StringContent(request.PriceSale.ToString()), "pricesale");
-            requestContent.Add(new StringContent(request.Update_At.ToString()), "update_At");
             requestContent.Add(new StringContent(request.Description.ToString()), "description");
-            requestContent.Add(new StringContent(request.Status.ToString()), "status");
             if (request.filecollection != null)
             {
                 foreach (var file in request.filecollection)

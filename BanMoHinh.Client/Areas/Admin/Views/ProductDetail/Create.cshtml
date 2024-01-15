@@ -56,9 +56,9 @@ figcaption{
                 <label class="control-label">Tên sản phẩm</label>
                 @{
                     <select name="productId" onchange="this.value;" asp-items="@ViewBag.ProductProp" class="form-control">
-                    <option>--Chọn sản phẩm--</option>
+                   
                 </select>
-                <span asp-validation-for="ProductId" class="text-danger"></span>
+                
                 }
                 
             </div>
@@ -66,9 +66,9 @@ figcaption{
                 <label class="control-label">Tên size</label>
                 @{
                     <select name="sizeId" onchange="this.value;" asp-items="@ViewBag.Size" class="form-control">
-                    <option>--Chọn size--</option>
+                    
                 </select>
-                <span asp-validation-for="SizeId" class="text-danger"></span>
+               
                 }
                 
             </div>
@@ -76,21 +76,23 @@ figcaption{
                 <label class="control-label">Tên màu</label>
                 @{
                     <select name="colorId" onchange="this.value;" asp-items="@ViewBag.Color" class="form-control">
-                    <option>--Chọn màu--</option>
+                   
                 </select>
-                <span asp-validation-for="ColorId" class="text-danger"></span>
+                
                 }
                
             </div>
             <div class="form-group">
                 <label class="control-label">Số lượng</label>
                 <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
+               
+
             </div>
+            <span class="text-danger">@Html.ValidationMessage("QuantityMessage")</span>
             <div class="form-group">
                 <label class="control-label">Giá nhập</label>
                 <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <span class="text-danger">@TempData["NullMessage"]</span>
             </div>
             <div class="form-group">
                 <label class="control-label">Giá bán</label>
