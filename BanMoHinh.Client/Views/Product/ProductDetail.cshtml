@@ -399,19 +399,11 @@
 			success: function (response) {
 				// Xử lý kết quả trả về sau khi thêm vào giỏ hàng thành công
 				if (response.status) {
-					Swal.fire({
-						title: 'Thành công!',
-						text: response.message,
-						icon: 'success',
-						confirmButtonText: 'Đóng'
-					});
+					location.reload();
+					alert(response.message);
 				} else {
-					Swal.fire({
-						title: 'Lỗi!',
-						text: response.message,
-						icon: 'error',
-						confirmButtonText: 'Đóng'
-					});
+					location.reload();
+					alert(response.message);
 				}
 			},
 			error: function () {
