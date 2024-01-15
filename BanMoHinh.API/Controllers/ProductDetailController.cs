@@ -32,6 +32,11 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("GetAllAnhSanPham")]
+        public List<ProductImageVM> GetAllAnhSanPham(Guid idSanPham)
+        {
+            return _iproductDetailService.GetAllAnhSanPham(idSanPham);
+        }
         [HttpGet("get/{id}")]
         public async Task<ActionResult<ProductDetailVM>> Get(Guid id)
         {
@@ -66,7 +71,7 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
-        [HttpPatch("update-productdetail-{id}")]
+        [HttpPut("update-productdetail-{id}")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<ProductDetailVM>> Put(Guid id, [FromForm] ProductDetailVM obj)
         {

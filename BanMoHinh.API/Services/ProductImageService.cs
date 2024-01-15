@@ -19,11 +19,26 @@ namespace BanMoHinh.API.Services
         {
             try
             {
-                ProductImage productImage = new ProductImage()
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                // Tạo thư mục nếu nó chưa tồn tại
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                string imgPath = Path.Combine(path, item.ImageFile.FileName);
+
+                using (var stream = new FileStream(imgPath, FileMode.Create))
+                {
+                    await item.ImageFile.CopyToAsync(stream);
+                }
+
+                var productImage = new ProductImage()
                 {
                     Id = Guid.NewGuid(),
                     ProductDetailId = item.ProductDetailId,
-                    ImageUrl = item.ImageUrl,
+                    ImageUrl = "/images/" + item.ImageFile.FileName
                 };
                 await _dbContext.ProductImage.AddAsync(productImage);
                 await _dbContext.SaveChangesAsync();
@@ -78,9 +93,19 @@ namespace BanMoHinh.API.Services
             }
         }
 
-        public async Task<IEnumerable<ProductImage>> GetAll()
+        public async Task<IEnumerable<ProductImageVM>> GetAll()
         {
-            return await _dbContext.ProductImage.ToListAsync();
+            var lstim = from a in _dbContext.ProductImage
+                        join b in _dbContext.ProductDetail on a.ProductDetailId equals b.Id
+                        join c in _dbContext.Product on b.ProductId equals c.Id
+                        select new ProductImageVM()
+                        {
+                            Id = a.Id,
+                            ProductDetailId = b.Id,
+                            ProductName = c.ProductName,
+                            ImageUrl = a.ImageUrl
+                        };
+            return lstim.ToList();
         }
 
         public async Task<ProductImage> GetItem(Guid id)

@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Share.Models;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using BanMoHinh.Share.Models;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,15 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;
-        public ProductController(HttpClient httpClient)
+        public INotyfService _notyf;
+
+        public ProductController(HttpClient httpClient, INotyfService notyf)
         {
             _httpClient = httpClient;
+            _notyf = notyf;
         }
-        
+
+
         // GET: ProductController
         public async Task<IActionResult> GetAllProduct()
         {
@@ -57,35 +62,40 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 ViewData["productCategory"] = productCategory;
                 ViewData["productBrand"] = productBrand;
                 ViewData["productMaterial"] = productMaterial;
-                if (pro.ProductName == null || pro.Description == null || pro.Long_Description == null)
+                if (pro.Description == null ||  edit == null)
                 {
-                    ViewData["Null"] = "Không được để trống";
+                    _notyf.Warning("Không được để trống!");
                 }
                 var allproduct = await _httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7007/api/product/get-all-product");
-                if (pro.Category != null || pro.BrandId != null || pro.MaterialId != null || pro.ProductName != null || pro.Description != null || pro.Long_Description != null)
+                if ( pro.ProductName != null )
                 {
                     var timkiem = allproduct.FirstOrDefault(x => x.ProductName.Trim().ToLower() == pro.ProductName.Trim().ToLower());
                     if (timkiem != null)
                     {
-                        ViewData["Name"] = "Đã có sản phẩm này";
+                        _notyf.Warning("Đã có sản phẩm này!");
                         return View();
                     }
+                    else
+                    {
+                        pro.Status = true;
+                        pro.Long_Description = edit;
+                        pro.Create_At = DateTime.Now;
+                        pro.AvailableQuantity = 0;
+                        pro.Update_At = null;
+                        var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
+                        if (createpro.IsSuccessStatusCode)
+                        {
+                            _notyf.Success("Thêm thành công!");
+                            return RedirectToAction("GetAllProduct");
+                        }
+                    }
                     
-                }
-                pro.Status = true;
-                pro.Long_Description = edit;
-                pro.Create_At = DateTime.Now;
-                pro.AvailableQuantity = 0;
-                pro.Update_At = null;
-                var createpro = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/product/create-product", pro);
-                if (createpro.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("GetAllProduct");
                 }
                 return RedirectToAction("CreateProduct");
             }
             catch
             {
+                _notyf.Error("Lỗi!");
                 return View();
             }
         }
@@ -117,19 +127,28 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 ViewData["productCategory"] = productCategory;
                 ViewData["productBrand"] = productBrand;
                 ViewData["productMaterial"] = productMaterial;
-                if (pro.Description == null || pro.Long_Description == null)
+                if (pro.Description == null || edit == null)
                 {
-                    ViewData["Null"] = "Không được để trống";
-                    return View();
+                    _notyf.Warning("Không được để trống!");
+                    //return View(pro);
                 }
-                pro.Long_Description = edit;
-                pro.Update_At = DateTime.Now;
-                pro.Status = true;
-                var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/product/update-product-{pro.Id}", pro);
-                return RedirectToAction("GetAllProduct");
+                else
+                {
+                    pro.Long_Description = edit;
+                    pro.Update_At = DateTime.Now;
+                    pro.Status = true;
+                    var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/product/update-product-{pro.Id}", pro);
+                    if (result.IsSuccessStatusCode)
+                    {
+                        _notyf.Success("Sửa thành công!");
+                    }
+                    return RedirectToAction("GetAllProduct");
+                }
+                return View();
             }
             catch
             {
+                _notyf.Error("Lỗi!");
                 return View();
             }
         }

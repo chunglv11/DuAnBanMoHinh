@@ -208,7 +208,6 @@ namespace BanMoHinh.API.Services
             #endregion
 
         }
-
         public async Task<bool> Update(ProductDetailVM item)
         {
             // Tìm sản phẩm chi tiết theo Id
@@ -339,6 +338,25 @@ namespace BanMoHinh.API.Services
             catch (Exception e)
             {
                 return false;
+            }
+        }
+
+        public List<ProductImageVM> GetAllAnhSanPham(Guid idSanPham)
+        {
+            try
+            {
+                var lst = (from a in _dbContext.ProductImage.Where(x => x.ProductDetailId == idSanPham)
+                           select new ProductImageVM()
+                           {
+                               Id = a.Id,
+                               ProductDetailId = a.ProductDetailId,
+                               ImageUrl = a.ImageUrl
+                           }).ToList();
+                return lst;
+            }
+            catch
+            {
+                return new List<ProductImageVM>();
             }
         }
     }

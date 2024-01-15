@@ -1,4 +1,7 @@
-﻿using BanMoHinh.Client.IServices;
+﻿using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
+using BanMoHinh.Client.IServices;
 using BanMoHinh.Client.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -13,6 +16,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IproductDetailApiClient, ProductDetailApiClient>();
+builder.Services.AddScoped<INotyfService, NotyfService>();
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 3;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopRight;
+});
+// Add Notyf // Đây là thông báo
 builder.Services.AddSession();
 
 builder.Services.AddSession(options =>

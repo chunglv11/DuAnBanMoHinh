@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Client.IServices;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using BanMoHinh.Client.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,12 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
     {
         private IproductDetailApiClient _apiClient;
         private HttpClient _httpClient;
-        public ProductDetailController(IproductDetailApiClient iproductDetail, HttpClient httpClient)
+        public INotyfService _notyf;
+        public ProductDetailController(IproductDetailApiClient iproductDetail, HttpClient httpClient, INotyfService notyf)
         {
             _apiClient = iproductDetail;
             _httpClient = httpClient;
+            _notyf = notyf;
         }
 
         public async Task<IActionResult> Show()
@@ -55,7 +58,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ProductDetailVM product, Guid productId, Guid sizeId, Guid colorId)
+        public async Task<IActionResult> Create([FromForm] ProductDetailVM create, Guid productId, Guid sizeId, Guid colorId)
         {
             var productprops = _apiClient.GetListProduct();
             ViewBag.ProductProp = productprops.Result.Select(x => new SelectListItem()
@@ -78,32 +81,41 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 Value = x.ColorId.ToString(),
                 Selected = colorId.ToString() == x.ColorId.ToString()
             });
-            //if (product.Quantity == null || product.Price == null || product.PriceSale == null || product.Description == null || product.filecollection == null)
-            //{
-            //    ModelState.AddModelError("NullMessage", "Không được để trống");
-            //}
+            if (create.Quantity == null || create.PriceSale == null || create.Price == null || create.filecollection == null || create.Description == null)
+            {
+                _notyf.Warning("Không để trống");
+                return View(create);
+            }
+            if (create.Quantity <= 0 || create.Price < 0 || create.PriceSale < 0)
+            {
+                _notyf.Warning("Số lượng không âm");
+                return View(create);
+            }
+            if (create.Quantity > 3000)
+            {
+                _notyf.Warning("Số lượng vượt quá kho chứa");
+                return View(create);
+            }
+            if (create.PriceSale < create.Price )
+            {
+                _notyf.Warning("Giá bán phải lớn hơn giá nhập");
+                return View(create);
+            }
 
-            if (product.Quantity <= 0)
+            if (create.PriceSale > 2000000000 || create.PriceSale < 0)
             {
-                ModelState.AddModelError("QuantityMessage", "Nhập đúng số lượng");
+                _notyf.Warning("Kiểm tra lại giá bán :(");
+                return View(create);
             }
-            //if (product.Price > product.PriceSale)
-            //{
-            //    ViewBag.PriceMessage = "Giá nhập phải nhỏ hơn giá bán";
-            //}
-            //if (product.Price <0 || product.PriceSale <0)
-            //{
-            //    ViewBag.PrisalMessage = "Nhập đúng giá vào";
-            //}
-            product.Status = true;
-            product.Create_At = DateTime.Now;
-            
-            var result = await _apiClient.CreateProduct(product, productId, sizeId, colorId);
-            if (result)
+            create.Status = true;
+            create.Create_At = DateTime.Now;
+            var result = await _apiClient.CreateProduct(create, productId, sizeId, colorId);
+            if (result != null)
             {
-                ViewBag.SuccessMessage = "Tạo sản phẩm thành công!"; ViewBag.ErrorMessage = "Tạo sản phẩm thất bại!";
+                _notyf.Success("Thêm thành công!");
+                return RedirectToAction("Show");
             }
-            return Json(new { success = false, message = "Tạo sản phẩm thất bại!" });
+            return View();
 
         }
 
@@ -125,9 +137,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 Selected = colorId.ToString() == x.ColorId.ToString()
             });
             var response = await _apiClient.GetByIdProductDetail(id);
-            //var producti = await _httpClient.GetFromJsonAsync<List<ProductImage>>("https://localhost:7007/api/productimage/get-all-productimage");
-            var productImages = await _apiClient.GetListProI();
-            ViewBag.ProductImages = productImages;
+            var producti = await _httpClient.GetFromJsonAsync<List<ProductImageVM>>($"https://localhost:7007/api/productDetail/GetAllAnhSanPham?idSanPham={id}");
+            ViewData["ProductImage"] = producti;
             return View(response);
         }
 
@@ -149,27 +160,43 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                     Value = x.ColorId.ToString(),
                     Selected = colorId.ToString() == x.ColorId.ToString()
                 });
-                if (create.Quantity == null || create.PriceSale == null || create.Description == null || create.filecollection == null)
+                if (create.Quantity == null || create.PriceSale == null || create.Description == null || create.SizeId == null || create.ColorId == null)
                 {
-                    ViewBag.NullMessage = "Không được để trống";
+                    _notyf.Warning("Không để trống");
+                    return View(create);
                 }
                 if (create.Quantity <= 0)
                 {
-                    ViewBag.QuantityMessage = "Nhập đúng số lượng";
+                    _notyf.Warning("Số lượng không âm");
+                    return View(create);
                 }
-                //var producti = await _apiClient.GetListProI();
-                //ViewData["productImage"] = producti;
-                var productImages = await _apiClient.GetListProI();
-                ViewBag.ProductImages = productImages;
+                if (create.Quantity > 3000)
+                {
+                    _notyf.Warning("Số lượng vượt quá kho chứa");
+                    return View(create);
+                }
+                if (create.PriceSale < create.Price)
+                {
+                    _notyf.Warning("Giá bán phải lớn hơn giá nhập");
+                    return View(create);
+                }
+
+                if (create.PriceSale > 2000000000 || create.PriceSale <0)
+                {
+                    _notyf.Warning("Kiểm tra lại giá bán :(");
+                    return View(create);
+                }
+                create.Status = true;
+                create.Update_At = DateTime.Now;
                 var response = await _apiClient.UpdateProduct(create, sizeId, colorId);
                 
                 if (response)
                 {
+                    _notyf.Success("Sửa thành công");
                     return RedirectToAction("Show");
                 }
                 else
                 {
-                    //ModelState.AddModelError("", "Cập nhật sản phẩm thất bại");
                     return View();
                 }
 
@@ -201,7 +228,42 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
-        
+        public async Task<IActionResult> ShowProI(Guid IdPr)
+        {
+            try
+            {
+                var response = _httpClient.GetAsync($"https://localhost:7007/api/productDetail/GetAllAnhSanPham?idSanPham={IdPr}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var lstAnh = JsonConvert.DeserializeObject<List<ProductImageVM>>(response.Content.ReadAsStringAsync().Result);
+                    ViewData["IDSanPham"] = IdPr.ToString();
+                    return View("ShowProI", lstAnh.OrderBy(x => x.ImageUrl));
+                }
+                else return View("ShowProI", new List<ProductImageVM>());
+            }
+            catch
+            {
+                return View("ShowProI", new List<ProductImageVM>());
+            }
+        }
+        [HttpPost]
+        public IActionResult CreateImg(IFormFile file, string idSanPham)
+        {
+            var anh = new ProductImageVM() { Id = Guid.NewGuid(), ImageFile = file, ProductDetailId = new Guid(idSanPham)};
+       
+            var create =  _httpClient.PostAsJsonAsync("https://localhost:7007/api/productimage/create-productimage", anh).Result;
+
+            if (create.IsSuccessStatusCode)
+            {
+                _notyf.Success("Thêm thành công");
+                // Chuyển hướng và truyền IdPr trong URL
+                return RedirectToAction("ShowProI", new { idSanPham });
+            }
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> RemoveProI(Guid Id)
         {
         
@@ -209,11 +271,13 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return Json(new { success = true, message = "Xoá ảnh thành công!" });
+                _notyf.Success("Xoá thành công");
+                return RedirectToAction("Show");
             }
             else
             {
-                return Json(new { success = false, message = "Xoá ảnh thất bại!" });
+                _notyf.Error("Lỗi");
+                return View();
             }
         }
 

@@ -1,11 +1,11 @@
-﻿
-@model BanMoHinh.Share.ViewModels.ProductDetailVM
+﻿@using BanMoHinh.Share.Models
+@using BanMoHinh.Share.ViewModels
 
+@model BanMoHinh.Share.ViewModels.ProductDetailVM
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
-    HttpClient _httpClient = new HttpClient();
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
-    var a = ViewBag.Size;
-    var b = a;
+    List<ProductImageVM> ProductI = ViewData["ProductImage"] as List<ProductImageVM>;
 }
 <style>
     input[type="file"] {
@@ -61,39 +61,49 @@
             <div class="form-group">
                 <label class="control-label">Tên size</label>
                 @Html.DropDownList("SizeId", (IEnumerable<SelectListItem>)ViewBag.Size, "Chọn kích thước", new { @class = "form-control" })
-                <span asp-validation-for="SizeId" class="text-danger"></span>
+               
             </div>
             <div class="form-group">
                 <label class="control-label">Tên màu</label>
-                    @Html.DropDownList("ColorId", (IEnumerable<SelectListItem>)ViewBag.Color, "Chọn màu sắc", new { @class = "form-control" })
-                <span asp-validation-for="ColorId" class="text-danger"></span>
-                
+                    @Html.DropDownList("ColorId", (IEnumerable<SelectListItem>)ViewBag.Color, "Chọn màu sắc", new { @class = "form-control" })        
                
             </div>
             <div class="form-group">
                 <label class="control-label">Số lượng tồn</label>
                 <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
+               @*  <span asp-validation-for="Quantity" class="text-danger"></span> *@
+            </div>
+            <div class="form-group">
+                <label class="control-label">Giá nhập</label>
+                <input asp-for="Price" class="form-control" readonly />
             </div>
             <div class="form-group">
                 <label class="control-label">Giá bán</label>
                 <input asp-for="PriceSale" class="form-control" />
-                <span asp-validation-for="PriceSale" class="text-danger"></span>
+                @* <span asp-validation-for="PriceSale" class="text-danger"></span> *@
             </div>
           
             <div class="form-group">
                 <label class="control-label">Mô tả</label>
                 <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                @* <span asp-validation-for="Description" class="text-danger"></span> *@
             </div>
             <div class="form-group">
-                <input type="file" id="file-input"  asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
+                @foreach (var image in ProductI)
+                {
+                    <div>
+                        <img src="@(Configuration["BaseAddress"]+ image.ImageUrl)" alt="Ảnh sản phẩm" style="width: 100px; height: 100px; margin: 5px;">
+                        <button type="button" class="btn btn-danger" onclick="removeImage('@image.Id')">X</button>
+                    </div>
+                }
+                <input type="file" id="file-input" asp-for="filecollection" accept="image/*" onchange="preview()" multiple>
                 <label for="file-input">
                     <i class="fas fa-upload"></i> Chọn ảnh
                 </label>
                 <p id="num-of-files">Không có file nào</p>
-                <div id="images"></div>            
+                <div id="images"></div>
             </div>
+
          
            <div class="form-group">
                 <button class="btn btn-success m-1" type="submit" >Cập nhật</button>
@@ -103,10 +113,36 @@
     </div>
 </div>
 
- <!--Font Awesome Icons-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<!--Font Awesome Icons-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+<script>
+    function removeImage(imageId) {
+        if (confirm("Có chắc chắn xóa ảnh?")) {
+            var formData = new FormData();
+            formData.append("id", imageId);
+            var urlDeletePhoto = "@Url.Action("RemoveProI")";
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlDeletePhoto,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Làm mới trang sau khi xoá ảnh
+                    location.reload(true);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
+
+
 <script>
     let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
 </script>
@@ -163,36 +199,11 @@
         let numOfFiles = document.getElementById("num-of-files");
         numOfFiles.textContent = `${selectedImages.length} ảnh đã chọn`;
     }
+   
 </script>
 
-<script>
-    document.getElementById('product-form').addEventListener('submit', function (e) {
-        e.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
 
-        let formData = new FormData(this); // Sử dụng FormData của form hiện tại
 
-        // Thêm tất cả các file đã chọn vào formData
-        selectedImages.forEach((selectedImage, index) => {
-            formData.append('filecollection', selectedImage.file);
-        });
-
-        // Gửi formData đến server
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Xử lý kết quả trả về từ server
-                // if (data.success) {
-                //     alert(data.message); // Hiển thị thông báo thành công
-                window.location.href = '/Admin/ProductDetail/Show';
-            })
-            .catch(error => {
-                console.error(error); // Xử lý lỗi nếu có
-            });
-    });
-</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

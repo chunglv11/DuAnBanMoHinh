@@ -14,7 +14,7 @@ namespace BanMoHinh.API.IServices
         //public Task<bool> DeleteMany(List<> items);
 
         public Task<IEnumerable<ProductDetailVM>> GetAll();
-
+        List<ProductImageVM> GetAllAnhSanPham(Guid idSanPham);
         public Task<ProductDetailVM> GetItem(Guid id);
         public Task<bool> UpdateQuantityById(Guid productDetailId, int quantity);
         public Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int quantity);

@@ -44,7 +44,7 @@ namespace BanMoHinh.API.Controllers
             }
         }
         [HttpPost("create-productimage")]
-        public async Task<ActionResult<ProductImageVM>> Post([FromBody] ProductImageVM obj)
+        public async Task<ActionResult<ProductImageVM>> Post( ProductImageVM obj)
         {
             var result = await _iproductImageService.Create(obj);
             if (result)

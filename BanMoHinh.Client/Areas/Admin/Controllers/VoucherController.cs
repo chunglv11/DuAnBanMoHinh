@@ -106,7 +106,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 				ViewData["SuccessMessage"] = successMessage;
 				ViewData["ShowSuccessMessage"] = true;
 			}
-			return RedirectToAction("GetallVoucherRank");
+			return RedirectToAction("GetallVoucher");
         }
         
         public async Task<IActionResult> CreateVoucher()

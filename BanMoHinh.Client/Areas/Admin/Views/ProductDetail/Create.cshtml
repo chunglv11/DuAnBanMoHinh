@@ -88,23 +88,22 @@ figcaption{
                
 
             </div>
-            <span class="text-danger">@Html.ValidationMessage("QuantityMessage")</span>
             <div class="form-group">
                 <label class="control-label">Giá nhập</label>
                 <input asp-for="Price" class="form-control" />
-                <span class="text-danger">@TempData["NullMessage"]</span>
+
             </div>
             <div class="form-group">
                 <label class="control-label">Giá bán</label>
                 <input asp-for="PriceSale" class="form-control" />
-                <span asp-validation-for="PriceSale" class="text-danger"></span>
+               
             </div>
             
           
             <div class="form-group">
                 <label class="control-label">Mô tả</label>
                 <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+
             </div>
             
             <div class="form-group">
@@ -201,6 +200,7 @@ figcaption{
         // Thêm tất cả các file đã chọn vào formData
         selectedImages.forEach((selectedImage, index) => {
             formData.append('filecollection', selectedImage.file);
+            console.log("OK")
         });
 
         // Gửi formData đến server

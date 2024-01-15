@@ -214,7 +214,7 @@ namespace BanMoHinh.Client.Controllers
         public async Task<IActionResult> ListProductAsync(string? name, string? sortOrder, Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice, int? page)
         {
             if (page == null) page = 1;
-            int pageSize = 21;
+            int pageSize = 1;
             int pageNumber = (page ?? 1);
 
             var productCategory = await _httpClient.GetFromJsonAsync<List<Category>>("https://localhost:7007/api/Category/get-all-Category");

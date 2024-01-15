@@ -13,7 +13,7 @@ namespace BanMoHinh.API.IServices
 
         //public Task<bool> DeleteMany(List<> items);
 
-        public Task<IEnumerable<ProductImage>> GetAll();
+        public Task<IEnumerable<ProductImageVM>> GetAll();
 
         public Task<ProductImage> GetItem(Guid id);
 

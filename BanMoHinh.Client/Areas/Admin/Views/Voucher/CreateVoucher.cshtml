@@ -35,7 +35,7 @@
 			<div class="form-group">
 				<label for="SelectedRank">Rank</label>
 				<select id="SelectedRank" name="selectedRank" class="form-control">
-					@foreach (var rank in ranks)
+					@foreach (var rank in ranks.OrderBy(c=>c.PointsMin))
 					{
 						<option value="@rank.Name">@rank.Name</option>
 
