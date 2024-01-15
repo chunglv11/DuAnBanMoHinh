@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using X.PagedList;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
@@ -18,15 +19,87 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             _client = httpClient;
         }
         [HttpGet]
-        public async Task<IActionResult> ShowList()
+        public async Task<IActionResult> ShowList(int? page,int? status, int? datetype)
         {
+            if (page == null) page = 1;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            ViewBag.status = status;
+            ViewBag.datetype = datetype;
             var user = await _client.GetFromJsonAsync<List<UserViewModel>>("https://localhost:7007/api/users/getall");
             ViewData["User"] = user;
             string apiurl = "https://localhost:7007/api/order/getall";
             var response = await _client.GetAsync(apiurl);
             var data = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<Order>>(data);
-            return View(result);
+            var Lst = await _client.GetFromJsonAsync<List<Order>>(apiurl);
+            var LstOrder = Lst.Where(c => c.Id !=null);
+            if (status==1)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==2)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==3)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==4)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==5)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==6)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==7)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("7C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (status==8)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("8C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+             if (status==9)
+            {
+                LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
+            }
+            if (datetype==1)
+            {
+                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 1).ToList();
+            }
+              if (datetype==2)
+            {
+                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 2).ToList();
+            }
+              if (datetype==7)
+            {
+                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 7).ToList();
+            }
+              if (datetype==30)
+            {
+                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 30).ToList();
+            }
+
+            int totalItems = LstOrder.Count(); // Điều này có thể thay đổi tùy theo cách bạn lấy dữ liệu
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Kiểm tra nếu trang hiện tại lớn hơn tổng số trang, chuyển về trang 1
+            if (totalPages>0)
+            {
+                if (page > totalPages)
+                {
+                    return RedirectToAction("ShowList", new { page = 1, status, datetype });
+                }
+            }
+           
+            return View(LstOrder.ToPagedList(pageNumber, pageSize));
 
         }
 

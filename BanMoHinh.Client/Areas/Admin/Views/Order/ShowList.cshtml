@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BanMoHinh.Share.Models.Order>
+﻿@model X.PagedList.IPagedList<BanMoHinh.Share.Models.Order>
+@using X.PagedList.Mvc.Core;
+
 @using BanMoHinh.Share.Models;
 @using BanMoHinh.Share.ViewModels;
 
@@ -126,7 +128,16 @@
                     }
                 </tbody>
             </table>
-
+            <div class="col-lg-12 mt-3 p-3 pagin-history">
+                <div class="shadow-sm">
+                    <div class="pagin-left float-left font-weight-lighter mt-1">
+                        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    </div>
+                    <div class="pagin-right float-right">
+                        @Html.PagedListPager(Model, page => Url.Action("ShowList", new { page,status = ViewBag.status,datetype = ViewBag.datetype}))
+                    </div>
+                </div>
+            </div>
         </div>
   
     <div class="col-md-3" style="float:left">
@@ -134,18 +145,23 @@
             <div class="card-header">
                 <h5 class="card-title">Lọc theo trạng thái</h5>
             </div>
+            <div class="card-header">
+               <a href="/admin/order/showlist">Reset</a>
+            </div>
+
+            
             <div class="card-body">
                 <div class="btn-group-vertical" id="select-trangThai">
-                    <button type="button" class="btn btn-outline-primary btn-text">Tất cả</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Đang được xử lý</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Chờ lấy hàng</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Đang giao hàng</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Giao hàng thành công</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Giao hàng không thành công</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Hủy đơn</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Yêu cầu trả hàng</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Chấp nhận trả hàng</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Chờ Thanh toán</button>
+                        <a href="#" onclick="updateUrlAndReload('status', '0'); return false;" class="btn btn-outline-primary btn-text">Tất cả</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '1'); return false;" class="btn btn-outline-primary btn-text">Đang được xử lý</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '2'); return false;" class="btn btn-outline-primary btn-text">Chờ lấy hàng</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '3'); return false;" class="btn btn-outline-primary btn-text">Đang giao hàng</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '4'); return false;" class="btn btn-outline-primary btn-text">Giao hàng thành công</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '5'); return false;" class="btn btn-outline-primary btn-text">Giao hàng không thành công</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '6'); return false;" class="btn btn-outline-primary btn-text">Hủy đơn</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '7'); return false;" class="btn btn-outline-primary btn-text">Yêu cầu trả hàng</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '8'); return false;" class="btn btn-outline-primary btn-text">Chấp nhận trả hàng</a>
+                        <a href="#" onclick="updateUrlAndReload('status', '9'); return false;" class="btn btn-outline-primary btn-text">Chờ Thanh toán</a>
                 </div>
             </div>
         </div>
@@ -155,11 +171,11 @@
             </div>
             <div class="card-body">
                 <div class="btn-group-vertical" id="select-ngay">
-                    <button type="button" class="btn btn-outline-primary btn-text">Tất cả</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Hôm nay</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Hôm qua</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Tuần này</button>
-                    <button type="button" class="btn btn-outline-primary btn-text">Tháng này</
+                        <a href="#" onclick="updateUrlAndReload('datetype', '0'); return false;" class="btn btn-outline-primary btn-text">Tất cả</a>
+                        <a href="#" onclick="updateUrlAndReload('datetype', '1'); return false;" class="btn btn-outline-primary btn-text">Hôm nay</a>
+                        <a href="#" onclick="updateUrlAndReload('datetype', '2'); return false;" class="btn btn-outline-primary btn-text">2 ngày trước</a>
+                        <a href="#" onclick="updateUrlAndReload('datetype', '3'); return false;" class="btn btn-outline-primary btn-text">7 ngày trước</a>
+                        <a href="#" onclick="updateUrlAndReload('datetype', '4'); return false;" class="btn btn-outline-primary btn-text">30 ngày trước</a>
     </div>
 </div>
 <div class="modal fade" id="chitiethd" tabindex="-1">
@@ -167,12 +183,12 @@
         <div class="modal-content cthdcontent">
             <div class="modal-header">
                 <h5 class="modal-title fw-bold">Chi tiết hóa đơn</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body cthd-body">
             </div>
             @* <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>*@
         </div>
     </div>
@@ -180,8 +196,7 @@
     </div>
 </body>
 <script>
-       
-    function billDetail(idhd){
+     function billDetail(idhd){
         $(".cthd-body").load("/Order/ViewChiTietHD/" + idhd);
     $("#chitiethd").modal("show");console.log(idhd);
     }
@@ -194,6 +209,20 @@
         var url = "/Order/ShowList?input=" + input + "&type=" + type + "&trangthai=" + trangthai + "&bdau=" + bdau + "&ketthuc=" + ketthuc;
         window.location.href = url;
     }
+   function updateUrlAndReload(parameterName, parameterValue) {
+    var currentUrl = window.location.href;
+    var url = new URL(currentUrl);
+    url.searchParams.set(parameterName, parameterValue);
+    // Thêm giá trị của page vào URL
+    url.searchParams.set('page', getCurrentPageNumber());
+    window.location.href = url.toString();
+}
+
+function getCurrentPageNumber() {
+    // Lấy giá trị của page hiện tại từ URL
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('page') || '1'; // Nếu không có page trong URL, mặc định là 1
+}
 </script>
 
 
