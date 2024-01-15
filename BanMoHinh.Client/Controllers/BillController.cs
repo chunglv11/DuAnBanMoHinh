@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Rotativa.AspNetCore;
+using Newtonsoft.Json.Linq;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -106,7 +107,6 @@ namespace BanMoHinh.Client.Controllers
                     var OrderJson = JsonConvert.SerializeObject(order);
                     // Lưu chuỗi JSON vào TempData
                     TempData["Order"] = OrderJson;
-                    _orderId = order.Id;
                     // get cart
                     var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={userId}");
                     // get cartitem
@@ -140,7 +140,7 @@ namespace BanMoHinh.Client.Controllers
                     {
                         // tạo bill vào xoá giỏ hàng .... Bill có trạng thái là chờ thanh toán
 
-                        string vnp_Returnurl = "https://localhost:7095/Bill/PaymentCallBack"; //URL nhan ket qua tra ve 
+                        string vnp_Returnurl = $"https://localhost:7095/Bill/PaymentCallBack?idhd={order.Id}"; //URL nhan ket qua tra ve 
                         string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
                         string vnp_TmnCode = "IHE4U2JP"; //Ma định danh merchant kết nối (Terminal Id)
                         string vnp_HashSecret = "KGUFENFAPPMWXGAYUBTNECEYOYEWEPWR"; //Secret Key
@@ -184,8 +184,53 @@ namespace BanMoHinh.Client.Controllers
             }
 
         }
+        [HttpPost]
+        public async Task<string> ContinueCheckOut(Guid idhd)
+        {
+            try
+            {
+                HttpContext.Session.SetString("orderid", idhd.ToString());
+                var order = await _httpClient.GetFromJsonAsync<Order>($"https://localhost:7007/api/order/get-{idhd}");
+                string vnp_Returnurl = $"https://localhost:7095/Bill/PaymentCallBack?idhd={idhd}"; //URL nhan ket qua tra ve 
+                string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
+                string vnp_TmnCode = "IHE4U2JP"; //Ma định danh merchant kết nối (Terminal Id)
+                string vnp_HashSecret = "KGUFENFAPPMWXGAYUBTNECEYOYEWEPWR"; //Secret Key
+                string ipAddr = HttpContext.Connection.RemoteIpAddress?.ToString();
+                //Get payment input
+                //Save order to db
+                //Build URL for VNPAY
+                string amountString = (order.TotalAmout * 100)?.ToString("0");
+                VnPayLibrary vnpay = new VnPayLibrary();
+                vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+                vnpay.AddRequestData("vnp_Command", "pay");
+                vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                vnpay.AddRequestData("vnp_Amount", amountString);
+                vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                vnpay.AddRequestData("vnp_CurrCode", "VND");
+                vnpay.AddRequestData("vnp_IpAddr", ipAddr);
+                vnpay.AddRequestData("vnp_Locale", "vn");
+                vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + order.OrderCode);
+                vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
+                vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+                vnpay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+                                                                                   //Add Params of 2.1.0 Version
+                                                                                   //Billing
+                string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+                //log.InfoFormat("VNPAY URL: {0}", paymentUrl);
+                return paymentUrl;
+
+
+            }
+            catch (Exception)
+            {
+                return "";
+                throw;
+            }
+            
+        }
+
         [HttpGet]
-        public async Task<IActionResult> PaymentCallBackAsync()
+        public async Task<IActionResult> PaymentCallBackAsync(Guid idhd)
         {
             try
             {
@@ -224,10 +269,10 @@ namespace BanMoHinh.Client.Controllers
                         {
                             Guid DaThanhToanStatus= Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");// đã thanh toán
                             // change status
-                            var responses = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={_orderId}&StatusId={DaThanhToanStatus}");
+                            var responses = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={idhd}&StatusId={DaThanhToanStatus}");
                             if (responses.IsSuccessStatusCode)
                             {
-                                return RedirectToAction("CheckOutSuccess"); // trang return thành công
+                                return RedirectToAction("OK"); // trang return thành công
                             }
                         }
                     }
@@ -239,8 +284,7 @@ namespace BanMoHinh.Client.Controllers
                 return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
         }
-
-
+        
         [HttpGet]
         public async Task<JsonResult> UseVoucher(string ma, int tongTien)
         {
