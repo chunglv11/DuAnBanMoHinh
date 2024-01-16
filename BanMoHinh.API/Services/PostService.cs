@@ -90,7 +90,7 @@ namespace BanMoHinh.API.Services
             return await _dbContext.Posts.FindAsync(id);
         }
 
-        public async Task<bool> Update(Guid id, Guid UserId, PostVM item)
+        public async Task<bool> Update( PostVM item)
         {
             try
             {
@@ -108,8 +108,9 @@ namespace BanMoHinh.API.Services
                         await item.filecollection.CopyToAsync(stream);
                     }
 
-                    var postForcus = await _dbContext.Posts.FirstOrDefaultAsync(c => c.Id == id && c.UserId == UserId);
+                    var postForcus = await _dbContext.Posts.FirstOrDefaultAsync(c => c.Id == item.Id);
                     postForcus.Tittle = item.Tittle;
+                    //postForcus.UserId = item.UserId; // không sửa người tạo
                     postForcus.TittleImage = "/postimages/" + item.filecollection.FileName;
                     postForcus.Contents = item.Contents;
                     postForcus.CreateAt = item.CreateAt;

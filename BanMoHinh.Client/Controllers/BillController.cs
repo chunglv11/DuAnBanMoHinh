@@ -382,11 +382,11 @@ namespace BanMoHinh.Client.Controllers
                                     {
                                             if (GetVoucher.Quantity > 0)
                                         {
-                                            if (GetVoucher.Minimum_order_value < tongTien)
+                                            if (GetVoucher.Minimum_order_value <= tongTien)
                                             {
                                                 return Json(new { HinhThuc = GetVoucher.Discount_Type, GiaTri = GetVoucher.Value,VoucherId = GetVoucher.Id, TrangThai = true });
                                             }
-                                            return Json(new { Loi = "Voucher chưa đạt đủ điều kiện: Tổng tiền sản phẩm lớn hơn " + GetVoucher.Minimum_order_value?.ToString("n0") + " VNĐ", TrangThai = false });
+                                            return Json(new { Loi = "Đơn hàng chưa đạt điều kiện: Tổng tiền sản phẩm lớn hơn " + GetVoucher.Minimum_order_value?.ToString("n0") + " VNĐ", TrangThai = false });
                                         }
                                         return Json(new { Loi = "Voucher đã sử dụng hết", TrangThai = false });
                                         }

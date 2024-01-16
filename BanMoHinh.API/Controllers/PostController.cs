@@ -54,15 +54,15 @@ namespace BanMoHinh.API.Controllers
             return BadRequest("Lỗi!");
         }
       
-        [HttpPut("update-post/{id}/{UserId}")]
-        public async Task<ActionResult<Post>> Put(Guid id,  PostVM post, Guid UserId)
+        [HttpPut("update-post")]
+        public async Task<ActionResult<Post>> Put([FromForm] PostVM post)
         {
-            var result = await _postService.Update(id,UserId, post);
+            var result = await _postService.Update(post);
             if (result)
             {
-                return Ok("Đã sửa thành công");
+                return Ok("Đã thêm thành công");
             }
-            return Ok("Lỗi!");
+            return BadRequest("Lỗi!");
         }
         [HttpDelete("delete-post/{id}")]
         public async Task<ActionResult<Post>> Delete(Guid id,Guid UserId)

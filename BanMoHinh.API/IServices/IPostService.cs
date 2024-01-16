@@ -13,6 +13,6 @@ namespace BanMoHinh.API.IServices
 
         public Task<Post> GetItem(Guid id);
 
-        public Task<bool> Update(Guid id,Guid UserId, PostVM item);
+        public Task<bool> Update(PostVM item);
     }
 }
