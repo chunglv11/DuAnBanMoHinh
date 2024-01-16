@@ -15,13 +15,15 @@ namespace BanMoHinh.Client.Controllers
         }
         public async Task<IActionResult> ListPostAsync()
         {
-            var Post = await _httpClient.GetFromJsonAsync<List<PostVM>>("https://localhost:7007/api/posts/get-posts");
+            var Post = await _httpClient.GetFromJsonAsync<List<Post>>("https://localhost:7007/api/posts/get-posts");
             return View(Post);
         }
         [HttpGet]
         public async Task<IActionResult> DetailPost(Guid id)
         {
-            var post = await _httpClient.GetFromJsonAsync<PostVM>($"https://localhost:7007/api/posts/get/{id}");
+            var post = await _httpClient.GetFromJsonAsync<Post>($"https://localhost:7007/api/posts/get/{id}");
+            var lstUser = await _httpClient.GetFromJsonAsync<List<User>>($"https://localhost:7007/api/users/getall");
+            ViewBag.user = lstUser;
             return View(post);
         }
     }
