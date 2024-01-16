@@ -35,6 +35,8 @@
 			<div class="form-group">
 				<label for="SelectedRank">Rank</label>
 				<select id="SelectedRank" name="selectedRank" class="form-control">
+					<option value="tatca">Tất cả người dùng</option>
+					<option value="guest">Khách vãng lai</option>
 					@foreach (var rank in ranks.OrderBy(c=>c.PointsMin))
 					{
 						<option value="@rank.Name">@rank.Name</option>

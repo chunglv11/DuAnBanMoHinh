@@ -14,7 +14,7 @@ namespace BanMoHinh.Client.Controllers
     {
         private readonly HttpClient _httpClient;
         public Guid _billId;
-        public Guid _orderId ;
+        public Guid _orderId;
         public BillController(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -57,7 +57,7 @@ namespace BanMoHinh.Client.Controllers
             else
             {
                 var LstCartItem = SessionServices.GetCartItemFromSession(HttpContext.Session, "Cart");
-                var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/CartDetails/Get-cartItemViewFromLstCartItem", LstCartItem);
+				var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/CartDetails/Get-cartItemViewFromLstCartItem", LstCartItem);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseData = await response.Content.ReadAsStringAsync();
@@ -77,29 +77,25 @@ namespace BanMoHinh.Client.Controllers
                 }
                 return BadRequest();
             }
-           
+
         }
 
         [HttpPost]
-        public async Task<string> CheckOut(Order hoaDon)    
+        public async Task<string> CheckOut(Order hoaDon)
         {
             try
             {
-                //tạo order
-                // tạo order item
-                // xoá sp trong giỏ hàng
-                // trừ sp trong database
-                // update mã giảm giá
-                // update rank kh sau khi nhận hàng
-                Guid userId = Guid.NewGuid();
-                if (User.Identity.IsAuthenticated)
+				//tạo order
+				// tạo order item
+				// xoá sp trong giỏ hàng
+				// trừ sp trong database
+				// update mã giảm giá
+				// update rank kh sau khi nhận hàng
+				Guid userId = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB");
+				if (User.Identity.IsAuthenticated)
                 {
                     var identity = HttpContext.User.Identity as ClaimsIdentity;
-                     userId = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
-                }
-                else
-                {
-                    userId = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB");
+                    userId = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
                 }
                 var order = new OrderVM(); // tạo mới đối tượng order
                 order.Id = Guid.NewGuid();
@@ -124,22 +120,22 @@ namespace BanMoHinh.Client.Controllers
                 {
                     order.OrderStatusId = Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"); // chờ thanh toán
                     order.Payment_Date = DateTime.Now;
-                    
-                    
+
+
                 }
                 var response = await _httpClient.PostAsJsonAsync<OrderVM>("https://localhost:7007/api/order/create", order); // tạo order
                 if (response.IsSuccessStatusCode)// nếu done
                 {
-                    if (order.VoucherId!=null)
+                    if (order.VoucherId != null)
                     {
                         // - số lượng voucher 
 
                         var updateSL = await _httpClient.GetAsync($"https://localhost:7007/api/voucher/TangGiamSoLuongTheoId?voucherId={order.VoucherId}&tanggiam=false");
 
                         // - sửa trạng thái trong uservoucher  
-                        if (!User.Identity.IsAuthenticated)
+                        if (User.Identity.IsAuthenticated)
                         {
-                            var updateStatus = await _httpClient.GetAsync($" https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
+                            var updateStatus = await _httpClient.GetAsync($"https://localhost:7007/api/UserVoucher/updatetrangthai?voucherId={order.VoucherId}&userId={order.UserId}&status=false");
 
                         }
 
@@ -172,7 +168,7 @@ namespace BanMoHinh.Client.Controllers
                     }
                     else // không đăng nhập
                     {
-                        var lstCartItem = SessionServices.GetCartItemFromSession(HttpContext.Session, "Cart");
+                        var lstCartItem = SessionServices.GetCartItemFromSession(HttpContext.Session,"Cart");
                         // tạo orderItem
                         foreach (var item in lstCartItem)
                         {
@@ -183,8 +179,13 @@ namespace BanMoHinh.Client.Controllers
                                 ProductDetailId = item.ProductDetail_ID,
                                 Quantity = item.Quantity,
                                 Price = item.Price
+                                
                             };
                             var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
+                            if (!responsePostCart.IsSuccessStatusCode)
+                            {
+                                return "None";
+                            }
                             var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
                         }
 
@@ -195,7 +196,7 @@ namespace BanMoHinh.Client.Controllers
                         }
 
                         SessionServices.SetCartItemToSession(HttpContext.Session, "Cart", lstCartItem);
-                        
+
                     }
                     var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                     if (!updateSLSPfromDb.IsSuccessStatusCode)
@@ -296,7 +297,7 @@ namespace BanMoHinh.Client.Controllers
                 return "";
                 throw;
             }
-            
+
         }
 
         [HttpGet]
@@ -337,7 +338,7 @@ namespace BanMoHinh.Client.Controllers
                     {
                         if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                         {
-                            Guid DaThanhToanStatus= Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");// đã thanh toán
+                            Guid DaThanhToanStatus = Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");// đã thanh toán
                             // change status
                             var responses = await _httpClient.GetAsync($"https://localhost:7007/api/order/updatestatus?OrderId={idhd}&StatusId={DaThanhToanStatus}");
                             if (responses.IsSuccessStatusCode)
@@ -354,7 +355,7 @@ namespace BanMoHinh.Client.Controllers
                 return RedirectToAction("CheckOutFails"); // return về thanh toán thất bại
             }
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> UseVoucher(string ma, int tongTien)
         {
@@ -367,33 +368,42 @@ namespace BanMoHinh.Client.Controllers
                 var GetVoucher = await _httpClient.GetFromJsonAsync<Voucher>($"https://localhost:7007/api/voucher/getbycode/{ma}");
                 if (GetVoucher != null)// check voucher tồn tại
                 {
-                    var identity = HttpContext.User.Identity as ClaimsIdentity;
-                    var id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    var id = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB");
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var identity = HttpContext.User.Identity as ClaimsIdentity;
+                        id = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+                    }
+                  
                     if (id != null)
                     {
                         var getSoHuu = await _httpClient.GetFromJsonAsync<UserVoucher>($"https://localhost:7007/api/UserVoucher/getsohuu/{GetVoucher.Id}/{id}");
                         if (getSoHuu != null)
                         {
-                            if (getSoHuu.Status==true)
+                            if (getSoHuu.Status == true)
                             {
-                                if (GetVoucher.Start_Date <= DateTime.Now )
+                                if (GetVoucher.Start_Date <= DateTime.Now)
                                 {
-                                    if ( GetVoucher.End_Date > DateTime.Now)
+                                    if (GetVoucher.End_Date > DateTime.Now)
                                     {
-                                            if (GetVoucher.Quantity > 0)
+                                        if (GetVoucher.Quantity > 0)
                                         {
                                             if (GetVoucher.Minimum_order_value <= tongTien)
                                             {
-                                                return Json(new { HinhThuc = GetVoucher.Discount_Type, GiaTri = GetVoucher.Value,VoucherId = GetVoucher.Id, TrangThai = true });
+                                                if (GetVoucher.Status == true)
+                                                {
+                                                    return Json(new { HinhThuc = GetVoucher.Discount_Type, GiaTri = GetVoucher.Value, VoucherId = GetVoucher.Id, TrangThai = true });
+                                                }
+                                                return Json(new { Loi = "Mã voucher không hợp lệ", TrangThai = false });
                                             }
                                             return Json(new { Loi = "Đơn hàng chưa đạt điều kiện: Tổng tiền sản phẩm lớn hơn " + GetVoucher.Minimum_order_value?.ToString("n0") + " VNĐ", TrangThai = false });
                                         }
                                         return Json(new { Loi = "Voucher đã sử dụng hết", TrangThai = false });
-                                        }
+                                    }
                                     return Json(new { Loi = "Mã voucher hết hạn", TrangThai = false });
                                 }
                                 return Json(new { Loi = "Mã voucher chưa bắt đầu", TrangThai = false });
-                             }
+                            }
                             return Json(new { Loi = "Voucher đã được sử dụng", TrangThai = false });
                         }
                         return Json(new { Loi = "Bạn không nằm trong danh sách áp dụng voucher", TrangThai = false });
@@ -403,7 +413,7 @@ namespace BanMoHinh.Client.Controllers
             }
             catch
             {
-                return Json(new { HinhThuc = false, GiaTri = 0, Loi = "Bạn không nằm trong danh sách áp dụng voucher" });
+                return Json(new { HinhThuc = false, GiaTri = 0, Loi = "Voucher không hợp lệ" });
             }
         }
         [HttpGet]
