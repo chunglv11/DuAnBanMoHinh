@@ -1,5 +1,6 @@
 ﻿@using HtmlAgilityPack;
- @model IEnumerable<BanMoHinh.Share.Models.Post>
+@model X.PagedList.IPagedList<BanMoHinh.Share.Models.Post>
+@using X.PagedList.Mvc.Core;
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
     ViewData["Title"] = "Danh sách bài viết";
@@ -73,27 +74,16 @@
             </a>
         }
     </div>
-    <div class="row no-gutters">
-        @foreach (var item in Model)
-        {
-            <div class="col-lg-3 d-flex">
-                <div class="card m-0" style="width: 100%; display: flex; flex-direction: column;">
-                    <img src="@(Configuration["BaseAddress"]+item.TittleImage)" height="300px" alt="Ảnh minh họa" class="card-img-top">
-                    <div class="card-body" style="flex-grow: 1;">
-                        <h2 class="post-title">@item.Tittle</h2>
-                        @{
-                            HtmlDocument doc = new HtmlDocument();
-                            doc.LoadHtml(@item.Contents);
-                            string contentText = doc.DocumentNode.InnerText;
-                            string first30Chars = contentText.Substring(0, Math.Min(145, contentText.Length));
-                        }
-                        <p>@Html.Raw(first30Chars)....</p>
-                    </div>
-                </div>
+    <div class="col-lg-12 mt-3 p-3 pagin-history">
+        <div class="shadow-sm">
+            <div class="pagin-left float-left font-weight-lighter mt-1">
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
             </div>
-        }
+            <div class="pagin-right float-right">
+                @Html.PagedListPager(Model, page => Url.Action("ListPost", new { page}))
+            </div>
+        </div>
     </div>
-
 
 </div>
 
