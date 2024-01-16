@@ -43,6 +43,25 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpGet("ChangeStatus")]
+        public async Task<ActionResult<bool>> UpdateStatus(Guid id, int status)
+        {
+            try
+            {
+                var result = await _postService.UpdateStatus(id, status);
+                if (result)
+                {
+                    return Ok("Sửa thành công");
+                }
+                return BadRequest("Lỗi!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+
         [HttpPost("create-post")]
         public async Task<ActionResult<PostVM>> Post([FromForm] PostVM post)
         {

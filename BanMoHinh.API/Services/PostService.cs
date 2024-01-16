@@ -3,6 +3,7 @@ using BanMoHinh.API.IServices;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Runtime.Intrinsics.Arm;
 
 namespace BanMoHinh.API.Services
@@ -88,6 +89,21 @@ namespace BanMoHinh.API.Services
         public async Task<Post> GetItem(Guid id)
         {
             return await _dbContext.Posts.FindAsync(id);
+        }
+        public async Task<bool> UpdateStatus(Guid id, int status)
+        {
+            try
+            {
+                var posts = await _dbContext.Posts.FindAsync(id);
+                posts.Status = status;
+                _dbContext.Posts.Update(posts);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> Update( PostVM item)

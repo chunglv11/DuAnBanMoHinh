@@ -131,5 +131,26 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             var post = await _httpClient.GetFromJsonAsync<Post>($"https://localhost:7007/api/posts/get/{id}");
             return View(post);
         }
+
+        public async Task<IActionResult> ChangeStatus(Guid id,int status)
+        {
+            try
+            {
+                var url = $"https://localhost:7007/api/posts/ChangeStatus?id={id}&status={status}";
+                var resul = await _httpClient.GetAsync(url);
+                if (resul.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+
+                }
+
+                return BadRequest("cant get");
+            }
+            catch
+            {
+                return BadRequest("Bug");
+            }
+
+        }
     }
 }
