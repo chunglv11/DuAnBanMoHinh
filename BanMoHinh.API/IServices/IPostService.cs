@@ -12,7 +12,8 @@ namespace BanMoHinh.API.IServices
         public Task<List<Post>> GetAll();
 
         public Task<Post> GetItem(Guid id);
+        public Task<bool> UpdateStatus(Guid id,int status);
 
-        public Task<bool> Update(Guid id,Guid UserId, PostVM item);
+        public Task<bool> Update(PostVM item);
     }
 }

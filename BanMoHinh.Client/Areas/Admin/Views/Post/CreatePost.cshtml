@@ -21,7 +21,7 @@
                 <span asp-validation-for="Tittle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Ảnh đại diện</label>
+                <label class="control-label">Ảnh bìa</label>
                 <input type="file" id="file" name="file" accept="image/*" class="form-control" />
                 <span asp-validation-for="filecollection" class="text-danger"></span>
             </div>
@@ -31,13 +31,31 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Trạng thái</label>
-                <input asp-for="Status" class="form-control" />
+                <label class="control-label">Trạng thái</label><br />
+                <div class="form-check form-check-inline">
+                    <input asp-for="Status" class="form-check-input" type="radio" id="status1" value="1" checked />
+                    <label class="form-check-label" for="status1">Xuất bản</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input asp-for="Status" class="form-check-input" type="radio" id="status0" value="0"  />
+                    <label class="form-check-label" for="status0">Không xuất bản</label>
+                </div>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label class="control-label">Nội dung</label>
-                <textarea asp-for="Contents" id="edit" name="edit" cols="80" rows="10"></textarea>
+                <label asp-for="Contents" class="control-label"></label>
+                <div class="form-group space-top" style="margin-top: 70px;">
+                    <!-- (2): textarea sẽ được thay thế bởi CKEditor -->
+                    <textarea asp-for="Contents" id="edit" name="edit" cols="200" rows="80"></textarea>
+
+                    <!-- (3): Code Javascript thay thế textarea có id='editor1' bởi CKEditor -->
+                    <script>
+
+                        CKEDITOR.replace('edit');
+
+                    </script>
+                </div>
                 <span asp-validation-for="Contents" class="text-danger"></span>
             </div>
             <div class="form-group">

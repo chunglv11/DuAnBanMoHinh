@@ -1,5 +1,7 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -54,20 +56,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         //addvoucher rank
         public async Task<IActionResult> AddVoucherForRank(string selectedRank, Voucher vc)
         {
-            // Lấy danh sách tất cả rank
-            var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
-            var rank = allranks.FirstOrDefault(r => r.Name == selectedRank);
-            if (rank == null)
-            {
-                return BadRequest("không có");
-            }
-            var allUser = await _httpClient.GetFromJsonAsync<List<User>>("https://localhost:7007/api/users/getall");
-			// Lấy danh sách người dùng theo rank đã chọn
-			var usersInRank = allUser.Where(c => c.RankId == rank.Id).ToList();		
-            // Tạo voucher mới
-            Voucher voucher = new Voucher
-            {
-                Id = Guid.NewGuid(),
+
+			// Tạo voucher mới
+			Voucher voucher = new Voucher
+			{
+				Id = Guid.NewGuid(),
 				Code = vc.Code,
 				Quantity = vc.Quantity,
 				Value = vc.Value,
@@ -77,28 +70,61 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 				Start_Date = vc.Start_Date,
 				End_Date = vc.End_Date,
 				Status = true
-			};		
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/voucher/create-voucher", voucher);
-            if (!response.IsSuccessStatusCode)
-            {
-                return BadRequest("Unable to create voucher.");
-            }
+			};
+			var response = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/voucher/create-voucher", voucher);
+			if (!response.IsSuccessStatusCode)
+			{
+				return BadRequest("Unable to create voucher.");
+			}
 
-            // Gán voucher cho mỗi người dùng trong rank
-            foreach (var user in usersInRank)
-            {
-				UserVoucher uv = new UserVoucher();
-                uv.Id = Guid.NewGuid();
-                uv.VoucherId = voucher.Id;
-                uv.UserId = user.Id;
-                uv.Status = true;          
-                // Tạo UserVoucher 
-                var createUV = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/UserVoucher/create-uservoucher", uv);
-                if (!createUV.IsSuccessStatusCode)
-                {
-					return BadRequest();
-                }
+			// Lấy danh sách tất cả rank
+			var allranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
+			// lấy danh sách tất cả người dùng
+			var allUser = await _httpClient.GetFromJsonAsync<List<User>>("https://localhost:7007/api/users/getall");
+			var usersInRank = allUser;
+			if (selectedRank != "tatca" && selectedRank != "guest")
+			{
+				var rank = allranks.FirstOrDefault(r => r.Name == selectedRank);
+				if (rank == null)
+				{
+					return BadRequest("không có");
+				}
+				// Lấy danh sách người dùng theo rank đã chọn
+				allUser = allUser.Where(c => c.RankId == rank.Id).ToList();
+			}
+			if (selectedRank != "guest")
+			{
+				// Gán voucher cho mỗi người dùng trong rank
+				foreach (var user in usersInRank)
+				{
+					UserVoucher uv = new UserVoucher();
+					uv.Id = Guid.NewGuid();
+					uv.VoucherId = voucher.Id;
+					uv.UserId = user.Id;
+					uv.Status = true;
+					// Tạo UserVoucher 
+					var createUV = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/UserVoucher/create-uservoucher", uv);
+					if (!createUV.IsSuccessStatusCode)
+					{
+						return BadRequest();
+					}
+				}
+ 
             }
+			else
+			{
+				UserVoucher uv = new UserVoucher();
+				uv.Id = Guid.NewGuid();
+				uv.VoucherId = voucher.Id;
+				uv.UserId = Guid.Parse("2FA6148D-B530-421F-878E-CE4D54BFC6AB");
+				uv.Status = true;
+				// Tạo UserVoucher 
+				var createUV = await _httpClient.PostAsJsonAsync("https://localhost:7007/api/UserVoucher/create-uservoucher", uv);
+				if (!createUV.IsSuccessStatusCode)
+				{
+					return BadRequest();
+				}
+			}
 			TempData["SuccessMessage"] = "Voucher đã được tạo thành công!";
 			var successMessage = TempData["SuccessMessage"] as string;
 			if (!string.IsNullOrEmpty(successMessage))

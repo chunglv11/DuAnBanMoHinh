@@ -61,13 +61,19 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td >
-                @Html.DisplayFor(modelItem => item.Price)
+                    @item.Price?.ToString("n0") VNĐ
             </td>
             <td >
-                @Html.DisplayFor(modelItem => item.PriceSale)
+                    @item.PriceSale?.ToString("n0") VNĐ
             </td>
             <td >
-                @Html.DisplayFor(modelItem => item.Update_At)
+                @{
+                        var result = item.Update_At != null ? item.Update_At.ToString() : "Chưa cập nhật";
+
+                }
+                <span>@result</span>
+                   
+
             </td>
             <td >
                     @if (item.Status == true)
