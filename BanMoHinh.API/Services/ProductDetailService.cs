@@ -156,8 +156,6 @@ namespace BanMoHinh.API.Services
                           Id = a.Id,
                           ProductName = d.ProductName,
                           SizeName = b.SizeName,
-                          Width = b.Width,
-                          Height = b.Height,
                           ColorName = c.ColorName,
                           ColorCode = c.ColorCode,
                           Quantity = a.Quantity,

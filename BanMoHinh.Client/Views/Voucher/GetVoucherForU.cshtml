@@ -1,0 +1,54 @@
+﻿@using BanMoHinh.Share.Models
+@model List<Voucher>
+@{
+    ViewData["Title"] = "GetVoucherForU";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh sách voucher</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<div class="container">
+    <div class="row">
+    @foreach (var item in Model)
+    {
+        <div style="margin-bottom:8px" class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mã: @item.Code</h5>
+                    <p class="card-text">Ngày bắt đầu: @item.Start_Date</p>
+                    <p class="card-text">Ngày kết thúc: @item.End_Date</p>
+                    <p  class="card-text">
+                        @if (item.Discount_Type == 0) // theo tiền mặt
+                        {
+                        <p style="color:black">Giảm @Convert.ToInt32(item.Value).ToString("n0").Replace(',', '.') VNĐ</p>
+                        }
+                        else if (item.Discount_Type == 1)
+                        {
+                        <p style="color:black">Giảm @item.Value %</p>
+                        }
+                     </p>
+                    <p style="color:red" class="card-text">Cho đơn từ: @item.Minimum_order_value VND</p>
+                    <a href="/Product/ListProduct" class="btn btn-primary">Sử dụng</a>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+

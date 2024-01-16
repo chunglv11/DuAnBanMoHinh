@@ -146,13 +146,13 @@
 							<div class="box-capacity">
 									@{
 										var lst = lstproductDetail.Where(c => c.ProductId == Model.Id).OrderBy(c => c.SizeName);
-										var uniquewh = lst.Select(item => new { Id = item.SizeId, Width = item.Width, Height = item.Height }).Distinct().ToList();
+										var uniquewh = lst.Select(item => new { Id = item.SizeId, SizeName = item.SizeName }).Distinct().ToList();
 
 										foreach (var uniqueSize in uniquewh)
 										{
 											var sizeId = uniqueSize.Id;
 											<input type="radio" name="sizeId"  value="@sizeId" data-size-id="@sizeId" id="sizeId-@sizeId" />
-										<label for="sizeId-@sizeId">@($"{uniqueSize.Width} cm - {uniqueSize.Height} cm")</label>
+										    <label for="sizeId-@sizeId">@uniqueSize.SizeName</label>
 										}
 									}
 							</div>				
