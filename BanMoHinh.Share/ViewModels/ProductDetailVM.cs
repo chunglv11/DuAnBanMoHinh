@@ -15,8 +15,6 @@ namespace BanMoHinh.Share.ViewModels
         public string? ProductName { get; set; }
         public Guid? SizeId { get; set; }
         public string? SizeName { get; set; }
-        public double? Width { get; set; }
-        public double? Height { get; set; }
         public Guid? ColorId { get; set; }
         public string? ColorName { get; set; }
         public string? ColorCode { get; set; }
