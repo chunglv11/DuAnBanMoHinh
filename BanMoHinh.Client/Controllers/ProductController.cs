@@ -281,7 +281,7 @@ namespace BanMoHinh.Client.Controllers
 
         }
 
-        public async Task<JsonResult> GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
+        public async Task<JsonResult> GetProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
             
             try
@@ -292,7 +292,7 @@ namespace BanMoHinh.Client.Controllers
             catch (Exception)
             {
 
-				return Json(new { message = "Lỗi", status = false });
+				return Json(new { message = "Không có size và màu bạn chọn :(", status = false });
 
 			}
 		}

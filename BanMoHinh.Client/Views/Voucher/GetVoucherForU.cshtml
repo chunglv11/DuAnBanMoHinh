@@ -1,8 +1,11 @@
 ﻿@using BanMoHinh.Share.Models
-@model List<Voucher>
+@using X.PagedList.Mvc.Core;
+@using static BanMoHinh.Client.Controllers.VoucherController
+@model X.PagedList.IPagedList<UserVoucherViewModel>
 @{
     ViewData["Title"] = "GetVoucherForU";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    // List<Voucher> lstVC = ViewData["UVC"] as List<Voucher>;
 }
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
@@ -25,30 +28,50 @@
 </section>
 <div class="container">
     <div class="row">
-    @foreach (var item in Model)
-    {
-        <div style="margin-bottom:8px" class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Mã: @item.Code</h5>
-                    <p class="card-text">Ngày bắt đầu: @item.Start_Date</p>
-                    <p class="card-text">Ngày kết thúc: @item.End_Date</p>
-                    <p  class="card-text">
-                        @if (item.Discount_Type == 0) // theo tiền mặt
-                        {
-                        <p style="color:black">Giảm @Convert.ToInt32(item.Value).ToString("n0").Replace(',', '.') VNĐ</p>
-                        }
-                        else if (item.Discount_Type == 1)
-                        {
-                        <p style="color:black">Giảm @item.Value %</p>
-                        }
-                     </p>
-                    <p style="color:red" class="card-text">Cho đơn từ: @item.Minimum_order_value VND</p>
-                    <a href="/Product/ListProduct" class="btn btn-primary">Sử dụng</a>
+        @foreach (var item in ViewData["Lstvc"] as IEnumerable<UserVoucherViewModel>)
+            {
+                <div style="margin-bottom:8px" class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">Mã: @item.Voucher.Code</h5>
+                        <p class="card-text">Ngày bắt đầu: @item.Voucher.Start_Date</p>
+                        <p class="card-text">Ngày kết thúc: @item.Voucher.End_Date</p>
+                            <p  class="card-text">
+                            @if (item.Voucher.Discount_Type == 0) // theo tiền mặt
+                                {
+                            <p style="color:black">Giảm @Convert.ToInt32(item.Voucher.Value).ToString("n0").Replace(',', '.') VNĐ</p>
+                                }
+                            else if (item.Voucher.Discount_Type == 1)
+                                {
+                            <p style="color:black">Giảm @item.Voucher.Value %</p>
+                                }
+                            </p>
+                        <p style="color:red" class="card-text">Cho đơn từ: @item.Voucher.Minimum_order_value?.ToString("N0") VND</p>
+                        @if (item.UserVoucher.Status == true)
+                            {
+                                <a href="/Product/ListProduct" class="btn btn-primary">Sử dụng</a>
+                            }
+                        else if (item.UserVoucher.Status == false)
+                            {
+                                <button style="color:white" class="btn btn-secondary" disabled>Đã sử dụng</button>
+
+                            }
+
+                        </div>
+                    </div>
                 </div>
+            }
+            
+    </div>
+    <div class="col-lg-12 mt-3 p-3">
+        <div class="shadow-sm">
+            <div class="pagin-left float-left font-weight-lighter mt-1">
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+            </div>
+            <div class="pagin-right float-right">
+                @Html.PagedListPager(Model, page => Url.Action("GetVoucherForU", new { page }))
             </div>
         </div>
-    }
     </div>
 </div>
 

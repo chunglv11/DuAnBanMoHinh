@@ -23,6 +23,75 @@
     Guid[] selectedMaterialIds = SelectedMaterial?.Select(x => x.Value).ToArray();
 
 }
+<style>
+    .custom-sidenav {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .has-sub {
+        margin-bottom: 10px;
+    }
+
+        .has-sub > a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ddd; /* Thêm đường kẻ ngăn cách giữa các mục */
+        }
+
+        .has-sub ul {
+            display: none;
+            list-style: none;
+            padding: 0;
+        }
+
+            .has-sub ul li {
+                margin: 0;
+            }
+
+                .has-sub ul li a {
+                    display: block;
+                    padding: 10px;
+                    text-decoration: none;
+                    color: #333;
+                }
+
+    .checkbox-list {
+        margin-left: 15px; /* Lùi sang phải 1 tí */
+    }
+
+    .top-filter-head {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .filter-content {
+        margin-top: 10px;
+    }
+
+    .form-row {
+        margin-bottom: 10px;
+    }
+
+    .search-btn-product {
+        margin-top: 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .search-btn-product i {
+            margin-right: 5px;
+        }
+
+</style>
 @*Lưu trạng thái khi lọc*@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -68,7 +137,7 @@
                     <div class="top-filter-head">Danh mục</div>
                     <div class="common-filter">
                         <!-- sidenav-section -->
-                        <div id="cssmenu">
+                        <div id="cssmenu" class="custom-sidenav">
                             <ul>
                                 <li class="has-sub">
                                     <a href="#">Hãng sản xuất</a>
@@ -133,13 +202,14 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <button class="search-btn-product primary-btn d-flex"><i class="bx bx-search-alt"></i></button>
                             </ul>
+                            <button class="search-btn-product primary-btn d-flex"><i class="bx bx-search-alt"></i></button>
                         </div>
                         <!-- /.sidenav-section -->
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-9 col-lg-8 col-md-7">
                 <!-- Start Filter Bar -->
                 <div class="filter-bar d-flex flex-wrap align-items-center">
@@ -225,9 +295,9 @@
                                                     <span class='bx bx-move'></span>
                                                     <p class="hover-text">Xem Thêm</p>
                                                 </a>
-                                                <a class="social-info">
-                                                    <span class='bx bx-share bx-rotate-180'></span>
-                                                    <p class="hover-text">Chia sẻ</p>
+                                                <a onclick="addToWishList('@item.Id')" class="social-info">
+                                                    <span class='bx bx-purchase-tag-alt bx-rotate-180'></span>
+                                                    <p class="hover-text">Yêu thích</p>
                                                 </a>
                                             </div>
                                         </div>

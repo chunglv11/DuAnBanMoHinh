@@ -303,7 +303,7 @@ namespace BanMoHinh.API.Services
             {
                 return productDetail;
             }
-            throw new Exception("Không tìm thấy giá sản phẩm chi tiết/ chưa có size,color này.");
+            return null;
         }
 
         public async Task<bool> UpdateQuantityById(Guid productDetailId, int quantity)
