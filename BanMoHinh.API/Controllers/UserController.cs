@@ -49,12 +49,12 @@ namespace BanMoHinh.API.Controllers
         }
 
 
-        [HttpDelete("delete/{userName}")]
-        public async Task<IActionResult> Delete(string userName)
+        [HttpPost("lock/{userName}")]
+        public async Task<IActionResult> Lock(string userName)
         {
             try
             {
-                return Ok(await _userService.Delete(userName));
+                return Ok(await _userService.Lock(userName));
             }
             catch (Exception ex)
             {
@@ -62,6 +62,20 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
+        [HttpPost("unlock/{userName}")]
+        public async Task<IActionResult> UnLock(string userName)
+        {
+            try
+            {
+                return Ok(await _userService.Unlock(userName));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(UserViewModel item,string roleName) 

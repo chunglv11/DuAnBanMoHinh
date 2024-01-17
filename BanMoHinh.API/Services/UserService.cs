@@ -45,22 +45,45 @@ namespace BanMoHinh.API.Services
             return false;
         }
         // DELETE
-        public async Task<bool> Delete(string userName)
+        public async Task<bool> Lock(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
             if (user != null)
             {
-                await _userManager.DeleteAsync(user);
+                // Đặt thời gian kết thúc lockout là vô hạn
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+
                 return true;
             }
             return false;
         }
+
+        public async Task<bool> Unlock(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user != null)
+            {
+                // Mở khóa người dùng bằng cách đặt thời gian kết thúc lockout thành null
+                await _userManager.SetLockoutEndDateAsync(user, null);
+
+                return true;
+            }
+            return false;
+        }
+
+
         // GET ALL USER
         public async Task<ICollection<User>> GetAll()
         {
-            var user =  await _userManager.Users.ToListAsync();
-            return user;
+            // Lấy tất cả người dùng từ UserManager
+            var allUsers = await _userManager.Users.ToListAsync();
+
+            // Lọc những người dùng không thuộc role "admin"
+            var nonAdminUsers = allUsers.Where(user => !_userManager.IsInRoleAsync(user, "Admin").Result).ToList();
+
+            return nonAdminUsers;
         }
+
         // GET USER
         public async Task<User> GetItem(string userName)
         {

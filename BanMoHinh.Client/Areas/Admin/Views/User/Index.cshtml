@@ -56,7 +56,9 @@
                 </td>
             <td>
                     <a asp-action="ChangeRole" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#changrole">Sửa Rolse </a>
-                    @Html.ActionLink("Xoá", "DeleteUser", new {  userName=item.UserName  }, new { @class = "btn btn-danger btn-sm" })
+
+                    @Html.ActionLink("Khoá", "LockUser", new { userName = item.UserName }, new { @class = "btn btn-danger btn-sm" })
+                    @Html.ActionLink("Mở", "UnlockUser", new { userName = item.UserName }, new { @class = "btn btn-success btn-sm" })
             </td>
         </tr>
             <!--

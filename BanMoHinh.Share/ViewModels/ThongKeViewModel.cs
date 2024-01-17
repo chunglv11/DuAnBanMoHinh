@@ -13,6 +13,7 @@ namespace BanMoHinh.Share.ViewModels
         public int SoLuongDonHuy{ get; set; }//Don Hang Huy
         public int? SoLuongSanPham { get; set; }
         public List<TopKhachHangVM>? topKhachHang { get; set; }
+        public List<SanPhamSapHetVM>? Sanphamsaphet { get; set; }
         public List<ThongKeCotViewModel> BieuDoCot { get; set; }
         public List<ThongKeDuongViewModel> BieuDoDuong { get; set; }
         public List<ThongKeTronViewModel> BieuDoTron { get; set; }

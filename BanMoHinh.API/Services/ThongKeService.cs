@@ -56,7 +56,15 @@ namespace BanMoHinh.API.Services
                                     .OrderByDescending(hd => hd.tongtien)
                                     .Take(5)
                                     .ToList();
-
+                List<Product> lstpr = new List<Product>();
+                List<SanPhamSapHetVM> sanPhamsapHetList = (from a in lstpr
+                                                           where a.AvailableQuantity < 10
+                                                           select new SanPhamSapHetVM
+                                                           {
+                                                               ten = a.ProductName,
+                                                               soluong = a.AvailableQuantity
+                                                           })
+                                          .ToList();
                 //Lấy biểu đồ cột
                 foreach (var hoaDon in lstHoaDon.Where(x => x.OrderStatusId == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC")))//đơn thành công
                 {
@@ -100,7 +108,7 @@ namespace BanMoHinh.API.Services
                 }
 
                 
-                return new ThongKeViewModel() { SoLuongThanhVien = soLuongThanhVien, SoLuongDonHang = soLuongDonHangCho, SoLuongDonHuy = soLuongDonHangHuy , SoLuongSanPham = soLuongSanPham,topKhachHang = topKhach, BieuDoCot = thongKeCot, BieuDoDuong = thongKeDuong.OrderBy(x => x.Ngay).ToList(), Start = start.ToString("MM/dd/yyyy"), End = end.ToString("MM/dd/yyyy") };
+                return new ThongKeViewModel() { SoLuongThanhVien = soLuongThanhVien, SoLuongDonHang = soLuongDonHangCho, SoLuongDonHuy = soLuongDonHangHuy , SoLuongSanPham = soLuongSanPham,topKhachHang = topKhach,Sanphamsaphet = sanPhamsapHetList, BieuDoCot = thongKeCot, BieuDoDuong = thongKeDuong.OrderBy(x => x.Ngay).ToList(), Start = start.ToString("MM/dd/yyyy"), End = end.ToString("MM/dd/yyyy") };
             }
             catch
             {

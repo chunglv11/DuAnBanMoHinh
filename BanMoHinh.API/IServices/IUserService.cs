@@ -6,7 +6,8 @@ namespace BanMoHinh.API.IServices
     public interface IUserService
     {
         public Task<bool> Create(UserViewModel item, string roleName);
-        public Task<bool> Delete(string userName);
+        public Task<bool> Lock(string userName);
+        public Task<bool> Unlock(string userName);
         public Task<ICollection<User>> GetAll();
         public Task<User> GetItem(string userName);
         public Task<bool> Update(UserViewModel item);
