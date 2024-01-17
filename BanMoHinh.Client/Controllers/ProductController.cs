@@ -147,10 +147,7 @@ namespace BanMoHinh.Client.Controllers
         public async Task<List<ProductVM>> Filter(string sortOrder, List<ProductVM> lstProductVm)
         {
             switch (sortOrder)
-            {
-                case "best-selling":
-                    lstProductVm = lstProductVm.OrderBy(p => p.ProductDvms?.Sum(d => d.Quantity)).ToList();
-                    break;
+            {             
                 case "a":
                     lstProductVm = lstProductVm.OrderBy(p => p.ProductName).ToList();
                     break;

@@ -214,32 +214,20 @@
                 <!-- Start Filter Bar -->
                 <div class="filter-bar d-flex flex-wrap align-items-center">
                     <div class="sorting custom-sort-product">
-                        <a href="@Url.ActionLink("Products", "Home", new { sortOrder = ViewBag.PriceSortParm,
-                            currentFilterSearch = ViewBag.CurrentFilterSearch,
-                            currentFilterBrand = ViewBag.CurrentFilterBrand,
-                            currentFilterSize = ViewBag.CurrentFilterSize,
-                            currentFilterColor = ViewBag.CurrentFilterColor })">
-                            <span>Giá từ: </span>
-                            <i class='bx bx-sort text-white'></i>
-                        </a>
+                        <form asp-controller="Product" asp-action="Filter" method="get">
+                            <div class="select-option form-group">
+                                <select id="sortOrder" name="sortOrder" class="form-control" placeholder="Sắp xếp theo">
+                                    <option value="" default="">Sắp xếp theo</option>
+                                    <option value="low-price">Giá Thấp</option>
+                                    <option value="high-price">Giá Cao</option>
+                                    <option value="a">A-Z</option>
+                                    <option value="z">Z-A</option>
+                                </select>
+                                <input type="submit" style="display: none;" />
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb10 alignright">
-                            <form asp-controller="Product" asp-action="Filter" method="get">
-                                <div class="select-option form-group">
-                                    <select id="sortOrder" name="sortOrder" class="form-control" placeholder="Sắp xếp theo">
-                                        <option value="" default="">Sắp xếp theo</option>
-                                        <option value="best-selling">Bán Chạy</option>
-                                        <option value="low-price">Giá Thấp</option>
-                                        <option value="high-price">Giá Cao</option>
-                                        <option value="a">A-Z</option>
-                                        <option value="z">Z-A</option>
-                                    </select>
-                                    <input type="submit" style="display: none;" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    
                 </div>
                 <!-- End Filter Bar -->
                 <!-- Start Best Seller -->
