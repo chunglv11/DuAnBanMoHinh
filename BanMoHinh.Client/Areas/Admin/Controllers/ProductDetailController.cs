@@ -280,6 +280,23 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatusAsync(Guid idspct, bool status)
+        {
+        
+            var response = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/ChangeStatus?idspct={idspct}&status={status}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                _notyf.Success("Cập nhật thành công");
+                return Redirect("/Admin/Product/GetAllProduct");
+            }
+            else
+            {
+                _notyf.Error("Lỗi");
+                return View();
+            }
+        }
 
     }
 }

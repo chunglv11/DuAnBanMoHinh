@@ -249,7 +249,7 @@ namespace BanMoHinh.Client.Controllers
             ViewBag.maxPrice = maxPrice;
 
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
-            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0)).ToList();
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0&&b.Status==true) && c.Status == true).ToList();
             if (!string.IsNullOrWhiteSpace(name))
             {
                 allproduct = await Search(name, allproduct);
