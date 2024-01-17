@@ -515,5 +515,60 @@ namespace BanMoHinh.API.Services
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public async Task<QLHDViewModel> GetDonMuaByOrderCode(string orderCode)
+        {
+			var chitietdon = await (from od in _dbContext.Order
+										 join ods in _dbContext.OrderStatus on od.OrderStatusId equals ods.Id
+										 where od.OrderCode == orderCode 
+										 select new QLHDViewModel
+										 {
+											 Id = od.Id,
+											 OrderStatusId = od.OrderStatusId,
+											 OrderStatusName = ods.OrderStatusName,
+											 PaymentType = od.PaymentType,
+											 OrderCode = od.OrderCode,
+											 RecipientName = od.RecipientName,
+											 RecipientAddress = od.RecipientAddress,
+											 RecipientPhone = od.RecipientPhone,
+											 TotalAmout = od.TotalAmout,
+											 VoucherValue = od.VoucherValue,
+											 TotalAmoutAfterApplyingVoucher = od.TotalAmoutAfterApplyingVoucher,
+											 ShippingFee = od.ShippingFee,
+											 Create_Date = od.Create_Date,
+											 Ship_Date = od.Ship_Date,
+											 Payment_Date = od.Payment_Date,
+											 Delivery_Date = od.Delivery_Date,
+											 Description = od.Description,
+
+											 OrderItem = (from odi in _dbContext.OrderItem
+														  join prd in _dbContext.ProductDetail on odi.ProductDetailId equals prd.Id
+														  join pr in _dbContext.Product on prd.ProductId equals pr.Id
+														  join cl in _dbContext.Colors on prd.ColorId equals cl.ColorId
+														  join sz in _dbContext.Size on prd.SizeId equals sz.Id
+														  where odi.OrderId == od.Id
+														  select new OrderItemCTViewModel
+														  {
+															  Id = odi.Id,
+															  OrderId = od.Id,
+															  ProductDetailId = prd.Id,
+															  ProductName = pr.ProductName,
+															  ProductId = pr.Id,
+															  SizeId = sz.Id,
+															  SizeName = sz.SizeName,
+															  ColorId = cl.ColorId,
+															  ColorName = cl.ColorName,
+															  Quantity = odi.Quantity ?? 0,
+															  PriceSale = odi.Price ?? 0,
+															  ProductImages = (from pi in _dbContext.ProductImage
+																			   where pi.ProductDetailId == prd.Id
+																			   select pi.ImageUrl).ToList()
+														  }).ToList()
+										 }).FirstOrDefaultAsync();
+
+
+            return chitietdon;
+        }
+
+    }
 }

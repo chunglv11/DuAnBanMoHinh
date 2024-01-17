@@ -34,6 +34,13 @@ namespace BanMoHinh.API.Controllers
             var listDonMuaCT = await _iorderService.getAllDonMuaChiTiet(idHoaDon);
             return listDonMuaCT;
         }
+        [HttpGet("GetAllDonMuaByOrderCode")]
+        public async Task<ActionResult> GetDonMuaByOrderCode(string orderCode)
+        {
+           return Ok( await _iorderService.GetDonMuaByOrderCode(orderCode));
+            
+            
+        }
         [HttpGet("get-{id}")]
         public async Task<ActionResult<Order>> Get(Guid id)
         {

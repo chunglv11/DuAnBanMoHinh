@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Share.Models;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,11 +12,14 @@ namespace BanMoHinh.Client.Controllers
 	public class OrderController : Controller
 	{
 		private readonly HttpClient _httpClient;
+        public INotyfService _notyf;
 
-		public OrderController(HttpClient httpClient)
-		{
-			_httpClient = httpClient;
-		}
+        public OrderController(HttpClient httpClient, INotyfService notyf)
+        {
+            _httpClient = httpClient;
+            _notyf = notyf;
+        }
+
         public async Task<IActionResult> allOrder(Guid id, int? page,int status)
         {
 
@@ -117,8 +121,24 @@ namespace BanMoHinh.Client.Controllers
             return RedirectToAction("allOrder");
         }
 
+        public async Task<IActionResult> allOrderCode(string ordercode)
+        {
+            if (string.IsNullOrEmpty(ordercode))
+            {
+                _notyf.Warning("Mã đơn hàng không được để trống.");
+                return RedirectToAction("SearchOrderCode");
+            }
+            var listOrder = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetAllDonMuaByOrderCode?orderCode={ordercode}");
 
+            return View(listOrder);
+        }
 
+        public async Task<IActionResult> SearchOrderCode()
+        {
+
+            return View();
+
+        }
 
 
 
