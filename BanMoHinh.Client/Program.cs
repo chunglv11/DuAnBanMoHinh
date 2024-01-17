@@ -14,10 +14,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IproductDetailApiClient, ProductDetailApiClient>();
 builder.Services.AddScoped<INotyfService, NotyfService>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;

@@ -74,20 +74,13 @@
                                 
                                     var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                                     
-
-
-
-
-                                   
-                                
-
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item"><a asp-controller="Authentication" asp-action="Profile" asp-route-id="@userIdClaim" class="nav-link">Thông tin cá nhân</a></li>
+                                    <li class="nav-item"><a asp-controller="User" asp-action="Profile" asp-route-id="@userIdClaim" class="nav-link">Thông tin cá nhân</a></li>
                                     <li class="nav-item"><a asp-controller="Order" asp-action="allOrder" class="nav-link">Lịch sử đơn hàng</a></li>
                                     <li class="nav-item"><a asp-controller="Voucher" asp-action="GetVoucherForU" class="nav-link">Kho voucher</a></li>
                                     <li class="nav-item"><a asp-controller="Order" asp-action="SearchOrderCode" class="nav-link">Tra cứu đơn hàng</a></li>
                                     <li class="nav-item"><a asp-controller="Product" asp-action="ShowWishList" class="nav-link">Sản phẩm đã thích</a></li>
-                                    <li class="nav-item"><a asp-controller="Authentication" asp-action="Logout" class="nav-link">Đăng xuất</a></li>
+                                    <li class="nav-item"><a asp-controller="Authentication" asp-action="LogOut" class="nav-link">Đăng xuất</a></li>
                                 </ul>
                             }
                             else

@@ -27,7 +27,7 @@ namespace BanMoHinh.Client.Controllers
         public INotyfService _notyf;
 
 
-        public AuthenticationController(IServices.IAuthenticationService authenticationService,HttpClient httpClient, INotyfService notyf )
+        public AuthenticationController(IServices.IAuthenticationService authenticationService, HttpClient httpClient, INotyfService notyf)
         {
             _authenticationService = authenticationService;
             _httpClient = httpClient;
@@ -39,15 +39,15 @@ namespace BanMoHinh.Client.Controllers
             var checkLogin = User.Identity.IsAuthenticated;
             if (checkLogin)
             {
-                var user = User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-                if (role== "Admin")
+                if (role == "Admin")
                 {
                     return Redirect("Admin/Home/Index");
                 }
                 if (role == "User")
                 {
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return View();
@@ -71,21 +71,21 @@ namespace BanMoHinh.Client.Controllers
                 await HttpContext.SignInAsync(principal);
                 string role = jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value;
                 var ListCartItemFromSession = SessionServices.GetCartItemFromSession(HttpContext.Session, "Cart");
-                if (ListCartItemFromSession.Count>0)
+                if (ListCartItemFromSession.Count > 0)
                 {
                     var MyCart = await _httpClient.GetFromJsonAsync<Cart>($"https://localhost:7007/api/cart/get-item-Cart?userId={jwt.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value}");
                     var ItemInMyCart = await _httpClient.GetFromJsonAsync<List<CartItem>>($"https://localhost:7007/api/cartitem/getcartitembycartid?cartid={MyCart.Id}"); // lấy item in cart
 
                     foreach (var item in ListCartItemFromSession)
                     {
-                        if (ItemInMyCart.Any(c=>c.ProductDetail_ID==item.ProductDetail_ID))// nếu trùng thì check và công sl
+                        if (ItemInMyCart.Any(c => c.ProductDetail_ID == item.ProductDetail_ID))// nếu trùng thì check và công sl
                         {
                             var productDetailFromDb = await _httpClient.GetFromJsonAsync<ProductDetailVM>($"https://localhost:7007/api/productDetail/get/{item.ProductDetail_ID}");
                             var cartitem = ItemInMyCart.FirstOrDefault(c => c.ProductDetail_ID == item.ProductDetail_ID);
-                            if (cartitem.Quantity+item.Quantity>productDetailFromDb.Quantity) // nếu tống sl sp + sl sp trong session > sl sp trong db ==> cho bằng kho
+                            if (cartitem.Quantity + item.Quantity > productDetailFromDb.Quantity) // nếu tống sl sp + sl sp trong session > sl sp trong db ==> cho bằng kho
                             {
                                 cartitem.Quantity = productDetailFromDb.Quantity;
-                                
+
                             }
                             // nếu tống sl sp + sl sp trong session < sl sp trong db ==> tổng
                             cartitem.Quantity += item.Quantity;
@@ -111,7 +111,7 @@ namespace BanMoHinh.Client.Controllers
                         ListCartItemFromSession.RemoveAt(i);
                     }
                     SessionServices.SetCartItemToSession(HttpContext.Session, "Cart", ListCartItemFromSession);
-                    
+
                 }
                 if (role == "User") { return RedirectToAction("Index", "Home"); }
                 else
@@ -127,7 +127,7 @@ namespace BanMoHinh.Client.Controllers
         }
         public async Task<IActionResult> LogOut()
         {
-           var sd = await _authenticationService.Logout();
+            var sd = await _authenticationService.Logout();
             if (sd.IsSuccess)
             {
                 Response.Cookies.Delete("Cookie_Cua_Trung");
@@ -139,7 +139,7 @@ namespace BanMoHinh.Client.Controllers
         {
             return View();
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -152,7 +152,7 @@ namespace BanMoHinh.Client.Controllers
                     UserName = model.UserName,
                     Password = model.Password
                 };
-               return await Login(LoginModel);
+                return await Login(LoginModel);
             }
             else
             {
@@ -189,7 +189,7 @@ namespace BanMoHinh.Client.Controllers
             return View(user);
 
         }
-       
+
         [HttpPost]
 
         public async Task<IActionResult> Profile(UserViewModel user)
@@ -227,13 +227,14 @@ namespace BanMoHinh.Client.Controllers
             }
 
 
-                _notyf.Error("Cập nhật thất bại");
-                return RedirectToAction("Profile");
+            _notyf.Error("Cập nhật thất bại");
+            return RedirectToAction("Profile");
 
-            
+
 
 
         }
-       
+
+    }
 }
 
