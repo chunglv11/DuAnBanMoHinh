@@ -13,7 +13,13 @@
     </ul>
 </div>
 <p>
-    <a asp-action="Create" class="btn btn-success m-1">Thêm mới</a>
+    @{
+        // Lấy giá trị của tham số 'id' từ URL hiện tại
+         string currentId = ViewContext.RouteData.Values["id"]?.ToString();
+    }
+
+    <a href="/admin/productdetail/create/@currentId" class="btn btn-success">Tạo mới</a>
+
 </p>
 <table class="table">
     <thead>

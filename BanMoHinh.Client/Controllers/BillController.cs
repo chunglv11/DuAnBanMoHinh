@@ -162,7 +162,7 @@ namespace BanMoHinh.Client.Controllers
                             };
                             var responsePostCart = await _httpClient.PostAsJsonAsync<OrderItemVM>("https://localhost:7007/api/orderitem/create", orderItem); // tạo order
                             var responseDeleteCartItem = await _httpClient.DeleteAsync($"https://localhost:7007/api/cartitem/Delete-CartItem?cartId={myCartId}");// xoá sp trong cart
-                            var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                            //var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
                         }
                         // trừ số lượng sp trong db
                     }
@@ -186,7 +186,7 @@ namespace BanMoHinh.Client.Controllers
                             {
                                 return "None";
                             }
-                            var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
+                            //var responseUpdateQuantityProductDetail = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetail_ID}&quantity={item.Quantity}");// update lại sp
                         }
 
                         // xoá sp trong cart session
@@ -198,11 +198,11 @@ namespace BanMoHinh.Client.Controllers
                         SessionServices.SetCartItemToSession(HttpContext.Session, "Cart", lstCartItem);
 
                     }
-                    var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
-                    if (!updateSLSPfromDb.IsSuccessStatusCode)
-                    {
-                        return "CheckOutFails";
-                    }
+                    //var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                    //if (!updateSLSPfromDb.IsSuccessStatusCode)
+                    //{
+                    //    return "CheckOutFails";
+                    //}
                     if (hoaDon.PaymentType == "COD")
                     {
                         return $"https://localhost:7095/Bill/CheckOutSuccess?orderid={order.Id}";

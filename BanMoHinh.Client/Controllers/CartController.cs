@@ -221,10 +221,6 @@ namespace BanMoHinh.Client.Controllers
                             {
                                 return Json(new { message = "Vui lòng chọn lại số lượng nhỏ hơn số lượng sản phẩm tồn!!", status = false });
                             }
-                            if (ProductDetailToAddCart.Quantity < quantity + checkExistInCartItem.FirstOrDefault().Quantity)
-                            {
-                                return Json(new { message = "Số lượng sản phẩm trong giỏ hàng và số lượng muốn thêm vào vượt quá số lượng tồn kho. Vui lòng giảm số lượng hoặc chọn sản phẩm khác.", status = false });
-                            }
                             if (ProductDetailToAddCart.Quantity <= 0)
                             {
                                 return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
