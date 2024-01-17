@@ -13,7 +13,6 @@ namespace BanMoHinh.API.Services
         private readonly IConfiguration _configuration;
         private readonly IRankService _rankService;
         private readonly RoleManager<Role> _roleManager;
-
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager,RoleManager<Role> roleManager, IConfiguration configuration,IRankService rankService)
         {
             _userManager = userManager;
