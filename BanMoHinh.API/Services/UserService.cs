@@ -3,6 +3,8 @@ using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
+using System.Text.Encodings.Web;
 
 namespace BanMoHinh.API.Services
 {
@@ -13,7 +15,6 @@ namespace BanMoHinh.API.Services
         private readonly IConfiguration _configuration;
         private readonly IRankService _rankService;
         private readonly RoleManager<Role> _roleManager;
-
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager,RoleManager<Role> roleManager, IConfiguration configuration,IRankService rankService)
         {
             _userManager = userManager;
@@ -66,6 +67,10 @@ namespace BanMoHinh.API.Services
         {
             return await _userManager.FindByNameAsync(userName);
         }
+        public async Task<User> GetItemid(Guid userName)
+        {
+            return await _userManager.FindByIdAsync(userName.ToString());
+        }
         // RESET PASSWORD
         public async Task<bool> ResetPassword(string userName, string newPassword)
         {
@@ -99,6 +104,20 @@ namespace BanMoHinh.API.Services
             }
             return false;
         }
+       // quên mật khẩu
+       
+        public async Task<bool> CheckPassword(string userName, string currentPassword)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            bool passwordMatch = await _userManager.CheckPasswordAsync(user, currentPassword); // check old password
+            if (passwordMatch)
+            {
+                return true;
+
+
+            }
+            return false;
+        }
         // CHANGE ROLE
         public async Task<bool> ChangeRole(string userName, string roleName)
         {
@@ -121,16 +140,18 @@ namespace BanMoHinh.API.Services
         }
 
         // UPDATE
-        public async Task<bool> Update( UserViewModel item) // tự nhiên có rank khoai ghê
+        public async Task<bool> Update(UserViewModel item) // tự nhiên có rank khoai ghê
         {
-            var user = new User()
-            {
-                UserName = item.UserName,
-                Email = item.Email,
-                PhoneNumber = item.PhoneNumber,
-                DateOfBirth = item.DateOfBirth,
-                Points = 0,
-            };
+            var user = await _userManager.FindByIdAsync(item.Id.ToString());
+            var currentSecurityStamp = user.SecurityStamp;
+
+
+            user.Email = item.Email;
+            user.PhoneNumber = item.PhoneNumber;
+            user.DateOfBirth = item.DateOfBirth;
+                    
+        
+            user.SecurityStamp = currentSecurityStamp;
             var result = await _userManager.UpdateAsync(user); // update account
             if (result.Succeeded)
             {

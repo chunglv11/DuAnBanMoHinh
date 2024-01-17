@@ -13,5 +13,9 @@ namespace BanMoHinh.API.IServices
         public Task<bool> ChangeRole( string userName, string roleName);
         public Task<bool> ResetPassword(string userName, string newPassword);
         public Task<bool> ChangePassword(string userName, string currentPassword, string newPassword);
+        public  Task<User> GetItemid(Guid userName);
+        public Task<bool> CheckPassword(string userName, string currentPassword);
+
+
     }
 }

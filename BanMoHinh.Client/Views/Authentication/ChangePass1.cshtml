@@ -1,0 +1,54 @@
+﻿@model BanMoHinh.Share.Models.User
+@using BanMoHinh.Share.Models
+
+@{
+    
+}
+<section class="banner-area organic-breadcrumb">
+<div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+    </div>
+</div>
+</section>
+
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-ctn mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đổi mật khẩu</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<h2 style="text-align:center">Thông tin tài khoản</h2>
+<hr/>
+<div class="row">
+    <div class="container">
+          
+
+        <form asp-controller="Authentication" asp-action="ChangePass" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label">Tên Tài Khoản</label>
+                <input asp-for="UserName" name="username" class="form-control" disabled />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Mật khẩu của bạn</label>
+                <input name="pass" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Mật khẩu Mới</label>
+                <input name="newpass" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success m-1" value="ChangePass" type="submit">Đổi mật khẩu</button>
+                <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Quay lại</a>
+            </div>
+            </form>

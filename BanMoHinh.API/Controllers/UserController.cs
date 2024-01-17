@@ -48,6 +48,19 @@ namespace BanMoHinh.API.Controllers
             }
         }
 
+        [HttpGet("getID/{userName}")]
+        public async Task<IActionResult> GetById(Guid userName)
+        {
+            try
+            {
+                return Ok(await _userService.GetItemid(userName));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
 
         [HttpDelete("delete/{userName}")]
         public async Task<IActionResult> Delete(string userName)
@@ -76,7 +89,7 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update(UserViewModel item)
         {
             try
@@ -115,12 +128,25 @@ namespace BanMoHinh.API.Controllers
                 return StatusCode(500, "Không lấy được dữ liệu");
             }
         }
-        [HttpGet("change-password/{userName}/{currentPassword}/{newPassword}")]
+        [HttpPost("change-password/{userName}/{currentPassword}/{newPassword}")]
         public async Task<IActionResult> ChangePassword(string userName, string currentPassword, string newPassword)
         {
             try
             {
                 return Ok(await _userService.ChangePassword(userName, currentPassword, newPassword));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Không lấy được dữ liệu");
+            }
+        }
+        [HttpGet("check-password/{userName}/{currentPassword}")]
+        public async Task<IActionResult> CheckPassword(string userName, string currentPassword)
+        {
+            try
+            {
+                return Ok(await _userService.CheckPassword(userName, currentPassword));
             }
             catch (Exception ex)
             {

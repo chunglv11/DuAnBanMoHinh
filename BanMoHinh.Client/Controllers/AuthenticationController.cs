@@ -10,6 +10,13 @@ using System.Net.Http;
 using System.Security.Policy;
 using System.Net.WebSockets;
 using BanMoHinh.Share.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using System.Net.Mail;
+using System.Text;
+using System.Text.Json;
+using System.Security.Cryptography;
 
 namespace BanMoHinh.Client.Controllers
 {
@@ -17,11 +24,14 @@ namespace BanMoHinh.Client.Controllers
     {
         private readonly IServices.IAuthenticationService _authenticationService;
         private readonly HttpClient _httpClient;
+        public INotyfService _notyf;
 
-        public AuthenticationController(IServices.IAuthenticationService authenticationService,HttpClient httpClient)
+
+        public AuthenticationController(IServices.IAuthenticationService authenticationService,HttpClient httpClient, INotyfService notyf )
         {
             _authenticationService = authenticationService;
             _httpClient = httpClient;
+            _notyf = notyf;
 
         }
         public IActionResult Login()
@@ -129,6 +139,7 @@ namespace BanMoHinh.Client.Controllers
         {
             return View();
         }
+       
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -149,5 +160,80 @@ namespace BanMoHinh.Client.Controllers
                 return View();
             }
         }
-    }
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new MailAddress(email);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> Profile(Guid id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+
+
+            var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            ViewBag.userID = userID;
+            var user = await _httpClient.GetFromJsonAsync<User>($"https://localhost:7007/api/users/getID/{id}");
+            var ranks = await _httpClient.GetFromJsonAsync<List<Rank>>("https://localhost:7007/api/ranks/get-ranks");
+
+            ViewData["rank"] = ranks;
+            return View(user);
+
+        }
+       
+        [HttpPost]
+
+        public async Task<IActionResult> Profile(UserViewModel user)
+        {
+
+            if (user.PhoneNumber.Length > 11)
+            {
+                _notyf.Error("Số điện thoại không quá 10 số");
+            }
+            if (!IsValidEmail(user.Email))
+            {
+                _notyf.Error("Email không hợp lệ");
+
+            }
+            if (user.DateOfBirth > DateTime.Now || user.DateOfBirth < new DateTime(1900, 1, 1))
+            {
+                _notyf.Error("ngày sinh không hợp lệ, ngày sinh phải nhỏ hơn hiện tại và ko được thấp hơn năm 1900");
+
+            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var usernameClaim = identity.FindFirst(ClaimTypes.Name);
+
+            if (usernameClaim != null)
+            {
+                var username = usernameClaim.Value;
+                user.UserName = username;
+                var result = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/users/Update", user);
+                if (result.IsSuccessStatusCode)
+                {
+                    _notyf.Success("Cập nhật thành công");
+                    return RedirectToAction("Index", "Home");
+
+                }
+                // Sử dụng biến username ở đây
+            }
+
+
+                _notyf.Error("Cập nhật thất bại");
+                return RedirectToAction("Profile");
+
+            
+
+
+        }
+       
 }
+
