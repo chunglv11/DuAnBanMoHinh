@@ -117,7 +117,7 @@
                                 <i class="nav-icon fas fa-user"></i>
 
                                 <p>
-                                   Quản lí người dùng
+                                    Quản lí người dùng
                                 </p>
                             </a>
                         </li>
@@ -127,13 +127,13 @@
                                 <i class="nav-icon fas fa-chart-simple"></i>
 
                                 <p>
-                                   Quản lí xếp hạng
+                                    Quản lí xếp hạng
                                 </p>
                             </a>
                         </li>
 
-                        
-                         <li class="nav-item">
+
+                        <li class="nav-item">
                             <a asp-area="Admin" asp-controller="Order" asp-action="ShowList" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
 
@@ -159,7 +159,7 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>
-                                   Quản lí Sản Phẩm
+                                    Quản lí Sản Phẩm
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
@@ -170,15 +170,15 @@
                                         <p>Sản phẩm</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Show" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sản phẩm chi tiết</p>
-                                    </a>
+                                @* <li class="nav-item">
+                                <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Show" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sản phẩm chi tiết</p>
+                                </a>
                                 </li>
-
+                                *@
                                 <li class="nav-item">
-                                    <a  asp-area="Admin" asp-controller="Size" asp-action="Show" class="nav-link">
+                                    <a asp-area="Admin" asp-controller="Size" asp-action="Show" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Kích cỡ</p>
                                     </a>
@@ -198,26 +198,27 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a  asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory" class="nav-link">
+                                    <a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategory" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Thể loại</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-area ="Admin" asp-controller="Material" asp-action="GetAllMaterial" class="nav-link">
+                                    <a asp-area="Admin" asp-controller="Material" asp-action="GetAllMaterial" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Chất liệu</p>
                                     </a>
                                 </li>
-
                             </ul>
                         </li>
-                                    <li class="nav-item"><a asp-controller="Authentication" asp-action="Logout" class="nav-link">
+                        <li class="nav-item">
+                            <a asp-controller="Authentication" asp-action="Logout" asp-area="" class="nav-link">
                                 <i class="nav-icon fas fa-backward "></i>
+                                Đăng xuất
+                            </a>
+                        </li>
 
-                                        Đăng xuất</a></li>
 
-                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
