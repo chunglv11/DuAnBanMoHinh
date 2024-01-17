@@ -78,11 +78,11 @@
             <td >
                     @if (item.Status == true)
                     {
-                        <p style="color:green">Còn hoạt động</p>
+                        <p style="color:green">Đang bán</p>
                     }
                     else
                     {
-                        <p style="color:red">Ngưng hoạt động</p>
+                        <p style="color:red">Ngừng bán</p>
                     }
                 
 
@@ -90,7 +90,21 @@
             <td >
                 <a class="btn btn-primary btn-sm" type="button" href="Update/@item.Id" title="Sửa"><i class="fa fa-edit"></i></a>
                 <a class="btn btn-warning btn-sm"  type="button" href="Details/@item.Id" title="Chi tiết"><i class="fas fa-info-circle"></i></a>
-                <a class="btn btn-danger btn-sm " type="button" href="Remove/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>
+                    @*<a class="btn btn-danger btn-sm " type="button" href="ChangeStatus/@item.Id" title="Xóa"><i class="fas fa-trash"></i></a>*@
+                    @*@Html.ActionLink("Xoá", "ChangeStatus", new { idspct =item.Id,status=false }, new {@class="btn btn-danger btn-sm"})*@
+                    @if (item.Status == true)
+                    {
+                        <button class="btn btn-danger">
+                            @Html.ActionLink("Ngừng bán", "ChangeStatus",new { idspct =item.Id,status=false }, new { @style = "color:white;" })
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success">
+                            @Html.ActionLink("Mở bán", "ChangeStatus", new { idspct =item.Id,status=true }, new { @style = "color:white;" })
+                        </button>
+                    }
+
             </td>
         </tr>
 }

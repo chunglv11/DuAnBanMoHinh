@@ -100,6 +100,7 @@
                                 foreach (var item in Model)
                                 {
                                     var checkSL = productDetailCheck.Where(c => c.Id == item.ProductDetail_Id && c.Quantity < item.Quantity).Count();
+                                    var checkstatus = productDetailCheck.Where(c => c.Id == item.ProductDetail_Id&&c.Status==false).Count();
                                     var idProductDetail = item.ProductDetail_Id;
                                     stt++;
 
@@ -126,12 +127,25 @@
                                                 <div class="exceeded-message">
                                                     <p>Sản phẩm vượt quá số lượng</p>
                                                     <a class="primary-btn custom-history-trash" onclick="removeItem('@item.ProductDetail_Id')">
-                                                        <i class="bx bx-trash bx-sm"></i> Hủy
+                                                        <i class="bx bx-trash bx-sm"></i> Xoá
                                                     </a>
-                                                    \
+                                                    
                                                 </div>
                                             </td>
                                         }
+                                        else if (checkstatus == 1)
+                                        {
+                                        <td class="pro-quantity text-center" colspan="4">
+                                            <div class="exceeded-message">
+                                                <p>Sản phẩm đã ngừng kinh doanh</p>
+                                                <a class="primary-btn custom-history-trash" onclick="removeItem('@item.ProductDetail_Id')">
+                                                    <i class="bx bx-trash bx-sm"></i> Xoá
+                                                </a>
+                                                
+                                            </div>
+                                        </td>
+                                        }
+
                                         else
                                         {
                                             <td class="pro-quantity">

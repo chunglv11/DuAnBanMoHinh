@@ -22,5 +22,6 @@ namespace BanMoHinh.API.IServices
         public Task<bool> Update(ProductDetailVM item);
         public decimal GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId);
         public ProductDetail GetProductDetail(Guid productId, Guid sizeId, Guid colorId);
+        public Task<bool> ChangeStatusAsync(Guid idspct, bool status);
     }
 }

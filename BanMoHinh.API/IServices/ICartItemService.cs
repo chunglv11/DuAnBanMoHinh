@@ -18,5 +18,6 @@ namespace BanMoHinh.API.IServices
 
         // Delete (Xóa một mục trong CartItem)
         public Task<bool> DeleteCartItem(Guid CartId);
+        public  Task<bool> Delete1Item(Guid CartItemId);
     }
 }

@@ -110,5 +110,12 @@ namespace BanMoHinh.API.Controllers
             }
             return Ok("Lỗi!");
         }
+        [HttpGet("ChangeStatus")]
+        public async Task<IActionResult> ChangeStatusAsync(Guid idsp, bool status)
+        {
+            var productdetail = await _iproductService.ChangeStatusAsync(idsp, status);
+            var updateslProduct = await _iproductService.UpdateSLTheoSPCT();
+            return Ok(productdetail);
+        }
     }
 }
