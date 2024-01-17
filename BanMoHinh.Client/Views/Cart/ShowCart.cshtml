@@ -106,7 +106,7 @@
 
 
                                     <tr>
-                                        <td class="pro-quantity"><span>@stt</span></td>
+                                        <td ><span>@stt</span></td>
                                         <td class="pro-thumbnail">
                                             <a href="#">
                                                 <img class="img-fluid img-cart-inx" src="@(Configuration["BaseAddress"]+item.ImageName)" alt="">
@@ -168,7 +168,7 @@
                                                     price = item.PriceSale;
 
                                                 }
-                                                <span>@price?.ToString("N0")</span>
+                                                <span>@price?.ToString("N0") VNĐ</span>
                                             </td>
                                             <td class="pro-price">
                                                 @{
