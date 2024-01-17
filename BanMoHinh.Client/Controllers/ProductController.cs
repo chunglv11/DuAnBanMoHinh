@@ -147,10 +147,7 @@ namespace BanMoHinh.Client.Controllers
         public async Task<List<ProductVM>> Filter(string sortOrder, List<ProductVM> lstProductVm)
         {
             switch (sortOrder)
-            {
-                case "best-selling":
-                    lstProductVm = lstProductVm.OrderBy(p => p.ProductDvms?.Sum(d => d.Quantity)).ToList();
-                    break;
+            {             
                 case "a":
                     lstProductVm = lstProductVm.OrderBy(p => p.ProductName).ToList();
                     break;
@@ -249,7 +246,7 @@ namespace BanMoHinh.Client.Controllers
             ViewBag.maxPrice = maxPrice;
 
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
-            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0)).ToList();
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0&&b.Status==true) && c.Status == true).ToList();
             if (!string.IsNullOrWhiteSpace(name))
             {
                 allproduct = await Search(name, allproduct);
@@ -281,7 +278,7 @@ namespace BanMoHinh.Client.Controllers
 
         }
 
-        public async Task<JsonResult> GetPriceForProductDetail(Guid productId, Guid sizeId, Guid colorId)
+        public async Task<JsonResult> GetProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
             
             try
@@ -292,7 +289,7 @@ namespace BanMoHinh.Client.Controllers
             catch (Exception)
             {
 
-				return Json(new { message = "Lỗi", status = false });
+				return Json(new { message = "Không có size và màu bạn chọn :(", status = false });
 
 			}
 		}

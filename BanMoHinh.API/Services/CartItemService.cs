@@ -57,6 +57,24 @@ namespace BanMoHinh.API.Services
                 return false;
             }
         }
+        [HttpGet]
+        public async Task<bool> Delete1Item( Guid CartItemId)
+        {
+            try
+            {
+                var item =await   _dbContext.CartItem.FindAsync(CartItemId);
+                _dbContext.CartItem.Remove(item);
+                await _dbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
 
         public async Task<List<CartItem>> GetAll()
         {

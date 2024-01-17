@@ -1,70 +1,58 @@
 ﻿@model BanMoHinh.Share.Models.Post
-
+@using BanMoHinh.Share.Models
 @{
     ViewData["Title"] = "DetailPost";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
+    List<User> lstUser = ViewBag.user as List<User>;
 }
+<style>
+    .article {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
 
+    .article-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .article-meta {
+        font-size: 14px;
+        color: #666666;
+        margin-bottom: 10px;
+    }
+
+    .article-date {
+        margin-right: 10px;
+    }
+
+    .article-author {
+        font-style: italic;
+    }
+
+    .article-content {
+        line-height: 1.6;
+    }
+</style>
 <div class="app-title">
-        <ul class="app-breadcrumb breadcrumb side">
-          <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
-          <li class="breadcrumb-item active"><a asp-action="Index">Danh sách bài viết</a></li>
-          <li class="breadcrumb-item active"><a asp-action="DetailPost">Chi tiết sản phẩm</a></li>
-        </ul>    
+    <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang Chủ</a></li>
+        <li class="breadcrumb-item active"><a asp-action="Index">Danh sách bài viết</a></li>
+        <li class="breadcrumb-item active"><a asp-action="DetailPost">Chi tiết sản phẩm</a></li>
+    </ul>
 </div>
 
-<div>
-    <dl class="row">
-
-        <dt class = "col-sm-2">
-            Người đăng
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-        <dt class = "col-sm-2">
-            Tiêu đề
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tittle)
-        </dd>
-        <dt class = "col-sm-2">
-            Ảnh đại diện
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TittleImage)
-        </dd>
-        <dt class = "col-sm-2">
-            Ngày đăng
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreateAt)
-        </dd>
-        <dt class = "col-sm-2">
-            Ngày cập nhật
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdateAt)
-        </dd>
-        <dt class = "col-sm-2">
-            Mô tả
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            Trạng thái
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-    <br/>
-    <hr/>
-    <br />
-    @Html.Raw(Model.Contents)
-</div>
-
-<div>
-    <a class="btn btn-secondary" asp-action="Index">Trở lại</a>
+<div class="article">
+    <h1 class="article-title">@Model.Tittle</h1>
+    <div class="article-meta">
+        <span class="article-date">@Model.CreateAt</span>
+        <span class="article-author">Người đăng: @lstUser.FirstOrDefault(c=>c.Id==Model.UserId).UserName</span>
+    </div>
+    <div class="article-content">
+        @Html.Raw(@Model.Contents)
+    </div>
 </div>

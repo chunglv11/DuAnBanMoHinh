@@ -192,11 +192,28 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                    
                      if(trangthai == 2) // chờ lấy hàng
                     {
+                        var hoadonCT =await _client.GetFromJsonAsync<DonMuaChiTietVM>($"https://localhost:7007/api/order/GetAllDonMuaChiTiet1/{idhd}");
+                        foreach (var item in hoadonCT.OrderItem)
+                        {
+                            var responseUpdateQuantityProductDetail = await _client.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityById?productDetailId={item.ProductDetailId}&quantity={item.Quantity}");// update lại sp
+                            if (!responseUpdateQuantityProductDetail.IsSuccessStatusCode)
+                            {// xác nhận đơn xong thì mới trừ số lượng sp
+                                return BadRequest();
+                            }
+                        }
+                        var updateSLSPfromDb = await _client.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                        if (!updateSLSPfromDb.IsSuccessStatusCode)
+                        { // update lại slsp
+                            return BadRequest();
+
+                        }
                         Guid idtt = Guid.Parse("2C54C2DD-2FA5-4041-9B94-FB613BEBDFBC");
                         string url = $"https://localhost:7007/api/order/updatett?idhoadon={idhd}&trangthai={idtt}&idnhanvien={idnv}";
                         var response = await _client.PutAsync(url, null);
                         if (response.IsSuccessStatusCode)
                         {
+
+
                             TempData["SuccessMessage"] = "Cập nhật trạng thái thành công!";
                             var successMessage = TempData["SuccessMessage"] as string;
                             if (!string.IsNullOrEmpty(successMessage))

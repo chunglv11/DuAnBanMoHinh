@@ -129,6 +129,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         public async Task<IActionResult> DetailPost(Guid id)
         {
             var post = await _httpClient.GetFromJsonAsync<Post>($"https://localhost:7007/api/posts/get/{id}");
+            var lstUser = await _httpClient.GetFromJsonAsync<List<User>>($"https://localhost:7007/api/users/getall");
+            ViewBag.user = lstUser;
             return View(post);
         }
 

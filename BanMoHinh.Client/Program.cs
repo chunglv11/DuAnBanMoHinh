@@ -25,12 +25,12 @@ builder.Services.AddNotyf(config =>
     config.Position = NotyfPosition.TopRight;
 });
 // Add Notyf // Đây là thông báo
-builder.Services.AddSession();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+	options.IdleTimeout = TimeSpan.FromDays(7);
 });
+
 // add authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
    .AddCookie(options =>

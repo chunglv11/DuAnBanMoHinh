@@ -15,6 +15,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<Order> GetItem(Guid id);
         public Task<List<DonMuaChiTietVM>> getAllDonMuaChiTiet(Guid idHoaDon);
+        public Task<QLHDViewModel> GetDonMuaByOrderCode(string? orderCode);
 
         public Task<bool> Update(Guid id, Guid UserId, OrderVM item);
         public  Task<bool> UpdateTrangThaiGiaoHang(Guid idHoaDon, Guid idtrangThai, Guid? idNhanVien);

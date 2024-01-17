@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Share.Models;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,11 +12,14 @@ namespace BanMoHinh.Client.Controllers
 	public class OrderController : Controller
 	{
 		private readonly HttpClient _httpClient;
+        public INotyfService _notyf;
 
-		public OrderController(HttpClient httpClient)
-		{
-			_httpClient = httpClient;
-		}
+        public OrderController(HttpClient httpClient, INotyfService notyf)
+        {
+            _httpClient = httpClient;
+            _notyf = notyf;
+        }
+
         public async Task<IActionResult> allOrder(Guid id, int? page,int status)
         {
 
@@ -103,22 +107,38 @@ namespace BanMoHinh.Client.Controllers
 
                 }
                 //hoàn lại số lượng
-                var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
+                //var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
                 
-                var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
-                foreach (var hdct in lsthdct)
-                {
-                    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
-                }
-                var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                //var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
+                //foreach (var hdct in lsthdct)
+                //{
+                //    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
+                //}
+                //var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                 return RedirectToAction("allOrder");
             }
 
             return RedirectToAction("allOrder");
         }
 
+        public async Task<IActionResult> allOrderCode(string ordercode)
+        {
+            if (string.IsNullOrEmpty(ordercode))
+            {
+                _notyf.Warning("Mã đơn hàng không được để trống.");
+                return RedirectToAction("SearchOrderCode");
+            }
+            var listOrder = await _httpClient.GetFromJsonAsync<QLHDViewModel>($"https://localhost:7007/api/order/GetAllDonMuaByOrderCode?orderCode={ordercode}");
 
+            return View(listOrder);
+        }
 
+        public async Task<IActionResult> SearchOrderCode()
+        {
+
+            return View();
+
+        }
 
 
 

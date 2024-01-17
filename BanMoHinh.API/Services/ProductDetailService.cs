@@ -303,14 +303,14 @@ namespace BanMoHinh.API.Services
             {
                 return productDetail;
             }
-            throw new Exception("Không tìm thấy giá sản phẩm chi tiết/ chưa có size,color này.");
+            return null;
         }
 
         public async Task<bool> UpdateQuantityById(Guid productDetailId, int quantity)
         {
             try
             {
-                var productDetail =   _dbContext.ProductDetail.FirstOrDefault(c=>c.Id== productDetailId);
+                var productDetail = _dbContext.ProductDetail.FirstOrDefault(c => c.Id == productDetailId);
                 productDetail.Quantity -= quantity;
                 _dbContext.ProductDetail.Update(productDetail);
                 await _dbContext.SaveChangesAsync();
@@ -320,7 +320,7 @@ namespace BanMoHinh.API.Services
             {
                 return false;
             }
-            
+
         }
 
         public async Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int quantity)
@@ -357,5 +357,23 @@ namespace BanMoHinh.API.Services
                 return new List<ProductImageVM>();
             }
         }
+        public async Task<bool> ChangeStatusAsync(Guid idspct, bool status)
+        {
+            try
+            {
+                var spct = await _dbContext.ProductDetail.FindAsync(idspct);
+                spct.Status = status;
+                _dbContext.ProductDetail.Update(spct);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+        }
+
     }
+
 }

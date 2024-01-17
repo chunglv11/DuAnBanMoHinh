@@ -37,7 +37,7 @@ namespace BanMoHinh.Client.Controllers
                 var listCartDetail = await _httpClient.GetFromJsonAsync<List<ViewCartDetails>>("https://localhost:7007/api/CartDetails/Get-All");
                 List<ViewCartDetails>? listcartDetailbyIdCart = listCartDetail.Where(c => c.CartId == getCart.Id).ToList();
                 var getAllProductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetail>>("https://localhost:7007/api/productDetail/get-all-productdetail"); // lấy hết spct
-                var productDetailCheck = getAllProductDetail.Where(productDetail => listcartDetailbyIdCart.Any(cartDetail => cartDetail.ProductDetail_Id == productDetail.Id && cartDetail.Quantity > productDetail.Quantity)).ToList();
+                var productDetailCheck = getAllProductDetail.Where(productDetail => listcartDetailbyIdCart.Any(cartDetail => cartDetail.ProductDetail_Id == productDetail.Id && cartDetail.Quantity > productDetail.Quantity || cartDetail.ProductDetail_Id == productDetail.Id&&productDetail.Status == false) ).ToList();
                 // lấy sp sao cho sl trong cart> sl kho
                 var listcartDetailbyIdCartJson = JsonConvert.SerializeObject(listcartDetailbyIdCart);
                 // Lưu chuỗi JSON vào TempData
@@ -61,7 +61,7 @@ namespace BanMoHinh.Client.Controllers
                     var ViewCartDetails = JsonConvert.DeserializeObject<List<ViewCartDetails>>(responseData);
                     // Lưu chuỗi JSON vào TempData
                     var getAllProductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetail>>("https://localhost:7007/api/productDetail/get-all-productdetail"); // lấy hết spct
-                    var productDetailCheck = getAllProductDetail.Where(productDetail => ViewCartDetails.Any(cartDetail => cartDetail.ProductDetail_Id == productDetail.Id && cartDetail.Quantity > productDetail.Quantity)).ToList();
+                    var productDetailCheck = getAllProductDetail.Where(productDetail => ViewCartDetails.Any(cartDetail => cartDetail.ProductDetail_Id == productDetail.Id && cartDetail.Quantity > productDetail.Quantity || cartDetail.ProductDetail_Id == productDetail.Id && productDetail.Status == false) ).ToList();
                     // lấy sp sao cho sl trong cart> sl kho
 
                     ViewData["productDetailCheck"] = productDetailCheck;
@@ -122,6 +122,10 @@ namespace BanMoHinh.Client.Controllers
                         {
                             return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
                         }
+                        if (ProductDetailToAddCart.Status==false)
+                        {
+                            return Json(new { message = "Sản phẩm đang ngừng bán!!", status = false });
+                        }
 
                         else
                         {
@@ -163,7 +167,10 @@ namespace BanMoHinh.Client.Controllers
                         {
                             return Json(new { message = "Sản phẩm đã hết hàng hoặc số lượng không hợp lệ. Vui lòng chọn số lượng hợp lệ.", status = false });
                         }
-
+                        if (ProductDetailToAddCart.Status == false)
+                        {
+                            return Json(new { message = "Sản phẩm đang ngừng bán!!", status = false });
+                        }
                         productDetailInCart.Quantity += quantity;
                         var updateResponse = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/cartitem/Update-CartItem?id={productDetailInCart.Id}", productDetailInCart);
                         if (!updateResponse.IsSuccessStatusCode)
@@ -200,7 +207,10 @@ namespace BanMoHinh.Client.Controllers
                         {
                             return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
                         }
-
+                        if (ProductDetailToAddCart.Status == false)
+                        {
+                            return Json(new { message = "Sản phẩm đang ngừng bán!!", status = false });
+                        }
                         else
                         {
                             if (ProductDetailToAddCart.Quantity == 0)
@@ -229,6 +239,10 @@ namespace BanMoHinh.Client.Controllers
                         if (ProductDetailToAddCart.Quantity == 0)
                         {
                             return Json(new { message = "Sản phẩm đã hết hàng!!", status = false });
+                        }
+                        if (ProductDetailToAddCart.Status == false)
+                        {
+                            return Json(new { message = "Sản phẩm đang ngừng bán!!", status = false });
                         }
                         var productDetailInCart = checkExistInCartItem.FirstOrDefault();
 
