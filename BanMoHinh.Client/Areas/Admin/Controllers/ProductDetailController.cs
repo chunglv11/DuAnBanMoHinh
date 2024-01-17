@@ -30,28 +30,27 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             return View(response);
 
         }
-        public async Task<IActionResult> Create(Guid productId, Guid sizeId, Guid colorId)
+        public async Task<IActionResult> Create(Guid productId)
         {
-            var productprops = _apiClient.GetListProduct();
-            ViewBag.ProductProp = productprops.Result.Select(x => new SelectListItem()
-            {
-                Text = x.ProductName,
-                Value = x.Id.ToString(),
-                Selected = productId.ToString() == x.Id.ToString()
-            });
+            //var productprops = _apiClient.GetListProduct();
+            //ViewBag.ProductProp = productprops.Result.Select(x => new SelectListItem()
+            //{
+            //    Text = x.ProductName,
+            //    Value = x.Id.ToString(),
+            //    Selected = productId.ToString() == x.Id.ToString()
+            //});
+            ViewBag.productId = productId;
             var sizes = _apiClient.GetListSize();
             ViewBag.Size = sizes.Result.Select(x => new SelectListItem()
             {
                 Text = x.SizeName,
-                Value = x.Id.ToString(),
-                Selected = sizeId.ToString() == x.Id.ToString()
+                Value = x.Id.ToString()
             });
             var colors = _apiClient.GetListColor();
             ViewBag.Color = colors.Result.Select(x => new SelectListItem()
             {
                 Text = x.ColorName,
-                Value = x.ColorId.ToString(),
-                Selected = colorId.ToString() == x.ColorId.ToString()
+                Value = x.ColorId.ToString()
             });
             return View();
         }
@@ -113,7 +112,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             if (result != null)
             {
                 _notyf.Success("Thêm thành công!");
-                return RedirectToAction("Show");
+                return Redirect("/Admin/Product/GetAllProduct");
             }
             return View();
 
@@ -193,11 +192,12 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 if (response)
                 {
                     _notyf.Success("Sửa thành công");
-                    return RedirectToAction("Show");
+                    return Redirect("/Admin/Product/GetAllProduct");
                 }
                 else
                 {
-                    return View();
+                    return Redirect("/Admin/Product/GetAllProduct");
+
                 }
 
             }
@@ -221,7 +221,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 
             if (response)
             {
-                return RedirectToAction("Show");
+                return Redirect("/Admin/Product/GetAllProduct");
+
             }
             else
             {

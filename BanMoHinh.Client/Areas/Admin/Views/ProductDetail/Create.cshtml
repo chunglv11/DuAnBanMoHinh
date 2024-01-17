@@ -51,16 +51,20 @@ figcaption{
     <div class="container">
         <form id="product-form" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly"  class="text-danger" ></div>
-            
+            @{
+                // Lấy giá trị của tham số 'id' từ URL hiện tại
+                string currentId = ViewContext.RouteData.Values["id"]?.ToString();
+            }
             <div class="form-group">
-                <label class="control-label">Tên sản phẩm</label>
+               @* <label class="control-label">Tên sản phẩm</label>
                 @{
                     <select name="productId" onchange="this.value;" asp-items="@ViewBag.ProductProp" class="form-control">
                    
                 </select>
                 
                 }
-                
+                *@
+                <input type="hidden" name="productId" value="@currentId" />
             </div>
             <div class="form-group">
                 <label class="control-label">Tên size</label>
@@ -174,55 +178,19 @@ figcaption{
             selectedImages.push({ file: file, imageUrl: imageUrl });
             imageContainer.appendChild(figure);
         });
-
         updateNumOfFiles();
     }
-
     function deleteImage(figure, file) {
         URL.revokeObjectURL(file.imageUrl); // Giải phóng bộ nhớ
         figure.remove();
         selectedImages = selectedImages.filter(selectedImage => selectedImage.file !== file);
         updateNumOfFiles();
     }
-
     function updateNumOfFiles() {
         let numOfFiles = document.getElementById("num-of-files");
         numOfFiles.textContent = `${selectedImages.length} ảnh đã chọn`;
     }
 </script>
-
-<script>
-    document.getElementById('product-form').addEventListener('submit', function (e) {
-        e.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
-
-        let formData = new FormData(this); // Sử dụng FormData của form hiện tại
-
-        // Thêm tất cả các file đã chọn vào formData
-        selectedImages.forEach((selectedImage, index) => {
-            formData.append('filecollection', selectedImage.file);
-            console.log("OK")
-        });
-
-        // Gửi formData đến server
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Xử lý kết quả trả về từ server
-                // if (data.success) {
-                //     alert(data.message); // Hiển thị thông báo thành công
-                    window.location.href = '/Admin/ProductDetail/Show';
-            })
-            .catch(error => {
-                console.error(error); // Xử lý lỗi nếu có
-            });
-    });
-</script>
-
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
