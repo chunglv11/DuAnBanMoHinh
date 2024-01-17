@@ -107,14 +107,14 @@ namespace BanMoHinh.Client.Controllers
 
                 }
                 //hoàn lại số lượng
-                var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
+                //var listOrderItem = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");           
                 
-                var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
-                foreach (var hdct in lsthdct)
-                {
-                    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
-                }
-                var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
+                //var lsthdct = listOrderItem.Where(c => c.OrderId == idHoaDon).ToList();
+                //foreach (var hdct in lsthdct)
+                //{
+                //    var UpdateQ = await _httpClient.GetAsync($"https://localhost:7007/api/productDetail/UpdateQuantityOrderFail?productDetailId={hdct.ProductDetailId}&quantity={hdct.Quantity}");// update lại sp
+                //}
+                //var updateSLSPfromDb = await _httpClient.GetAsync($"https://localhost:7007/api/product/UpdateSLTheoSPCT");
                 return RedirectToAction("allOrder");
             }
 

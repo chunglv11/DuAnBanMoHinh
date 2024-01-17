@@ -42,26 +42,7 @@ namespace BanMoHinh.Client.Controllers
             {
                 TempData["Message"] = "Dữ liệu không tồn tại.";
             }
-            // sản phẩm bán chạy
-            var HDCT = await _httpClient.GetFromJsonAsync<List<OrderItem>>("https://localhost:7007/api/orderitem/getall");
-            var query =
-            (from item in HDCT
-             group item.Quantity by item.productDetail into g
-             orderby g.Sum() descending
-             select new { ProductDetails = g.Key }).Take(4).ToList();
-            //var bestSell = from a in query
-            //               join b in result on a.ProductDetails.ProductId equals b.Id into temp
-            //               from b in temp.DefaultIfEmpty()
-            //               join c in ProductImage on a.ProductDetails.Id equals c.ProductDetailId into tempImage
-            //               from c in tempImage.DefaultIfEmpty()
-            //               select new ProductDetailVM()
-            //               {
-            //                   Id = a.ProductDetails.Id,
-            //                   ProductName = b != null ? b.ProductName : "Unknown", // Xử lý trường hợp b là null
-            //                   PriceSale = a.ProductDetails.PriceSale
-            //               };
-
-            ViewData["TopSellingProducts"] = query;
+            
             return View();
         }
         public IActionResult Introduct()
