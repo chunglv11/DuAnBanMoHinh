@@ -33,13 +33,12 @@
 		<form asp-action="CreateVoucher">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
-				<label for="SelectedRank">Rank</label>
+				<label for="SelectedRank">Đối tượng áp dụng</label>
 				<select id="SelectedRank" name="selectedRank" class="form-control">
 					<option value="tatca">Tất cả người dùng</option>
-					<option value="guest">Khách vãng lai</option>
 					@foreach (var rank in ranks.OrderBy(c=>c.PointsMin))
 					{
-						<option value="@rank.Name">@rank.Name</option>
+						<option value="@rank.Name">Khách hàng rank @rank.Name</option>
 
 					}
 				</select>

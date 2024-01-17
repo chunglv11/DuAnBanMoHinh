@@ -219,5 +219,21 @@ namespace BanMoHinh.API.Services
             }
         }
 
+        public async Task<bool> ChangeStatusAsync(Guid idsp, bool status)
+        {
+            try
+            {
+                var sp = await _dbContext.Product.FindAsync(idsp);
+                sp.Status = status;
+                _dbContext.Product.Update(sp);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+        }
     }
 }

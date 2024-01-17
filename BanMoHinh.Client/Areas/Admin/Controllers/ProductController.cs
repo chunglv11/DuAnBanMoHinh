@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using BanMoHinh.Share.Models;
+using BanMoHinh.Share.ViewModels;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -159,5 +160,29 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             await _httpClient.DeleteAsync($"https://localhost:7007/api/product/delete-product-{id}");
             return RedirectToAction("GetAllProduct");
         }
+        public async Task<IActionResult> ProductDetail(Guid id)
+        {
+            var AllProductDetail = await _httpClient.GetFromJsonAsync<List<ProductDetailVM>>("https://localhost:7007/api/productDetail/get-all-productdetail");
+            var ProductDetailInProduct = AllProductDetail.Where(c=>c.ProductId==id).ToList();
+            return View(ProductDetailInProduct);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatusAsync(Guid idsp, bool status)
+        {
+
+            var response = await _httpClient.GetAsync($"https://localhost:7007/api/product/ChangeStatus?idsp={idsp}&status={status}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                _notyf.Success("Cập nhật thành công");
+                return RedirectToAction("GetAllProduct");
+            }
+            else
+            {
+                _notyf.Error("Lỗi");
+                return View();
+            }
+        }
+
     }
 }

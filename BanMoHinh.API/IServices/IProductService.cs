@@ -18,7 +18,7 @@ namespace BanMoHinh.API.IServices
 
         public Task<bool> UpdateSLTheoSPCT();
         public Task<Product> GetItem(Guid id);
-
+        public Task<bool> ChangeStatusAsync(Guid idsp, bool status);
         public Task<bool> Update(Guid id, ProductVM item);
     }
 }
