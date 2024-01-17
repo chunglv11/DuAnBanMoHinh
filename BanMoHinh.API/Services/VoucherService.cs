@@ -29,6 +29,8 @@ namespace BanMoHinh.API.Services
                     Minimum_order_value = item.Minimum_order_value,
                     Create_Date = item.Create_Date,
                     Start_Date = item.Start_Date,
+                    Description = item.Description,
+                    MaxDiscountAmount = item.MaxDiscountAmount ,
                     End_Date = item.End_Date,
                     Status = item.Status,
                 };
@@ -97,10 +99,12 @@ namespace BanMoHinh.API.Services
             try
             {
                 var VoucherForcus = await _dbContext.Voucher.FirstOrDefaultAsync(c => c.Id == id);
-                VoucherForcus.Minimum_order_value = rank.Minimum_order_value;  
+                VoucherForcus.Minimum_order_value = rank.Minimum_order_value;
                 VoucherForcus.Quantity = rank.Quantity;
                 VoucherForcus.Start_Date = rank.Start_Date;
                 VoucherForcus.End_Date = rank.End_Date;
+                VoucherForcus.Description = rank.Description;
+                VoucherForcus.MaxDiscountAmount  = rank.MaxDiscountAmount ;
                 VoucherForcus.Status = rank.Status;
                 _dbContext.Voucher.Update(VoucherForcus);
                 await _dbContext.SaveChangesAsync();

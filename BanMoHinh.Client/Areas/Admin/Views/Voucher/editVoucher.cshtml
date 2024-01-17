@@ -17,7 +17,13 @@
     <div class="container">
         <form asp-action="editVoucher">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+            <div class="form-group">
+                <label class="control-label">Chi tiết</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <span class="text-danger">@ViewData["description"]</span>
+            </div>
+
             <div class="form-group">
                 <label  class="control-label">Số lượng</label>
                 <input asp-for="Quantity" class="form-control" />

@@ -17,6 +17,8 @@ namespace BanMoHinh.Share.Models
         public int? Value { get; set; }
         public int? Discount_Type { get; set; } // hinh thuc giam gia, 1 là %, 0 là theo tiền mặt
         public int? Minimum_order_value { get; set; }
+        public int? MaxDiscountAmount { get; set; }
+        public string? Description { get; set; } 
         public DateTime? Create_Date { get; set; }
         public DateTime? Start_Date { get; set; }
         public DateTime? End_Date { get; set; }
