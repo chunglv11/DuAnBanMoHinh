@@ -56,7 +56,10 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         //addvoucher rank
         public async Task<IActionResult> AddVoucherForRank(string selectedRank, Voucher vc)
         {
-
+			if (vc.MaxDiscountAmount==null)
+			{
+				vc.MaxDiscountAmount = vc.Value;
+			}
 			// Tạo voucher mới
 			Voucher voucher = new Voucher
 			{
@@ -64,7 +67,9 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 				Code = vc.Code,
 				Quantity = vc.Quantity,
 				Value = vc.Value,
-				Discount_Type = vc.Discount_Type,
+				Description = vc.Description,
+                MaxDiscountAmount = vc.MaxDiscountAmount,
+                Discount_Type = vc.Discount_Type,
 				Minimum_order_value = vc.Minimum_order_value,
 				Create_Date = DateTime.Now,
 				Start_Date = vc.Start_Date,
