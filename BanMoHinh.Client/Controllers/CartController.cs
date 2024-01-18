@@ -1,6 +1,7 @@
 ﻿using BanMoHinh.Client.Services;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,7 +15,8 @@ using static System.Net.WebRequestMethods;
 
 namespace BanMoHinh.Client.Controllers
 {
-    public class CartController : Controller
+	[Authorize(Roles = "User")]
+	public class CartController : Controller
     {
         private readonly HttpClient _httpClient;
         public CartController(HttpClient httpClient)
@@ -73,6 +75,7 @@ namespace BanMoHinh.Client.Controllers
             }
 
         }
+        
         [HttpPost]
         public async Task<IActionResult> AddtoCart(string ProductName, Guid colorId, Guid sizeId, int quantity)
         {

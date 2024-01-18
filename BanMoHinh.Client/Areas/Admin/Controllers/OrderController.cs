@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -10,7 +11,8 @@ using X.PagedList;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class OrderController : Controller
+	[Authorize(Roles = "Admin")]
+	public class OrderController : Controller
     {
         HttpClient _client;
 

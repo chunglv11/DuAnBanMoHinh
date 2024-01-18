@@ -1,11 +1,13 @@
 ﻿using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class HomeController : Controller
+	[Authorize(Roles = "Admin")]
+	public class HomeController : Controller
     {
         private readonly HttpClient _httpClient;
 

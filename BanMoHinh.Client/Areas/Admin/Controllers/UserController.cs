@@ -1,12 +1,14 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class UserController : Controller
+	[Authorize(Roles = "Admin")]
+	public class UserController : Controller
     {
         private readonly HttpClient _httpClient;
         public INotyfService _notyf;

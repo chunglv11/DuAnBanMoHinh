@@ -1,4 +1,5 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Drawing;
@@ -8,7 +9,8 @@ using System.Text;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ColorController : Controller
+	[Authorize(Roles = "Admin")]
+	public class ColorController : Controller
     {
         private HttpClient _httpClient;
         Uri Url = new Uri("https://localhost:7007/api/color");

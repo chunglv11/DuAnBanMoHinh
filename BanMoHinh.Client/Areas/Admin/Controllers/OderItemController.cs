@@ -1,11 +1,13 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
-    public class OderItemController : Controller
+	[Authorize(Roles = "Admin")]
+	public class OderItemController : Controller
     {
         HttpClient _client;
 

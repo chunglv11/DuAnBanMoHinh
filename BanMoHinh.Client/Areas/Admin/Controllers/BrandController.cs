@@ -1,11 +1,13 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BrandController : Controller
+	[Authorize(Roles = "Admin")]
+	public class BrandController : Controller
     {
         private readonly HttpClient _client;
         public BrandController(HttpClient client)

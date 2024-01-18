@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Plugins;
 using System.Net.Http;
@@ -8,7 +9,8 @@ using System.Net.Http.Json;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class VoucherController : Controller
+	[Authorize(Roles = "Admin")]
+	public class VoucherController : Controller
     {
 
 

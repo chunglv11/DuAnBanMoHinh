@@ -50,7 +50,7 @@
     <h1 class="article-title">@Model.Tittle</h1>
     <div class="article-meta">
         <span class="article-date">@Model.CreateAt</span>
-        <span class="article-author">Người đăng: @lstUser.FirstOrDefault(c=>c.Id==Model.UserId).UserName</span>
+        <span class="article-author">Người đăng: Admin</span>
     </div>
     <div class="article-content">
         @Html.Raw(@Model.Contents)
