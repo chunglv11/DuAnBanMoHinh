@@ -111,7 +111,6 @@
 <script>
 	$(document).ready(function () {
 		var maxDiscountGroup = $("#maxDiscountGroup");
-		var valuevc = $("#valuevc");
 		// Xử lý sự kiện khi người dùng chọn radio button
 		$("input[name='Discount_Type']").change(function () {
 			var discountType = $("input[name='Discount_Type']:checked").val();
@@ -119,7 +118,6 @@
 			// Hiển thị hoặc ẩn trường nhập liệu tùy thuộc vào lựa chọn giảm theo phần trăm
 			if (discountType == "1") {
 				maxDiscountGroup.show();
-				valuevc.attr("max", 100);
 			} else {
 				maxDiscountGroup.hide();
 			}

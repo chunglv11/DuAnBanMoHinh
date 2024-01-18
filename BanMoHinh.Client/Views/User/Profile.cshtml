@@ -73,7 +73,7 @@
                             {
                                 <label class="control-label">Rank:</label>
 
-                                <label class="control-label"  style="color:green; background-color:de ">@item.Name</label>
+                                <h4 class="control-label"  style="color:green; background-color:de ">@item.Name</h4>
                                 <input class="control-label" asp-for="RankId" style="display:none">
                                 <span asp-validation-for="@item.Name" class="text-danger"></span>
                             }
@@ -82,9 +82,7 @@
                 }
             </div>
 
-            <div class="form-group">
-                <button class="btn btn-success m-1" type="submit" asp-controller="Authentication" asp-action="ChangePass1" asp-route-id="@Model.Id">Đổi Mật Khẩu</button>
-            </div>
+           
             <div class="form-group">
                 <button class="btn btn-success m-1" value="Profile" type="submit">Sửa Profile</button>
                 <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Quay lại</a>

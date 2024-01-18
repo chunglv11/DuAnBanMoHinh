@@ -360,12 +360,17 @@
                 voucher = value;
                 VoucherId = String(response.voucherId);
                 if (response.trangThai == true) {
-
                     if (response.hinhThuc == 1) { // theo %
-                        tienVoucher = (@tongtien * response.giaTri) / 100;
+                        var checktien = (@tongtien * response.giaTri) / 100;
+                        if (checktien > response.maxDiscountAmount) {
+                            tienVoucher = response.maxDiscountAmount;
+                        }
+                        else {
+                            tienVoucher = checktien;
+                        }
                     }
                     else if (response.hinhThuc == 0) { // theo tiền mặt
-                        tienVoucher = response.giaTri;
+                        tienVoucher = response.maxDiscountAmount;
                     }
                     var ipVoucher = document.getElementById("moneyvoucher");
                     ipVoucher.hidden = false;
