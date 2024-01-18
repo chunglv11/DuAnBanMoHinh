@@ -392,7 +392,7 @@ namespace BanMoHinh.Client.Controllers
                                             {
                                                 if (GetVoucher.Status == true)
                                                 {
-                                                    return Json(new { HinhThuc = GetVoucher.Discount_Type, GiaTri = GetVoucher.Value, VoucherId = GetVoucher.Id, TrangThai = true });
+                                                    return Json(new { HinhThuc = GetVoucher.Discount_Type, GiaTri = GetVoucher.Value, MaxDiscountAmount = GetVoucher.MaxDiscountAmount, VoucherId = GetVoucher.Id, TrangThai = true });
                                                 }
                                                 return Json(new { Loi = "Mã voucher không hợp lệ", TrangThai = false });
                                             }
