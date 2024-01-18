@@ -235,5 +235,48 @@ namespace BanMoHinh.API.Services
                 throw;
             }
         }
+
+        public async Task<bool> Updatetatus(Guid idsp)
+        {
+            try
+            {
+                var product = await _dbContext.Product.FindAsync(idsp);
+                var spct = await _dbContext.ProductDetail.Where(c => c.ProductId == idsp).ToListAsync();
+                if (product.Status == false) // nếu product status = false thì status
+                {
+                    foreach (var item in spct)
+                    {
+                        item.Status = false;
+                        _dbContext.ProductDetail.Update(item);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+                int count = 0;
+                foreach (var item in spct) // nếu all spct status false thì change status sp
+                {
+                    if (item.Status == false)
+                    {
+                        count++;
+                    }
+                }
+                if (spct.Count == count)
+                {
+                    product.Status = false;
+                    _dbContext.Product.Update(product);
+                    await _dbContext.SaveChangesAsync();
+                }
+                if (spct.Count > count)
+                {
+                    product.Status = true;
+                    _dbContext.Product.Update(product);
+                    await _dbContext.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

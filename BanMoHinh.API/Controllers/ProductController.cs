@@ -115,6 +115,7 @@ namespace BanMoHinh.API.Controllers
         {
             var productdetail = await _iproductService.ChangeStatusAsync(idsp, status);
             var updateslProduct = await _iproductService.UpdateSLTheoSPCT();
+            var Updatetatus = await _iproductService.Updatetatus(idsp);
             return Ok(productdetail);
         }
     }
