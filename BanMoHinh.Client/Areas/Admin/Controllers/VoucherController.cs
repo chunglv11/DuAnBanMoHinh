@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Share.Models;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using BanMoHinh.Share.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Plugins;
@@ -13,11 +14,13 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
        
 
         private readonly HttpClient _httpClient;
+		public INotyfService _notyf;
 		private readonly IHttpClientFactory _httpClientFactory;
-        public VoucherController(HttpClient httpClient, IHttpClientFactory httpClientFactory)
+        public VoucherController(HttpClient httpClient, IHttpClientFactory httpClientFactory, INotyfService notyf)
         {
             _httpClient = httpClient;
 			_httpClientFactory = httpClientFactory;
+			_notyf = notyf;
 
 			ScheduleUpdateVoucherStatus();
         }
@@ -113,9 +116,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 					{
 						return BadRequest();
 					}
+					
 				}
- 
-            }
+				_notyf.Success("Thêm thành công");
+				return RedirectToAction("GetallVoucher");
+			}
 			else
 			{
 				UserVoucher uv = new UserVoucher();
@@ -129,15 +134,14 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 				{
 					return BadRequest();
 				}
+				else
+				{
+					_notyf.Success("Thêm thành công");
+					return RedirectToAction("GetallVoucher");
+				}
+				
 			}
-			TempData["SuccessMessage"] = "Voucher đã được tạo thành công!";
-			var successMessage = TempData["SuccessMessage"] as string;
-			if (!string.IsNullOrEmpty(successMessage))
-			{
-				ViewData["SuccessMessage"] = successMessage;
-				ViewData["ShowSuccessMessage"] = true;
-			}
-			return RedirectToAction("GetallVoucher");
+			//return RedirectToAction("GetallVoucher");
         }
         
         public async Task<IActionResult> CreateVoucher()
@@ -168,7 +172,8 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 					{
 						ViewData["SoLuong"] = "Mời bạn nhập số lượng lớn hơn 0";
 					}
-					if (voucher.End_Date < voucher.Start_Date)
+                    
+                    if (voucher.End_Date < voucher.Start_Date)
 					{
 						ViewData["NgayKetThuc"] = "Ngày kết thúc phải lớn hơn ngày áp dụng";
 					}
@@ -192,6 +197,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 								ViewData["GiaTri"] = "Giá trị từ 1 đến 100";
 								return View(voucher);
 							}
+							if (voucher.MaxDiscountAmount <= 0)
+							{
+								ViewData["ToiDa"] = "Mời bạn nhập lớn hơn 0";
+								return View(voucher);
+							}
 							if (voucher.Value <= 100 && voucher.Value > 0)
 							{
 								if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
@@ -204,6 +214,11 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
 						{
 							if (voucher.Value <= voucher.Minimum_order_value)
 							{
+								if (voucher.MaxDiscountAmount <= 0)
+								{
+									ViewData["ToiDa"] = "Mời bạn nhập lớn hơn 0";
+									return View(voucher);
+								}
 								if (voucher.Value <= 100 && voucher.Value > 0)
 								{
 									if (voucher.Minimum_order_value >= 0 && voucher.Value > 0 && voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date && timkiem == null)
@@ -304,53 +319,25 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
                 {
                     ViewData["SoLuong"] = "Mời bạn nhập số lượng lớn hơn 0";
                 }
-                
-                if (voucher.Minimum_order_value == 0)
+				if (voucher.Minimum_order_value < 0)
+				{
+					ViewData["SoTienCan"] = "Mời bạn nhập số tiền cần không âm";
+					return View(voucher);
+				}
+
+
+				if (voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date)
                 {
 
-                    if (voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date)
+					voucher.Status = true;
+                    var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
+                    if (response.IsSuccessStatusCode)
                     {
-                        
-
-                        var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return RedirectToAction("GetAllVoucher");
-                        }
-                        return View();
+						_notyf.Success("Sửa thành công");
+                        return RedirectToAction("GetAllVoucher");
                     }
                 }
-                if (voucher.Minimum_order_value > 0)
-                {
-                    if (voucher.Minimum_order_value < voucher.Value)
-                    {
-                        ViewData["SoTienCan"] = "Số tiền cần phải lớn hơn giá trị";
 
-                    }
-                    if (voucher.Minimum_order_value >= voucher.Value)
-                    {
-                        if (voucher.Quantity > 0 && voucher.End_Date >= voucher.Start_Date)
-                        {
-
-                            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7007/api/voucher/update-voucher-{voucher.Id}", voucher);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return RedirectToAction("GetAllVoucher");
-                            }
-                            return View();
-                        }
-                    }
-                    
-                }
-                else
-                {
-                    if (voucher.Minimum_order_value < 0)
-                    {
-                        ViewData["SoTienCan"] = "Mời bạn nhập số tiền cần không âm";
-                    }
-                    
-                    return View();
-                }
                 return View();
             }
             catch

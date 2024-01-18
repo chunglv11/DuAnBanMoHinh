@@ -15,19 +15,6 @@
           <li class="breadcrumb-item active"><a asp-action="CreateVoucher">Thêm mới</a></li>
         </ul>    
 </div>
-@if (ViewData["ShowSuccessMessage"] != null && (bool)ViewData["ShowSuccessMessage"])
-{
-	<div id="successMessage" class="alert alert-success">
-		@ViewData["SuccessMessage"]
-	</div>
-}
-<script>
-	$(document).ready(function () {
-		setTimeout(function () {
-			$("#successMessage").fadeOut("slow");
-		}, 2000);
-	});
-</script>
 <div class="row">
 	<div class="container">
 		<form asp-action="CreateVoucher">
@@ -89,7 +76,7 @@
 			<div class="form-group" id="maxDiscountGroup">
 				<label class="control-label">Số tiền giảm tối đa (%)</label>
 				<input asp-for="MaxDiscountAmount" class="form-control" />
-				<span asp-validation-for="MaxDiscountAmount" class="text-danger"></span>
+				<span class="text-danger">@ViewData["ToiDa"]</span>
 			</div>
 			<div class="form-group">
 				<label  class="control-label">Đơn hàng từ</label>

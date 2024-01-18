@@ -36,6 +36,7 @@
                         <h5 class="card-title">Mã: @item.Voucher.Code</h5>
                         <p class="card-text">Ngày bắt đầu: @item.Voucher.Start_Date</p>
                         <p class="card-text">Ngày kết thúc: @item.Voucher.End_Date</p>
+                        <p class="card-text">Mô tả: @item.Voucher.Description</p>
                             <p  class="card-text">
                             @if (item.Voucher.Discount_Type == 0) // theo tiền mặt
                                 {
@@ -44,6 +45,7 @@
                             else if (item.Voucher.Discount_Type == 1)
                                 {
                             <p style="color:black">Giảm @item.Voucher.Value %</p>
+                            <p style="color:black">Tối đa @item.Voucher.MaxDiscountAmount VND</p>
                                 }
                             </p>
                         <p style="color:red" class="card-text">Cho đơn từ: @item.Voucher.Minimum_order_value?.ToString("N0") VND</p>

@@ -98,15 +98,15 @@
     <div class="col-xl-4 col-lg-12">
         <div class="card" style="height:300px">
             <div class="card-block">
-                <h3 style="margin:8px; color:red">Sản phẩm sắp hết hàng</h3>
+                <h3 style="margin:8px">Top khách mua nhiều</h3>
                 <ul class="customer-list">
                     @{
-                        @foreach (var khachHang in Model.topKhachHang)
+                        @foreach (var khachHang in Model.topKhachHang.OrderByDescending(kh => kh.tongtien))
                         {
                             <li>
-                                <span class="sdt">Tên sản phẩm: @khachHang.ten</span>
-                              
-                                <span class="tonghoadon">Số lượng: @khachHang.sdt</span>
+                                <span class="sdt">SDT: @khachHang.sdt</span>
+                                <span class="tongtien">Tổng tiền: @khachHang.tongtien?.ToString("n0")</span>
+                                <span class="tonghoadon">Tổng đơn: @khachHang.tonghoadon</span>
                             </li>
                         }
                     }
