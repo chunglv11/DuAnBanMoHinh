@@ -147,7 +147,7 @@ namespace BanMoHinh.Client.Controllers
         public async Task<List<ProductVM>> Filter(string sortOrder, List<ProductVM> lstProductVm)
         {
             switch (sortOrder)
-            {             
+            {
                 case "a":
                     lstProductVm = lstProductVm.OrderBy(p => p.ProductName).ToList();
                     break;
@@ -208,7 +208,7 @@ namespace BanMoHinh.Client.Controllers
         }
 
 
-        public async Task<IActionResult> ListProductAsync(string? name, string? sortOrder, Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice, int? page)
+        public async Task<IActionResult> ListProductAsync(string? SearchString, string? sortOrder, Guid?[] SelectedCategory, Guid?[] SelectedBrand, Guid?[] SelectedMaterial, int? minPrice, int? maxPrice, int? page)
         {
             if (page == null) page = 1;
             int pageSize = 1;
@@ -241,15 +241,19 @@ namespace BanMoHinh.Client.Controllers
             ViewData["productMaterial"] = selectListItemsProductMaterial;
             ViewData["productDetail"] = productDetail;
             ViewData["ProductImage"] = ProductImage;
-            ViewBag.name = name;
+            ViewBag.SearchString = SearchString;
             ViewBag.minPrice = minPrice;
             ViewBag.maxPrice = maxPrice;
+            ViewBag.SelectedMaterial = SelectedMaterial;
+            ViewBag.SelectedBrand = SelectedBrand;
+            ViewBag.SelectedCategory = SelectedCategory;
+            ViewBag.sortOrder = sortOrder;
 
             var allproduct = await _httpClient.GetFromJsonAsync<List<ProductVM>>("https://localhost:7007/api/product/get-all-productvm");
-            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0&&b.Status==true) && c.Status == true).ToList();
-            if (!string.IsNullOrWhiteSpace(name))
+            allproduct = allproduct.GroupBy(p => new { p.ProductName }).Select(g => g.First()).Where(c => productDetail.Any(b => b.ProductId == c.Id && c.AvailableQuantity > 0 && b.Status == true) && c.Status == true).ToList();
+            if (!string.IsNullOrWhiteSpace(SearchString))
             {
-                allproduct = await Search(name, allproduct);
+                allproduct = await Search(SearchString, allproduct);
             }
             allproduct = await Filter(SelectedCategory, SelectedBrand, SelectedMaterial, minPrice, maxPrice, sortOrder, allproduct);
             return View(allproduct.ToPagedList(pageNumber, pageSize));
@@ -280,18 +284,18 @@ namespace BanMoHinh.Client.Controllers
 
         public async Task<JsonResult> GetProductDetail(Guid productId, Guid sizeId, Guid colorId)
         {
-            
+
             try
             {
-				var productdetail = await _httpClient.GetFromJsonAsync<ProductDetail>($"https://localhost:7007/api/productDetail/GetProductDetail?productId={productId}&sizeId={sizeId}&colorId={colorId}");
-				return Json(new { message = "OK", status = true, quantity = productdetail.Quantity, price = productdetail.PriceSale });
-			}
+                var productdetail = await _httpClient.GetFromJsonAsync<ProductDetail>($"https://localhost:7007/api/productDetail/GetProductDetail?productId={productId}&sizeId={sizeId}&colorId={colorId}");
+                return Json(new { message = "OK", status = true, quantity = productdetail.Quantity, price = productdetail.PriceSale });
+            }
             catch (Exception)
             {
 
-				return Json(new { message = "Không có size và màu bạn chọn :(", status = false });
+                return Json(new { message = "Không có size và màu bạn chọn :(", status = false });
 
-			}
-		}
+            }
+        }
     }
 }

@@ -8,42 +8,39 @@
     ViewData["Title"] = "ShowList";
     Layout = "~/Areas/Admin/Shared/_LayoutAdmin.cshtml";
 }
-<div class="d-flex align-items-center p-3" style="height:80px">
-    <h3 class="heading-page">
-        <span><b>Hóa đơn</b></span>
-    </h3>
-</div>
-<body >
-<div class="row">
+<body>
+    <form asp-action="ShowList" method="get">
+        <div class="container mt-5">
+            <h2 class="mb-4">Lọc Theo Ngày</h2>
 
-        
-        
+            <div class="row">
+                <div class="col-md-5 mb-2">
+                    <label for="searchText">Tìm kiếm theo mã hoá đơn:</label>
+                    <input type="text" id="searchText" name="searchText" class="form-control">
+                </div>
+                <div class="col-md-2 mb-2">
+                    <label for="startDate">Ngày Bắt Đầu:</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control">
+                </div>
 
-    <!--DANH SÁCH HÓA ĐƠN-->
-    <div class="d-flex flex-column p-12 bg-white flex-grow-1 col-md-9">
-        <div class="d-flex flex-row p-1 bg-white align-items-center">
-            @* <div class="d-flex me-auto" style="justify-content:center">
-                <div class="searchhd">
-                    <div class="dropdown">
-                        <div class="defaultOption"><span id="searchtype">Hóa đơn</span> <i class="bi bi-caret-down-fill ms-auto"></i></div>
+                <div class="col-md-2 mb-2">
+                    <label for="endDate">Ngày Kết Thúc:</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control">
+                </div>
 
-                        <ul class="ul chonkieu">
-                            <li data-value="1">Hóa đơn</li>
-                            <li data-value="2">Khách hàng</li>
-                        </ul>
-                    </div>
-                    <div class="searchField">
-                        <input type="text" class="input" id="inputhd" autocomplete="off" placeholder="Nhập mã hóa đơn, SĐT đặt hàng">
-                        <div class="btnsearch" onclick="timKiemHD()">
-                            <i class="fa fa-search"></i>
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                    <label for="searchButton" class="invisible">Tìm</label>
+                    <button type="submit" class="btn btn-primary btn-block">Tìm</button>
                 </div>
             </div>
-            <div class="d-flex ms-auto" style="justify-content:center">
-                <ul id="pagination-demo" class="pagination mx-2 my-2"></ul>
-            </div> *@
         </div>
+    </form>
+
+    <div class="row">
+        <!--DANH SÁCH HÓA ĐƠN-->
+        <div class="d-flex flex-column p-12 bg-white flex-grow-1 col-md-9">
+            <div class="d-flex flex-row p-1 bg-white align-items-center">
+            </div>
             <table class="table table-hover table-bordered tbbills" align="center" cellpadding="10">
                 <thead class="thead-dark">
                     <tr>
@@ -64,22 +61,23 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Create_Date)
                             </td>
-                                @{
-                                    var user = ViewData["User"] as List<UserViewModel>;
-                                  @if(user != null){
-
-                                @foreach (var item1 in user)
+                            @{
+                                var user = ViewData["User"] as List<UserViewModel>;
+                                @if (user != null)
                                 {
-                                    if (item.UserId == item1.Id)
+
+                                    @foreach (var item1 in user)
                                     {
-                                        <td>@item1.UserName</td>
+                                        if (item.UserId == item1.Id)
+                                        {
+                                            <td>@item1.UserName</td>
+                                        }
                                     }
                                 }
-                                }
-                                }
+                            }
                             <td>
-                                
-                                @if(item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+
+                                @if (item.OrderStatusId == Guid.Parse("1C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-warning text-dark">Đang được xử lý</span>
                                 }
@@ -87,24 +85,24 @@
                                 {
                                     <span class="badge bg-primary">Chờ lấy hàng</span>
                                 }
-                                else if(item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                else if (item.OrderStatusId == Guid.Parse("3C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-primary">Đang giao hàng</span>
                                 }
-                               
-                                else if(item.OrderStatusId ==Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+
+                                else if (item.OrderStatusId == Guid.Parse("4C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-success">Giao hàng thành công</span>
                                 }
-                                else if(item.OrderStatusId == Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                else if (item.OrderStatusId == Guid.Parse("5C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-danger text-dark">Giao hàng không thành công</span>
                                 }
-                                else if(item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                else if (item.OrderStatusId == Guid.Parse("6C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-danger text-dark">Hủy đơn</span>
                                 }
-                                else if(item.OrderStatusId == Guid.Parse("7C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
+                                else if (item.OrderStatusId == Guid.Parse("7C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"))
                                 {
                                     <span class="badge bg-primary">Yêu cầu trả hàng</span>
                                 }
@@ -116,14 +114,14 @@
                                 {
                                     <span class="badge bg-primary">Chờ Thanh toán</span>
                                 }
-                                
-                            </td>
-                            
-                            <td class="text-end">
-                                    @item.TotalAmout?.ToString("n0") 
+
                             </td>
 
-                            
+                            <td class="text-end">
+                                @item.TotalAmout?.ToString("n0")
+                            </td>
+
+
                         </tr>
                     }
                 </tbody>
@@ -134,24 +132,23 @@
                         Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
                     </div>
                     <div class="pagin-right float-right">
-                        @Html.PagedListPager(Model, page => Url.Action("ShowList", new { page,status = ViewBag.status,datetype = ViewBag.datetype}))
+                        @Html.PagedListPager(Model, page => Url.Action("ShowList", new { page,status = ViewBag.status,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate}))
                     </div>
                 </div>
             </div>
         </div>
-  
-    <div class="col-md-3" style="float:left">
-<div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Lọc theo trạng thái</h5>
-            </div>
-            <div class="card-header">
-               <a href="/admin/order/showlist">Reset</a>
-            </div>
+        <div class="col-md-3" style="float:left">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Lọc theo trạng thái</h5>
+                </div>
+                <div class="card-header">
+                    <a href="/admin/order/showlist">Reset</a>
+                </div>
 
-            
-            <div class="card-body">
-                <div class="btn-group-vertical" id="select-trangThai">
+
+                <div class="card-body">
+                    <div class="btn-group-vertical" id="select-trangThai">
                         <a href="#" onclick="updateUrlAndReload('status', '0'); return false;" class="btn btn-outline-primary btn-text">Tất cả</a>
                         <a href="#" onclick="updateUrlAndReload('status', '1'); return false;" class="btn btn-outline-primary btn-text">Đang được xử lý</a>
                         <a href="#" onclick="updateUrlAndReload('status', '2'); return false;" class="btn btn-outline-primary btn-text">Chờ lấy hàng</a>
@@ -162,45 +159,35 @@
                         <a href="#" onclick="updateUrlAndReload('status', '7'); return false;" class="btn btn-outline-primary btn-text">Yêu cầu trả hàng</a>
                         <a href="#" onclick="updateUrlAndReload('status', '8'); return false;" class="btn btn-outline-primary btn-text">Chấp nhận trả hàng</a>
                         <a href="#" onclick="updateUrlAndReload('status', '9'); return false;" class="btn btn-outline-primary btn-text">Chờ Thanh toán</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="modal fade" id="chitiethd" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content cthdcontent">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold">Chi tiết hóa đơn</h5>
+                                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body cthd-body">
+                            </div>
+                            @* <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>*@
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Lọc theo ngày</h5>
-            </div>
-            <div class="card-body">
-                <div class="btn-group-vertical" id="select-ngay">
-                        <a href="#" onclick="updateUrlAndReload('datetype', '0'); return false;" class="btn btn-outline-primary btn-text">Tất cả</a>
-                        <a href="#" onclick="updateUrlAndReload('datetype', '1'); return false;" class="btn btn-outline-primary btn-text">Hôm nay</a>
-                        <a href="#" onclick="updateUrlAndReload('datetype', '2'); return false;" class="btn btn-outline-primary btn-text">2 ngày trước</a>
-                        <a href="#" onclick="updateUrlAndReload('datetype', '3'); return false;" class="btn btn-outline-primary btn-text">7 ngày trước</a>
-                        <a href="#" onclick="updateUrlAndReload('datetype', '4'); return false;" class="btn btn-outline-primary btn-text">30 ngày trước</a>
-    </div>
-</div>
-<div class="modal fade" id="chitiethd" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content cthdcontent">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Chi tiết hóa đơn</h5>
-                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body cthd-body">
-            </div>
-            @* <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>*@
-        </div>
-    </div>
-</div>
     </div>
 </body>
 <script>
-     function billDetail(idhd){
+    function billDetail(idhd) {
         $(".cthd-body").load("/Order/ViewChiTietHD/" + idhd);
-    $("#chitiethd").modal("show");console.log(idhd);
+        $("#chitiethd").modal("show"); console.log(idhd);
     }
-       function timKiemHD() {
+    function timKiemHD() {
         var type = $("#searchtype").text();
         var input = $("#inputhd").val();
         var trangthai = $("#select-trangThai .btn-text").text();
@@ -209,20 +196,20 @@
         var url = "/Order/ShowList?input=" + input + "&type=" + type + "&trangthai=" + trangthai + "&bdau=" + bdau + "&ketthuc=" + ketthuc;
         window.location.href = url;
     }
-   function updateUrlAndReload(parameterName, parameterValue) {
-    var currentUrl = window.location.href;
-    var url = new URL(currentUrl);
-    url.searchParams.set(parameterName, parameterValue);
-    // Thêm giá trị của page vào URL
-    url.searchParams.set('page', getCurrentPageNumber());
-    window.location.href = url.toString();
-}
+    function updateUrlAndReload(parameterName, parameterValue) {
+        var currentUrl = window.location.href;
+        var url = new URL(currentUrl);
+        url.searchParams.set(parameterName, parameterValue);
+        // Thêm giá trị của page vào URL
+        url.searchParams.set('page', getCurrentPageNumber());
+        window.location.href = url.toString();
+    }
 
-function getCurrentPageNumber() {
-    // Lấy giá trị của page hiện tại từ URL
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('page') || '1'; // Nếu không có page trong URL, mặc định là 1
-}
+    function getCurrentPageNumber() {
+        // Lấy giá trị của page hiện tại từ URL
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('page') || '1'; // Nếu không có page trong URL, mặc định là 1
+    }
 </script>
 
 
