@@ -19,13 +19,15 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             _client = httpClient;
         }
         [HttpGet]
-        public async Task<IActionResult> ShowList(int? page,int? status, int? datetype)
+        public async Task<IActionResult> ShowList(int? page,int? status, string searchText, DateTime? startDate, DateTime? endDate)
         {
             if (page == null) page = 1;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             ViewBag.status = status;
-            ViewBag.datetype = datetype;
+            ViewBag.searchText = searchText;
+            ViewBag.startDate = startDate;
+            ViewBag.endDate = endDate;
             var user = await _client.GetFromJsonAsync<List<UserViewModel>>("https://localhost:7007/api/users/getall");
             ViewData["User"] = user;
             string apiurl = "https://localhost:7007/api/order/getall";
@@ -70,23 +72,14 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             {
                 LstOrder = LstOrder.Where(c => c.OrderStatusId == Guid.Parse("9C54C2DD-2FA5-4041-9B94-FB613BEBDFBC"));
             }
-            if (datetype==1)
+            if (searchText!=null)
             {
-                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 1).ToList();
+                LstOrder = LstOrder.Where(c => c.OrderCode.ToLower().Contains(searchText.ToLower()));
             }
-              if (datetype==2)
+            if (startDate != null && endDate != null)
             {
-                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 2).ToList();
+                LstOrder = LstOrder.Where(c => c.Create_Date >= startDate && c.Create_Date <= endDate);
             }
-              if (datetype==7)
-            {
-                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 7).ToList();
-            }
-              if (datetype==30)
-            {
-                LstOrder = LstOrder.Where(c => (DateTime.Now - c.Create_Date)?.TotalDays <= 30).ToList();
-            }
-
             int totalItems = LstOrder.Count(); // Điều này có thể thay đổi tùy theo cách bạn lấy dữ liệu
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
@@ -95,7 +88,7 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             {
                 if (page > totalPages)
                 {
-                    return RedirectToAction("ShowList", new { page = 1, status, datetype });
+                    return RedirectToAction("ShowList", new { page = 1, status,  searchText,  startDate,  endDate });
                 }
             }
            
