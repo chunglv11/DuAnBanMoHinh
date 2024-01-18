@@ -314,7 +314,7 @@
                     Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
                 </div>
                 <div class="pagin-right ml-auto">
-                    @Html.PagedListPager(Model, page => Url.Action("ListProduct", new { page,name = ViewBag.name,SelectedCategory = selectedCategoryIds,SelectedBrand = selectedBrandIds,SelectedMaterial = selectedMaterialIds,minPrice=ViewBag.minPrice,maxPrice=ViewBag.maxPrice}))
+                    @Html.PagedListPager(Model, page => Url.Action("ListProduct", new { page,SearchString = ViewBag.SearchString,SelectedCategory = ViewBag.SelectedCategory,SelectedBrand = ViewBag.SelectedBrand,SelectedMaterial =ViewBag.SelectedMaterial,minPrice=ViewBag.minPrice,maxPrice=ViewBag.maxPrice,sortOrder=ViewBag.sortOrder}))
                 </div>
             </div>
         </div>
