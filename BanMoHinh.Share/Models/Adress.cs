@@ -17,7 +17,7 @@ namespace BanMoHinh.Share.Models
         public string? District { get; set; } // Quận/Huyện
         public string? Ward { get; set; } // Xã
         public bool? IsDefault { get; set; } // is default
-        public string? DescriptionAddress { get; set; } // is địa chỉ chi tiết
+        public string? DescriptionAddress { get; set; } // is địa chỉ chi tiết demo
             
 
         [ForeignKey("UserId")]
