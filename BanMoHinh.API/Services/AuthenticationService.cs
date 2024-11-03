@@ -28,18 +28,20 @@ namespace BanMoHinh.API.Services
         private async Task<string> GenerateJwtTokenAsync(User user)
         {
             var role = await _userManager.GetRolesAsync(user);
-            // Create list of claims
+            // Tạo danh sách các claims (yêu cầu) để lưu thông tin về người dùng trong token
             var claims = new List<Claim>()
-            {
-                    new Claim(ClaimTypes.Name,user.UserName.ToString()),
-                    new Claim(ClaimTypes.Role,role.FirstOrDefault()),
-                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                    new Claim(ClaimTypes.Email,user.Email.ToString()),
-            };
+    {
+            new Claim(ClaimTypes.Name,user.UserName.ToString()),
+            new Claim(ClaimTypes.Role,role.FirstOrDefault()),
+            new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+            new Claim(ClaimTypes.Email,user.Email.ToString()),
+    };
 
-            // Create JWT Token
+            // Tạo khóa bảo mật đối xứng từ chuỗi bí mật được lưu trong cấu hình
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
+            // Thiết lập thông tin ký token, sử dụng thuật toán HmacSha256 để đảm bảo an toàn
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            // Tạo đối tượng JWT token với các thông tin như Issuer, Audience, Claims và thời gian hết hạn
             var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims,
                 expires: DateTime.UtcNow.AddDays(7), signingCredentials: signIn);
             return new JwtSecurityTokenHandler().WriteToken(token);

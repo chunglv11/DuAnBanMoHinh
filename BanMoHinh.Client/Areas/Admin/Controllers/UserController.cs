@@ -1,4 +1,5 @@
-﻿using BanMoHinh.Share.Models;
+﻿using BanMoHinh.Client.Models;
+using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,10 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
         {
             // show role trong index 
             // nếu là tài khoản của nhân viên thì được phép reset mật khẩu
-            
+            // Lấy danh sách vai trò từ API
+            var roles = await _httpClient.GetFromJsonAsync<List<Role>>("https://localhost:7007/api/role");
+            var roleNames = roles.Select(role => role.Name).ToList();
+            ViewData["RoleList"] = roleNames;
             var user =await _httpClient.GetFromJsonAsync<List<UserViewModel>>("https://localhost:7007/api/users/getall");
             return View(user);
         }
@@ -26,11 +30,22 @@ namespace BanMoHinh.Client.Areas.Admin.Controllers
             await _httpClient.DeleteAsync($"https://localhost:7007/api/users/delete/{userName}");
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> ChangeRole(string userName,string roleName)
+        public async Task<IActionResult> ChangeRole(string userName, string roleName)
         {
-            var user = await _httpClient.GetFromJsonAsync<UserViewModel>($"https://localhost:7007/api/users/get/{userName}");
-            return View(user);
+
+            // Lấy thông tin người dùng và vai trò hiện tại
+            var response = await _httpClient.GetAsync($"https://localhost:7007/api/users/change-role/{userName}/{roleName}");
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Nếu không thành công, trả về thông báo lỗi
+                return BadRequest();
+            };
         }
+
 
     }
 }
