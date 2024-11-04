@@ -11,6 +11,7 @@ using System.Net.Http;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductDetailController : Controller
     {
         private IproductDetailApiClient _apiClient;

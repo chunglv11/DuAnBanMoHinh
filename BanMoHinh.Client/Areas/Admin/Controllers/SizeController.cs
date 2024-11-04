@@ -1,10 +1,12 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SizeController : Controller
     {
         private HttpClient _httpClient;

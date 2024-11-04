@@ -1,10 +1,12 @@
 ﻿using BanMoHinh.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class MaterialController : Controller
     {
         private readonly HttpClient _client;

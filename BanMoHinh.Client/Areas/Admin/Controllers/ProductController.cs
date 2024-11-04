@@ -2,6 +2,7 @@
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Web;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;

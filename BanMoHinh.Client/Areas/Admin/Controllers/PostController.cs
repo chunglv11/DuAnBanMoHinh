@@ -1,5 +1,6 @@
 ﻿using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System.Text;
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class PostController : Controller
     {
         private HttpClient _httpClient;

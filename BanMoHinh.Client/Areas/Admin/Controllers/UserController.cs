@@ -1,11 +1,13 @@
 ﻿using BanMoHinh.Client.Models;
 using BanMoHinh.Share.Models;
 using BanMoHinh.Share.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BanMoHinh.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly HttpClient _httpClient;
